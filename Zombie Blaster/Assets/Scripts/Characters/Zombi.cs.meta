@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: ba0cd659ec823d64e88940b9cef90568
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - ZombieRagdoll: {instanceID: 0}
+  - ZombieFire: {instanceID: 0}
+  - ZombieSmoke: {instanceID: 0}
+  - ZombieSheriffBullet: {instanceID: 0}
+  - headHit: {instanceID: 0}
+  - ParticleDirtClod: {fileID: 100000, guid: 274ca8d9865bdeb45b45ac4f8f83b8f6, type: 2}
+  - AudioSpawn: {fileID: 8300000, guid: 9ce8cea77ff545449a151a61e6837f4a, type: 1}
+  - AudioZombieAttackWalk: {fileID: 8300000, guid: 7d93d927eda98e04682bdf1eba85613f,
+      type: 1}
+  - whitetexture: {fileID: 2800000, guid: 4b5fdac3a8d1ef2438dcb225bcc83ed0, type: 1}
+  - redtexture: {fileID: 2800000, guid: d6ceda023fe447542a898afed5a68a60, type: 1}
+  executionOrder: 0
+  icon: {instanceID: 0}

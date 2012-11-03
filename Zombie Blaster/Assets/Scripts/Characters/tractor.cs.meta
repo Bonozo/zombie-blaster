@@ -1,0 +1,8 @@
+fileFormatVersion: 2
+guid: 96ddb513cb91e2f4b85b5af12774945b
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - FlameParticle: {fileID: 100000, guid: 48e697fe45985ab48be6abd37d29aa86, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}

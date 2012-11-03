@@ -1,0 +1,22 @@
+# Ignore The following directories / file extensions
+Library
+Temp
+
+# Ignore the following file extensions
+*.vcproject
+*.sln
+/Zombie Blaster/Assembly-UnityScript.unityproj
+/Zombie Blaster/Assembly-UnityScript-firstpass.pidb
+/Zombie Blaster/Assembly-UnityScript-firstpass.unityproj
+/Zombie Blaster/Assembly-UnityScript-firstpass-vs.unityproj
+/Zombie Blaster/Assembly-UnityScript-vs.unityproj
+/Zombie Blaster/Zombie Blaster.sln
+/Zombie Blaster/Zombie Blaster.userprefs
+/Zombie Blaster/Zombie Blaster-csharp.sln
+/Zombie Blaster/Assembly-CSharp.csproj
+/Zombie Blaster/Assembly-CSharp.pidb
+/Zombie Blaster/Assembly-CSharp-firstpass.csproj
+/Zombie Blaster/Assembly-CSharp-firstpass.pidb
+/Zombie Blaster/Assembly-CSharp-firstpass-vs.csproj
+/Zombie Blaster/Assembly-CSharp-vs.csproj
+/Zombie Blaster/Assembly-UnityScript.pidb

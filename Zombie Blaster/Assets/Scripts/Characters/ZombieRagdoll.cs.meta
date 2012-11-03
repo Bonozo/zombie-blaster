@@ -1,0 +1,8 @@
+fileFormatVersion: 2
+guid: ca70146122065d649925fdc89209e030
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - HealthPack: {fileID: 100000, guid: dbc301ace0925b041a67ad65dfb1774e, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}

@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 584c56706863a2c46b738a0713ec69c0
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - textureBackground: {fileID: 2800000, guid: a13aacee374be204ab9222113ad559eb, type: 1}
+  - textureScreenShot: {fileID: 2800000, guid: ff1f4fe146b304344aca356fb7613501, type: 1}
+  executionOrder: 0
+  icon: {instanceID: 0}
