@@ -16,6 +16,18 @@ public class ZombiGenerator : MonoBehaviour {
 		control = (Control)GameObject.FindObjectOfType(typeof(Control));
 	}
 	
+	int WhatZombieToSpawn()
+	{
+		int z = 0;
+		bool ok = false;
+		while(!ok)
+		{
+			z = Random.Range(0,Zombie.Length);
+			ok = control.CurrentLevel==1 || (z!=11&&z!=12); // not Football level and Football zombie	
+		}
+		return z;
+	}
+	
 	// Update is called once per frame
 	void Update () {
 		rate -= Time.deltaTime;
@@ -24,7 +36,7 @@ public class ZombiGenerator : MonoBehaviour {
 			rate = Random.Range(GenerationRateMin,GenerationRateMax);
 			
 			//Instantiate(Zombie[Random.Range(0,Zombie.Length)],new Vector3(0,0,5),Quaternion.Euler(0,180,0) );
-			GameObject newzombie = (GameObject)Instantiate(Zombie[Random.Range(0,Zombie.Length)],RandomPosition(),Quaternion.Euler(0,180,0) );
+			GameObject newzombie = (GameObject)Instantiate(Zombie[WhatZombieToSpawn()],RandomPosition(),Quaternion.Euler(0,180,0) );
 			if( NearAtZombie(newzombie) ) 
 			{
 				Destroy(newzombie);

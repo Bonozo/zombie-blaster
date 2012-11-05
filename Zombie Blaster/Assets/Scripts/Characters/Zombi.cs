@@ -15,8 +15,12 @@ public class Zombi : MonoBehaviour {
 	public GameObject ZombieSheriffBullet;
 	public HeadHit headHit;
 	public GameObject ParticleDirtClod;
+	
 	public AudioClip AudioSpawn;
 	public AudioClip AudioZombieAttackWalk;
+	public AudioClip AudioShoot;
+	public AudioClip AudioJump;
+	
 	public int playAudioZombieAttackWalkRate = 1000;
 	public float CollisionToDownLenght = 0.35f;
 	
@@ -127,12 +131,14 @@ public class Zombi : MonoBehaviour {
 			//??// Shoting
 			if( runningTime <= 0f &&  HitWithName(gameObject.name,"Sheriff") && Random.Range(0,300)==1)
 			{
+				if( AudioShoot != null ) audio.PlayOneShot(AudioShoot);
 				animation.Play("shoot");
 				return;
 			}
 			//??// Jump
 			if( runningTime <= 0f && (HitWithName(gameObject.name,"Ballerina") || HitWithName(gameObject.name,"FootballPlayer")) && Random.Range(0,300)==1)
 			{
+				if( AudioJump != null ) audio.PlayOneShot(AudioJump);
 				animation.Play("jump");
 				return;
 			}
