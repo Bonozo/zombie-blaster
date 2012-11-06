@@ -25,7 +25,10 @@ public class HeadHit : MonoBehaviour {
 		InstantiateMessage();
 		if( HeadContainer.NearPlayer() )
 			GameObject.Find("Goo").SendMessage("Show");
-		HeadContainer.SendMessage("DieNormal");
+		if( HeadContainer.haveHelmet )
+			HeadContainer.SendMessage("GetHitDamaged",2);
+		else
+			HeadContainer.SendMessage("DieNormal");
 	}
 	
 	public void DieWithJump()

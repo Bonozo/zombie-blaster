@@ -30,6 +30,10 @@ public class Zombi : MonoBehaviour {
 	
 	public string[] extraAnimations;
 	
+	public GameObject HelmetPrefab;
+	
+	public bool haveHelmet = false;
+	
 	#endregion
 	
 	#region Variables
@@ -65,6 +69,13 @@ public class Zombi : MonoBehaviour {
 		
 		headHit.tag = "ZombieHead";
 		headHit.HeadContainer = this;
+		
+		haveHelmet = false;
+		if( HelmetPrefab != null )
+		{
+			haveHelmet = Random.Range(0,2)==1;
+			HelmetPrefab.SetActiveRecursively(haveHelmet);
+		}
 		
 		transform.position = new Vector3(transform.position.x,ZombieHeight,transform.position.z);
 		
@@ -311,7 +322,16 @@ public class Zombi : MonoBehaviour {
 		animation.Play("get hit");
 		animation["get hit"].time = 0.0f;
 		if( damage <= 0 )
-			DieNormal();
+		{
+			if( haveHelmet )
+			{
+				haveHelmet = false;
+				HelmetPrefab.SetActiveRecursively(false);
+				damage = 10;
+			}
+			else
+				DieNormal();
+		}
 	}
 	
 	public void GetHit()
@@ -400,6 +420,11 @@ public class Zombi : MonoBehaviour {
 	{
 		flaming = smoking = 0;
 		DieNormal();
+	}
+	
+	void OnDestroy()
+	{
+		Destroy(particleDirtClod);
 	}
 	
 	#endregion

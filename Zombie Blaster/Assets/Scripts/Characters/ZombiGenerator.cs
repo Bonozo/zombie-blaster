@@ -18,14 +18,10 @@ public class ZombiGenerator : MonoBehaviour {
 	
 	int WhatZombieToSpawn()
 	{
-		int z = 0;
-		bool ok = false;
-		while(!ok)
-		{
-			z = Random.Range(0,Zombie.Length);
-			ok = control.CurrentLevel==1 || (z!=11&&z!=12); // not Football level and Football zombie	
-		}
-		return z;
+		if( control.CurrentLevel == 1 )
+			return Random.Range(11,13);
+		else
+			return Random.Range(0,11);
 	}
 	
 	// Update is called once per frame
