@@ -20,7 +20,6 @@ public class tractor : MonoBehaviour {
 	
 	void Explode()
 	{
-		Debug.Log (transform.position);
 		if( exploded ) return;
 		exploded = true;
 		Instantiate(FlameParticle,transform.position,Quaternion.identity);

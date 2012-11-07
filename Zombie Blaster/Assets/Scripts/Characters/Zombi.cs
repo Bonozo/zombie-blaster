@@ -326,7 +326,13 @@ public class Zombi : MonoBehaviour {
 			if( haveHelmet )
 			{
 				haveHelmet = false;
+				
+				GameObject g = (GameObject)Instantiate(HelmetPrefab,HelmetPrefab.transform.position,HelmetPrefab.transform.rotation);
+				g.transform.localScale = HelmetPrefab.transform.lossyScale;
+				g.AddComponent<ThrowingOut>();
+				
 				HelmetPrefab.SetActiveRecursively(false);
+				
 				damage = 10;
 			}
 			else

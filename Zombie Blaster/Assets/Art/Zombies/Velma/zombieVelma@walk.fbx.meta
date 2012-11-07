@@ -1,10 +1,9 @@
 fileFormatVersion: 2
-guid: 43e0f0bf2d29d924293c5a41d13a6580
+guid: 663b488a495cd174d9aa0bcb8bce087e
 ModelImporter:
   fileIDToRecycleName:
     7400000: Take 001 //// zombieVelma@zombieVelma_walk
-    7400002: Take 001 //// zombieVelma@zwalk
-    7400004: Take 001 //// zombieVelma@walk
+    7400002: Take 001 //// zombieVelma@walk
   serializedVersion: 10
   materials:
     importMaterials: 1
@@ -42,104 +41,104 @@ ModelImporter:
     //RootNode:
       data:
         first: 1
-        second: ac860100
+        second: a2860100
       data:
         first: 4
-        second: 8c1a0600
+        second: 821a0600
       data:
         first: 111
         second: 605fa900
     bn_l_anklee01:
       data:
         first: 1
-        second: a2860100
+        second: c0860100
       data:
         first: 4
-        second: 821a0600
+        second: a01a0600
     bn_l_ball01:
-      data:
-        first: 1
-        second: a0860100
-      data:
-        first: 4
-        second: 801a0600
-    bn_l_chest01:
-      data:
-        first: 1
-        second: b0860100
-      data:
-        first: 4
-        second: 901a0600
-    bn_l_elbow01:
-      data:
-        first: 1
-        second: c8860100
-      data:
-        first: 4
-        second: a81a0600
-    bn_l_hand01:
-      data:
-        first: 1
-        second: a6860100
-      data:
-        first: 4
-        second: 861a0600
-    bn_l_hata01:
-      data:
-        first: 1
-        second: a8860100
-      data:
-        first: 4
-        second: 881a0600
-    bn_l_head01:
-      data:
-        first: 1
-        second: aa860100
-      data:
-        first: 4
-        second: 8a1a0600
-    bn_l_hip01:
-      data:
-        first: 1
-        second: b4860100
-      data:
-        first: 4
-        second: 941a0600
-    bn_l_knee01:
-      data:
-        first: 1
-        second: b2860100
-      data:
-        first: 4
-        second: 921a0600
-    bn_l_necka01:
-      data:
-        first: 1
-        second: a4860100
-      data:
-        first: 4
-        second: 841a0600
-    bn_l_should01:
       data:
         first: 1
         second: ae860100
       data:
         first: 4
         second: 8e1a0600
-    bn_l_spinea01:
+    bn_l_chest01:
       data:
         first: 1
-        second: b8860100
+        second: cc860100
       data:
         first: 4
-        second: 981a0600
-    bn_l_spineb01:
+        second: ac1a0600
+    bn_l_elbow01:
+      data:
+        first: 1
+        second: aa860100
+      data:
+        first: 4
+        second: 8a1a0600
+    bn_l_hand01:
+      data:
+        first: 1
+        second: b2860100
+      data:
+        first: 4
+        second: 921a0600
+    bn_l_hata01:
       data:
         first: 1
         second: b6860100
       data:
         first: 4
         second: 961a0600
+    bn_l_head01:
+      data:
+        first: 1
+        second: ba860100
+      data:
+        first: 4
+        second: 9a1a0600
+    bn_l_hip01:
+      data:
+        first: 1
+        second: be860100
+      data:
+        first: 4
+        second: 9e1a0600
+    bn_l_knee01:
+      data:
+        first: 1
+        second: c4860100
+      data:
+        first: 4
+        second: a41a0600
+    bn_l_necka01:
+      data:
+        first: 1
+        second: c2860100
+      data:
+        first: 4
+        second: a21a0600
+    bn_l_should01:
+      data:
+        first: 1
+        second: ca860100
+      data:
+        first: 4
+        second: aa1a0600
+    bn_l_spinea01:
+      data:
+        first: 1
+        second: a6860100
+      data:
+        first: 4
+        second: 861a0600
+    bn_l_spineb01:
+      data:
+        first: 1
+        second: a0860100
+      data:
+        first: 4
+        second: 801a0600
     bn_l_wrist01:
       data:
         first: 1
@@ -150,52 +149,52 @@ ModelImporter:
     bn_r_anklee01:
       data:
         first: 1
-        second: c4860100
+        second: c8860100
       data:
         first: 4
-        second: a41a0600
+        second: a81a0600
     bn_r_ball01:
+      data:
+        first: 1
+        second: a4860100
+      data:
+        first: 4
+        second: 841a0600
+    bn_r_elbow01:
+      data:
+        first: 1
+        second: b8860100
+      data:
+        first: 4
+        second: 981a0600
+    bn_r_hand01:
       data:
         first: 1
         second: ce860100
       data:
         first: 4
         second: ae1a0600
-    bn_r_elbow01:
-      data:
-        first: 1
-        second: c0860100
-      data:
-        first: 4
-        second: a01a0600
-    bn_r_hand01:
-      data:
-        first: 1
-        second: ba860100
-      data:
-        first: 4
-        second: 9a1a0600
     bn_r_hip01:
       data:
         first: 1
-        second: be860100
+        second: b4860100
       data:
         first: 4
-        second: 9e1a0600
+        second: 941a0600
     bn_r_knee01:
+      data:
+        first: 1
+        second: a8860100
+      data:
+        first: 4
+        second: 881a0600
+    bn_r_should01:
       data:
         first: 1
         second: d0860100
       data:
         first: 4
         second: b01a0600
-    bn_r_should01:
-      data:
-        first: 1
-        second: c2860100
-      data:
-        first: 4
-        second: a21a0600
     bn_r_wrist01:
       data:
         first: 1
@@ -206,14 +205,14 @@ ModelImporter:
     jnt01:
       data:
         first: 1
-        second: cc860100
+        second: b0860100
       data:
         first: 4
-        second: ac1a0600
+        second: 901a0600
     root:
       data:
         first: 1
-        second: ca860100
+        second: ac860100
       data:
         first: 4
-        second: aa1a0600
+        second: 8c1a0600
