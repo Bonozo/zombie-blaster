@@ -28,7 +28,6 @@ public class Control : MonoBehaviour {
 	#region Variables
 	
 	private ZombiGenerator zombieGenerator;
-	private SoundPlayer soundPlayer;
 	private Store store;
 	
 	private float health = 1f;
@@ -50,7 +49,6 @@ public class Control : MonoBehaviour {
 	void Start ()
 	{
 		zombieGenerator = (ZombiGenerator)GameObject.FindObjectOfType(typeof(ZombiGenerator));
-		soundPlayer = (SoundPlayer)GameObject.FindObjectOfType(typeof(SoundPlayer));
 		store = (Store)GameObject.FindObjectOfType(typeof(Store));
 		
 		health = Option.Health;
@@ -299,11 +297,11 @@ public class Control : MonoBehaviour {
 		
 		WaveInfo waveInfo = (WaveInfo)GameObject.FindObjectOfType(typeof(WaveInfo));
 		waveInfo.ShowWave(currentwave);
-		soundPlayer.PlayLevel(currentwave);
+		LevelInfo.Audio.PlayLevel(currentwave);
 	}
 	public void ToLose()
 	{
-		soundPlayer.StopAll();
+		LevelInfo.Audio.StopAll();
 		audio.PlayOneShot(AudioGameOver);
 		audio.Stop();
 		lose = true;

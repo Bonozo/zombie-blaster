@@ -12,12 +12,6 @@ public class SelectArea : MonoBehaviour {
 		GameEnvironment.StartWave = 0;
 	}
 
-	void Update()
-	{
-		if( Input.GetKey(KeyCode.Escape) )
-			Application.LoadLevel("mainmenu");
-	}
-	
 	// Update is called once per frame
 	void OnGUI ()
 	{ 

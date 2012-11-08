@@ -74,6 +74,7 @@ public class Store : MonoBehaviour {
 			{
 				if( GameEnvironment.Money >= cost )
 				{
+					audio.Play();
 					GameEnvironment.Money -= cost;
 					GameEnvironment.storeGun[wooi].store += GameEnvironment.storeGun[wooi].pocketsize;
 					GameEnvironment.storeGun[wooi].enabled = true;

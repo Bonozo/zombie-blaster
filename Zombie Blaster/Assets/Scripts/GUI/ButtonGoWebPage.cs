@@ -5,16 +5,21 @@ public class ButtonGoWebPage : ButtonBase {
 	
 	public string ulr;
 	
-	void OnMouseUp()
+	/*void OnMouseUp()
 	{
 		Application.OpenURL(ulr);
-	}
+	}*/
 	
 	protected override void Update()
 	{
-		foreach(Touch touch in Input.touches)
+		base.Update();
+		
+		if( base.Pressed() )
+			Application.OpenURL(ulr);
+		
+		/*foreach(Touch touch in Input.touches)
 			if( guiTexture.HitTest(touch.position) && touch.phase == TouchPhase.Ended)
 				Application.OpenURL(ulr);
-		base.Update();
+		base.Update();*/
 	}
 }

@@ -3,9 +3,15 @@ using System.Collections;
 
 public class BulletZombie : MonoBehaviour {
 	
+	public enum FireType
+	{
+		Straight,
+		Throw
+	}
+	
 	public float DestroyTime = 3f;
+	public FireType fireType;
 	public float Speed = 5f;
-	public float Y = 2.5f;
 	
 	private Control control;
 	
@@ -14,27 +20,35 @@ public class BulletZombie : MonoBehaviour {
 		
 		control = (Control)GameObject.FindObjectOfType(typeof(Control));
 		
-		transform.position = new Vector3(transform.position.x,Y,transform.position.z);
-		transform.LookAt(GameObject.Find("GunAirgun").transform.position,Vector3.up);
-		transform.Translate(0.5f*Vector3.forward);
-		transform.Translate(0.2f*Vector3.right);
+		if( fireType == FireType.Straight )
+		{
+			Vector3 to = control.transform.position; to.y = 2f;
+			transform.LookAt(to,Vector3.up);
+		}
+		else
+		{
+			Vector3 dir = control.transform.position - transform.position; dir.y=1;
+			rigidbody.angularVelocity = new Vector3(Random.Range(0,360f),Random.Range(0,360f),Random.Range(0,360f));
+			rigidbody.AddForce(dir*Speed);
+		}
 		
+		Destroy(this.gameObject,DestroyTime);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		transform.Translate(Time.deltaTime*Speed*Vector3.forward);
 		
-		Vector3 v = transform.position;
+		if( fireType == FireType.Straight )
+		{
+			transform.Translate(Time.deltaTime*Speed*Vector3.forward);
+		}
+
+		Vector3 v = transform.position-control.transform.position;
 		v.y = 0;
 		if( v.magnitude <= 0.5f )
 		{
 			control.GetHealth(-0.01f);
 			Destroy(this.gameObject);
 		}
-		
-		DestroyTime -= Time.deltaTime;
-		if( DestroyTime <= 0 )
-			Destroy(this.gameObject);
 	}
 }

@@ -13,17 +13,14 @@ public class ZombieRagdoll : MonoBehaviour {
 	
 	private bool rd = false;
 	private float rootbeginposy;
-	private float forcey = 0;
+	//private float forcey = 0;
 	
 	public GameObject head;
 	private CollisionSender headcol;
 	private bool falledsoundplayed = false;
 	
-	private SoundPlayer soundPlayer;
-	
 	// Use this for initialization
 	void Start () {
-		soundPlayer = (SoundPlayer)GameObject.FindObjectOfType(typeof(SoundPlayer));
 		
 		Fire.particleEmitter.emit = true;
 		Smoke.particleEmitter.emit = true;
@@ -80,7 +77,7 @@ public class ZombieRagdoll : MonoBehaviour {
 		if( !falledsoundplayed && headcol.entered )
 		{
 			falledsoundplayed = true;
-			soundPlayer.PlayZombieFalls();
+			LevelInfo.Audio.PlayZombieFalls();
 		}
 		
 		if( DestroyTime <= 0f )

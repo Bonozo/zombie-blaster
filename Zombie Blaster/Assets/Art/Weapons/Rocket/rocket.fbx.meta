@@ -3,6 +3,7 @@ guid: 4083344c638b113449f0d9a48599eb0e
 ModelImporter:
   fileIDToRecycleName:
     4300000: polySurface12
+    4300002: polySurface23
   serializedVersion: 10
   materials:
     importMaterials: 1

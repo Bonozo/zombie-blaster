@@ -10,17 +10,17 @@ public class ButtonStore : ButtonBase {
 		store = (Store)GameObject.FindObjectOfType(typeof(Store));
 	}
 	
-	void OnMouseUp()
+	/*void OnMouseUp()
 	{
 		Time.timeScale = 0.0f;
-	}
+	}*/
 	
 	protected override void Update()
 	{
-		foreach(Touch touch in Input.touches)
-			if( guiTexture.HitTest(touch.position) && touch.phase == TouchPhase.Ended)
-				
-				Time.timeScale = 0.0f;
 		base.Update();
+		
+		if( base.Pressed() )
+				Time.timeScale = 0.0f;
+		
 	}
 }

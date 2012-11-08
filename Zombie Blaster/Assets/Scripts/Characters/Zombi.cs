@@ -5,42 +5,42 @@ public class Zombi : MonoBehaviour {
 	
 	#region Parameters
 	
+	// Basic Params
 	public float Speed = 0.5f;
 	public float ZombieHeight = 1.35f;
 	public float WaitDistance = 1.5f;
+	public float CollisionToDownLenght = 0.35f;
 	
+	// Parts
 	public GameObject ZombieRagdoll;
 	public GameObject ZombieFire;
 	public GameObject ZombieSmoke;
-	public GameObject ZombieSheriffBullet;
 	public HeadHit headHit;
-	public GameObject ParticleDirtClod;
-	
-	public AudioClip AudioSpawn;
-	public AudioClip AudioZombieAttackWalk;
-	public AudioClip AudioShoot;
-	public AudioClip AudioJump;
-	
-	public int playAudioZombieAttackWalkRate = 1000;
-	public float CollisionToDownLenght = 0.35f;
-	
+
+	// Scores
 	public float BitePoint = 0.01f;
-	
 	public int PlayerScoreForDie = 100;
-	
-	public string[] extraAnimations;
-	
+		
+	// Helemt
+	public bool haveHelmet = false;
 	public GameObject HelmetPrefab;
 	
-	public bool haveHelmet = false;
+	// Jump
+	public bool canJump;
+	public AudioClip jumpAudio;	
+	
+	// Shoot
+	public bool canShoot;
+	public Transform shootTransform;
+	public GameObject shootBullet;
+	public float shootTime;
+	public AudioClip shootAudio;
+	
 	
 	#endregion
 	
 	#region Variables
 
-	private Control control;
-	private SoundPlayer soundPlayer;
-	private Camera mainCamera;
 	private SwipeUpCaution swipeUpcaution;
 	
 	private float flaming = 1f;
@@ -61,11 +61,7 @@ public class Zombi : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		
-		control = (Control)GameObject.FindObjectOfType(typeof(Control));
-		mainCamera = (Camera)GameObject.FindObjectOfType(typeof(Camera));
 		swipeUpcaution = (SwipeUpCaution)GameObject.FindObjectOfType(typeof(SwipeUpCaution));
-		soundPlayer = (SoundPlayer)GameObject.FindObjectOfType(typeof(SoundPlayer));
 		
 		headHit.tag = "ZombieHead";
 		headHit.HeadContainer = this;
@@ -80,11 +76,11 @@ public class Zombi : MonoBehaviour {
 		transform.position = new Vector3(transform.position.x,ZombieHeight,transform.position.z);
 		
 		// Playing Spawn Animation
-		particleDirtClod = (GameObject)Instantiate(ParticleDirtClod,new Vector3(transform.position.x,1f,transform.position.z),Quaternion.identity);
+		particleDirtClod = (GameObject)Instantiate(LevelInfo.Environments.dirtyClodPrefab,new Vector3(transform.position.x,1f,transform.position.z),Quaternion.identity);
 		if(spawning)
 		{
 			animation.Play("spawn");
-			soundPlayer.PlayZombieSpawn();
+			LevelInfo.Audio.PlayZombieSpawn();
 		}
 	}
 	
@@ -93,20 +89,20 @@ public class Zombi : MonoBehaviour {
 	void Update () {
 		
 		// look to player.
-		Vector3 np = control.transform.position-transform.position; np.y = 0;
+		Vector3 np = LevelInfo.Environments.control.transform.position-transform.position; np.y = 0;
 		transform.rotation = Quaternion.LookRotation(np,Vector3.up);
 		
 		if( animation.IsPlaying("spawn") ) return;
 		if( animation.IsPlaying("jump") ) return;
 		if( animation.IsPlaying("shoot") ) 
 		{
-			if( animation["shoot"].time >= 0.5f && animation["shoot"].time <= 0.6f)
+			if( animation["shoot"].time >= shootTime )
 			{
 				shotDeltaTime -= Time.deltaTime;
-				if(shotDeltaTime <= 0 )
+				if( shotDeltaTime <= 0 )
 				{
-					Instantiate(ZombieSheriffBullet,transform.position,transform.rotation);
-					shotDeltaTime = 0.1f;
+					Instantiate(shootBullet,shootTransform.position,Quaternion.identity);
+					shotDeltaTime = animation["shoot"].length-animation["shoot"].time+0.05f;
 				}
 			}
 			return;
@@ -118,43 +114,43 @@ public class Zombi : MonoBehaviour {
 		if( animation.IsPlaying("zap") ) return;
 		if( animation.IsPlaying("get hit") ) return;
 		
-		if( control.Died ) return;
+		if( LevelInfo.Environments.control.Died ) return;
 
 		// If Near Updates
 		if( NearPlayer() )
 		{
-			swipeUpcaution.Activate(mainCamera.WorldToScreenPoint(transform.position));
+			swipeUpcaution.Activate(LevelInfo.Environments.mainCamera.WorldToScreenPoint(transform.position));
 				
 			
 			if( !animation.IsPlaying("attack01") && !animation.IsPlaying("attack02") )
 			{
 				animation.Play(Random.Range(1,3)==1?"attack01":"attack02");
 				if( flaming <= 0.75f )
-					control.GetBite(2*BitePoint);
+					LevelInfo.Environments.control.GetBite(2*BitePoint);
 				else
-					control.GetBite(BitePoint);
+					LevelInfo.Environments.control.GetBite(BitePoint);
 			}
 			
 		}
 		// If Far Update
 		else
 		{
-			//??// Shoting
-			if( runningTime <= 0f &&  HitWithName(gameObject.name,"Sheriff") && Random.Range(0,300)==1)
+			/// Shoot
+			if( runningTime <= 0f &&  canShoot && Random.Range(0,300)==1)
 			{
-				if( AudioShoot != null ) audio.PlayOneShot(AudioShoot);
+				if( shootAudio != null ) audio.PlayOneShot(shootAudio);
 				animation.Play("shoot");
 				return;
 			}
-			//??// Jump
-			if( runningTime <= 0f && (HitWithName(gameObject.name,"Ballerina") || HitWithName(gameObject.name,"FootballPlayer")) && Random.Range(0,300)==1)
+			// Jump
+			if( runningTime <= 0f && canJump && Random.Range(0,300)==1)
 			{
-				if( AudioJump != null ) audio.PlayOneShot(AudioJump);
+				if( jumpAudio != null ) audio.PlayOneShot(jumpAudio);
 				animation.Play("jump");
 				return;
 			}
-			////
 			
+			// ?? // Running
 			if( runningTime <= 0f && HitWithName(gameObject.name,"FootballPlayer") && Random.Range(0,300)==1 )
 			{
 				runningTime = RunningTime;
@@ -174,8 +170,8 @@ public class Zombi : MonoBehaviour {
 			NormalizeHeight();
 			float spd = Speed; if( runningTime > 0f ) spd *= 2f;
 			if(CanMoveForward()) transform.Translate(Time.deltaTime*spd*Vector3.forward);
-			if( !audio.isPlaying && Random.Range(1,playAudioZombieAttackWalkRate)==1 )
-				audio.PlayOneShot(AudioZombieAttackWalk);
+			if( !audio.isPlaying && Random.Range(0,LevelInfo.Audio.zombieAudioAttackWalkRate)==1 )
+				audio.PlayOneShot(LevelInfo.Audio.AudioZombieAttackWalk);
 		}
 		
 	}
@@ -185,6 +181,7 @@ public class Zombi : MonoBehaviour {
 		RaycastHit hit;    
 		
 		Vector3 pos = transform.position;
+		// ?? // 
 		if( HitWithName(gameObject.name,"Fatkid") || HitWithName(gameObject.name,"Farmer2") ||
 			HitWithName(gameObject.name,"Ballerina") || HitWithName(gameObject.name,"FootballPlayer"))
 			pos.y += 0.4f;
@@ -236,7 +233,7 @@ public class Zombi : MonoBehaviour {
 		if( Time.timeScale == 0.0f ) return;
 		
 		Vector3 head = headHit.transform.position; head.y += 0.5f;
-		Vector3 pos = mainCamera.WorldToScreenPoint(head);
+		Vector3 pos = LevelInfo.Environments.mainCamera.WorldToScreenPoint(head);
 		if( pos.z > 0 )
 		{
 			pos.y = Screen.height - pos.y;
@@ -356,7 +353,7 @@ public class Zombi : MonoBehaviour {
 	{
 		if( died ) return;
 		died = true;
-		control.GetZombie(PlayerScoreForDie);
+		LevelInfo.Environments.control.GetZombie(PlayerScoreForDie);
 		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
 		ZombieSmoke.particleEmitter.minSize = ZombieSmoke.particleEmitter.maxSize = (1-smoking)*1f;
 		ZombieSmoke.particleEmitter.minSize = ZombieSmoke.particleEmitter.maxSize = (1-smoking)*1f;
@@ -364,7 +361,7 @@ public class Zombi : MonoBehaviour {
 		g.SendMessage("SetSmokeSize",ZombieSmoke.particleEmitter.maxSize);
 		
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
-		Vector3 dir = transform.position - control.transform.position; dir.Normalize();
+		Vector3 dir = transform.position - LevelInfo.Environments.control.transform.position; dir.Normalize();
         foreach (Rigidbody child in rigidbodies) 
 			child.AddForce(1000f*dir);
 		
@@ -375,7 +372,7 @@ public class Zombi : MonoBehaviour {
 	{
 		if( died ) return;
 		died = true;
-		control.GetZombie(PlayerScoreForDie);
+		LevelInfo.Environments.control.GetZombie(PlayerScoreForDie);
 		
 		// Adding Force
 		GameObject ragdoll = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
@@ -392,7 +389,7 @@ public class Zombi : MonoBehaviour {
 	{
 		if( died ) return;
 		died = true;
-		control.GetZombie(PlayerScoreForDie);
+		LevelInfo.Environments.control.GetZombie(PlayerScoreForDie);
 		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
 		ZombieSmoke.particleEmitter.minSize = ZombieSmoke.particleEmitter.maxSize = (1-smoking)*1f;
 		ZombieSmoke.particleEmitter.minSize = ZombieSmoke.particleEmitter.maxSize = (1-smoking)*1f;
@@ -400,7 +397,7 @@ public class Zombi : MonoBehaviour {
 		g.SendMessage("SetSmokeSize",ZombieSmoke.particleEmitter.maxSize);
 		
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
-		Vector3 dir = transform.position - control.transform.position; dir.Normalize(); dir.y =0.5f;
+		Vector3 dir = transform.position - LevelInfo.Environments.control.transform.position; dir.Normalize(); dir.y =0.5f;
         foreach (Rigidbody child in rigidbodies) 
 			child.AddForce(2000f*dir);
 		
@@ -415,7 +412,7 @@ public class Zombi : MonoBehaviour {
 		ragdoll.SendMessage("SetFireSize",ZombieFire.particleEmitter.maxSize);
 		ragdoll.SendMessage("SetSmokeSize",ZombieSmoke.particleEmitter.maxSize);
 		var rigidbodies = ragdoll.GetComponentsInChildren(typeof(Rigidbody));
-		Vector3 dir = transform.position - control.transform.position; dir.Normalize(); dir.y = 0.5f;
+		Vector3 dir = transform.position - LevelInfo.Environments.control.transform.position; dir.Normalize(); dir.y = 0.5f;
         foreach (Rigidbody child in rigidbodies) 
 			child.AddForce(1500f*dir);
 		ragdoll.SendMessage("ThrowedOut");
@@ -444,7 +441,7 @@ public class Zombi : MonoBehaviour {
 	
 	public float XZDistFromPlayer()
 	{
-		return Vector3.Distance(transform.position,new Vector3(control.transform.position.x,transform.position.y,control.transform.position.z));
+		return Vector3.Distance(transform.position,new Vector3(LevelInfo.Environments.control.transform.position.x,transform.position.y,LevelInfo.Environments.control.transform.position.z));
 	}
 	
 	public bool NearPlayer()

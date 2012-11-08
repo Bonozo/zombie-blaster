@@ -10,7 +10,7 @@ public class Option : MonoBehaviour {
 	public static bool UnlimitedHealth = false;
 	public static bool UnlimitedAmmo = false;
 	public static bool UnlockAreas = false;
-	public static bool Vibration = false;
+	public static bool Vibration = true;
 	//public static int Quality = QualitySettings.GetQualityLevel();
 	
 	// Use this for initialization
@@ -31,13 +31,13 @@ public class Option : MonoBehaviour {
 	{
 		float w = 0f;
 		if( index > 8 ) { w = Screen.width*0.5f; index-=8; }
-		return new Rect(w + Screen.width*0.05f,index*50f,textSize.x,textSize.y);
+		return new Rect(w + Screen.width*0.05f,index*40f,textSize.x,textSize.y);
 	}
 	private Rect buttonRect(float index)
 	{
 		float w = 0f;
 		if( index > 8 ) { w = Screen.width*0.5f; index-=8; }
-		return new Rect(w+Screen.width*0.0f+textSize.x,index*50f,buttonSize.x,buttonSize.y);
+		return new Rect(w+Screen.width*0.1f+textSize.x,index*40f,buttonSize.x,buttonSize.y);
 	}
 	
 	void OnGUI()
@@ -90,9 +90,5 @@ public class Option : MonoBehaviour {
 			else
 				QualitySettings.IncreaseLevel();
 		}
-		
-		
-		if( GUI.Button( new Rect(Screen.width-100,Screen.height-60,80,40),"Main Menu") || Input.GetKey(KeyCode.Escape) )
-			Application.LoadLevel("mainmenu");
 	}
 }
