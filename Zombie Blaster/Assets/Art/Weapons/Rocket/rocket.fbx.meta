@@ -1,9 +1,8 @@
 fileFormatVersion: 2
-guid: 4083344c638b113449f0d9a48599eb0e
+guid: 0db61aa35eba16c4d85642e929c7db88
 ModelImporter:
   fileIDToRecycleName:
-    4300000: polySurface12
-    4300002: polySurface23
+    4300000: polySurface23
   serializedVersion: 10
   materials:
     importMaterials: 1

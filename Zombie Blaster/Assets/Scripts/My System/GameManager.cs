@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour {
 	
 	public Camera mainCamera;
 	public Control control;
+	public ZombiGenerator zombieGenerator;
 	
 	#endregion
 	

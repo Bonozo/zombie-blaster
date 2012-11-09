@@ -61,6 +61,12 @@ public class AudioManager : MonoBehaviour {
 		audioSourceZombies.PlayOneShot(ZombieFall);
 	}
 	
+	// Gets Attacket
+	public AudioClip ZombieGetsAttacked;
+	public void PlayZombieGetsAttcked()
+	{
+		audioSourceZombies.PlayOneShot(ZombieGetsAttacked);
+	}
 	#endregion
 	
 	

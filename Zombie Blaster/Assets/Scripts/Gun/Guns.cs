@@ -11,7 +11,7 @@ public class Guns : MonoBehaviour {
 	public Texture2D ButtonPlus,ButtonMinus;
 	
 	private int current = 0;
-	private bool showotherbuttons = false;
+	//private bool showotherbuttons = false;
 	
 	private Store store;
 	
@@ -100,7 +100,7 @@ public class Guns : MonoBehaviour {
 		
 		// Draw Ammo Information
 		GUI.color = Color.black;
-		GUI.Label(new Rect(Screen.width-gbw,Screen.height-gbh-20f,gbw,20f),gun[current].AmmoInformation);		
+		GUI.Label(new Rect(20f,Screen.height-gbh-20f,gbw,20f),gun[current].AmmoInformation);		
 	}
 	
 	#endregion

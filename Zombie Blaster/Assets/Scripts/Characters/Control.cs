@@ -27,7 +27,6 @@ public class Control : MonoBehaviour {
 	
 	#region Variables
 	
-	private ZombiGenerator zombieGenerator;
 	private Store store;
 	
 	private float health = 1f;
@@ -48,7 +47,6 @@ public class Control : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
 	{
-		zombieGenerator = (ZombiGenerator)GameObject.FindObjectOfType(typeof(ZombiGenerator));
 		store = (Store)GameObject.FindObjectOfType(typeof(Store));
 		
 		health = Option.Health;
@@ -293,7 +291,7 @@ public class Control : MonoBehaviour {
 
 		currentwave++;
 		wavezombiecount = NumberZombiesForEachWave;
-		zombieGenerator.StartNewWave(wavezombiecount);
+		LevelInfo.Environments.zombieGenerator.StartNewWave(wavezombiecount);
 		
 		WaveInfo waveInfo = (WaveInfo)GameObject.FindObjectOfType(typeof(WaveInfo));
 		waveInfo.ShowWave(currentwave);

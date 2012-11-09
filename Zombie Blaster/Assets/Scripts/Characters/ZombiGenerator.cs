@@ -4,6 +4,8 @@ using System.Collections;
 public class ZombiGenerator : MonoBehaviour {
 	
 	public GameObject[] Zombie;
+	public GameObject[] ZombieFootballPlayers;
+	
 	public float GenerationRateMin = 2f, GenerationRateMax=5f;
 	
 	private float rate = 0.0f;
@@ -16,12 +18,14 @@ public class ZombiGenerator : MonoBehaviour {
 		control = (Control)GameObject.FindObjectOfType(typeof(Control));
 	}
 	
-	int WhatZombieToSpawn()
+	GameObject WhatZombieToSpawn()
 	{
-		if( control.CurrentLevel == 1 )
-			return Random.Range(11,13);
+		GameObject g;
+		if( control.CurrentLevel == 1 ) // FottballPlayerLevel
+			g = (GameObject)Instantiate(ZombieFootballPlayers[Random.Range(0,ZombieFootballPlayers.Length)],RandomPosition(),Quaternion.Euler(0,180,0) );
 		else
-			return Random.Range(0,11);
+			g = (GameObject)Instantiate(Zombie[Random.Range(0,Zombie.Length)],RandomPosition(),Quaternion.Euler(0,180,0) );
+		return g;
 	}
 	
 	// Update is called once per frame
@@ -31,8 +35,7 @@ public class ZombiGenerator : MonoBehaviour {
 		{
 			rate = Random.Range(GenerationRateMin,GenerationRateMax);
 			
-			//Instantiate(Zombie[Random.Range(0,Zombie.Length)],new Vector3(0,0,5),Quaternion.Euler(0,180,0) );
-			GameObject newzombie = (GameObject)Instantiate(Zombie[WhatZombieToSpawn()],RandomPosition(),Quaternion.Euler(0,180,0) );
+			GameObject newzombie = WhatZombieToSpawn();
 			if( NearAtZombie(newzombie) ) 
 			{
 				Destroy(newzombie);

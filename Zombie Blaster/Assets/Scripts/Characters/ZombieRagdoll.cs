@@ -28,6 +28,8 @@ public class ZombieRagdoll : MonoBehaviour {
 		rootbeginposy = head.transform.position.y*0.9f;
 		
 		headcol = head.AddComponent<CollisionSender>();
+		
+		LevelInfo.Audio.PlayZombieGetsAttcked();
 	}
 
 
