@@ -51,7 +51,6 @@ public class Zombi : MonoBehaviour {
 	private float RunningTime = 3f;
 	private float runningTime = 0.0f;
 	
-	public Texture2D whitetexture,redtexture;
 	private GameObject particleDirtClod;
 	
 	#endregion
@@ -238,8 +237,8 @@ public class Zombi : MonoBehaviour {
 			pos.y = Screen.height - pos.y;
 			pos.z = 1f;
 		
-			GUI.DrawTexture(new Rect(pos.x-20,pos.y,40,5),whitetexture);
-			GUI.DrawTexture(new Rect(pos.x-20,pos.y,damage*4,5),redtexture);
+			GUI.DrawTexture(new Rect(pos.x-20,pos.y,40,5),LevelInfo.Environments.ProgressBarZombieEmpty);
+			GUI.DrawTexture(new Rect(pos.x-20,pos.y,damage*4,5),LevelInfo.Environments.ProgressBarZombieFull);
 		}
 		//GUI.Label(new Rect(0,100,200,200),"Dist " + transform.position.magnitude );
 	}

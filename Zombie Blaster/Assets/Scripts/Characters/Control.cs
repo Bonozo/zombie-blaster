@@ -15,10 +15,6 @@ public class Control : MonoBehaviour {
 	
 	private float health = 1f;
 	
-	private Vector2 ProgressBarHealthPos = new Vector2(50,10);
-	private Vector2 ProgressBarHealthSize = new Vector2(100,30);
-	private Rect ProgressBarHealthLabelRect = new Rect(10,15,100,20);
-	
 	#endregion
 	
 	#region Start, Update
@@ -26,12 +22,8 @@ public class Control : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
 	{
-		
 		health = Option.Health;
-		
-		LevelInfo.State.lose = false;		
-		LevelInfo.State.score = 0;
-		
+	
 		transform.position.Set(VantagePoints[0].x,transform.position.y,VantagePoints[0].z);
 		
 		LevelInfo.State.ForceLevel(GameEnvironment.StartLevel,0);
@@ -48,7 +40,7 @@ public class Control : MonoBehaviour {
 		if( Input.GetKey(KeyCode.J) )
 			health += 0.05f;
 		
-		if( LevelInfo.State.lose ) return;
+		if( LevelInfo.State.state == GameState.Lose ) return;
 		
 		if( Option.UnlimitedHealth ) health = 1.0f;
 		
@@ -81,6 +73,8 @@ public class Control : MonoBehaviour {
 		rot.y += Speed*Time.deltaTime*Input.GetAxis("Horizontal"); // for PC version test.
 		
 		transform.rotation = Quaternion.Euler(rot);
+		
+		UpdateHealthBar();
 	}
 	
 	private void MovingUpdate()
@@ -139,34 +133,30 @@ public class Control : MonoBehaviour {
 	
 	#region On GUI
 	
-	void OnGUI()
-	{	
-		// Draw Health
-	    GUI.DrawTexture(new Rect(ProgressBarHealthPos.x, ProgressBarHealthPos.y, ProgressBarHealthSize.x, ProgressBarHealthSize.y),LevelInfo.Environments.ProgressBarEmpty);
-	    GUI.DrawTexture(new Rect(ProgressBarHealthPos.x, ProgressBarHealthPos.y, ProgressBarHealthSize.x * Mathf.Clamp01(health), ProgressBarHealthSize.y), LevelInfo.Environments.ProgressBarFull);
-	    GUI.DrawTexture(new Rect(ProgressBarHealthPos.x+ProgressBarHealthSize.x, ProgressBarHealthPos.y, ProgressBarHealthSize.x * Mathf.Max (0f,health-1), ProgressBarHealthSize.y), LevelInfo.Environments.ProgressBarArmor);
-		GUI.Label(ProgressBarHealthLabelRect,"Health");	
+	void UpdateHealthBar()
+	{
+		Vector3 v;
+		// Full scale
+		v = LevelInfo.Environments.ProgressBarPlayerFull.transform.localScale;
+		v.x = 0.1f*Mathf.Clamp01(health);
+		LevelInfo.Environments.ProgressBarPlayerFull.transform.localScale = v;
+		// Full position
+		v = LevelInfo.Environments.ProgressBarPlayerFull.transform.position;
+		v.x = LevelInfo.Environments.ProgressBarPlayerEmpty.transform.position.x-0.05f+0.05f*Mathf.Clamp01(health);
+		LevelInfo.Environments.ProgressBarPlayerFull.transform.position = v;
 		
-		// Draw Lose Window
+		// Armor position
+		v = LevelInfo.Environments.ProgressBarPlayerArmor.transform.position;
+		v.x = LevelInfo.Environments.ProgressBarPlayerEmpty.transform.position.x + 0.5f*LevelInfo.Environments.ProgressBarPlayerEmpty.transform.localScale.x + 0.5f*Mathf.Max (0f,0.1f*health-0.1f);
+		LevelInfo.Environments.ProgressBarPlayerArmor.transform.position = v;
+	
+		// Armor scale
+		v = LevelInfo.Environments.ProgressBarPlayerArmor.transform.localScale;
+		v.x = Mathf.Max (0f,0.1f*health-0.1f);
+		LevelInfo.Environments.ProgressBarPlayerArmor.transform.localScale = v;
 		
-		if( LevelInfo.State.lose)
-		{	
-			GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"Reply?");
-			if( GUI.Button(new Rect(0.35f*Screen.width,0.4f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "Reply" ) )	
-			{
-				GameEnvironment.StartWave = LevelInfo.State.currentWave-1;
-				Time.timeScale = 1.0f;
-				Application.LoadLevel(Application.loadedLevel);
-			}
-			if( GUI.Button(new Rect(0.35f*Screen.width,0.6f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "Main Menu" ) )
-			{
-				Time.timeScale = 1.0f;
-				Application.LoadLevel("mainmenu");
-			}	
-		}
-		
-		//GUI.Label(new Rect(0,160,200,25), "Health : " + health);
 	}
+	
 	
 	#endregion
 	
@@ -191,7 +181,10 @@ public class Control : MonoBehaviour {
 		LevelInfo.State.score += LevelInfo.State.scoreForZombie;
 		LevelInfo.State.zombiesLeftForThisWave--;
 		if( LevelInfo.State.zombiesLeftForThisWave <= 0 && GameObject.FindGameObjectsWithTag("ZombieHead").Length == 1)
+		{
+			LevelInfo.Environments.waveInfo.WaveComplete();
 			StartCoroutine(MoveTo(VantagePoints[LevelInfo.State.currentWave%VantagePoints.Length]));
+		}
 	}
 	
 	public void GetHealth(float h)
@@ -202,6 +195,7 @@ public class Control : MonoBehaviour {
 				Handheld.Vibrate();
 		
 		health += h;
+		if( health > 3f ) health = 3f;//?? 2x armor maximum//
 		if( health <= 0.0f)
 		{
 			health = 0.0f;
@@ -216,16 +210,26 @@ public class Control : MonoBehaviour {
 		LevelInfo.State.zombiesLeftForThisWave = LevelInfo.State.zombiesCountFactor*LevelInfo.State.currentWave;
 		LevelInfo.Environments.generator.StartNewWave(LevelInfo.State.zombiesLeftForThisWave);
 		
-		LevelInfo.Environments.waveInfo.ShowWave(LevelInfo.State.currentWave);
+		LevelInfo.Environments.waveInfo.ShowWave(LevelInfo.State.currentWave,LevelInfo.State.zombiesLeftForThisWave);
 		LevelInfo.Audio.PlayLevel(LevelInfo.State.currentWave);
 	}
-
+	
+	
+	public void RestartWave()
+	{
+		LevelInfo.State.zombiesLeftForThisWave = LevelInfo.State.zombiesCountFactor*LevelInfo.State.currentWave;
+		LevelInfo.Environments.generator.StartNewWave(LevelInfo.State.zombiesLeftForThisWave);
+		
+		LevelInfo.Environments.waveInfo.ShowWave(LevelInfo.State.currentWave,LevelInfo.State.zombiesLeftForThisWave);
+		LevelInfo.Audio.PlayLevel(LevelInfo.State.currentWave);	
+	}
+	
 	public void ToLose()
 	{
 		LevelInfo.Audio.StopAll();
 		LevelInfo.Audio.PlayGameOver();
 		audio.Stop();
-		LevelInfo.State.lose = true;
+		LevelInfo.State.state = GameState.Lose;
 		Time.timeScale = 0.0f;
 		LevelInfo.Environments.store.enabled = false;		
 	}

@@ -10,7 +10,8 @@ public class MainMenu : MonoBehaviour {
 		MainMenu,
 		Option,
 		Credits,
-		AreaMap
+		AreaMap,
+		Store
 	}
 	
 	#endregion
@@ -18,8 +19,8 @@ public class MainMenu : MonoBehaviour {
 	#region Parameters
 	
 	public AudioSource audioPressed;
-	public GUITexture guiOptionButton,guiPlayButton;
-	public GameObject objMenu,objOption,objCreadits,objAreaMap;
+	public GUITexture guiOptionButton,guiPlayButton,guiStore;
+	public GameObject objMenu,objOption,objCreadits,objAreaMap,objStore;
 	public AudioSource SoundBackground,SoundWind;
 	
 	private MenuState _state;
@@ -39,10 +40,16 @@ public class MainMenu : MonoBehaviour {
 			objOption.SetActiveRecursively(_state == MenuState.Option);
 			objCreadits.SetActiveRecursively(_state == MenuState.Credits);
 			objAreaMap.SetActiveRecursively(_state == MenuState.AreaMap);
+			objStore.SetActiveRecursively(_state == MenuState.Store);
 			
 			if( _state == MenuState.AreaMap )
 				SoundBackground.Stop();
 		}
+	}
+	
+	public void GoMainState()
+	{
+		State = MenuState.MainMenu;
 	}
 	
 	#endregion
@@ -82,6 +89,11 @@ public class MainMenu : MonoBehaviour {
 				State = MenuState.Option;
 			if( ButtonPressed(guiPlayButton) )
 				State = MenuState.AreaMap;
+			if( ButtonPressed(guiStore) )
+			{
+				Time.timeScale = 0.0f;
+				State = MenuState.Store;
+			}
 			if( Input.GetKeyUp(KeyCode.Escape) )
 				Application.Quit();
 			break;

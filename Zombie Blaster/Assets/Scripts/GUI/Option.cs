@@ -11,6 +11,8 @@ public class Option : MonoBehaviour {
 	public static bool UnlimitedAmmo = false;
 	public static bool UnlockAreas = false;
 	public static bool Vibration = true;
+	public static bool SpotLight = true;
+	public static bool Fog = false;
 	//public static int Quality = QualitySettings.GetQualityLevel();
 	
 	//--------------- store purchase code ------------------//
@@ -168,6 +170,14 @@ public class Option : MonoBehaviour {
 			else
 				QualitySettings.IncreaseLevel();
 		}
+		
+		GUI.Label(textRect(11),"Light");
+		if( GUI.Button(buttonRect(11),SpotLight?"FlashLight":"Directional" ) )
+			SpotLight = !SpotLight;
+		
+		GUI.Label(textRect(12),"Fog");
+		if( GUI.Button(buttonRect(12),Fog?"ON":"OFF" ) )
+			Fog = !Fog;
 		
 		/*GUI.Label(textRect(16),"Purchase UnlockAreas");
 		if( GUI.Button(buttonRect(16),purchased==1?"purshased":"get this" ) )

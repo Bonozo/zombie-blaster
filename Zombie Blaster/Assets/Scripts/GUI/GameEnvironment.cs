@@ -5,7 +5,19 @@ public class GameEnvironment : MonoBehaviour {
 	
 	#region Static
 	
-	public static int zombieHeads = 0;
+	public static int _playerprefs_zombieHeads=0;
+	public static int zombieHeads
+	{
+		get
+		{
+			return _playerprefs_zombieHeads;
+		}
+		set
+		{
+			_playerprefs_zombieHeads = value;
+			PlayerPrefs.SetInt("zombieHeads",_playerprefs_zombieHeads);
+		}
+	}
 	public static int StartLevel = 0;
 	public static int StartWave = 0;
 	

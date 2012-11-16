@@ -10,7 +10,7 @@ public class ButtonBase : MonoBehaviour {
 	public bool Pressed()
 	{
 		foreach(Touch touch in Input.touches)
-			if( this.guiTexture.HitTest(touch.position ) )
+			if( this.guiTexture.HitTest(touch.position ) && touch.phase == TouchPhase.Ended)
 			{
 				if( audioPressed != null ) audioPressed.Play();
 				return true;

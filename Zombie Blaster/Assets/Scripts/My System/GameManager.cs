@@ -20,10 +20,17 @@ public class GameManager : MonoBehaviour {
 	public GUIText guiZombieHeads;
 	public GUIText guiScore;
 	public GUIText guiZombiesLeft;
+	public GUIText guiLives;
 	
-	public Texture2D ProgressBarEmpty;
-	public Texture2D ProgressBarFull;
-	public Texture2D ProgressBarArmor;
+	public GUITexture ProgressBarPlayerEmpty;
+	public GUITexture ProgressBarPlayerFull;
+	public GUITexture ProgressBarPlayerArmor;
+	
+	public Texture ProgressBarZombieEmpty;
+	public Texture ProgressBarZombieFull;
+	
+	public GameObject lightSpot;
+	public GameObject lightDirectional;
 	
 	#endregion
 	

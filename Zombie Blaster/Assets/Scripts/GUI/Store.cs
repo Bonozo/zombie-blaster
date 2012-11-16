@@ -5,6 +5,9 @@ public class Store : MonoBehaviour {
 	
 	public Texture2D textureBackground;
 	public Texture2D textureScreenShot;
+	public Texture2D textureZombieHead;
+	
+	public MainMenu objManiMenu;
 	
 	private readonly float updownbuttonheight = 0.1f*Screen.height;
 	private readonly float armorydown = 0.25f*Screen.height;
@@ -19,15 +22,21 @@ public class Store : MonoBehaviour {
 		// Background
 		GUI.DrawTexture(new Rect(0f,0f,Screen.width,Screen.height),textureBackground);
 		
-		// Current Currency Amount
-		GUI.Box(new Rect(0,0,0.5f*Screen.width,updownbuttonheight),"Zombie Head : " + GameEnvironment.zombieHeads);
+		// Current Zombie Head Amount
+		GUI.DrawTexture(new Rect(0.125f*Screen.width,0.005f*Screen.height,Screen.width*0.09f,Screen.height*0.09f),textureZombieHead);
+		GUI.Box(new Rect(0,0,0.5f*Screen.width,updownbuttonheight),"" + GameEnvironment.zombieHeads);
 		
 		// Return to Game
 		if( GUI.Button(new Rect(0,Screen.height-updownbuttonheight,Screen.width*0.5f,updownbuttonheight),"Return to Game") )
 		{
-			wooi = -1;
-			Time.timeScale = 1f;
-			GameEnvironment.IgnoreButtons();
+			if( objManiMenu != null )
+				objManiMenu.GoMainState();
+			else
+			{
+				wooi = -1;
+				Time.timeScale = 1f;
+				GameEnvironment.IgnoreButtons();
+			}
 		}
 		
 		if( GUI.Button(new Rect(Screen.width*0.5f,Screen.height-updownbuttonheight,Screen.width*0.5f,updownbuttonheight),"Main Menu") )

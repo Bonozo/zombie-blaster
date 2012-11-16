@@ -15,7 +15,7 @@ public class HeadHit : MonoBehaviour {
 	
 	void Update()
 	{
-		boxCollider.size = beginsize*(0.2f*HeadContainer.XZDistFromPlayer()+0.7f);
+		boxCollider.size = beginsize*(0.05f*HeadContainer.XZDistFromPlayer()+0.925f);
 	}
 	
 	public void DieNormal()
