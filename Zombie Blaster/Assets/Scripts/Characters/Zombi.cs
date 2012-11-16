@@ -5,7 +5,7 @@ public class Zombi : MonoBehaviour {
 	
 	#region Parameters
 	
-	// Basic Params
+	// Placement
 	public float Speed = 0.5f;
 	public float ZombieHeight = 1.35f;
 	public float WaitDistance = 1.5f;
@@ -19,7 +19,6 @@ public class Zombi : MonoBehaviour {
 
 	// Scores
 	public float BitePoint = 0.01f;
-	public int PlayerScoreForDie = 100;
 		
 	// Helemt
 	public bool haveHelmet = false;
@@ -353,7 +352,7 @@ public class Zombi : MonoBehaviour {
 	{
 		if( died ) return;
 		died = true;
-		LevelInfo.Environments.control.GetZombie(PlayerScoreForDie);
+		LevelInfo.Environments.control.GetZombie();
 		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
 		ZombieSmoke.particleEmitter.minSize = ZombieSmoke.particleEmitter.maxSize = (1-smoking)*1f;
 		ZombieSmoke.particleEmitter.minSize = ZombieSmoke.particleEmitter.maxSize = (1-smoking)*1f;
@@ -372,7 +371,7 @@ public class Zombi : MonoBehaviour {
 	{
 		if( died ) return;
 		died = true;
-		LevelInfo.Environments.control.GetZombie(PlayerScoreForDie);
+		LevelInfo.Environments.control.GetZombie();
 		
 		// Adding Force
 		GameObject ragdoll = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
@@ -389,7 +388,7 @@ public class Zombi : MonoBehaviour {
 	{
 		if( died ) return;
 		died = true;
-		LevelInfo.Environments.control.GetZombie(PlayerScoreForDie);
+		LevelInfo.Environments.control.GetZombie();
 		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
 		ZombieSmoke.particleEmitter.minSize = ZombieSmoke.particleEmitter.maxSize = (1-smoking)*1f;
 		ZombieSmoke.particleEmitter.minSize = ZombieSmoke.particleEmitter.maxSize = (1-smoking)*1f;

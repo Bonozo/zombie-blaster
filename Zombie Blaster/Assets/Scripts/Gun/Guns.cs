@@ -13,31 +13,24 @@ public class Guns : MonoBehaviour {
 	private int current = 0;
 	//private bool showotherbuttons = false;
 	
-	private Store store;
 	
 	// Use this for initialization
-	void Start () {
-		store = (Store)GameObject.FindObjectOfType(typeof(Store));
-		
+	void Start () {	
 		// initialize guns from option
 		for(int i=1;i<GameEnvironment.storeGun.Length;i++)
 			GameEnvironment.storeGun[i].SetEnabled(Option.WeaponsUnlocked);
 		if( Option.UnlimitedAmmo )
 			for(int i=0;i<GameEnvironment.storeGun.Length;i++)
 				GameEnvironment.storeGun[i].SetAsUnlimited();
-		
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if( Time.timeScale == 0.0f ) return;
 		foreach( GunBase g in gun ) g.ManualUpdate((Weapon)current );
-		
 	}
 	
 	#region OnGUI
-	
-
 	
 	private float gbw=80f, gbh=80;
 	private float pbw=50f,pbh=50f;
@@ -107,12 +100,12 @@ public class Guns : MonoBehaviour {
 	
 	#region Messages
 	
-	public void GetAmmo(int coef)
+/*	public void GetAmmo(int coef)
 	{
 		gun[current].GetAmmoStorePacket(coef);
 	}
 	
-	public void GetGun(int gunnumber,int coef)
+	public void GetWeapon(int gunnumber,int coef)
 	{
 		if( !gun[gunnumber].EnabledGun )
 		{
@@ -126,6 +119,24 @@ public class Guns : MonoBehaviour {
 			// Get Pocket
 			gun[gunnumber].GetAmmoStorePacket(coef);
 		}
+	}
+*/	
+	public void GetWeaponWithMAX(Weapon weapon)
+	{
+		int gunnumber = (int)weapon;
+		if( !gun[gunnumber].EnabledGun )
+		{
+			// Get Pocket and fast Reload
+			gun[gunnumber].EnabledGun = true;
+			gun[gunnumber].Ammo += gun[gunnumber].PacketSize;
+		}
+		
+		gun[gunnumber].GetAmmoStorePacketWithMaxAmmo();
+	}
+	
+	public void GetAmmoWithMax(Weapon weapon)
+	{
+		gun[(int)weapon].GetAmmoStorePacketWithMaxAmmo();
 	}
 	
 	

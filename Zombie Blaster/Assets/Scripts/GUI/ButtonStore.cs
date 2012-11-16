@@ -3,11 +3,8 @@ using System.Collections;
 
 public class ButtonStore : ButtonBase {
 	
-	Store store;
-	
 	void Start()
 	{
-		store = (Store)GameObject.FindObjectOfType(typeof(Store));
 	}
 	
 	/*void OnMouseUp()

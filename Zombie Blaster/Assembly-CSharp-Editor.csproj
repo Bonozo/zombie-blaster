@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+	<ProductVersion>10.0.20506</ProductVersion>
+	<SchemaVersion>2.0</SchemaVersion>
+	<ProjectGuid>{5A8E5420-FD65-74D2-B824-440012E286A6}</ProjectGuid>
+	<OutputType>Library</OutputType>
+	<AppDesignerFolder>Properties</AppDesignerFolder>
+	<RootNamespace></RootNamespace>
+	<AssemblyName>Assembly-CSharp-Editor</AssemblyName>
+	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+	<FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+	<DebugSymbols>true</DebugSymbols>
+	<DebugType>full</DebugType>
+	<Optimize>false</Optimize>
+	<OutputPath>Temp\bin\Debug\</OutputPath>
+	<DefineConstants>DEBUG;TRACE;UNITY_3_5_5;UNITY_3_5;UNITY_EDITOR;ENABLE_PROFILER;UNITY_ANDROID;ENABLE_GENERICS;ENABLE_TERRAIN;ENABLE_WEBCAM;ENABLE_NETWORK;ENABLE_CLOTH;ENABLE_WWW;ENABLE_DUCK_TYPING</DefineConstants>
+	<ErrorReport>prompt</ErrorReport>
+	<WarningLevel>4</WarningLevel>
+	<NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+	<DebugType>pdbonly</DebugType>
+	<Optimize>true</Optimize>
+	<OutputPath>Temp\bin\Release\</OutputPath>
+	<DefineConstants>TRACE</DefineConstants>
+	<ErrorReport>prompt</ErrorReport>
+	<WarningLevel>4</WarningLevel>
+	<NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+	<Reference Include="System" />
+    <Reference Include="System.XML" />
+	<Reference Include="System.Core" />
+	<Reference Include="UnityEngine">
+	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	</Reference>
+	<Reference Include="UnityEditor">
+	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	</Reference>
+  </ItemGroup>
+  <ItemGroup>
+     <Compile Include="Assets\Editor\BuildSettingsEditor.cs" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_btn_popup_dialog_close_bg_highlight.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_activity_close_enter.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_status_bar_translate_in_left.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_modal_navigation_bar.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_txtbtn_right_emboss_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_rotate.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_txtbtn_left_emboss_bg_default.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_um_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_dashboard_button.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_btn_popup_dialog_close_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_emoji_palette_arrow_left_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\values\gree_themes.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_notifications_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_btn_close_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_status_bar.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_emoji_palette_enter_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_txtbtn_label_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_subnavi_background_default.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_notification_board_background.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_popup_dialog_layout.xml" />
+     <None Include="Assets\Plugins\Android\res\values\gree_styles.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_internal_notification_bar_layout.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_palette_in_from_right.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_internal_notification.xml" />
+     <None Include="Assets\Plugins\InAppBillingAndroid\Manifest.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_dashboardview.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_txtbtn_left_emboss_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_activity_open_exit.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_status_game_notification_with_badge_selector.xml" />
+     <None Include="Assets\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
+     <None Include="Assets\Plugins\Android\res\menu\gree_subbrowser.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_subnavi_background_highlighted.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_palette_out_to_right.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_emoji_palette_page_indicator.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_slide_out_right.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_common_bg_highlight.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_tabbutton.xml" />
+     <None Include="Assets\Plugins\Android\res\layout-land\gree_subnavi_item.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_btn_arrow_right_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_activity_open_enter.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_dashboard_navigation_bar.xml" />
+     <None Include="Assets\Plugins\Android\Unity34Manifest.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_emoji_palette_arrow_right_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_game_notification_button.xml" />
+     <None Include="Assets\Standard Assets\Skyboxes\_skybox info.txt" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_loader_progress.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_subnavi_item.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_txtbtn_right_emboss_bg_highlight.xml" />
+     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_tabbutton_right.xml" />
+     <None Include="Assets\Plugins\Android\res\layout-land\gree_popup_dialog_layout.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_dialog_bottom_exit.xml" />
+     <None Include="Assets\Plugins\Android\res\layout-land\gree_notification_board_layout.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_emoji_palette_page_indicator_active.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_expandable_status_bar_right.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_dialog_enter.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_status_bar_translate_in_right.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_btn_mood_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_status_user_notification_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\values\gree_color.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_emoji_palette_delete_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_expandable_status_bar_left.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_dashboard_subbrowser_layout.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_btn_arrow_left_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\values\gree_arrays.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_tutorial_universalmenu.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_dashboard_universalmenu.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_notifications_red_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_notification_board_layout.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_emoji_palette.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_txtbtn_left_emboss_bg_highlight.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_posting_layout.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_activity_close_exit.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_navigationbar_background.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_dialog_bottom_enter.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_posting_multiple_layout.xml" />
+     <None Include="Assets\Plugins\Android\Unity35Manifest.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_txtbtn_right_emboss_bg_default.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_popup_dialog_open.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_user_notification_button.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_slide_out_left.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_overscroll_icon_down_to_up.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_pull_to_refresh_header.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_palette_out_to_left.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_slide_in_right.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_status_user_notification_with_badge_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_status_notification_badge_left_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_status_capture_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_overscroll_icon_up_to_down.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_status_bar_translate_out_right.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_status_notification_badge_right_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_notification_board_close.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_status_bar_translate_out_left.xml" />
+     <None Include="Assets\Plugins\Android\res\values\gree_strings.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_dialog_exit.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_emoji_item_selector_bg.xml" />
+     <None Include="Assets\Plugins\Android\res\values\gree_integer.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_modal_view.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_notification_board_open.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_slide_in_left.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_popup_dialog_close.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_status_db_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\drawable\gree_status_game_notification_selector.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_posting_tool_bar.xml" />
+     <None Include="Assets\Plugins\Android\res\layout\gree_screenshot_button.xml" />
+     <None Include="Assets\Plugins\Android\res\anim\gree_palette_in_from_left.xml" />
+     <None Include="Assets\Plugins\Android\res\values-ja\gree_strings.xml" />
+ <Reference Include="P31MenuItem">
+ <HintPath>Assets\Editor\Prime31\P31MenuItem.dll</HintPath>
+ </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{273D50B4-AAF9-96CA-1923-6CBABDF70880}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
+    <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
+      <Project>{AD9BD5B6-53B1-E3A8-C01A-B58AD06B7FCC}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
+    <ProjectReference Include="Assembly-CSharp.csproj">
+      <Project>{4D8ADAAF-ED22-D1D1-76D1-136A27FCA8E8}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+	   Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  
+</Project>

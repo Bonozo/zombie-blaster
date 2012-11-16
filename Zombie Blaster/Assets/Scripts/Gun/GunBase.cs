@@ -5,14 +5,14 @@ public enum Weapon
 {
 	BB,
 	Flamethrower,
-	Zapper,
+	Rocket,
 	PulseShotGun,
 	Grenade,
 	MachineGun,
 	Crossbow,
 	Football,
 	Sniper,
-	Rocket,
+	Zapper,
 	Microwave,
 	None
 };
@@ -48,6 +48,8 @@ public class GunBase : MonoBehaviour {
 		set
 		{
 			GameEnvironment.storeGun[index].store = value;
+			if(GameEnvironment.storeGun[index].store > 5*GameEnvironment.storeGun[index].pocketsize)
+				GameEnvironment.storeGun[index].store = 5*GameEnvironment.storeGun[index].pocketsize;
 		}	
 	}
 	
@@ -98,6 +100,11 @@ public class GunBase : MonoBehaviour {
 	public void GetAmmoStorePacket(int coef)
 	{
 		AmmoStore += PacketSize*coef;
+	}
+	
+	public void GetAmmoStorePacketWithMaxAmmo()
+	{
+		AmmoStore += PacketSize*5;
 	}
 	
 	public void Reload()

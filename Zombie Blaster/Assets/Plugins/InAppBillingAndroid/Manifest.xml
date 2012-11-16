@@ -1,0 +1,18 @@
+<!-- ACTIVITIES -->
+
+
+<!-- META-DATA -->
+        <service android:name="com.prime31.billing.BillingService" />
+        <receiver android:name="com.prime31.billing.BillingReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.billing.IN_APP_NOTIFY" />
+                <action android:name="com.android.vending.billing.RESPONSE_CODE" />
+                <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+
+<!-- PERMISSIONS -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+

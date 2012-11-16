@@ -5,13 +5,13 @@ public class ButtonPause : MonoBehaviour {
 	
 	void OnMouseUp()
 	{
-		if( Control.lose ) return;
+		if( LevelInfo.State.lose ) return;
 		Time.timeScale = 1-Time.timeScale;
 	}
 	
 	void Update()
 	{
-		if( Control.lose ) return;
+		if( LevelInfo.State.lose ) return;
 		foreach(Touch touch in Input.touches)
 			if( touch.phase == TouchPhase.Ended && guiTexture.HitTest(touch.position) )
 			{

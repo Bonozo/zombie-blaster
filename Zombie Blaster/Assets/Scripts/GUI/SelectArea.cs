@@ -9,7 +9,7 @@ public class SelectArea : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		GameEnvironment.StartWave = 0;
+		GameEnvironment.StartLevel = 0;
 	}
 
 	// Update is called once per frame
@@ -29,7 +29,7 @@ public class SelectArea : MonoBehaviour {
 		{
 			if( GUI.Button( rect,area[index]) )
 			{
-				GameEnvironment.StartWave = index*4;
+				GameEnvironment.StartLevel = index;
 				loadingtext.enabled = true;
 				Application.LoadLevel("playgame");		
 			}

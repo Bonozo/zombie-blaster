@@ -3,37 +3,27 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour {
 	
-	/*#region Game
-	
-	public Camera mainCamera;
-	public Generator generator;
-	public Score score;
-	
-	public float upDownMaxHeight = 3.0f;
-	
-	#endregion
-	
-	#region GUI
-		
-	public GUIText guiPowerUpTime;
-	public GUIText guiDistanceTravelled;
 
 	
-	#endregion
-	
-	#region Player
-	
-	public Player playerShip;
-	public Overheat fuelOverheat;
-	public Overheat fireOverheat;
-	
-	#endregion*/
-	
-	#region Game
+	#region Main Objects
 	
 	public Camera mainCamera;
 	public Control control;
-	public ZombiGenerator zombieGenerator;
+	public Store store;
+	public Generator generator;
+	public HealthPack healthPack;
+	public GameObject messageText;
+	public civilian civilianPrefab;
+	
+	public WaveInfo waveInfo;
+	
+	public GUIText guiZombieHeads;
+	public GUIText guiScore;
+	public GUIText guiZombiesLeft;
+	
+	public Texture2D ProgressBarEmpty;
+	public Texture2D ProgressBarFull;
+	public Texture2D ProgressBarArmor;
 	
 	#endregion
 	

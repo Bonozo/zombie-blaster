@@ -5,119 +5,95 @@ public enum HealthPackType
 {
 	Health=0,
 	Ammo=1,
-	Weapon=2
+	SuperAmmo=2,
+	Weapon=3
 }
 
 public class HealthPack : MonoBehaviour {
 	
 	public Texture TextureHealth;
 	public Texture TextureAmmo;
+	public Texture TextureSuperAmmo;
 	
 	public AudioClip AudioHealth;
 	public AudioClip AudioAmmo;
 	public AudioClip AudioWeapon;
+	public AudioClip AudioSuperAmmo;
 
 	public float Health = 0.1f;
 	public float DeadTime = 20f;
 	
 	private float StartHeight = 2.5f;
-	
-	private Control control;
+
 	private Guns guns;
 	
-	private Camera mainCamera;
 	private RaycastHit hit;
 	private Ray ray;
 	
 	private bool picked = false;
-	private float riseTime = 0.5f;
 	
 	private HealthPackType packType;
-	private InstantiateObject instantiater;
-	private int gunindexifweapon = 0;
+	private Weapon gunindexifweapon = 0;
+	
+	public bool scooby = false;
 	
 	// Use this for initialization
 	void Start () {
-		mainCamera = (Camera)GameObject.FindObjectOfType(typeof(Camera));
-		control = (Control)GameObject.FindObjectOfType(typeof(Control));
 		guns = (Guns)GameObject.FindObjectOfType(typeof(Guns));	
-		instantiater = (InstantiateObject)GameObject.FindObjectOfType(typeof(InstantiateObject));
-		
 		
 		transform.Translate(0,StartHeight-transform.position.y,0);
 		
-		packType = (HealthPackType)Random.Range(0,3);
+		packType = (HealthPackType)Random.Range(0,4);
+		if( !scooby && packType == HealthPackType.Weapon ) packType = HealthPackType.Ammo;//ha ha ha... wrong logic 
+		var level = LevelInfo.State.level[LevelInfo.State.currentLevel];
+		
 		switch(packType)
 		{
 		case HealthPackType.Health:
 			gameObject.renderer.material.mainTexture = TextureHealth;
+			gameObject.renderer.material.color = Color.white;
 			break;
 		case HealthPackType.Ammo:
+			int t = Random.Range(0,guns.gun.Length);
+			while( !guns.gun[t].EnabledGun ) t--;
+			gunindexifweapon = (Weapon)t;
+				
+			gameObject.renderer.material.mainTexture = guns.gun[(int)gunindexifweapon].texture;
+			gameObject.renderer.material.color = Color.blue;
+			break;
+		case HealthPackType.SuperAmmo:
 			gameObject.renderer.material.mainTexture = TextureAmmo;
+			gameObject.renderer.material.color = Color.yellow;
 			break;
 		case HealthPackType.Weapon:
-			gunindexifweapon = Random.Range(0,GameEnvironment.storeGun.Length);
-			gameObject.renderer.material.mainTexture = guns.gun[gunindexifweapon].texture;
+			gunindexifweapon = level.allowedGun[Random.Range(0,level.allowedGun.Length)];
+			gameObject.renderer.material.mainTexture = guns.gun[(int)gunindexifweapon].texture;
+			gameObject.renderer.material.color = Color.red;
 			break;
 		}		
 	}
 	
 	void Update()
 	{
-		
-		if( picked )
-		{
-			//transform.Translate(0,riseSpeed*Time.deltaTime,0);
-			riseTime -= Time.deltaTime;
-			if( riseTime <= 0 )
-			{
-				string pickupname = "";
-				//control.GetScore(Score);
-				switch(packType)
-				{
-				case HealthPackType.Health:
-					control.GetHealth(Health);
-					pickupname = "Health";
-					break;
-				case HealthPackType.Ammo:
-					guns.GetAmmo(1);
-					pickupname = "Ammo";
-					break;
-				case HealthPackType.Weapon:
-					guns.GetGun(gunindexifweapon,1);
-					pickupname = GameEnvironment.storeGun[gunindexifweapon].name;
-					break;
-				}
-				
-				instantiater.InstantiateMessageText(transform.position+ new Vector3(0,0.75f,0),pickupname);
-				
-				Destroy(this.gameObject);
-			}
-			return;
-		}
-		
-		DeadTime -= Time.deltaTime;
-		if( DeadTime <= 0 )
-		{
-			Destroy(this.gameObject);
-			return;
-		}
+		if( picked ) return;
+		if( (DeadTime -= Time.deltaTime) <= 0 ) Destroy(this.gameObject);
+
 		
 		foreach(Touch touch in Input.touches)
 		{
-        	ray = mainCamera.ScreenPointToRay(touch.position);
+        	ray = LevelInfo.Environments.mainCamera.ScreenPointToRay(touch.position);
 	        if(touch.phase == TouchPhase.Began && Physics.Raycast(ray.origin,ray.direction,out hit)){
 				if(hit.collider.gameObject == gameObject )
-					PickedUp();
+					StartCoroutine(PickedUp());
 			}
         }
-		ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+		ray = LevelInfo.Environments.mainCamera.ScreenPointToRay(Input.mousePosition);
 		if(Physics.Raycast(ray.origin,ray.direction,out hit))
 			if(Input.GetMouseButtonDown(0) && hit.collider.gameObject == gameObject )
-				PickedUp();
+				StartCoroutine(PickedUp());
 	}
 	
-	private void PickedUp()
+	private IEnumerator PickedUp()
 	{
 		rigidbody.AddForce(0,1000,0);
 		GameEnvironment.IgnoreButtons();
@@ -131,9 +107,48 @@ public class HealthPack : MonoBehaviour {
 		case HealthPackType.Ammo:
 			audio.PlayOneShot(AudioAmmo);
 			break;
+		case HealthPackType.SuperAmmo:
+			audio.PlayOneShot(AudioSuperAmmo);
+			break;
 		case HealthPackType.Weapon:
 			audio.PlayOneShot(AudioWeapon);
 			break;
-		}				
+		}	
+		
+		float time = Time.time+0.5f;
+		while( Time.time <= time )
+			yield return new WaitForEndOfFrame();
+		
+		string pickupname = "";
+		//control.GetScore(Score);
+		switch(packType)
+		{
+		case HealthPackType.Health:
+			LevelInfo.Environments.control.GetHealth(Health);
+			pickupname = "Health";
+			break;
+		case HealthPackType.Ammo:
+			guns.GetAmmoWithMax(gunindexifweapon);
+			pickupname = "Ammo";
+			break;
+		case HealthPackType.SuperAmmo:
+			for(int i=0;i<guns.gun.Length;i++)
+				if( guns.gun[i].EnabledGun )
+					guns.GetWeaponWithMAX((Weapon)i);
+			pickupname = "Super Ammo";
+			break;
+		case HealthPackType.Weapon:
+			guns.GetWeaponWithMAX(gunindexifweapon);
+			pickupname = GameEnvironment.storeGun[(int)gunindexifweapon].name;
+			break;
+		}
+		
+		LevelInfo.Environments.generator.GenerateMessageText(transform.position+ new Vector3(0,0.75f,0),pickupname);
+		
+		LevelInfo.State.score += LevelInfo.State.scoreForPickUp;
+		
+		Destroy(this.gameObject);
+
+			
 	}
 }

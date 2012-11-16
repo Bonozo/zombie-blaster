@@ -3,7 +3,8 @@ using System.Collections;
 
 public class ZombieRagdoll : MonoBehaviour {
 	
-	public GameObject HealthPack;
+	public bool scooby = false;
+	
 	public GameObject Fire;
 	public GameObject Smoke;
 	public GameObject Zombie;
@@ -12,7 +13,7 @@ public class ZombieRagdoll : MonoBehaviour {
 	private bool throwedout = false;
 	
 	private bool rd = false;
-	private float rootbeginposy;
+	//private float rootbeginposy;
 	//private float forcey = 0;
 	
 	public GameObject head;
@@ -25,7 +26,7 @@ public class ZombieRagdoll : MonoBehaviour {
 		Fire.particleEmitter.emit = true;
 		Smoke.particleEmitter.emit = true;
 		
-		rootbeginposy = head.transform.position.y*0.9f;
+		//rootbeginposy = head.transform.position.y*0.9f;
 		
 		headcol = head.AddComponent<CollisionSender>();
 		
@@ -94,7 +95,11 @@ public class ZombieRagdoll : MonoBehaviour {
 			}
 			else
 			{
-				Instantiate(HealthPack,transform.position,transform.rotation);
+				if( Random.Range(0,2)==1)
+				{
+					HealthPack er = (HealthPack)Instantiate(LevelInfo.Environments.healthPack,transform.position,transform.rotation);
+					er.scooby = scooby;
+				}
 				Destroy(this.gameObject);
 			}
 		}

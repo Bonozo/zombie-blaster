@@ -12,7 +12,7 @@ public class Store : MonoBehaviour {
 	private static Vector2 scrollposition = Vector2.zero;
 	private static int wooi = -1;
 	
-	private static int cost = 150;
+	private static int cost = 10;
 	
 	public void DrawStore()
 	{	
@@ -20,7 +20,7 @@ public class Store : MonoBehaviour {
 		GUI.DrawTexture(new Rect(0f,0f,Screen.width,Screen.height),textureBackground);
 		
 		// Current Currency Amount
-		GUI.Box(new Rect(0,0,0.5f*Screen.width,updownbuttonheight),"Money : " + GameEnvironment.Money);
+		GUI.Box(new Rect(0,0,0.5f*Screen.width,updownbuttonheight),"Zombie Head : " + GameEnvironment.zombieHeads);
 		
 		// Return to Game
 		if( GUI.Button(new Rect(0,Screen.height-updownbuttonheight,Screen.width*0.5f,updownbuttonheight),"Return to Game") )
@@ -72,10 +72,10 @@ public class Store : MonoBehaviour {
 			// Purchases
 			if( GUI.Button(new Rect(Screen.width*0.5f,Screen.height-2*updownbuttonheight,Screen.width*0.25f,updownbuttonheight),"Purchases") ) 
 			{
-				if( GameEnvironment.Money >= cost )
+				if( GameEnvironment.zombieHeads >= cost )
 				{
 					audio.Play();
-					GameEnvironment.Money -= cost;
+					GameEnvironment.zombieHeads -= cost;
 					GameEnvironment.storeGun[wooi].store += GameEnvironment.storeGun[wooi].pocketsize;
 					GameEnvironment.storeGun[wooi].enabled = true;
 				}

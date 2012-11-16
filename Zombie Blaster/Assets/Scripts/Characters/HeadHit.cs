@@ -6,12 +6,10 @@ public class HeadHit : MonoBehaviour {
 	public Zombi HeadContainer;
 	private BoxCollider boxCollider;
 	private Vector3 beginsize;
-	private InstantiateObject instantiater;
 	
 	void Start()
 	{
 		boxCollider = (BoxCollider)transform.collider;
-		instantiater = (InstantiateObject)GameObject.FindObjectOfType(typeof(InstantiateObject));
 		beginsize = boxCollider.size;
 	}
 	
@@ -28,7 +26,11 @@ public class HeadHit : MonoBehaviour {
 		if( HeadContainer.haveHelmet )
 			HeadContainer.SendMessage("GetHitDamaged",2);
 		else
+		{
 			HeadContainer.SendMessage("DieNormal");
+			GameEnvironment.zombieHeads++;
+			LevelInfo.State.score += LevelInfo.State.scoreForHeadShot - LevelInfo.State.scoreForZombie;
+		}
 	}
 	
 	public void DieWithJump()
@@ -36,6 +38,8 @@ public class HeadHit : MonoBehaviour {
 		InstantiateMessage();
 		if( HeadContainer.NearPlayer() )
 			GameObject.Find("Goo").SendMessage("Show");
+		GameEnvironment.zombieHeads++;
+		LevelInfo.State.score += LevelInfo.State.scoreForHeadShot - LevelInfo.State.scoreForZombie;
 		HeadContainer.SendMessage("DieWithJump");
 	}
 	
@@ -44,6 +48,8 @@ public class HeadHit : MonoBehaviour {
 		InstantiateMessage();
 		if( HeadContainer.NearPlayer() )
 			GameObject.Find("Goo").SendMessage("Show");
+		GameEnvironment.zombieHeads++;
+		LevelInfo.State.score += LevelInfo.State.scoreForHeadShot - LevelInfo.State.scoreForZombie;
 		HeadContainer.SendMessage("DieWithFireAndSmoke");
 	}
 	
@@ -52,11 +58,13 @@ public class HeadHit : MonoBehaviour {
 		InstantiateMessage();
 		if( HeadContainer.NearPlayer() )
 			GameObject.Find("Goo").SendMessage("Show");
+		GameEnvironment.zombieHeads++;
+		LevelInfo.State.score += LevelInfo.State.scoreForHeadShot - LevelInfo.State.scoreForZombie;
 		HeadContainer.SendMessage("DieWithFootball");
 	}
 	
 	private void InstantiateMessage()
 	{
-		instantiater.InstantiateMessageText(transform.position+ new Vector3(0f,0.75f,0),"Headshot");
+		LevelInfo.Environments.generator.GenerateMessageText(transform.position+ new Vector3(0f,0.75f,0),"Headshot");
 	}
 }

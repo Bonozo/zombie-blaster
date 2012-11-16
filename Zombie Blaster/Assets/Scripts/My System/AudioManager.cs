@@ -35,6 +35,12 @@ public class AudioManager : MonoBehaviour {
 		audioSourceBackground.Play();
 	}
 	
+	public AudioClip AudioGameOver;
+	public void PlayGameOver()
+	{
+		audioSourceBackground.PlayOneShot(AudioGameOver);
+	}
+	
 	#endregion
 	
 	#region Zombies
@@ -48,7 +54,7 @@ public class AudioManager : MonoBehaviour {
 	public AudioClip zombieSpawnRock;
 	public void PlayZombieSpawn()
 	{
-		if( LevelInfo.Environments.control.CurrentLevel == 4 ) // City Level
+		if( LevelInfo.State.currentLevel == 4 ) // City Level
 			audioSourceZombies.PlayOneShot(zombieSpawnRock);
 		else
 			audioSourceZombies.PlayOneShot(zombieSpawnStandard);
@@ -69,7 +75,15 @@ public class AudioManager : MonoBehaviour {
 	}
 	#endregion
 	
+	#region Control
 	
+	public AudioClip AudioGetHit;
+	public void PlayPlayerGetHit()
+	{
+		audioSourcePlayer.PlayOneShot(AudioGetHit);
+	}
+	
+	#endregion
 
 
 }

@@ -3,10 +3,10 @@ using System.Collections;
 
 public class GameEnvironment : MonoBehaviour {
 	
-	#region Static Parameters
+	#region Static
 	
-	public static bool GamePaused = false;
-	public static int Money = 1000;
+	public static int zombieHeads = 0;
+	public static int StartLevel = 0;
 	public static int StartWave = 0;
 	
 	#endregion
@@ -266,18 +266,17 @@ public class GameEnvironment : MonoBehaviour {
 		}
 	}
 	
-	public static StoreGun[] storeGun = new StoreGun[10]
+	public static StoreGun[] storeGun = new StoreGun[9]
 	{
 		new StoreGun("BB",true,100),			//0
 		new StoreGun("Flamethrower",false,100),	//1
-		new StoreGun("Zapper",false,100),		//2
+		new StoreGun("Rocket",false,5),			//2
 		new StoreGun("PulseShotGun",false,5),	//3
 		new StoreGun("Grenade",false,5),		//4
 		new StoreGun("MachineGun",false,100),	//5
 		new StoreGun("Crossbow",false,12),		//6
 		new StoreGun("Football",false,5),		//7
-		new StoreGun("Sniper",false,12),		//8
-		new StoreGun("Rocket",false,5)			//9
+		new StoreGun("Sniper",false,12)			//8
 	};
 	
 	#endregion
