@@ -5,17 +5,21 @@ public class ButtonPause : MonoBehaviour {
 	
 	void OnMouseUp()
 	{
-		if( LevelInfo.State.state == GameState.Lose ) return;
-		Time.timeScale = 1-Time.timeScale;
+		if( LevelInfo.Environments.control.state == GameState.Play )
+		{
+			GameEnvironment.IgnoreButtons();
+			LevelInfo.Environments.control.state = GameState.Paused;
+		}
 	}
 	
 	void Update()
 	{
-		if( LevelInfo.State.state == GameState.Lose ) return;
-		foreach(Touch touch in Input.touches)
-			if( touch.phase == TouchPhase.Ended && guiTexture.HitTest(touch.position) )
-			{
-				Time.timeScale = 1-Time.timeScale;
-			}
+		if( LevelInfo.Environments.control.state == GameState.Play )
+			foreach(Touch touch in Input.touches)
+				if( touch.phase == TouchPhase.Ended && guiTexture.HitTest(touch.position) )
+				{
+					GameEnvironment.IgnoreButtons();
+					LevelInfo.Environments.control.state = GameState.Paused;
+				}
 	}
 }

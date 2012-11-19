@@ -59,6 +59,7 @@ public class Zombi : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		gameObject.AddComponent<AudioSource>();
 		swipeUpcaution = (SwipeUpCaution)GameObject.FindObjectOfType(typeof(SwipeUpCaution));
 		
 		headHit.tag = "ZombieHead";
@@ -74,7 +75,8 @@ public class Zombi : MonoBehaviour {
 		transform.position = new Vector3(transform.position.x,ZombieHeight,transform.position.z);
 		
 		// Playing Spawn Animation
-		particleDirtClod = (GameObject)Instantiate(LevelInfo.Environments.dirtyClodPrefab,new Vector3(transform.position.x,1f,transform.position.z),Quaternion.identity);
+		particleDirtClod = LevelInfo.Environments.control.currentLevel % 2 == 1? LevelInfo.Environments.dirtyClodCityPrefab: LevelInfo.Environments.dirtyClodPrefab;
+		particleDirtClod = (GameObject)Instantiate(particleDirtClod,new Vector3(transform.position.x,1f,transform.position.z),Quaternion.identity);
 		if(spawning)
 		{
 			animation.Play("spawn");
@@ -105,7 +107,7 @@ public class Zombi : MonoBehaviour {
 			}
 			return;
 		}
-		else if(!audioswaonelayed) { audio.Stop(); audioswaonelayed=true; }
+		if(!audioswaonelayed) { audio.Stop(); audioswaonelayed=true; }
 		
 		// Head Hited End
 		
@@ -136,14 +138,14 @@ public class Zombi : MonoBehaviour {
 			/// Shoot
 			if( runningTime <= 0f &&  canShoot && Random.Range(0,300)==1)
 			{
-				if( shootAudio != null ) audio.PlayOneShot(shootAudio);
+				if( shootAudio != null ) LevelInfo.Audio.audioSourceZombies.PlayOneShot(shootAudio);
 				animation.Play("shoot");
 				return;
 			}
 			// Jump
 			if( runningTime <= 0f && canJump && Random.Range(0,300)==1)
 			{
-				if( jumpAudio != null ) audio.PlayOneShot(jumpAudio);
+				if( jumpAudio != null ) LevelInfo.Audio.audioSourceZombies.PlayOneShot(jumpAudio);
 				animation.Play("jump");
 				return;
 			}
@@ -168,8 +170,8 @@ public class Zombi : MonoBehaviour {
 			NormalizeHeight();
 			float spd = Speed; if( runningTime > 0f ) spd *= 2f;
 			if(CanMoveForward()) transform.Translate(Time.deltaTime*spd*Vector3.forward);
-			if( !audio.isPlaying && Random.Range(0,LevelInfo.Audio.zombieAudioAttackWalkRate)==1 )
-				audio.PlayOneShot(LevelInfo.Audio.AudioZombieAttackWalk);
+			if( Random.Range(0,LevelInfo.Audio.zombieAudioAttackWalkRate)==1 )
+				LevelInfo.Audio.audioSourceZombies.PlayOneShot(LevelInfo.Audio.AudioZombieAttackWalk);
 		}
 		
 	}
@@ -313,6 +315,7 @@ public class Zombi : MonoBehaviour {
 	
 	public void GetHitDamaged(int hitpoints)
 	{
+		if( LevelInfo.Environments.control.DamageMultiplied ) hitpoints *= 4;
 		damage -= hitpoints;
 		animation.Play("get hit");
 		animation["get hit"].time = 0.0f;

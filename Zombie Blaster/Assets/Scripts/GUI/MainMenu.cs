@@ -20,7 +20,7 @@ public class MainMenu : MonoBehaviour {
 	
 	public AudioSource audioPressed;
 	public GUITexture guiOptionButton,guiPlayButton,guiStore;
-	public GameObject objMenu,objOption,objCreadits,objAreaMap,objStore;
+	public GameObject objMenu,objOption,objCreadits,objAreaMap;
 	public AudioSource SoundBackground,SoundWind;
 	
 	private MenuState _state;
@@ -40,7 +40,6 @@ public class MainMenu : MonoBehaviour {
 			objOption.SetActiveRecursively(_state == MenuState.Option);
 			objCreadits.SetActiveRecursively(_state == MenuState.Credits);
 			objAreaMap.SetActiveRecursively(_state == MenuState.AreaMap);
-			objStore.SetActiveRecursively(_state == MenuState.Store);
 			
 			if( _state == MenuState.AreaMap )
 				SoundBackground.Stop();
@@ -73,6 +72,13 @@ public class MainMenu : MonoBehaviour {
 		return false;
 	}
 	
+	void Awake()
+	{
+		GameEnvironment.RestorePlayerPrefs();
+		Time.timeScale = 1f;
+		GameObject.Find("Store").GetComponent<Store>().showStore = false;
+	}
+	
 	// Use this for initialization
 	void Start ()
 	{
@@ -91,7 +97,7 @@ public class MainMenu : MonoBehaviour {
 				State = MenuState.AreaMap;
 			if( ButtonPressed(guiStore) )
 			{
-				Time.timeScale = 0.0f;
+				GameObject.Find("Store").GetComponent<Store>().showStore = true;
 				State = MenuState.Store;
 			}
 			if( Input.GetKeyUp(KeyCode.Escape) )

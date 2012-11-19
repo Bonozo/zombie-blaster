@@ -150,12 +150,12 @@ public class Option : MonoBehaviour {
 		if( GUI.Button(buttonRect(7),UnlimitedAmmo?"ON":"OFF" ) )
 			UnlimitedAmmo = !UnlimitedAmmo;
 		
-		GUI.Label(textRect(8),"Unlock Areas");
+		/*GUI.Label(textRect(8),"Unlock Areas");
 		if( GUI.Button(buttonRect(8),UnlockAreas?"ON":"OFF" ) )
 		{
 			//if( purchased == 1 )
 				UnlockAreas = !UnlockAreas;
-		}
+		}*/
 		
 		GUI.Label(textRect(9),"Vibration");
 		if( GUI.Button(buttonRect(9),Vibration?"ON":"OFF" ) )

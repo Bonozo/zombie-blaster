@@ -31,7 +31,6 @@ public class IABAndroidManager : MonoBehaviour
 	// Fired when the restoreTransactions call fails
 	public static event Action<string> transactionRestoreFailedEvent;
 
-
 	void Awake()
 	{
 		// Set the GameObject name to the class name for easy access from Obj-C

@@ -11,14 +11,22 @@ public class Generator : MonoBehaviour {
 	
 	private float zombieRate = 0.0f;
 	private int zombiesLeft = 0;
+	private int scoobyZombieCount = 10;
 	
 	private GameObject WhatZombieToSpawn()
 	{
 		GameObject z;
-		var level = LevelInfo.State.level[LevelInfo.State.currentLevel];
+		var level = LevelInfo.State.level[LevelInfo.Environments.control.currentLevel];
 		z = level.standardZombie[Random.Range(0,level.standardZombie.Length)];
-		if( LevelInfo.State.currentWave > 1 && Random.Range(0,level.standardZombie.Length+level.scoobyZombies.Length) < level.scoobyZombies.Length)
-			z = level.scoobyZombies[Random.Range(0,level.scoobyZombies.Length)];
+		if(LevelInfo.Environments.control.currentLevel != 4 && LevelInfo.Environments.control.currentWave > 1)
+		{
+			if(scoobyZombieCount <= 10 && Random.Range(0,scoobyZombieCount+1) == 0 )
+			{
+				z = level.scoobyZombies[Random.Range(0,level.scoobyZombies.Length)];
+				scoobyZombieCount += 10;
+			}
+			scoobyZombieCount--;
+		}
 		return (GameObject)Instantiate(z,RandomPosition(),Quaternion.Euler(0,180,0) );
 	}
 	
@@ -123,7 +131,7 @@ public class Generator : MonoBehaviour {
 		}
 		
 		// Civilian
-		if( LevelInfo.State.currentLevel!=0 || LevelInfo.State.currentWave >= 3 )
+		if( LevelInfo.Environments.control.currentLevel!=0 || LevelInfo.Environments.control.currentWave >= 3 )
 		{
 			civilianRate -= Time.deltaTime;
 			if( civilianRate <= 0f )

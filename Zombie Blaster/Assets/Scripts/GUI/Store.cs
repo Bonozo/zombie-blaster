@@ -3,11 +3,11 @@ using System.Collections;
 
 public class Store : MonoBehaviour {
 	
+	#region Game Store
+	
 	public Texture2D textureBackground;
 	public Texture2D textureScreenShot;
 	public Texture2D textureZombieHead;
-	
-	public MainMenu objManiMenu;
 	
 	private readonly float updownbuttonheight = 0.1f*Screen.height;
 	private readonly float armorydown = 0.25f*Screen.height;
@@ -16,6 +16,15 @@ public class Store : MonoBehaviour {
 	private static int wooi = -1;
 	
 	private static int cost = 10;
+	
+	public bool isPlayGame = false;
+	public bool showStore = false;
+
+	void Awake()
+	{
+		DontDestroyOnLoad(this.gameObject);
+	}
+
 	
 	public void DrawStore()
 	{	
@@ -26,23 +35,32 @@ public class Store : MonoBehaviour {
 		GUI.DrawTexture(new Rect(0.125f*Screen.width,0.005f*Screen.height,Screen.width*0.09f,Screen.height*0.09f),textureZombieHead);
 		GUI.Box(new Rect(0,0,0.5f*Screen.width,updownbuttonheight),"" + GameEnvironment.zombieHeads);
 		
+		// Get 1000 Head
+		if( GUI.Button(new Rect(Screen.width*0.5f,0,Screen.width*0.5f,updownbuttonheight),"Get 1000 Heads") )
+		{
+			IABAndroid.purchaseProduct("android.test.purchased");
+		}
+		
 		// Return to Game
 		if( GUI.Button(new Rect(0,Screen.height-updownbuttonheight,Screen.width*0.5f,updownbuttonheight),"Return to Game") )
 		{
-			if( objManiMenu != null )
-				objManiMenu.GoMainState();
-			else
+			wooi = -1;
+			showStore = false;
+			GameEnvironment.IgnoreButtons();
+			if( Application.loadedLevelName == "mainmenu" )
 			{
-				wooi = -1;
-				Time.timeScale = 1f;
-				GameEnvironment.IgnoreButtons();
+				MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
+				mainmenu.GoMainState();
 			}
+			else if( Application.loadedLevelName == "playgame" )
+				LevelInfo.Environments.control.state = GameState.Play;
+	
 		}
 		
 		if( GUI.Button(new Rect(Screen.width*0.5f,Screen.height-updownbuttonheight,Screen.width*0.5f,updownbuttonheight),"Main Menu") )
 		{
-			Time.timeScale = 1f;
 			Application.LoadLevel("mainmenu");
+
 		}	
 		if( wooi == -1 )
 		{		
@@ -98,6 +116,43 @@ public class Store : MonoBehaviour {
 	
 	void OnGUI()
 	{
-		if( Time.timeScale == 0.0f ) DrawStore();
+		if( showStore ) DrawStore();
 	}
+	
+	#endregion
+	
+	#region Google
+
+	//--------------- store purchase code ------------------//
+	
+	public string storePublicKey;
+	
+	void OnEnable()
+	{
+		IABAndroidManager.purchaseSucceededEvent += HandleIABAndroidManagerpurchaseSucceededEvent;
+	}
+	
+	void OnDisable()
+	{
+		IABAndroidManager.purchaseSucceededEvent -= HandleIABAndroidManagerpurchaseSucceededEvent;
+	}
+	
+	void HandleIABAndroidManagerpurchaseSucceededEvent (string obj)
+	{
+		GameEnvironment.zombieHeads = GameEnvironment.zombieHeads + 1000;
+	}
+	
+	void Start()
+	{
+		IABAndroid.init( storePublicKey );
+	}
+	
+	public void OnApplicationQuit()
+	{
+		IABAndroid.stopBillingService();
+	}
+	
+	//--------------- store purchase code end ------------------//
+	
+	#endregion
 }

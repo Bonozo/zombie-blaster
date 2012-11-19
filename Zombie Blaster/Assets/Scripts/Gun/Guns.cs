@@ -38,7 +38,7 @@ public class Guns : MonoBehaviour {
 	
 	void OnGUI()
 	{
-		if( Time.timeScale == 1.0f )
+		if( LevelInfo.Environments.control.state == GameState.Play )
 			DrawWeapons();
 		
 	}
@@ -92,7 +92,7 @@ public class Guns : MonoBehaviour {
 		}*/
 		
 		// Draw Ammo Information
-		GUI.color = Color.black;
+		//GUI.color = Color.black;
 		GUI.Label(new Rect(20f,Screen.height-gbh-20f,gbw,20f),gun[current].AmmoInformation);		
 	}
 	

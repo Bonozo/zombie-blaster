@@ -11,6 +11,7 @@ public class ZombieRagdoll : MonoBehaviour {
 	
 	private float DestroyTime = 8f;
 	private bool throwedout = false;
+	private bool iscivilian = false;
 	
 	private bool rd = false;
 	//private float rootbeginposy;
@@ -87,6 +88,7 @@ public class ZombieRagdoll : MonoBehaviour {
 		{
 			if( throwedout )
 			{
+				if( iscivilian ) LevelInfo.Environments.control.zombiesLeftForThisWave++;
 				GameObject zomb = (GameObject)Instantiate(Zombie,head.transform.position,Quaternion.identity);
 				zomb.SendMessage("DontSpawn");
 				zomb.SendMessage("SetFireSize",Fire.particleEmitter.maxSize);
@@ -95,7 +97,15 @@ public class ZombieRagdoll : MonoBehaviour {
 			}
 			else
 			{
-				if( Random.Range(0,2)==1)
+				// other logic for cemetary level
+				bool cemetary = LevelInfo.Environments.control.currentLevel == 4;
+				if( cemetary ) // Cemetary
+				{
+					scooby = LevelInfo.Environments.control.currentWave > 1;
+					if( scooby && Random.Range(0,2)==0 ) scooby = false;
+				}
+				
+				if(scooby || Random.Range(0,2)==1)
 				{
 					HealthPack er = (HealthPack)Instantiate(LevelInfo.Environments.healthPack,transform.position,transform.rotation);
 					er.scooby = scooby;
@@ -121,5 +131,12 @@ public class ZombieRagdoll : MonoBehaviour {
 	{
 		//DestroyTime = 50;
 		throwedout = true;
+	}
+
+	public void IsCivilian()
+	{
+		//DestroyTime = 50;
+		throwedout = true;
+		iscivilian = true;
 	}
 }

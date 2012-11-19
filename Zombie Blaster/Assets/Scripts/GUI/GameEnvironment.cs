@@ -3,11 +3,10 @@ using System.Collections;
 
 public class GameEnvironment : MonoBehaviour {
 	
-	#region Static
+	#region Player Prefs
 	
 	public static int _playerprefs_zombieHeads=0;
-	public static int zombieHeads
-	{
+	public static int zombieHeads{
 		get
 		{
 			return _playerprefs_zombieHeads;
@@ -18,6 +17,97 @@ public class GameEnvironment : MonoBehaviour {
 			PlayerPrefs.SetInt("zombieHeads",_playerprefs_zombieHeads);
 		}
 	}
+	
+	public static int _playerprefs_unlockCity=0;
+	public static int unlockCity{
+		get
+		{
+			return _playerprefs_unlockCity;
+		}
+		set
+		{
+			_playerprefs_unlockCity = value;
+			PlayerPrefs.SetInt("unlockCity",_playerprefs_unlockCity);
+		}
+	}
+	
+	public static int _playerprefs_unlockStadiums=0;
+	public static int unlockStadiums{
+		get
+		{
+			return _playerprefs_unlockStadiums;
+		}
+		set
+		{
+			_playerprefs_unlockStadiums = value;
+			PlayerPrefs.SetInt("unlockStadiums",_playerprefs_unlockStadiums);
+		}
+	}
+	
+	public static int _playerprefs_unlockFrat=0;
+	public static int unlockFrat{
+		get
+		{
+			return _playerprefs_unlockFrat;
+		}
+		set
+		{
+			_playerprefs_unlockFrat = value;
+			PlayerPrefs.SetInt("unlockFrat",_playerprefs_unlockFrat);
+		}
+	}
+	
+	public static int _playerprefs_unlockCemetery=0;
+	public static int unlockCemetery{
+		get
+		{
+			return _playerprefs_unlockCemetery;
+		}
+		set
+		{
+			_playerprefs_unlockCemetery = value;
+			PlayerPrefs.SetInt("unlockCemetery",_playerprefs_unlockCemetery);
+		}
+	}
+	
+	/// <summary>
+	/// Unlocks the level.
+	/// </summary>
+	/// <param name='index'>
+	/// current city code
+	/// </param>
+	public static void UnlockLevel(int index)
+	{
+		switch(index)
+		{
+		case 1:
+			unlockFrat = 1;
+			break;
+		case 2:
+			unlockStadiums = 1;
+			break;
+		case 3:
+			unlockCity = 1;
+			break;
+		case 4:
+			unlockCemetery = 1;
+			break;
+		}
+	}
+	
+	public static void RestorePlayerPrefs()
+	{
+		GameEnvironment._playerprefs_zombieHeads = PlayerPrefs.GetInt("zombieHeads",0);
+		GameEnvironment._playerprefs_unlockFrat = PlayerPrefs.GetInt("unlockFrat",0);
+		GameEnvironment._playerprefs_unlockStadiums = PlayerPrefs.GetInt("unlockStadiums",0);
+		GameEnvironment._playerprefs_unlockCity = PlayerPrefs.GetInt("unlockCity",0);
+		GameEnvironment._playerprefs_unlockCemetery = PlayerPrefs.GetInt("unlockCemetery",0);
+	}
+	
+	#endregion
+	
+	#region Static Local
+	
 	public static int StartLevel = 0;
 	public static int StartWave = 0;
 	

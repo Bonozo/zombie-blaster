@@ -102,7 +102,7 @@ public class civilian : MonoBehaviour {
 	{
 		control.GetHealth(PlayerScoreForDie);
 		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
-		g.SendMessage("ThrowedOut");
+		g.SendMessage("IsCivilian");
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
 		Vector3 dir = transform.position - control.transform.position; dir.Normalize();
         foreach (Rigidbody child in rigidbodies) 
@@ -115,7 +115,7 @@ public class civilian : MonoBehaviour {
 	{
 		control.GetHealth(PlayerScoreForDie);
 		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
-		g.SendMessage("ThrowedOut");
+		g.SendMessage("IsCivilian");
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
 		Vector3 dir = transform.position - control.transform.position; dir.Normalize(); dir.y = 0.5f;
         foreach (Rigidbody child in rigidbodies) 
@@ -129,7 +129,7 @@ public class civilian : MonoBehaviour {
 		control.GetHealth(PlayerScoreForDie);
 		
 		GameObject ragdoll = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
-		ragdoll.SendMessage("ThrowedOut");
+		ragdoll.SendMessage("IsCivilian");
 		var rigidbodies = ragdoll.GetComponentsInChildren(typeof(Rigidbody));
         foreach (Rigidbody child in rigidbodies) 
 			child.AddForce(new Vector3(Random.Range(-1600f,1600f),1600f,Random.Range(-1600f,1600f)));
@@ -141,7 +141,7 @@ public class civilian : MonoBehaviour {
 		control.GetHealth(PlayerScoreForDie);
 		
 		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
-		g.SendMessage("ThrowedOut");
+		g.SendMessage("IsCivilian");
 		g.SendMessage("SetFireSize",1f);
 		g.SendMessage("SetSmokeSize",1f);
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));

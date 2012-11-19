@@ -41,6 +41,17 @@ public class AudioManager : MonoBehaviour {
 		audioSourceBackground.PlayOneShot(AudioGameOver);
 	}
 	
+	public AudioClip AudioWaveComplete;
+	
+	public AudioClip AudioPause;
+	public AudioClip AudioUnPause;
+	
+	public void PlayAudioPause(bool onoff)
+	{
+		if( onoff ) audioSourcePlayer.PlayOneShot(AudioPause);
+		else audioSourcePlayer.PlayOneShot(AudioUnPause);
+	}
+	
 	#endregion
 	
 	#region Zombies
@@ -54,7 +65,7 @@ public class AudioManager : MonoBehaviour {
 	public AudioClip zombieSpawnRock;
 	public void PlayZombieSpawn()
 	{
-		if( LevelInfo.State.currentLevel == 4 ) // City Level
+		if( LevelInfo.Environments.control.currentLevel %2 == 1 ) // City or Frat
 			audioSourceZombies.PlayOneShot(zombieSpawnRock);
 		else
 			audioSourceZombies.PlayOneShot(zombieSpawnStandard);
@@ -81,6 +92,60 @@ public class AudioManager : MonoBehaviour {
 	public void PlayPlayerGetHit()
 	{
 		audioSourcePlayer.PlayOneShot(AudioGetHit);
+	}
+	
+	public AudioClip AudioZombieHeadshot;
+	public void PlayZombieHeadShot()
+	{
+		audioSourcePlayer.PlayOneShot(AudioZombieHeadshot);
+	}
+	
+	#endregion
+	
+	#region PickUps
+	
+	public AudioClip audioPickUpHealth;
+	public AudioClip audioPickUpAmmo;
+	public AudioClip audioPickUpSuperAmmo;
+	public AudioClip audioPickUpBonusHeads;
+	public AudioClip audioPickUpXtraLife;
+	public AudioClip audioPickUpDamageMultiplier;
+	public AudioClip audioPickUpArmor;
+	public AudioClip audioPickUpShield;
+	public AudioClip audioPickUpWeapon;
+	
+	public void PlayPickUp(HealthPackType healthPackType)
+	{
+		switch(healthPackType)
+		{
+		case HealthPackType.Ammo:
+			audioSourcePlayer.PlayOneShot(audioPickUpAmmo);
+			break;
+		case HealthPackType.Armor:
+			audioSourcePlayer.PlayOneShot(audioPickUpArmor);
+			break;
+		case HealthPackType.BonusHeads:
+			audioSourcePlayer.PlayOneShot(audioPickUpBonusHeads);
+			break;
+		case HealthPackType.DamageMultiplier:
+			audioSourcePlayer.PlayOneShot(audioPickUpDamageMultiplier);
+			break;
+		case HealthPackType.Health:
+			audioSourcePlayer.PlayOneShot(audioPickUpHealth);
+			break;
+		case HealthPackType.Shield:
+			audioSourcePlayer.PlayOneShot(audioPickUpShield);
+			break;
+		case HealthPackType.SuperAmmo:
+			audioSourcePlayer.PlayOneShot(audioPickUpSuperAmmo);
+			break;
+		case HealthPackType.Weapon:
+			audioSourcePlayer.PlayOneShot(audioPickUpWeapon);
+			break;
+		case HealthPackType.XtraLife:
+			audioSourcePlayer.PlayOneShot(audioPickUpXtraLife);
+			break;	
+		}		
 	}
 	
 	#endregion

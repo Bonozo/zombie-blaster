@@ -20,47 +20,42 @@ public class HeadHit : MonoBehaviour {
 	
 	public void DieNormal()
 	{
-		InstantiateMessage();
-		if( HeadContainer.NearPlayer() )
-			GameObject.Find("Goo").SendMessage("Show");
+
 		if( HeadContainer.haveHelmet )
 			HeadContainer.SendMessage("GetHitDamaged",2);
 		else
 		{
+			DiePrepare();
 			HeadContainer.SendMessage("DieNormal");
-			GameEnvironment.zombieHeads++;
-			LevelInfo.State.score += LevelInfo.State.scoreForHeadShot - LevelInfo.State.scoreForZombie;
 		}
 	}
 	
 	public void DieWithJump()
 	{	
-		InstantiateMessage();
-		if( HeadContainer.NearPlayer() )
-			GameObject.Find("Goo").SendMessage("Show");
-		GameEnvironment.zombieHeads++;
-		LevelInfo.State.score += LevelInfo.State.scoreForHeadShot - LevelInfo.State.scoreForZombie;
+		DiePrepare();
 		HeadContainer.SendMessage("DieWithJump");
 	}
 	
 	public void DieWithFireAndSmoke()
 	{
-		InstantiateMessage();
-		if( HeadContainer.NearPlayer() )
-			GameObject.Find("Goo").SendMessage("Show");
-		GameEnvironment.zombieHeads++;
-		LevelInfo.State.score += LevelInfo.State.scoreForHeadShot - LevelInfo.State.scoreForZombie;
+		DiePrepare();
 		HeadContainer.SendMessage("DieWithFireAndSmoke");
 	}
 	
 	public void DieWithFootball()
 	{
+		DiePrepare();
+		HeadContainer.SendMessage("DieWithFootball");
+	}
+	
+	private void DiePrepare()
+	{
 		InstantiateMessage();
 		if( HeadContainer.NearPlayer() )
 			GameObject.Find("Goo").SendMessage("Show");
 		GameEnvironment.zombieHeads++;
-		LevelInfo.State.score += LevelInfo.State.scoreForHeadShot - LevelInfo.State.scoreForZombie;
-		HeadContainer.SendMessage("DieWithFootball");
+		LevelInfo.Environments.control.score += LevelInfo.State.scoreForHeadShot - LevelInfo.State.scoreForZombie;
+		LevelInfo.Audio.PlayZombieHeadShot();
 	}
 	
 	private void InstantiateMessage()

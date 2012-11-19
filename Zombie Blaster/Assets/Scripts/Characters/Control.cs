@@ -9,11 +9,77 @@ public class Control : MonoBehaviour {
 	
 	public Vector3[] VantagePoints;
 	
+	public bool DamageMultiplied = false;
+	private float damageMultiplieTime = 0f;
+	
 	#endregion
 	
 	#region Variables
 	
 	private float health = 1f;
+	
+	#endregion
+	
+	#region State
+	
+	public GameState _state = GameState.Play;
+	public GameState state
+	{
+		get 
+		{
+			return _state;
+		}
+		set
+		{
+			if( _state == GameState.Paused && value != GameState.Paused)
+				LevelInfo.Audio.PlayAudioPause(false);
+			
+			_state = value;
+			
+			switch(_state)
+			{
+			case GameState.Lose:
+				Time.timeScale = 0f;
+				lives--;
+				break;
+			case GameState.Play:
+				Time.timeScale = 1f;
+				break;
+			case GameState.Paused:
+				LevelInfo.Audio.PlayAudioPause(true);
+				Time.timeScale = 0f;
+				GameObject.Find("Store").GetComponent<Store>().showStore = true;
+				break;
+			case GameState.WaveCompleted:
+				Time.timeScale = 0;
+				break;
+			}
+		}
+	}
+	
+	public int currentLevel = 0;
+	
+	public int currentWave = 0;
+	
+	private int _zombiesLeftForThisWave = 0;
+	public int zombiesLeftForThisWave { get { return _zombiesLeftForThisWave; } set {_zombiesLeftForThisWave = value; LevelInfo.Environments.guiZombiesLeft.text = "" + _zombiesLeftForThisWave; } }
+		
+	private static int startScore = 0;
+	private int _score = 0;
+	public int score { get { return _score; } set {_score = value; LevelInfo.Environments.guiScore.text = "" + _score; } }
+	
+	private static int startLives = 1;
+	private int _lives = 0;
+	public int lives { get { return _lives; } set {_lives = value; LevelInfo.Environments.guiLives.text = "" + _lives; } }
+	
+	public void ForceLevel(int levelnumber,int currentwave)
+	{
+		currentLevel = levelnumber;
+		currentWave = currentwave;
+		foreach(var c in LevelInfo.State.level)
+			c.hierarchyPlace.SetActiveRecursively(false);
+		LevelInfo.State.level[currentLevel].hierarchyPlace.SetActiveRecursively(true);
+	}
 	
 	#endregion
 	
@@ -24,23 +90,34 @@ public class Control : MonoBehaviour {
 	{
 		health = Option.Health;
 	
-		transform.position.Set(VantagePoints[0].x,transform.position.y,VantagePoints[0].z);
+		int vi = GameEnvironment.StartWave % VantagePoints.Length;
+		transform.position = new Vector3(VantagePoints[vi].x,transform.position.y,VantagePoints[vi].z);
 		
-		LevelInfo.State.ForceLevel(GameEnvironment.StartLevel,0);
+		ForceLevel(GameEnvironment.StartLevel,GameEnvironment.StartWave);
 		
 		CreateNewZombieWave();
+		
+		lives = startLives;
+		score = startScore;
+		
+		LevelInfo.Environments.lightSpot.SetActiveRecursively(Option.SpotLight);
+		LevelInfo.Environments.lightDirectional.SetActiveRecursively(!Option.SpotLight);
+		
+		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActiveRecursively(false);
+		
+		RenderSettings.fog = Option.Fog;
 	}
 	
 	// Update is called once per frame
 	void Update () 
-	{
+	{	
 		//??//
 		if( Input.GetKey(KeyCode.H) )
 			health -= 0.05f;
 		if( Input.GetKey(KeyCode.J) )
 			health += 0.05f;
 		
-		if( LevelInfo.State.state == GameState.Lose ) return;
+		if( state != GameState.Play) return;
 		
 		if( Option.UnlimitedHealth ) health = 1.0f;
 		
@@ -75,6 +152,53 @@ public class Control : MonoBehaviour {
 		transform.rotation = Quaternion.Euler(rot);
 		
 		UpdateHealthBar();
+		LevelInfo.Environments.guiZombieHeads.text = "" + GameEnvironment.zombieHeads;
+	}
+	
+	void OnGUI()
+	{
+		switch(state)
+		{
+		case GameState.Lose:
+			if( lives > 0 )
+			{
+				GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"CONTINUE?");
+				if( GUI.Button(new Rect(0.35f*Screen.width,0.4f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "CONTINUE" ) )	
+				{
+					GameEnvironment.StartWave = currentWave-1;
+					startLives = lives;
+					startScore = score;
+					
+					Time.timeScale = 1.0f;
+					Application.LoadLevel(Application.loadedLevel);
+				}
+				if( GUI.Button(new Rect(0.35f*Screen.width,0.6f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "MENU" ) )
+				{
+					Time.timeScale = 1.0f;
+					Application.LoadLevel("mainmenu");
+				}			
+			}
+			else
+			{
+				GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"YOU ARE DIED.");
+				if( GUI.Button(new Rect(0.35f*Screen.width,0.5f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "MENU" ) )
+				{
+					Time.timeScale = 1.0f;
+					Application.LoadLevel("mainmenu");
+				}
+			}
+			break;
+		case GameState.WaveCompleted:
+			GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"WAVE COMPLETE.");
+			
+			GUI.Label(new Rect(0.35f*Screen.width,0.4f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "REWARD		" + (bonusForWaveComplete==0?"Xtra Live":"+100 Heads")  ) ;
+			
+			if( GUI.Button(new Rect(0.35f*Screen.width,0.6f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "Continue" ) )
+			{
+				PrepareAndCreateNewWave();
+			}
+			break;
+		}
 	}
 	
 	private void MovingUpdate()
@@ -113,13 +237,8 @@ public class Control : MonoBehaviour {
 	private bool angling = false;
 	
 		
-	private IEnumerator MoveTo(Vector3 dest)
+	private void MoveTo(Vector3 dest)
 	{
-		// wait 5 seconds
-		float time = Time.time + 5f;
-		while ( Time.time < time )
-			yield return new WaitForEndOfFrame();
-		
 		//GameObject[] g = GameObject.FindGameObjectsWithTag("HealthPack");
 		//foreach(GameObject gg in g) Destroy(gg);
 		
@@ -164,7 +283,7 @@ public class Control : MonoBehaviour {
 	
 	public bool Died { get { return health <= 0; }}
 	
-	public float Health { get { return health; }}
+	public float Health { get { return health; } set { health = value; } }
 	
 	#endregion
 
@@ -178,13 +297,10 @@ public class Control : MonoBehaviour {
 	
 	public void GetZombie()
 	{
-		LevelInfo.State.score += LevelInfo.State.scoreForZombie;
-		LevelInfo.State.zombiesLeftForThisWave--;
-		if( LevelInfo.State.zombiesLeftForThisWave <= 0 && GameObject.FindGameObjectsWithTag("ZombieHead").Length == 1)
-		{
-			LevelInfo.Environments.waveInfo.WaveComplete();
-			StartCoroutine(MoveTo(VantagePoints[LevelInfo.State.currentWave%VantagePoints.Length]));
-		}
+		score += LevelInfo.State.scoreForZombie;
+		zombiesLeftForThisWave--;
+		if( zombiesLeftForThisWave <= 0 && GameObject.FindGameObjectsWithTag("ZombieHead").Length == 1)
+			StartCoroutine(WaveComplete());
 	}
 	
 	public void GetHealth(float h)
@@ -195,7 +311,7 @@ public class Control : MonoBehaviour {
 				Handheld.Vibrate();
 		
 		health += h;
-		if( health > 3f ) health = 3f;//?? 2x armor maximum//
+		if( health > LevelInfo.State.playerMaxHealth ) health = LevelInfo.State.playerMaxHealth;
 		if( health <= 0.0f)
 		{
 			health = 0.0f;
@@ -203,25 +319,36 @@ public class Control : MonoBehaviour {
 		}
 	}
 	
-	public void CreateNewZombieWave()
-	{	
-		LevelInfo.State.currentWave++;
-
-		LevelInfo.State.zombiesLeftForThisWave = LevelInfo.State.zombiesCountFactor*LevelInfo.State.currentWave;
-		LevelInfo.Environments.generator.StartNewWave(LevelInfo.State.zombiesLeftForThisWave);
+	private int bonusForWaveComplete = 0;
+	public IEnumerator WaveComplete()
+	{
+		float time = Time.time + 6f;
+		while( Time.time < time )
+			yield return new WaitForEndOfFrame();
 		
-		LevelInfo.Environments.waveInfo.ShowWave(LevelInfo.State.currentWave,LevelInfo.State.zombiesLeftForThisWave);
-		LevelInfo.Audio.PlayLevel(LevelInfo.State.currentWave);
+		LevelInfo.Audio.audioSourceZombies.PlayOneShot(LevelInfo.Audio.AudioWaveComplete);
+		bonusForWaveComplete = Random.Range(0,2);
+		state = GameState.WaveCompleted;
 	}
 	
-	
-	public void RestartWave()
+	public void PrepareAndCreateNewWave()
 	{
-		LevelInfo.State.zombiesLeftForThisWave = LevelInfo.State.zombiesCountFactor*LevelInfo.State.currentWave;
-		LevelInfo.Environments.generator.StartNewWave(LevelInfo.State.zombiesLeftForThisWave);
+		LevelInfo.Audio.audioSourceZombies.Stop();
+		if( bonusForWaveComplete==0) lives++;
+		else GameEnvironment.zombieHeads+=100;
+		state = GameState.Play;
+		MoveTo(VantagePoints[currentWave%VantagePoints.Length]);
+	}
+	
+	public void CreateNewZombieWave()
+	{	
+		currentWave++;
+
+		zombiesLeftForThisWave = LevelInfo.State.zombiesCountFactor*currentWave;
+		LevelInfo.Environments.generator.StartNewWave(zombiesLeftForThisWave);
 		
-		LevelInfo.Environments.waveInfo.ShowWave(LevelInfo.State.currentWave,LevelInfo.State.zombiesLeftForThisWave);
-		LevelInfo.Audio.PlayLevel(LevelInfo.State.currentWave);	
+		LevelInfo.Environments.waveInfo.ShowWave(currentWave,zombiesLeftForThisWave);
+		LevelInfo.Audio.PlayLevel(currentWave);
 	}
 	
 	public void ToLose()
@@ -229,9 +356,31 @@ public class Control : MonoBehaviour {
 		LevelInfo.Audio.StopAll();
 		LevelInfo.Audio.PlayGameOver();
 		audio.Stop();
-		LevelInfo.State.state = GameState.Lose;
-		Time.timeScale = 0.0f;
-		LevelInfo.Environments.store.enabled = false;		
+		state = GameState.Lose;
+		Time.timeScale = 0.0f;	
+	}
+	
+	private IEnumerator DamageMultiplyThread()
+	{
+		DamageMultiplied = true;
+		
+		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActiveRecursively(true);
+		
+		damageMultiplieTime = Time.time + 30f;
+		while( Time.time < damageMultiplieTime )
+		{
+			LevelInfo.Environments.guiDamageMultiplier.text = "" + (int)(damageMultiplieTime-Time.time+1);
+			yield return new WaitForEndOfFrame();
+		}
+		
+		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActiveRecursively(false);
+		DamageMultiplied = false;
+	}
+	
+	public void DamageMultiply()
+	{
+		if( DamageMultiplied ) damageMultiplieTime = Time.time + 30;
+		else StartCoroutine(DamageMultiplyThread());
 	}
 	
 	#endregion
