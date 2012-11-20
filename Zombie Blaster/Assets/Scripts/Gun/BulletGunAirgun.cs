@@ -8,6 +8,7 @@ public class BulletGunAirgun : MonoBehaviour {
 	public float DestroyTime = 4f;
 	public float Speed = 5f;
 	public float Y = 2.5f;
+	public int damage = 2;
 	
 	// Use this for initialization
 	void Start () {
@@ -25,7 +26,7 @@ public class BulletGunAirgun : MonoBehaviour {
 	void OnCollisionEnter(Collision col)
 	{
 		if( col.gameObject.tag == "Zombie" )
-			col.gameObject.SendMessage("GetHitDamaged",2);
+			col.gameObject.SendMessage("GetHitDamaged",damage);
 		
 		if( col.gameObject.tag == "ZombieHead" )
 			col.gameObject.SendMessage("DieNormal");

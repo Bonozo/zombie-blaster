@@ -5,7 +5,7 @@ public class Option : MonoBehaviour {
 	
 	public static float Health = 1f;
 	public static float hSlideVolume = 1f;
-	public static bool WeaponsUnlocked = false;
+	//public static bool WeaponsUnlocked = false;
 	public static float SpawnDistanceMin=10f,SpawnDistanceMax=13f;
 	public static bool UnlimitedHealth = false;
 	public static bool UnlimitedAmmo = false;
@@ -125,13 +125,13 @@ public class Option : MonoBehaviour {
 		Health = GUI.HorizontalSlider(buttonRect(2),Health,0.05f,1f);
 		
 		GUI.Label(textRect(3),"Weapons Unlocked");
-		if( GUI.Button(buttonRect(3),WeaponsUnlocked?"ON":"OFF" ))
+		/*if( GUI.Button(buttonRect(3),WeaponsUnlocked?"ON":"OFF" ))
 		{
 			WeaponsUnlocked = !WeaponsUnlocked;
 			if( WeaponsUnlocked )
 				for(int i=1;i<GameEnvironment.storeGun.Length;i++)
 					GameEnvironment.storeGun[i].SetEnabled(Option.WeaponsUnlocked);
-		}
+		}*/
 		
 		GUI.Label(textRect(4),"Spawn Distance Min");
 		SpawnDistanceMin = GUI.HorizontalSlider(buttonRect(4),SpawnDistanceMin,5f,13f);

@@ -17,8 +17,14 @@ public class Guns : MonoBehaviour {
 	// Use this for initialization
 	void Start () {	
 		// initialize guns from option
-		for(int i=1;i<GameEnvironment.storeGun.Length;i++)
-			GameEnvironment.storeGun[i].SetEnabled(Option.WeaponsUnlocked);
+		
+		for(int i=0;i<GameEnvironment.storeGun.Length;i++)
+			GameEnvironment.storeGun[i].SetEnabled(false);
+		
+		Weapon[] w = LevelInfo.State.level[GameEnvironment.StartLevel].allowedGun;
+		for(int i=0;i<w.Length;i++)
+			GameEnvironment.storeGun[(int)w[i]].SetEnabled(Store.WeaponUnlocked((int)w[i]));
+		
 		if( Option.UnlimitedAmmo )
 			for(int i=0;i<GameEnvironment.storeGun.Length;i++)
 				GameEnvironment.storeGun[i].SetAsUnlimited();

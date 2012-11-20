@@ -153,7 +153,7 @@ public class HealthPack : MonoBehaviour {
 			break;
 			
 		case HealthPackType.BonusHeads:
-			GameEnvironment.zombieHeads = GameEnvironment.zombieHeads+10;
+			Store.zombieHeads = Store.zombieHeads+10;
 			pickupname = "+10 Heads";
 			break;
 			

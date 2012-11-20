@@ -18,6 +18,12 @@ public class HeadHit : MonoBehaviour {
 		boxCollider.size = beginsize*(0.05f*HeadContainer.XZDistFromPlayer()+0.925f);
 	}
 	
+	public void DieDamaged()
+	{
+		DiePrepare();
+		HeadContainer.SendMessage("DieNormal");
+	}
+	
 	public void DieNormal()
 	{
 
@@ -53,7 +59,7 @@ public class HeadHit : MonoBehaviour {
 		InstantiateMessage();
 		if( HeadContainer.NearPlayer() )
 			GameObject.Find("Goo").SendMessage("Show");
-		GameEnvironment.zombieHeads++;
+		Store.zombieHeads++;
 		LevelInfo.Environments.control.score += LevelInfo.State.scoreForHeadShot - LevelInfo.State.scoreForZombie;
 		LevelInfo.Audio.PlayZombieHeadShot();
 	}

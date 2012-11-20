@@ -1,23 +1,6 @@
 using UnityEngine;
 using System.Collections;
 
-public enum Weapon
-{
-	BB,
-	Flamethrower,
-	Rocket,
-	PulseShotGun,
-	Grenade,
-	MachineGun,
-	Crossbow,
-	Football,
-	Sniper,
-	Zapper,
-	Microwave,
-	None
-};
-
-
 public class GunBase : MonoBehaviour {
 	
 	/// <summary>

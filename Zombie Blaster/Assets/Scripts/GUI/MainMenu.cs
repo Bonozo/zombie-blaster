@@ -74,7 +74,6 @@ public class MainMenu : MonoBehaviour {
 	
 	void Awake()
 	{
-		GameEnvironment.RestorePlayerPrefs();
 		Time.timeScale = 1f;
 		GameObject.Find("Store").GetComponent<Store>().showStore = false;
 	}

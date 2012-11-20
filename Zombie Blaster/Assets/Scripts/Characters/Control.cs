@@ -152,7 +152,7 @@ public class Control : MonoBehaviour {
 		transform.rotation = Quaternion.Euler(rot);
 		
 		UpdateHealthBar();
-		LevelInfo.Environments.guiZombieHeads.text = "" + GameEnvironment.zombieHeads;
+		LevelInfo.Environments.guiZombieHeads.text = "" + Store.zombieHeads;
 	}
 	
 	void OnGUI()
@@ -335,7 +335,7 @@ public class Control : MonoBehaviour {
 	{
 		LevelInfo.Audio.audioSourceZombies.Stop();
 		if( bonusForWaveComplete==0) lives++;
-		else GameEnvironment.zombieHeads+=100;
+		else Store.zombieHeads= Store.zombieHeads + 100;
 		state = GameState.Play;
 		MoveTo(VantagePoints[currentWave%VantagePoints.Length]);
 	}

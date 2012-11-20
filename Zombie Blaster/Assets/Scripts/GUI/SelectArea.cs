@@ -7,21 +7,35 @@ public class SelectArea : MonoBehaviour {
 	
 	public Texture2D lockedTexture;
 	public GUITexture loadingTexture;
+	public GUITexture[] bloods;
 	
 	private bool[] unlocked = new bool[5];
 	private int[] unlock_heads = new int [5] {0,1000,2500,5000,10000};
 	private int unlock_index = 0;
+	private int countUnlocked=0;
+	
+	private void UpdateBlood()
+	{
+		foreach(var g in bloods )
+		{
+			Color c = g.color;
+			c.a = 0.115f*(countUnlocked-1);
+			g.color = c;
+		}
+	}
 	
 	// Use this for initialization
 	void Start () {
 		
 		GameEnvironment.StartLevel = 0;
 		loadingTexture.enabled = false;
-		unlocked[0] = true;
-		unlocked[1] = 1==GameEnvironment.unlockFrat;
-		unlocked[2] = 1==GameEnvironment.unlockStadiums;
-		unlocked[3] = 1==GameEnvironment.unlockCity;
-		unlocked[4] = 1==GameEnvironment.unlockCemetery;
+		for(int i=0;i<Store.countLevel;i++)
+		{
+			unlocked[i] = Store.LevelUnlocked(i);
+			if(unlocked[i]) countUnlocked++;
+		}
+		UpdateBlood();
+
 		
 		for(int i=0;i<levelButton.Length;i++)
 			levelButton[i].canPressed = unlocked[i];
@@ -59,7 +73,7 @@ public class SelectArea : MonoBehaviour {
 		
 		if( unlock_index != 0 )
 		{
-			bool can_bay = GameEnvironment.zombieHeads >= unlock_heads[unlock_index];
+			bool can_bay = Store.zombieHeads >= unlock_heads[unlock_index];
 			if( can_bay)
 				GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"Would you like to unlock this level with " + unlock_heads[unlock_index] + " ZB heads");
 			else
@@ -67,9 +81,11 @@ public class SelectArea : MonoBehaviour {
 			
 			if(can_bay && GUI.Button(new Rect(0.35f*Screen.width,0.4f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "UNLOCK" ) )	
 			{
-				GameEnvironment.UnlockLevel(unlock_index);
+				Store.UnlockLevel(unlock_index);
 				unlocked[unlock_index] = true;
-				GameEnvironment.zombieHeads = GameEnvironment.zombieHeads - unlock_heads[unlock_index];
+				countUnlocked++;
+				UpdateBlood();
+				Store.zombieHeads = Store.zombieHeads - unlock_heads[unlock_index];
 				levelButton[unlock_index].canPressed = unlocked[unlock_index];
 				unlock_index = 0;
 			}

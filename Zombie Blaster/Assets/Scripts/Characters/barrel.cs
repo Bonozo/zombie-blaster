@@ -25,7 +25,7 @@ public class barrel : MonoBehaviour {
 	void OnCollisionEnter(Collision col)
 	{	
 		//  PulseShotGun Attack
-		if( HitWithName(col.gameObject.name,"BulletPulseShotGun") )
+		if( HitWithName(col.gameObject.name,"BulletPulseShotGun") || col.gameObject.tag == "Bullet" )
 		{
 			Explode();
 			return;
