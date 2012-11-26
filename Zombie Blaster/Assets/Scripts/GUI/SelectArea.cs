@@ -46,14 +46,14 @@ public class SelectArea : MonoBehaviour {
 		if( unlock_index != 0 ) return;
 		
 		for(int i=0;i<levelButton.Length;i++)
-			if( !unlocked[i] && levelButton[i].PressedDown() )
+			if( !unlocked[i] && levelButton[i].PressedUp )
 			{
 				unlock_index = i;
 				return;
 			}
 		
 		for(int i=0;i<levelButton.Length;i++)
-			if( unlocked[i] && levelButton[i].Pressed() )
+			if( unlocked[i] && levelButton[i].PressedUp )
 			{
 				GameEnvironment.StartLevel = i;
 				loadingTexture.enabled = true;

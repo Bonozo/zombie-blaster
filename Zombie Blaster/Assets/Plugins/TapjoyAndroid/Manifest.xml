@@ -1,0 +1,30 @@
+<!-- ACTIVITIES -->
+		<receiver android:name="com.tapjoy.TapjoyReferralTracker" android:exported="true">    
+		    <intent-filter>
+		        <action android:name="com.android.vending.INSTALL_REFERRER" />
+		    </intent-filter>
+		</receiver>
+		<activity android:name="com.tapjoy.TJCVirtualGoods" android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" android:configChanges="keyboardHidden|orientation" />
+		<activity android:name="com.tapjoy.DownloadVirtualGood" android:theme="@android:style/Theme.Dialog" android:configChanges="keyboardHidden|orientation" android:launchMode="singleTask" />
+		<activity android:name="com.tapjoy.TJCOffersWebView" android:configChanges="keyboardHidden|orientation" />
+		<activity android:name="com.tapjoy.TapjoyFullScreenAdWebView" android:configChanges="keyboardHidden|orientation" />
+		<activity android:name="com.tapjoy.TapjoyVideoView" android:configChanges="keyboardHidden|orientation" />
+		<receiver android:name="com.tapjoy.TapjoyReferralTracker" android:exported="true">
+		    <intent-filter>
+		        <action android:name="com.android.vending.INSTALL_REFERRER" />
+		    </intent-filter>
+		</receiver>
+
+<!-- META-DATA -->
+
+
+
+<!-- PERMISSIONS -->
+	<uses-permission android:name="android.permission.INTERNET"/>
+	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/> 
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+
+<!-- FIND-REPLACE -->
+	<fr><find><![CDATA[ForwardNativeEventsToDalvik" android:value="false" />]]></find><replace><![CDATA[ForwardNativeEventsToDalvik" android:value="true" />]]></replace></fr>

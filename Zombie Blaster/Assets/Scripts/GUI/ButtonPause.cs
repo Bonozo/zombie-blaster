@@ -3,15 +3,6 @@ using System.Collections;
 
 public class ButtonPause : MonoBehaviour {
 	
-	void OnMouseUp()
-	{
-		if( LevelInfo.Environments.control.state == GameState.Play )
-		{
-			GameEnvironment.IgnoreButtons();
-			LevelInfo.Environments.control.state = GameState.Paused;
-		}
-	}
-	
 	void Update()
 	{
 		if( LevelInfo.Environments.control.state == GameState.Play )
@@ -21,5 +12,11 @@ public class ButtonPause : MonoBehaviour {
 					GameEnvironment.IgnoreButtons();
 					LevelInfo.Environments.control.state = GameState.Paused;
 				}
+		
+		if( Input.GetMouseButtonUp(0) && this.guiTexture.HitTest(Input.mousePosition) )
+		{
+			GameEnvironment.IgnoreButtons();
+			LevelInfo.Environments.control.state = GameState.Paused;		
+		}
 	}
 }

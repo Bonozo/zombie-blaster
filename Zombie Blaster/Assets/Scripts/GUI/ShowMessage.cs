@@ -12,6 +12,7 @@ public class ShowMessage : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		guiText.enabled = Time.timeScale>0;
 		transform.Translate(0f,UpSpeed*Time.deltaTime,0f);
 		ShowTime -= Time.deltaTime;
 		if( ShowTime <= 0 )

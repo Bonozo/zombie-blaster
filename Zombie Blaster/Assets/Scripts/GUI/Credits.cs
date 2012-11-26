@@ -11,7 +11,12 @@ public class Credits : MonoBehaviour {
 	}
 	
 	public CreditStruct[] members;
-	public GUIStyle myGuiStyle;
+	
+	public float Speed = 0.1f;
+	
+	public GUIStyle guiStyleTitle;
+	public GUIStyle guiStyleName;
+	private float currentHeight = -1f;
 	
 	// Use this for initialization
 	void Start () {
@@ -19,28 +24,39 @@ public class Credits : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if( Input.touchCount == 0 )
+			currentHeight += Time.deltaTime*Speed;
 	}
 	
-	private float index = 0;
-	private Rect textRect(bool big)
+	private Rect RectScreen(float a,float b,float w,float h)
 	{
-		index++;
-		myGuiStyle.fontSize = big?50:30;
-		float w = 0f;
-		if( index > 8 ) { w = Screen.width*0.5f; index-=8; }
-		return new Rect(w,index*25f,Screen.width*0.5f,Screen.height*0.1f);
+		return new Rect(a*Screen.width,b*Screen.height,w*Screen.width,h*Screen.height);
 	}
 	
 	void OnGUI()
 	{
+		foreach(Touch touch in Input.touches)
+				currentHeight += touch.deltaPosition.y/Screen.height;
+		
+		float index = -currentHeight;
+		
 		foreach(var mb in members )
 		{
-			GUI.Label(textRect(false),mb.title,myGuiStyle);
+			GUI.Label(RectScreen(0.35f,index,0.3f,0.1f),mb.title,guiStyleTitle);
+			index += 0.1f;
 			foreach(var nm in mb.name)
-				GUI.Label(textRect(true),nm,myGuiStyle);
-			index++;
+			{
+				GUI.Label(RectScreen(0.2f,index,0.6f,0.1f),nm,guiStyleName);
+				index += 0.1f;
+			}
+			index += 0.1f;
 		}
-		index = 0;
+		Debug.Log("index : " + index);
+		if(index<0f)
+		{
+			currentHeight = -1;
+			MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
+			mainmenu.GoState(MainMenu.MenuState.Option);
+		}
 	}
 }

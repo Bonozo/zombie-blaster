@@ -14,7 +14,7 @@ public class ButtonGoScene : ButtonBase {
 	{
 		base.Update();
 		
-		if( base.Pressed() )
+		if( base.PressedUp )
 			Application.LoadLevel(scenename);
 		/*foreach(Touch touch in Input.touches)
 			if( guiTexture.HitTest(touch.position) && touch.phase == TouchPhase.Ended)

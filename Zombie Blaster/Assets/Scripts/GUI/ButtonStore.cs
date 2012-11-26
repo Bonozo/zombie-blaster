@@ -6,17 +6,12 @@ public class ButtonStore : ButtonBase {
 	void Start()
 	{
 	}
-	
-	/*void OnMouseUp()
-	{
-		Time.timeScale = 0.0f;
-	}*/
-	
+
 	protected override void Update()
 	{
 		base.Update();
 		
-		if( base.Pressed() )
+		if( base.PressedUp )
 				Time.timeScale = 0.0f;
 		
 	}

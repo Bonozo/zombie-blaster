@@ -14,7 +14,7 @@ public class ButtonGoWebPage : ButtonBase {
 	{
 		base.Update();
 		
-		if( base.Pressed() )
+		if( base.PressedUp )
 			Application.OpenURL(ulr);
 		
 		/*foreach(Touch touch in Input.touches)

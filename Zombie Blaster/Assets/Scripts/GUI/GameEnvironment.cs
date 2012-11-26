@@ -5,7 +5,7 @@ public class GameEnvironment : MonoBehaviour {
 	
 	#region Static Local
 	
-	public static int StartLevel = 1;
+	public static int StartLevel = 0;
 	public static int StartWave = 0;
 	
 	#endregion
@@ -19,7 +19,7 @@ public class GameEnvironment : MonoBehaviour {
 		ignore = true;
 	}
 	
-	#if !UNITY_ANDROID
+	#if UNITY_ANDROID
 	private static float lastx;
 	private static bool lastpressed = false;
 	public static float Swipe { get {
@@ -97,6 +97,10 @@ public class GameEnvironment : MonoBehaviour {
 		}
 		
 		return res;
+	}}
+	
+	public static Vector3 InputAxis { get {
+		return new Vector3(Input.GetAxis("Horizontal"),Input.GetAxis("Vertical"),0f);
 	}}
 	#else
 	
@@ -201,6 +205,18 @@ public class GameEnvironment : MonoBehaviour {
 			}
 		}
 		return res;
+	}}
+	
+	public static Vector3 InputAxis { get {
+		Vector3 dir = Vector3.zero;
+		dir.x = -Input.acceleration.y;
+		dir.z = Input.acceleration.x;
+		
+		if(dir.sqrMagnitude > 1)
+			dir.Normalize();
+		dir.y = dir.z; dir.z = 0;
+			
+		return dir;
 	}}
 	#endif
 	

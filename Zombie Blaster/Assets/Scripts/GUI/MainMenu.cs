@@ -5,7 +5,7 @@ public class MainMenu : MonoBehaviour {
 	
 	#region State Enum
 	
-	private enum MenuState
+	public enum MenuState
 	{
 		MainMenu,
 		Option,
@@ -46,9 +46,9 @@ public class MainMenu : MonoBehaviour {
 		}
 	}
 	
-	public void GoMainState()
+	public void GoState(MenuState state)
 	{
-		State = MenuState.MainMenu;
+		State = state;
 	}
 	
 	#endregion

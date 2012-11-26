@@ -17,6 +17,7 @@ public class Control : MonoBehaviour {
 	#region Variables
 	
 	private float health = 1f;
+	private float healthshow = 1f;
 	
 	#endregion
 	
@@ -108,20 +109,29 @@ public class Control : MonoBehaviour {
 		RenderSettings.fog = Option.Fog;
 	}
 	
+	float x=0;
 	// Update is called once per frame
 	void Update () 
 	{	
+		RenderSettings.skybox.SetTextureOffset("_MainTex",new Vector2(x,x));
+		x+=0.01f;
+		
 		//??//
-		if( Input.GetKey(KeyCode.H) )
-			health -= 0.05f;
-		if( Input.GetKey(KeyCode.J) )
-			health += 0.05f;
+		if( Input.GetKeyUp(KeyCode.H) )
+			health -= 0.5f;
+		if( Input.GetKeyUp(KeyCode.J) )
+			health += 0.5f;
 		
 		if( state != GameState.Play) return;
 		
 		if( Option.UnlimitedHealth ) health = 1.0f;
 		
-		if( health <= 0 ) { ToLose(); return; }
+		if( healthshow != health )
+		{
+			if( healthshow < health ) healthshow += Mathf.Min(Time.deltaTime*1f,health-healthshow);
+			if( healthshow > health ) healthshow -= Mathf.Min(Time.deltaTime*1f,healthshow-health);
+			if( healthshow <= 0 ) { ToLose(); return; }
+		}
 		
 		if (Moving )
 		{
@@ -257,21 +267,21 @@ public class Control : MonoBehaviour {
 		Vector3 v;
 		// Full scale
 		v = LevelInfo.Environments.ProgressBarPlayerFull.transform.localScale;
-		v.x = 0.1f*Mathf.Clamp01(health);
+		v.x = 0.1f*Mathf.Clamp01(healthshow);
 		LevelInfo.Environments.ProgressBarPlayerFull.transform.localScale = v;
 		// Full position
 		v = LevelInfo.Environments.ProgressBarPlayerFull.transform.position;
-		v.x = LevelInfo.Environments.ProgressBarPlayerEmpty.transform.position.x-0.05f+0.05f*Mathf.Clamp01(health);
+		v.x = LevelInfo.Environments.ProgressBarPlayerEmpty.transform.position.x-0.05f+0.05f*Mathf.Clamp01(healthshow);
 		LevelInfo.Environments.ProgressBarPlayerFull.transform.position = v;
 		
 		// Armor position
 		v = LevelInfo.Environments.ProgressBarPlayerArmor.transform.position;
-		v.x = LevelInfo.Environments.ProgressBarPlayerEmpty.transform.position.x + 0.5f*LevelInfo.Environments.ProgressBarPlayerEmpty.transform.localScale.x + 0.5f*Mathf.Max (0f,0.1f*health-0.1f);
+		v.x = LevelInfo.Environments.ProgressBarPlayerEmpty.transform.position.x + 0.5f*LevelInfo.Environments.ProgressBarPlayerEmpty.transform.localScale.x + 0.5f*Mathf.Max (0f,0.1f*healthshow-0.1f);
 		LevelInfo.Environments.ProgressBarPlayerArmor.transform.position = v;
 	
 		// Armor scale
 		v = LevelInfo.Environments.ProgressBarPlayerArmor.transform.localScale;
-		v.x = Mathf.Max (0f,0.1f*health-0.1f);
+		v.x = Mathf.Max (0f,0.1f*healthshow-0.1f);
 		LevelInfo.Environments.ProgressBarPlayerArmor.transform.localScale = v;
 		
 	}
@@ -281,9 +291,9 @@ public class Control : MonoBehaviour {
 	
 	#region Properties
 	
-	public bool Died { get { return health <= 0; }}
+	public bool Died { get { return healthshow <= 0; }}
 	
-	public float Health { get { return health; } set { health = value; } }
+	public float Health { get { return healthshow; } set { healthshow = value; } }
 	
 	#endregion
 
@@ -315,7 +325,7 @@ public class Control : MonoBehaviour {
 		if( health <= 0.0f)
 		{
 			health = 0.0f;
-			ToLose();
+			//ToLose();
 		}
 	}
 	

@@ -28,6 +28,9 @@ public class Zombi : MonoBehaviour {
 	public bool canJump;
 	public AudioClip jumpAudio;	
 	
+	// Shield Up
+	public bool canShieldUp;
+	
 	// Shoot
 	public bool canShoot;
 	public Transform shootTransform;
@@ -150,6 +153,14 @@ public class Zombi : MonoBehaviour {
 				return;
 			}
 			
+			// Shield Up
+			if( runningTime <= 0f && canShieldUp && Random.Range(0,300)==1)
+			{
+				//if( jumpAudio != null ) LevelInfo.Audio.audioSourceZombies.PlayOneShot(jumpAudio);
+				animation.Play("shieldup");
+				return;
+			}
+			
 			// ?? // Running
 			if( runningTime <= 0f && HitWithName(gameObject.name,"FootballPlayer") && Random.Range(0,300)==1 )
 			{
@@ -163,7 +174,8 @@ public class Zombi : MonoBehaviour {
 			}
 			else
 			{
-				animation.Play("walk");
+				if( !animation.IsPlaying("shieldup") )
+					animation.Play("walk");
 			}
 			// Move Forward if no zombie in front of
 			

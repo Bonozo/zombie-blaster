@@ -56,84 +56,22 @@ public class Store : MonoBehaviour {
 		}
 	}
 	
-	/*public static int _playerprefs_unlockCity=0;
-	public static int unlockCity{
-		get
-		{
-			return _playerprefs_unlockCity;
-		}
-		set
-		{
-			_playerprefs_unlockCity = value;
-			PlayerPrefs.SetInt("unlockCity",_playerprefs_unlockCity);
-		}
-	}
-	
-	public static int _playerprefs_unlockStadiums=0;
-	public static int unlockStadiums{
-		get
-		{
-			return _playerprefs_unlockStadiums;
-		}
-		set
-		{
-			_playerprefs_unlockStadiums = value;
-			PlayerPrefs.SetInt("unlockStadiums",_playerprefs_unlockStadiums);
-		}
-	}
-	
-	public static int _playerprefs_unlockFrat=0;
-	public static int unlockFrat{
-		get
-		{
-			return _playerprefs_unlockFrat;
-		}
-		set
-		{
-			_playerprefs_unlockFrat = value;
-			PlayerPrefs.SetInt("unlockFrat",_playerprefs_unlockFrat);
-		}
-	}
-	
-	public static int _playerprefs_unlockCemetery=0;
-	public static int unlockCemetery{
-		get
-		{
-			return _playerprefs_unlockCemetery;
-		}
-		set
-		{
-			_playerprefs_unlockCemetery = value;
-			PlayerPrefs.SetInt("unlockCemetery",_playerprefs_unlockCemetery);
-		}
-	}
-	*/
 	private static int[] _playerprefs_unlockweapon = new int[countWeapons];
 	private static int[] _playerprefs_unlocklevel = new int[countLevel];
-	
-	/// <summary>
-	/// Unlocks the level.
-	/// </summary>
-	/// <param name='index'>
-	/// current city code
-	/// </param>
-	
+		
 	public static bool WeaponUnlocked(int weapon)
 	{
 		return _playerprefs_unlockweapon[weapon] == 1;
 	}
-	
 	public static void UnlockWeapon(int weapon)
 	{
 		_playerprefs_unlockweapon[weapon] = 1;
 		PlayerPrefs.SetInt("weapon"+weapon,_playerprefs_unlockweapon[weapon]);
 	}
-	
 	public static bool LevelUnlocked(int level)
 	{
 		return _playerprefs_unlocklevel[level] == 1;
 	}
-	
 	public static void UnlockLevel(int level)
 	{
 		_playerprefs_unlocklevel[level] = 1;
@@ -161,8 +99,14 @@ public class Store : MonoBehaviour {
 		
 	}
 	
-	#endregion
+	void Awake()
+	{
+		DontDestroyOnLoad(this.gameObject);
+		RestorePlayerPrefs();
+	}
 	
+	#endregion
+	/*
 	#region Game Store
 	
 	public Texture2D textureBackground;
@@ -200,24 +144,7 @@ public class Store : MonoBehaviour {
 			}
 		}
 	}
-
-	void Awake()
-	{
-		DontDestroyOnLoad(this.gameObject);
-		RestorePlayerPrefs();
-	}
 	
-	private bool IsLevelGamePlay { get { return Application.loadedLevel == 2; } }
-	private bool IsLevelOption { get { return Application.loadedLevel == 1; } }
-	
-	private bool ExistGunInCurrentLevel(Weapon w)
-	{
-		if( !IsLevelGamePlay ) return false;
-			foreach(Weapon c in weaponsForLevel[GameEnvironment.StartLevel] )
-				if( c == w )
-				return true;
-		return false;
-	}
 	
 	public GUIStyle myStyle;
 	
@@ -268,7 +195,7 @@ public class Store : MonoBehaviour {
 		
 			// Weapon List
 			scrollposition = GUI.BeginScrollView(new Rect(0,armorydown,Screen.width*0.5f,Screen.height-armorydown-updownbuttonheight),
-				scrollposition,new Rect(0,0,Screen.width*0.48f,(GameEnvironment.storeGun.Length-1)*updownbuttonheight),false,true);
+				scrollposition,new Rect(0,0,Screen.width*0.48f,(GameEnvironment.storeGun.Length-1)*updownbuttonheight),false,false);
 		
 			for(int i=1;i<GameEnvironment.storeGun.Length;i++)
 			{
@@ -339,6 +266,7 @@ public class Store : MonoBehaviour {
 	}
 	
 	#endregion
+	*/
 	
 	#region Google
 
@@ -372,6 +300,422 @@ public class Store : MonoBehaviour {
 	}
 	
 	//--------------- store purchase code end ------------------//
+	
+	#endregion
+
+
+	#region GUI
+	
+	public Texture2D[] textureWeapons;
+	public Texture2D textureWeaponUnknown;
+	public GameObject[] objectWeapons;
+	
+	public GameObject StoreGUI;
+	public ButtonBase buttonMainMenu;
+	public ButtonBase buttonGet1000Heads;
+	public ButtonBase buttonGAME;
+	public ButtonBase buttonTrash;
+	public GUIText zombieHeadText;
+	
+	private int showZombieHeads = -1; 
+	private bool[] showWeapon = new bool[countWeapons];
+	private bool _showStore = false;
+	public bool showStore{
+		get
+		{
+			return _showStore;
+		}
+		set
+		{
+			_showStore = value;
+			
+			StoreGUI.SetActiveRecursively(_showStore);
+			
+			if( _showStore )
+			{
+				for(int i=0;i<countWeapons;i++) showWeapon[i]=WeaponUnlocked(i);
+				for(int i=0;i<countLevel;i++)
+					if( LevelUnlocked(i) )
+						for(int j=0;j<weaponsForLevel[i].Length;j++)
+							showWeapon[(int)weaponsForLevel[i][j]] = true;
+				if( IsLevelOption ) buttonGAME.gameObject.SetActiveRecursively(false);
+				showZombieHeads = zombieHeads;
+				//FirstShopItem();
+				//FirstStashItem();
+			}
+		}
+	}
+	
+	private bool IsLevelGamePlay { get { return Application.loadedLevel == 2; } }
+	private bool IsLevelOption { get { return Application.loadedLevel == 1; } }
+	
+	private void UpdateZombieHeads()
+	{
+		int delta = Mathf.Abs(showZombieHeads-zombieHeads);
+		if(delta<10) delta=1;
+		else if(delta<100) delta=10;
+		else delta=100;
+		if( showZombieHeads < zombieHeads ) showZombieHeads+=delta;
+		if( showZombieHeads > zombieHeads ) showZombieHeads-=delta;
+		zombieHeadText.text = "" + showZombieHeads;
+		
+	}
+	
+	void Update()
+	{
+		UpdateZombieHeads();
+		
+		if( buttonGAME.PressedUp ) 
+		{
+			if( IsLevelGamePlay ) LevelInfo.Environments.control.state = GameState.Play;
+			if( IsLevelOption ) Debug.LogError("Game button should be disabled in MainMenu screen");
+			showStore = false;
+		}
+		
+		if( buttonMainMenu.PressedUp )
+		{
+			if( IsLevelGamePlay ) Application.LoadLevel("mainmenu");
+			if( IsLevelOption )
+			{
+				MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
+				mainmenu.GoState(MainMenu.MenuState.MainMenu);
+				showStore = false;
+			}
+		}
+		
+		if( buttonGet1000Heads.PressedUp )
+		{
+			IABAndroid.purchaseProduct("android.test.purchased");
+		}
+	}
+	
+	public GUIStyle myStyle;
+	
+	//private readonly Rect shopRect = new Rect(0.01f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
+	//private readonly Rect stashRect = new Rect(0.51f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
+
+	private readonly float itemHeight = 0.42f*Screen.height;
+	
+	
+	private float itemdist = 0.6f;
+	private void PrepareShopItems()
+	{
+		for(int i=0,j1=0,j2=0;i<countWeapons;i++)
+		{
+			if( !WeaponUnlocked(i) )
+			{
+				objectWeapons[i].transform.position = new Vector3(0,-j1++*itemdist,0);
+				objectWeapons[i].layer = 8;
+			}
+			else
+			{
+				objectWeapons[i].transform.position = new Vector3(0,-j2++*itemdist,0);
+				objectWeapons[i].layer = 9;
+			}
+		}
+	}
+	
+	private int _current_shop_item = -1;
+	
+	private void FirstShopItem()
+	{
+		_current_shop_item=-1;
+		NextShopItem();
+	}
+	
+	private void NextShopItem()
+	{
+		for(int i=0;i<countWeapons;i++)
+			objectWeapons[i].SetActiveRecursively(false);	
+		
+		bool allunl = true;
+		for(int i=0;i<countWeapons;i++)
+			if( !WeaponUnlocked(i) )
+				allunl = false;
+		if( allunl ) {_current_shop_item = -1; return; }
+		
+		do { _current_shop_item = (_current_shop_item+1)%countWeapons; }
+		while( WeaponUnlocked(_current_shop_item) ); 
+			
+		ShowItems();
+	}
+	
+	private void PrevShopItem()
+	{
+		for(int i=0;i<countWeapons;i++)
+			objectWeapons[i].SetActiveRecursively(false);	
+		
+		bool allunl = true;
+		for(int i=0;i<countWeapons;i++)
+			if( !WeaponUnlocked(i) )
+				allunl = false;
+		if( allunl ) {_current_shop_item = -1; return; }
+		
+		do { _current_shop_item = (_current_shop_item-1+countWeapons)%countWeapons; }
+		while( WeaponUnlocked(_current_shop_item) );
+		ShowItems();
+	}	
+	
+	private int _current_stash_item = -1;
+	
+	private void FirstStashItem()
+	{
+		_current_stash_item=-1;
+		NextStashItem();
+	}
+	
+	private void NextStashItem()
+	{
+		
+		for(int i=0;i<countWeapons;i++)
+			objectWeapons[i].SetActiveRecursively(false);	
+		
+		bool allunl = true;
+		for(int i=0;i<countWeapons;i++)
+			if( WeaponUnlocked(i) )
+				allunl = false;
+		if( allunl ) { _current_stash_item = -1; return; }
+		
+		do { _current_stash_item = (_current_stash_item+1)%countWeapons; }
+		while( !WeaponUnlocked(_current_stash_item) ); 
+			
+		ShowItems();
+		
+	}
+	
+	private void PrevStashItem()
+	{
+		for(int i=0;i<countWeapons;i++)
+			objectWeapons[i].SetActiveRecursively(false);	
+		
+		bool allunl = true;
+		for(int i=0;i<countWeapons;i++)
+			if( WeaponUnlocked(i) )
+				allunl = false;
+		if( allunl ) {_current_stash_item = -1; return; }
+		
+		do { _current_stash_item = (_current_stash_item-1+countWeapons)%countWeapons; }
+		while( !WeaponUnlocked(_current_stash_item) );
+		ShowItems();
+	}	
+	
+	private void ShowItems()
+	{
+		if( _current_shop_item != -1 )
+		{
+			objectWeapons[_current_shop_item].SetActiveRecursively(true);
+			objectWeapons[_current_shop_item].transform.position = new Vector3(-0.28f,-0.05f,0.59f);
+		}
+		if( _current_stash_item != -1 )
+		{
+			objectWeapons[_current_stash_item].SetActiveRecursively(true);
+			objectWeapons[_current_stash_item].transform.position = new Vector3(0.18f,-0.05f,0.59f);		
+		}
+	}
+	
+	private void SetLayer(GameObject g,int n)
+	{
+		g.layer = n;
+		Transform[] gg = g.GetComponentsInChildren<Transform>();
+		foreach(Transform c in gg)
+			c.gameObject.layer = n;
+	}
+	
+	
+	private int wooi = -1;
+	private bool fillin = false;
+	private Vector2 scrollposition = Vector2.zero;
+	private Vector2 scrollposition2 = Vector2.zero;
+	void OnGUI()
+	{
+		if(!_showStore) return;
+		
+		
+		// Shop
+		Rect shopRect = new Rect(0.01f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
+		scrollposition = GUI.BeginScrollView(new Rect(0.01f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height),scrollposition,new Rect(0f,0f,0.457f*Screen.width,8*itemHeight),false,true);
+		foreach(Touch touch in Input.touches)
+			if( RectContainPoint(shopRect,touch.position))
+				scrollposition.y += 0.5f*touch.deltaPosition.y;
+		
+		for(int i=0,j=0;i<GameEnvironment.storeGun.Length;i++)
+			if(!WeaponUnlocked(i) )
+			{
+				objectWeapons[i].transform.localPosition = new Vector3(0,-j + 1/0.42f*scrollposition.y/Screen.height,0);
+				SetLayer(objectWeapons[i],8);
+				//Texture2D texture = showWeapon[i]?textureWeapons[i]:textureWeaponUnknown;
+				//GUI.DrawTexture(new Rect(0.035f*Screen.width,j*itemHeight,0.246f*Screen.width,itemHeight),textureWeapons[i]);
+				GUI.Box(new Rect(0.02f*Screen.width,j*itemHeight,0.3f*Screen.width,0.08f*Screen.height),GameEnvironment.storeGun[i].name,myStyle);	
+				if(wooi==-1)
+				{			
+					if( GUI.Button(new Rect(0.335f*Screen.width,(j+0.5f)*itemHeight,0.14f*Screen.width,0.08f*Screen.height),"100",myStyle) )
+						wooi = i;
+				}
+				else
+					GUI.Box(new Rect(0.335f*Screen.width,(j+0.5f)*itemHeight,0.14f*Screen.width,0.08f*Screen.height),"100",myStyle);
+				j++;
+			}
+		
+		GUI.EndScrollView();
+	
+		
+		// Stash
+		Rect stashRect = new Rect(0.51f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
+		scrollposition2 = GUI.BeginScrollView(new Rect(0.51f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height),scrollposition2,new Rect(0f,0f,0.457f*Screen.width,8*itemHeight),false,true);
+		foreach(Touch touch in Input.touches)
+			if( RectContainPoint(stashRect,touch.position))
+				scrollposition2.y += 0.5f*touch.deltaPosition.y;
+		
+		for(int i=0,j=0;i<GameEnvironment.storeGun.Length;i++)
+			if( WeaponUnlocked(i) )
+			{
+				objectWeapons[i].transform.localPosition = new Vector3(0,-j + 1/0.42f*scrollposition2.y/Screen.height,0);
+				SetLayer(objectWeapons[i],9);	
+				
+				GUI.Box(new Rect(0.02f*Screen.width,j*itemHeight,0.3f*Screen.width,0.08f*Screen.height),GameEnvironment.storeGun[i].name,myStyle);	
+				if( IsLevelGamePlay )
+				{
+					if(wooi==-1 && GUI.Button(new Rect(0.335f*Screen.width,(j+0.5f)*itemHeight,0.14f*Screen.width,0.08f*Screen.height),GameEnvironment.storeGun[i].AmmoInformation,myStyle) )
+					{
+						wooi = i;
+						fillin = true;
+					}
+					else
+						GUI.Box(new Rect(0.335f*Screen.width,(j+0.5f)*itemHeight,0.14f*Screen.width,0.08f*Screen.height),GameEnvironment.storeGun[i].AmmoInformation,myStyle);
+				}
+				j++;
+			}
+		
+		
+		GUI.EndScrollView();
+				
+		
+		/*if( _current_shop_item != -1 )
+		{
+			GUI.Box(new Rect(0.03f*Screen.width,0.3f*Screen.height,0.3f*Screen.width,0.1f*Screen.height),GameEnvironment.storeGun[_current_shop_item].name,myStyle);
+			
+			if( wooi == -1 )
+			{
+				if( GameEnvironment.AbsoluteSwipe.y > 0f )
+					PrevShopItem();
+				if( GameEnvironment.AbsoluteSwipe.y < 0f )
+					NextShopItem();
+				
+				
+				if( GUI.Button(new Rect(0.36f*Screen.width,0.4f*Screen.height,0.13f*Screen.width,0.08f*Screen.height),"Prev",myStyle) )
+					PrevShopItem();
+				if( GUI.Button(new Rect(0.36f*Screen.width,0.5f*Screen.height,0.13f*Screen.width,0.08f*Screen.height),"Next",myStyle) )
+					NextShopItem();
+				if( GUI.Button(new Rect(0.36f*Screen.width,0.6f*Screen.height,0.13f*Screen.width,0.08f*Screen.height),"Buy",myStyle) )
+					wooi = _current_shop_item;
+			}
+		}		
+		
+		if( _current_stash_item != -1 )
+		{
+			GUI.Box(new Rect(0.53f*Screen.width,0.3f*Screen.height,0.3f*Screen.width,0.1f*Screen.height),GameEnvironment.storeGun[_current_stash_item].name,myStyle);
+			
+			if( wooi == -1 )
+			{
+				if( GUI.Button(new Rect(0.86f*Screen.width,0.4f*Screen.height,0.13f*Screen.width,0.08f*Screen.height),"Prev",myStyle) )
+					PrevStashItem();
+				if( GUI.Button(new Rect(0.86f*Screen.width,0.5f*Screen.height,0.13f*Screen.width,0.08f*Screen.height),"Next",myStyle) )
+					NextStashItem();
+				if(IsLevelGamePlay && GUI.Button(new Rect(0.86f*Screen.width,0.6f*Screen.height,0.13f*Screen.width,0.08f*Screen.height),"Fill in",myStyle) )
+				{
+					wooi = _current_stash_item;
+					fillin = true;
+				}
+			}
+		}*/
+		
+		if( wooi != -1 )
+		{
+			if(fillin)
+				ShowFillInDialog();
+			else
+				ShowWeaponBuyDialog();
+		}
+	}
+	
+	private void ShowWeaponBuyDialog()
+	{
+		if( Store.zombieHeads >= 100 )
+		{
+			GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"Do you want to buy this item?");
+			
+			if(GUI.Button(new Rect(0.35f*Screen.width,0.4f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "Buy" ) )	
+			{
+				Store.UnlockWeapon(wooi);
+				showWeapon[wooi] = true;
+				audio.Play();
+				Store.zombieHeads -= 100;
+				if( IsLevelGamePlay && ExistGunInCurrentLevel((Weapon)wooi))
+				{
+					GameEnvironment.storeGun[wooi].store += 5*GameEnvironment.storeGun[wooi].pocketsize;
+					GameEnvironment.storeGun[wooi].enabled = true;
+				}
+				wooi = -1;
+			}
+			if( GUI.Button(new Rect(0.35f*Screen.width,0.6f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "Back" ) )
+				wooi = -1;			
+		}
+		else
+		{
+			GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"You have not enough heads to buy this item.");
+			if( GUI.Button(new Rect(0.35f*Screen.width,0.5f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "Back") )
+				wooi = -1;
+		}
+		
+
+	}
+	
+	private void ShowFillInDialog()
+	{
+		if( Store.zombieHeads >= 100 )
+		{
+			GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"Do you want to Fill in ammo?");
+			
+			if(GUI.Button(new Rect(0.35f*Screen.width,0.4f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "Fill in" ) )	
+			{
+				audio.Play();
+				Store.zombieHeads -= 100;
+				GameEnvironment.storeGun[wooi].store += 5*GameEnvironment.storeGun[wooi].pocketsize;
+				wooi = -1;
+				fillin = false;
+			}
+			if( GUI.Button(new Rect(0.35f*Screen.width,0.6f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "Back" ) )
+			{
+				wooi = -1;
+				fillin = false;
+			}
+		}
+		else
+		{
+			GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"You have not enough heads.");
+			if( GUI.Button(new Rect(0.35f*Screen.width,0.5f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "Back") )
+			{
+				wooi = -1;
+				fillin = false;
+			}
+		}
+		
+
+	}
+	
+	private bool ExistGunInCurrentLevel(Weapon w)
+	{
+		if( !IsLevelGamePlay ) return false;
+			foreach(Weapon c in weaponsForLevel[GameEnvironment.StartLevel] )
+				if( c == w )
+				return true;
+		return false;
+	}
+	
+	private bool RectContainPoint(Rect rect,Vector2 pos)
+	{
+		return rect.xMin <= pos.x && pos.x <= rect.xMax && rect.yMin <= pos.y && pos.y <= rect.yMax;
+	}
 	
 	#endregion
 }
