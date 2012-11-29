@@ -8,6 +8,7 @@ public class SelectArea : MonoBehaviour {
 	public Texture2D lockedTexture;
 	public GUITexture loadingTexture;
 	public GUITexture[] bloods;
+	public GUIText headsText;
 	
 	private bool[] unlocked = new bool[5];
 	private int[] unlock_heads = new int [5] {0,1000,2500,5000,10000};
@@ -43,6 +44,7 @@ public class SelectArea : MonoBehaviour {
 	
 	void Update()
 	{
+		headsText.text = "" + Store.zombieHeads;
 		if( unlock_index != 0 ) return;
 		
 		for(int i=0;i<levelButton.Length;i++)

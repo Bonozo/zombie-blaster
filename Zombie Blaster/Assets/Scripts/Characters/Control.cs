@@ -107,22 +107,26 @@ public class Control : MonoBehaviour {
 		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActiveRecursively(false);
 		
 		RenderSettings.fog = Option.Fog;
+		
+		LevelInfo.Environments.generator.GenerateMessageText(new Vector3(0.2f,0.2f,10),"TAP TO SHOOT and SWIPE TO TURN",false,4f);
 	}
 	
-	float x=0;
 	// Update is called once per frame
 	void Update () 
-	{	
-		RenderSettings.skybox.SetTextureOffset("_MainTex",new Vector2(x,x));
-		x+=0.01f;
-		
+	{
 		//??//
 		if( Input.GetKeyUp(KeyCode.H) )
-			health -= 0.5f;
+			health -= 0.1f;
 		if( Input.GetKeyUp(KeyCode.J) )
-			health += 0.5f;
-		
-		if( state != GameState.Play) return;
+			health += 0.1f;
+	
+		if( state != GameState.Play) return;//expect
+		if(Input.GetKey(KeyCode.Escape) )
+		{
+			LevelInfo.Environments.control.state = GameState.Paused;
+			return;
+		}
+		////
 		
 		if( Option.UnlimitedHealth ) health = 1.0f;
 		
@@ -264,25 +268,14 @@ public class Control : MonoBehaviour {
 	
 	void UpdateHealthBar()
 	{
-		Vector3 v;
-		// Full scale
-		v = LevelInfo.Environments.ProgressBarPlayerFull.transform.localScale;
-		v.x = 0.1f*Mathf.Clamp01(healthshow);
-		LevelInfo.Environments.ProgressBarPlayerFull.transform.localScale = v;
-		// Full position
-		v = LevelInfo.Environments.ProgressBarPlayerFull.transform.position;
-		v.x = LevelInfo.Environments.ProgressBarPlayerEmpty.transform.position.x-0.05f+0.05f*Mathf.Clamp01(healthshow);
-		LevelInfo.Environments.ProgressBarPlayerFull.transform.position = v;
+		GUITexture h = LevelInfo.Environments.healthbarHealth;
+		Vector3 v = h.transform.localScale;
+		v.x = Mathf.Clamp01(healthshow/LevelInfo.State.playerMaxHealth);
+		h.transform.localScale = v;
 		
-		// Armor position
-		v = LevelInfo.Environments.ProgressBarPlayerArmor.transform.position;
-		v.x = LevelInfo.Environments.ProgressBarPlayerEmpty.transform.position.x + 0.5f*LevelInfo.Environments.ProgressBarPlayerEmpty.transform.localScale.x + 0.5f*Mathf.Max (0f,0.1f*healthshow-0.1f);
-		LevelInfo.Environments.ProgressBarPlayerArmor.transform.position = v;
-	
-		// Armor scale
-		v = LevelInfo.Environments.ProgressBarPlayerArmor.transform.localScale;
-		v.x = Mathf.Max (0f,0.1f*healthshow-0.1f);
-		LevelInfo.Environments.ProgressBarPlayerArmor.transform.localScale = v;
+		v = h.transform.localPosition;
+		v.x = -0.01500002f-0.5f*(1-h.transform.localScale.x);
+		h.transform.localPosition = v;
 		
 	}
 	
@@ -316,9 +309,10 @@ public class Control : MonoBehaviour {
 	public void GetHealth(float h)
 	{
 		if( Option.UnlimitedHealth ) return;
-		
-		if( h<0f && Option.Vibration && Application.platform == RuntimePlatform.Android)
+		#if UNITY_ANDROID || UNITY_IPHONE
+		if( h<0f && Option.Vibration)
 				Handheld.Vibrate();
+		#endif
 		
 		health += h;
 		if( health > LevelInfo.State.playerMaxHealth ) health = LevelInfo.State.playerMaxHealth;

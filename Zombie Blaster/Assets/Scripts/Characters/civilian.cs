@@ -5,6 +5,8 @@ public class civilian : MonoBehaviour {
 	
 	public GameObject ZombieRagdoll;
 	
+	public float CollisionToDownLenght = 0.4f;
+	
 	public float Speed = 20f;
 	public float DestroyTime = 30f;
 	//public GameObject ZombieRagdoll;
@@ -20,7 +22,6 @@ public class civilian : MonoBehaviour {
 		control = (Control)GameObject.FindObjectOfType(typeof(Control));
 		transform.position = new Vector3(transform.position.x,1.35f,transform.position.z);
 		center = transform.position; center.x += 4f;
-		animation["walk"].speed = 4f;
 	}
 	
 	// Update is called once per frame
@@ -33,7 +34,7 @@ public class civilian : MonoBehaviour {
 			return;
 		}
 		
-		
+		NormalizeHeight();
 		
 		Vector3 lastpos = transform.position;
 		Vector3 v = control.transform.position; v.y = transform.position.y;
@@ -42,7 +43,28 @@ public class civilian : MonoBehaviour {
 		else
 			transform.RotateAround(v,Vector3.up,Time.deltaTime*Speed);
 		transform.rotation = Quaternion.LookRotation(transform.position-lastpos,Vector3.up);
-		animation.Play("walk");
+		animation.Play("running");
+	}
+	
+	private void NormalizeHeight()
+	{
+		RaycastHit hit;    
+		
+		Vector3 pos = transform.position;
+		// ?? // 
+		if( HitWithName(gameObject.name,"Fatkid") || HitWithName(gameObject.name,"Farmer2") ||
+			HitWithName(gameObject.name,"Ballerina") || HitWithName(gameObject.name,"FootballPlayer"))
+			pos.y += 0.4f;
+		
+		pos.y += 1f;
+		
+		if(Physics.Raycast(pos, -transform.up, out hit, CollisionToDownLenght+0.01f+1f) /*&& 
+			hit.collider.gameObject.name == "ground" */)
+			transform.Translate(0,0.02f,0);
+		if( !Physics.Raycast(pos, -transform.up, out hit, CollisionToDownLenght-0.03f+1f) )
+			transform.Translate(0,-0.02f,0);
+		
+		Debug.DrawRay(pos, -CollisionToDownLenght*transform.up, Color.green);
 	}
 	
 	void OnTriggerStay(Collider col)
@@ -106,7 +128,7 @@ public class civilian : MonoBehaviour {
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
 		Vector3 dir = transform.position - control.transform.position; dir.Normalize();
         foreach (Rigidbody child in rigidbodies) 
-			child.AddForce(1000f*dir);
+			child.AddForce(200f*dir);
 		
 		Destroy(this.gameObject);
 	}
@@ -119,7 +141,7 @@ public class civilian : MonoBehaviour {
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
 		Vector3 dir = transform.position - control.transform.position; dir.Normalize(); dir.y = 0.5f;
         foreach (Rigidbody child in rigidbodies) 
-			child.AddForce(2000f*dir);
+			child.AddForce(400f*dir);
 		
 		Destroy(this.gameObject);
 	}
@@ -132,7 +154,7 @@ public class civilian : MonoBehaviour {
 		ragdoll.SendMessage("IsCivilian");
 		var rigidbodies = ragdoll.GetComponentsInChildren(typeof(Rigidbody));
         foreach (Rigidbody child in rigidbodies) 
-			child.AddForce(new Vector3(Random.Range(-1600f,1600f),1600f,Random.Range(-1600f,1600f)));
+			child.AddForce(new Vector3(Random.Range(-320f,320f),320f,Random.Range(-320f,320f)));
 		Destroy(this.gameObject);
 	}
 	
@@ -147,7 +169,7 @@ public class civilian : MonoBehaviour {
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
 		Vector3 dir = transform.position - control.transform.position; dir.Normalize();
         foreach (Rigidbody child in rigidbodies) 
-			child.AddForce(100f*dir);
+			child.AddForce(20f*dir);
 		
 		Destroy(this.gameObject);
 	}

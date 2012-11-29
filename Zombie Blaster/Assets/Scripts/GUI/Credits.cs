@@ -28,6 +28,11 @@ public class Credits : MonoBehaviour {
 			currentHeight += Time.deltaTime*Speed;
 	}
 	
+	void OnEnable()
+	{
+		currentHeight = -1;
+	}
+	
 	private Rect RectScreen(float a,float b,float w,float h)
 	{
 		return new Rect(a*Screen.width,b*Screen.height,w*Screen.width,h*Screen.height);
@@ -51,7 +56,6 @@ public class Credits : MonoBehaviour {
 			}
 			index += 0.1f;
 		}
-		Debug.Log("index : " + index);
 		if(index<0f)
 		{
 			currentHeight = -1;

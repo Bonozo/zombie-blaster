@@ -88,6 +88,8 @@ public class Generator : MonoBehaviour {
 	
 	#region Civilian
 	
+	public GameObject[] civilianPrefabs;
+	
 	private float civilianRate = 3f;
 	
 	Vector3 CivilianRandomPosition()
@@ -137,7 +139,7 @@ public class Generator : MonoBehaviour {
 			if( civilianRate <= 0f )
 			{
 				if( GameObject.FindObjectOfType(typeof(civilian)) == null )
-					Instantiate(LevelInfo.Environments.civilianPrefab,RandomPosition(),Quaternion.identity);
+					Instantiate(civilianPrefabs[Random.Range(0,civilianPrefabs.Length)],RandomPosition(),Quaternion.identity);
 				civilianRate = Random.Range(5f,10f);
 			}
 		}
@@ -155,5 +157,10 @@ public class Generator : MonoBehaviour {
 		g.SendMessage("ChangeMessage",text);
 	}
 	
+	public void GenerateMessageText(Vector3 pos,string text,bool up,float time)
+	{
+		GameObject g = (GameObject)Instantiate(LevelInfo.Environments.messageText2,pos,Quaternion.identity);
+		g.GetComponent<ShowMessage>().ShowMessageText2D(text,up,time);
+	}	
 	#endregion
 }

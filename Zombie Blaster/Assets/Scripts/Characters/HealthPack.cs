@@ -128,7 +128,7 @@ public class HealthPack : MonoBehaviour {
 	
 	private IEnumerator PickedUp()
 	{
-		rigidbody.AddForce(0,1000,0);
+		rigidbody.AddForce(0,200,0);
 		GameEnvironment.IgnoreButtons();
 		picked = true;
 		

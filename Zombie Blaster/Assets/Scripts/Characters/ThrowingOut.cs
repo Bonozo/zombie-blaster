@@ -9,7 +9,7 @@ public class ThrowingOut : MonoBehaviour {
 		
 		Control control = (Control)GameObject.FindObjectOfType(typeof(Control));
 		Vector3 dir = transform.position - control.transform.position; dir.Normalize();
-		rigidbody.AddForce(4000f*dir);
+		rigidbody.AddForce(800f*dir);
 		
 		Destroy(this.gameObject,4f);
 	}

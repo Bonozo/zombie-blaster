@@ -44,19 +44,65 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Editor\BuildSettingsEditor.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Camera\tk2dCameraEditor.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Fonts\tk2dFontBuilder.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Fonts\tk2dFontEditor.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Fonts\tk2dTextMeshEditor.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\Atlas\tk2dAtlasBuilder.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\Atlas\tk2dAtlasRect.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\Atlas\tk2dMaxRectsBinPack.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\SpriteCollectionEditor\tk2dSpriteCollectionEditor.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\SpriteCollectionEditor\tk2dSpriteCollectionEditorFontView.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\SpriteCollectionEditor\tk2dSpriteCollectionEditorPopup.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\SpriteCollectionEditor\tk2dSpriteCollectionEditorProxy.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\SpriteCollectionEditor\tk2dSpriteCollectionEditorSettingsView.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\SpriteCollectionEditor\tk2dSpriteCollectionEditorSpriteSheetView.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\SpriteCollectionEditor\tk2dSpriteCollectionEditorSpriteView.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\SpriteCollectionEditor\tk2dSpriteCollectionEditorTextureView.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\TextureProcessing\tk2dFloydSteinbergDithering.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\Triangulator\tk2dTriangulator.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\tk2dAnimatedSpriteEditor.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\tk2dSlicedSpriteEditor.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\tk2dSpriteAnimationEditor.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\tk2dSpriteCollectionBuilder.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\tk2dSpriteCollectionTextureWatcher.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\tk2dSpriteEditor.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\tk2dSpriteThumbnailCache.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Sprites\tk2dStaticSpriteBatcherEditor.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Tilemap\Importer\tk2dTileMapImporter.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Tilemap\tk2dTileMapBrushBuilder.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Tilemap\tk2dTileMapBrushRenderer.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Tilemap\tk2dTileMapEditor.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Tilemap\tk2dTileMapEditorData.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Tilemap\tk2dTileMapEditorDataInspector.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Tilemap\tk2dTileMapSceneGUI.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\Tilemap\tk2dTileMapUtility.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\tk2dEditorSkin.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\tk2dEditorUtility.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\tk2dGuiUtility.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\tk2dIndex.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\tk2dJSSupport.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\tk2dMenu.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\tk2dPreferencesEditor.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\tk2dScaleUtility.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\tk2dSpriteGuiUtility.cs" />
+     <Compile Include="Assets\TK2DROOT\tk2d\Editor\tk2dUpdateWindow.cs" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_popup_dialog_close_bg_highlight.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_activity_close_enter.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_status_bar_translate_in_left.xml" />
      <None Include="Assets\Plugins\Android\res\layout\gree_modal_navigation_bar.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_txtbtn_right_emboss_selector.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_rotate.xml" />
+     <None Include="Assets\TK2DROOT\tk2d\Shaders\LitSolidVertexColor.shader" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_txtbtn_left_emboss_bg_default.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_um_selector.xml" />
      <None Include="Assets\Plugins\Android\res\layout\gree_dashboard_button.xml" />
+     <None Include="Assets\Testing\ShopFont1.txt" />
+     <None Include="Assets\TK2DROOT\tk2d\Shaders\SolidVertexColor.shader" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_popup_dialog_close_selector.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_emoji_palette_arrow_left_selector.xml" />
      <None Include="Assets\Plugins\Android\res\values\gree_themes.xml" />
+     <None Include="Assets\Standard Assets\UIToolkit\DemoAssets\Resources\textDemoSheet2x.txt" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_notifications_selector.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_close_selector.xml" />
      <None Include="Assets\Plugins\Android\res\layout\gree_status_bar.xml" />
@@ -64,6 +110,7 @@
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_txtbtn_label_selector.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_subnavi_background_default.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_notification_board_background.xml" />
+     <None Include="Assets\Plugins\TapjoyAndroid\Manifest.xml" />
      <None Include="Assets\Plugins\Android\res\layout\gree_popup_dialog_layout.xml" />
      <None Include="Assets\Plugins\Android\res\values\gree_styles.xml" />
      <None Include="Assets\Plugins\Android\res\layout\gree_internal_notification_bar_layout.xml" />
@@ -74,19 +121,24 @@
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_txtbtn_left_emboss_selector.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_activity_open_exit.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_status_game_notification_with_badge_selector.xml" />
+     <None Include="Assets\Standard Assets\UIToolkit\DemoAssets\Resources\colorPickerSheet.txt" />
      <None Include="Assets\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
      <None Include="Assets\Plugins\Android\res\menu\gree_subbrowser.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_subnavi_background_highlighted.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_palette_out_to_right.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_emoji_palette_page_indicator.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_slide_out_right.xml" />
+     <None Include="Assets\TK2DROOT\tk2d\Shaders\LitPremulVertexColor.shader" />
+     <None Include="Assets\TK2DROOT\tk2d\Shaders\PremulVertexColor.shader" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_common_bg_highlight.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_tabbutton.xml" />
      <None Include="Assets\Plugins\Android\res\layout-land\gree_subnavi_item.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_arrow_right_selector.xml" />
+     <None Include="Assets\Plugins\SocialNetworking\Manifest.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_activity_open_enter.xml" />
      <None Include="Assets\Plugins\Android\res\layout\gree_dashboard_navigation_bar.xml" />
      <None Include="Assets\Plugins\Android\Unity34Manifest.xml" />
+     <None Include="Assets\TK2DROOT\tk2d\Shaders\Blend2TexVertexColor.shader" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_emoji_palette_arrow_right_selector.xml" />
      <None Include="Assets\Plugins\Android\res\layout\gree_game_notification_button.xml" />
      <None Include="Assets\Standard Assets\Skyboxes\_skybox info.txt" />
@@ -98,6 +150,7 @@
      <None Include="Assets\Plugins\Android\res\layout-land\gree_popup_dialog_layout.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_dialog_bottom_exit.xml" />
      <None Include="Assets\Plugins\Android\res\layout-land\gree_notification_board_layout.xml" />
+     <None Include="Assets\Standard Assets\UIToolkit\DemoAssets\Resources\joystickSheet.txt" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_emoji_palette_page_indicator_active.xml" />
      <None Include="Assets\Plugins\Android\res\layout\gree_expandable_status_bar_right.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_dialog_enter.xml" />
@@ -109,20 +162,25 @@
      <None Include="Assets\Plugins\Android\res\layout\gree_expandable_status_bar_left.xml" />
      <None Include="Assets\Plugins\Android\res\layout\gree_dashboard_subbrowser_layout.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_arrow_left_selector.xml" />
+     <None Include="Assets\TK2DROOT\tk2d\Shaders\BlendVertexColor.shader" />
      <None Include="Assets\Plugins\Android\res\values\gree_arrays.xml" />
      <None Include="Assets\Plugins\Android\res\layout\gree_tutorial_universalmenu.xml" />
      <None Include="Assets\Plugins\Android\res\layout\gree_dashboard_universalmenu.xml" />
+     <None Include="Assets\Plugins\UIToolkit\Shaders\UIToolkit Alpha Enabled (Default).shader" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_notifications_red_selector.xml" />
      <None Include="Assets\Plugins\Android\res\layout\gree_notification_board_layout.xml" />
      <None Include="Assets\Plugins\Android\res\layout\gree_emoji_palette.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_txtbtn_left_emboss_bg_highlight.xml" />
+     <None Include="Assets\TK2DROOT\tk2d\Shaders\LitCutoutVertexColor.shader" />
      <None Include="Assets\Plugins\Android\res\layout\gree_posting_layout.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_activity_close_exit.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_navigationbar_background.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_dialog_bottom_enter.xml" />
      <None Include="Assets\Plugins\Android\res\layout\gree_posting_multiple_layout.xml" />
+     <None Include="Assets\Standard Assets\UIToolkit\DemoAssets\Resources\kitchenSinkSheet.txt" />
      <None Include="Assets\Plugins\Android\Unity35Manifest.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_txtbtn_right_emboss_bg_default.xml" />
+     <None Include="Assets\TK2DROOT\tk2d\Shaders\CutoutVertexColor.shader" />
      <None Include="Assets\Plugins\Android\res\anim\gree_popup_dialog_open.xml" />
      <None Include="Assets\Plugins\Android\res\layout\gree_user_notification_button.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_slide_out_left.xml" />
@@ -130,12 +188,19 @@
      <None Include="Assets\Plugins\Android\res\layout\gree_pull_to_refresh_header.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_palette_out_to_left.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_slide_in_right.xml" />
+     <None Include="Assets\Standard Assets\UIToolkit\DemoAssets\Resources\joystickSheet2x.txt" />
+     <None Include="Assets\Plugins\UIToolkit\Shaders\UIToolkit No Alpha.shader" />
+     <None Include="Assets\Standard Assets\UIToolkit\DemoAssets\Resources\textDemoSheet.txt" />
+     <None Include="Assets\TK2DROOT\tk2d\Shaders\LitBlendVertexColor.shader" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_status_user_notification_with_badge_selector.xml" />
+     <None Include="Assets\Standard Assets\UIToolkit\DemoAssets\Resources\prototype.txt" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_status_notification_badge_left_selector.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_status_capture_selector.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_overscroll_icon_up_to_down.xml" />
+     <None Include="Assets\Standard Assets\UIToolkit\DemoAssets\Resources\kitchenSinkSheet2x.txt" />
      <None Include="Assets\Plugins\Android\res\anim\gree_status_bar_translate_out_right.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_status_notification_badge_right_selector.xml" />
+     <None Include="Assets\Standard Assets\UIToolkit\DemoAssets\Resources\prototype2x.txt" />
      <None Include="Assets\Plugins\Android\res\anim\gree_notification_board_close.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_status_bar_translate_out_left.xml" />
      <None Include="Assets\Plugins\Android\res\values\gree_strings.xml" />
@@ -154,6 +219,15 @@
      <None Include="Assets\Plugins\Android\res\values-ja\gree_strings.xml" />
  <Reference Include="P31MenuItem">
  <HintPath>Assets\Editor\Prime31\P31MenuItem.dll</HintPath>
+ </Reference>
+ <Reference Include="Prime31MenuItem">
+ <HintPath>Assets\Editor\Prime31\Prime31MenuItem.dll</HintPath>
+ </Reference>
+ <Reference Include="P31RestKit">
+ <HintPath>Assets\Plugins\Prime31\P31RestKit.dll</HintPath>
+ </Reference>
+ <Reference Include="tk2dExternal">
+ <HintPath>Assets\TK2DROOT\tk2d\Editor\tk2dExternal.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>

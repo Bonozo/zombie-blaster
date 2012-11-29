@@ -18,6 +18,7 @@ public class MainMenu : MonoBehaviour {
 	
 	#region Parameters
 	
+	public AudioSource audioCredits;
 	public AudioSource audioPressed;
 	public GUITexture guiOptionButton,guiPlayButton,guiStore;
 	public GameObject objMenu,objOption,objCreadits,objAreaMap;
@@ -43,6 +44,9 @@ public class MainMenu : MonoBehaviour {
 			
 			if( _state == MenuState.AreaMap )
 				SoundBackground.Stop();
+			
+			if( _state == MenuState.Credits )
+				audioCredits.Play();
 		}
 	}
 	

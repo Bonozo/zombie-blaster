@@ -103,6 +103,7 @@ public class Store : MonoBehaviour {
 	{
 		DontDestroyOnLoad(this.gameObject);
 		RestorePlayerPrefs();
+		Application.targetFrameRate = 60;
 	}
 	
 	#endregion
@@ -319,6 +320,7 @@ public class Store : MonoBehaviour {
 	
 	private int showZombieHeads = -1; 
 	private bool[] showWeapon = new bool[countWeapons];
+	private bool[] showFillIn = new bool[countWeapons];
 	private bool _showStore = false;
 	public bool showStore{
 		get
@@ -334,10 +336,10 @@ public class Store : MonoBehaviour {
 			if( _showStore )
 			{
 				for(int i=0;i<countWeapons;i++) showWeapon[i]=WeaponUnlocked(i);
-				for(int i=0;i<countLevel;i++)
-					if( LevelUnlocked(i) )
-						for(int j=0;j<weaponsForLevel[i].Length;j++)
-							showWeapon[(int)weaponsForLevel[i][j]] = true;
+				for(int i=0;i<countWeapons;i++) showFillIn[i]=false;
+				if( IsLevelGamePlay )
+					for(int j=0;j<weaponsForLevel[LevelInfo.Environments.control.currentLevel].Length;j++)
+						showFillIn[(int)weaponsForLevel[LevelInfo.Environments.control.currentLevel][j]] = true;
 				if( IsLevelOption ) buttonGAME.gameObject.SetActiveRecursively(false);
 				showZombieHeads = zombieHeads;
 				//FirstShopItem();
@@ -573,7 +575,7 @@ public class Store : MonoBehaviour {
 				SetLayer(objectWeapons[i],9);	
 				
 				GUI.Box(new Rect(0.02f*Screen.width,j*itemHeight,0.3f*Screen.width,0.08f*Screen.height),GameEnvironment.storeGun[i].name,myStyle);	
-				if( IsLevelGamePlay )
+				if( IsLevelGamePlay && showFillIn[i])
 				{
 					if(wooi==-1 && GUI.Button(new Rect(0.335f*Screen.width,(j+0.5f)*itemHeight,0.14f*Screen.width,0.08f*Screen.height),GameEnvironment.storeGun[i].AmmoInformation,myStyle) )
 					{

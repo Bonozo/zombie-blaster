@@ -15,85 +15,6 @@ public class Option : MonoBehaviour {
 	public static bool Fog = false;
 	//public static int Quality = QualitySettings.GetQualityLevel();
 	
-	//--------------- store purchase code ------------------//
-	
-	public string storePublicKey;
-	private string storemessage = "";//"store message";
-	private string storemessage2 = "";//"store message2";
-	private static int purchased = 0;
-	
-	void Awake() {
-		
-		purchased = PlayerPrefs.GetInt("purchased",0);
-		
-		IABAndroidManager.purchaseSucceededEvent += HandleIABAndroidManagerpurchaseSucceededEvent;
-		IABAndroidManager.purchaseFailedEvent += HandleIABAndroidManagerpurchaseFailedEvent;
-		IABAndroidManager.purchaseCancelledEvent += HandleIABAndroidManagerpurchaseCancelledEvent;
-		IABAndroidManager.billingSupportedEvent += HandleIABAndroidManagerbillingSupportedEvent;
-		
-		IABAndroidManager.transactionRestoreFailedEvent += HandleIABAndroidManagertransactionRestoreFailedEvent;
-		IABAndroidManager.transactionsRestoredEvent += HandleIABAndroidManagertransactionRestoredEvent;
-		IABAndroidManager.purchaseSignatureVerifiedEvent +=  HandleIABAndroidManagerpurchaseSignatureVerifiedEvent;
-		IABAndroidManager.purchaseRefundedEvent += HandleIABAndroidManagerpurchaseRefundedEvent;
-	}
-
-	void HandleIABAndroidManagerpurchaseRefundedEvent (string obj)
-	{
-		//storemessage2 = "purchaseRefunded : " + obj;
-	}
-
-	void HandleIABAndroidManagerpurchaseSignatureVerifiedEvent (string arg1, string arg2)
-	{
-		//storemessage2 = "purchaseSignatureVerified : " + arg1 + "," + arg2;
-	}
-	
-	void HandleIABAndroidManagertransactionRestoredEvent()
-	{
-		storemessage2 = "Transaction Restored";
-	}
-	
-	void HandleIABAndroidManagertransactionRestoreFailedEvent (string obj)
-	{
-		storemessage2 = "Transaction Restore Failed : " + obj;
-	}
-
-	void HandleIABAndroidManagerbillingSupportedEvent (bool obj)
-	{
-		//storemessage = "Billing Supported : " + obj;
-	}
-
-	void HandleIABAndroidManagerpurchaseCancelledEvent (string obj)
-	{
-		storemessage = "Purchase Cancelled : " + obj;
-	}
-
-	void HandleIABAndroidManagerpurchaseFailedEvent (string obj)
-	{
-		storemessage = "Purchase Failed : " + obj;
-	}
-
-	void HandleIABAndroidManagerpurchaseSucceededEvent (string obj)
-	{
-		purchased = 1;
-		PlayerPrefs.SetInt("purchased",purchased);
-		storemessage = "Purchase Succeeded : " + obj;
-	}
-	
-	void Start()
-	{
-		//IABAndroid.init( storePublicKey );
-		//IABAndroid.startCheckBillingAvailableRequest();
-		//IABAndroid.restoreTransactions();
-		
-	}
-	
-	public void OnApplicationQuit()
-	{
-		//IABAndroid.stopBillingService();
-	}
-	
-	//--------------- store purchase code end ------------------//
-	
 	// Update is called once per frame
 	void Update () 
 	{
@@ -178,14 +99,5 @@ public class Option : MonoBehaviour {
 		GUI.Label(textRect(12),"Fog");
 		if( GUI.Button(buttonRect(12),Fog?"ON":"OFF" ) )
 			Fog = !Fog;
-		
-		/*GUI.Label(textRect(16),"Purchase UnlockAreas");
-		if( GUI.Button(buttonRect(16),purchased==1?"purshased":"get this" ) )
-		{
-			IABAndroid.purchaseProduct("zombie_blaster_testing_unlockareas");
-		}	*/
-		
-		GUI.Label(new Rect(Screen.width*0.5f,Screen.height*0.75f,200,200),storemessage);
-		GUI.Label(new Rect(Screen.width*0.5f,Screen.height*0.85f,200,200),storemessage2);
 	}
 }

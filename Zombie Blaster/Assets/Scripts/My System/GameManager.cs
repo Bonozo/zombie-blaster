@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour {
 	public Guns guns;
 	
 	public GameObject messageText;
+	public GameObject messageText2;
 	public civilian civilianPrefab;
 	
 	public WaveInfo waveInfo;
@@ -25,9 +26,8 @@ public class GameManager : MonoBehaviour {
 	public GUIText guiZombiesLeft;
 	public GUIText guiLives;
 	
-	public GUITexture ProgressBarPlayerEmpty;
-	public GUITexture ProgressBarPlayerFull;
-	public GUITexture ProgressBarPlayerArmor;
+	public GUITexture healthbarHealth;
+	public GUITexture healthbarArmor;
 	
 	public Texture ProgressBarZombieEmpty;
 	public Texture ProgressBarZombieFull;

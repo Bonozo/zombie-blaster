@@ -1,0 +1,1 @@
+Warning: None triangle mesh: polySurface15 (file: 'C:\Users\Mike\Desktop\flame thrower\fbx\flamethrower.fbx') [ (line 0)]

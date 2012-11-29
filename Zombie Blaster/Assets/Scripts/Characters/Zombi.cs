@@ -5,6 +5,8 @@ public class Zombi : MonoBehaviour {
 	
 	#region Parameters
 	
+	public AudioClip audioAttackwalk;
+	
 	// Placement
 	public float Speed = 0.5f;
 	public float ZombieHeight = 1.35f;
@@ -85,6 +87,9 @@ public class Zombi : MonoBehaviour {
 			animation.Play("spawn");
 			LevelInfo.Audio.PlayZombieSpawn();
 		}
+		
+		if( audioAttackwalk == null )
+			audioAttackwalk = LevelInfo.Audio.AudioZombieAttackWalk;
 	}
 	
 	private float shotDeltaTime=0.0f;
@@ -94,6 +99,12 @@ public class Zombi : MonoBehaviour {
 		// look to player.
 		Vector3 np = LevelInfo.Environments.control.transform.position-transform.position; np.y = 0;
 		transform.rotation = Quaternion.LookRotation(np,Vector3.up);
+		
+		if( transform.position.y < -10f )
+		{
+			LevelInfo.Environments.control.zombiesLeftForThisWave--;
+			Destroy(this.gameObject);
+		}
 		
 		if( animation.IsPlaying("spawn") ) return;
 		if( animation.IsPlaying("jump") ) return;
@@ -183,7 +194,7 @@ public class Zombi : MonoBehaviour {
 			float spd = Speed; if( runningTime > 0f ) spd *= 2f;
 			if(CanMoveForward()) transform.Translate(Time.deltaTime*spd*Vector3.forward);
 			if( Random.Range(0,LevelInfo.Audio.zombieAudioAttackWalkRate)==1 )
-				LevelInfo.Audio.audioSourceZombies.PlayOneShot(LevelInfo.Audio.AudioZombieAttackWalk);
+				LevelInfo.Audio.audioSourceZombies.PlayOneShot(audioAttackwalk);
 		}
 		
 	}
@@ -376,7 +387,7 @@ public class Zombi : MonoBehaviour {
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
 		Vector3 dir = transform.position - LevelInfo.Environments.control.transform.position; dir.Normalize();
         foreach (Rigidbody child in rigidbodies) 
-			child.AddForce(1000f*dir);
+			child.AddForce(200f*dir);
 		
 		Destroy(this.gameObject);
 	}
@@ -393,7 +404,7 @@ public class Zombi : MonoBehaviour {
 		ragdoll.SendMessage("SetSmokeSize",ZombieSmoke.particleEmitter.maxSize);
 		var rigidbodies = ragdoll.GetComponentsInChildren(typeof(Rigidbody));
         foreach (Rigidbody child in rigidbodies) 
-			child.AddForce(new Vector3(Random.Range(-1600f,1600f),1600f,Random.Range(-1600f,1600f)));
+			child.AddForce(new Vector3(Random.Range(-320f,320f),320f,Random.Range(-320f,320f)));
 		
 		Destroy(this.gameObject);
 	}
@@ -412,7 +423,7 @@ public class Zombi : MonoBehaviour {
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
 		Vector3 dir = transform.position - LevelInfo.Environments.control.transform.position; dir.Normalize(); dir.y =0.5f;
         foreach (Rigidbody child in rigidbodies) 
-			child.AddForce(2000f*dir);
+			child.AddForce(400f*dir);
 		
 		Destroy(this.gameObject);	
 	}
@@ -427,7 +438,7 @@ public class Zombi : MonoBehaviour {
 		var rigidbodies = ragdoll.GetComponentsInChildren(typeof(Rigidbody));
 		Vector3 dir = transform.position - LevelInfo.Environments.control.transform.position; dir.Normalize(); dir.y = 0.5f;
         foreach (Rigidbody child in rigidbodies) 
-			child.AddForce(1500f*dir);
+			child.AddForce(300f*dir);
 		ragdoll.SendMessage("ThrowedOut");
 		Destroy(this.gameObject);
 	}

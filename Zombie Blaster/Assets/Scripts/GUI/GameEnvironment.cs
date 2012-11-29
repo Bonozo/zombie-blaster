@@ -19,91 +19,7 @@ public class GameEnvironment : MonoBehaviour {
 		ignore = true;
 	}
 	
-	#if UNITY_ANDROID
-	private static float lastx;
-	private static bool lastpressed = false;
-	public static float Swipe { get {
-		float mouseposx = Input.mousePosition.x/Screen.width;
-		float res = 0.0f;
-		
-		if( lastpressed )
-		{
-			if( lastx != mouseposx ) IgnoreButtons();
-			res = lastx-mouseposx;
-		}
-		lastpressed = Input.GetMouseButton(0);
-		if( lastpressed )
-			lastx = mouseposx;
-				
-		return 30.0f*res;
-	}}
-	
-	public static Vector2 lastInput = Vector2.zero;
-	public static Vector2 lastInput01 { get { 
-		Vector2 v = lastInput;
-		v.x /= Screen.width;
-		v.y /= Screen.height;
-		return v;
-		}}
-	
-	public static bool FireButton { get {
-			bool ans = false;
-			if( Input.GetMouseButtonUp(0) && !ignore)
-			{
-				lastInput = Input.mousePosition;
-				ans = true;
-			}
-			if( Input.GetMouseButtonUp(0) )
-				ignore = false;
-			return ans;
-		}}
-	public static bool FlameButton { get {
-			bool ans = false;
-			if( Input.GetMouseButton(0) && !ignore)
-			{
-				lastInput = Input.mousePosition;
-				ans = true;
-			}
-			if( Input.GetMouseButtonUp(0) )
-				ignore = false;
-			return ans;
-		}}
-	
-	public static bool TouchedScreen { get {
-			bool ans = false;
-			if( Input.GetMouseButton(0) )
-			{
-				lastInput = Input.mousePosition;
-				ans = true;			
-			}
-			//if( Input.GetMouseButtonUp(0) )
-			//	ignore = false;
-		return ans;
-		}}
-	private static Vector2 last;
-	public static Vector2 AbsoluteSwipe { get {
-		Vector2 mousepos = Input.mousePosition;
-		mousepos.x /= Screen.width;
-		mousepos.y /= Screen.height;
-
-		Vector2 res = Vector2.zero;
-		if( Input.GetMouseButtonDown(0) )
-		{
-			last = mousepos;
-		}
-		if( Input.GetMouseButtonUp(0) )
-		{
-			res = mousepos-last;
-		}
-		
-		return res;
-	}}
-	
-	public static Vector3 InputAxis { get {
-		return new Vector3(Input.GetAxis("Horizontal"),Input.GetAxis("Vertical"),0f);
-	}}
-	#else
-	
+	#if UNITY_ANDROID || UNITY_IPHONE
 	private static float startTime;
 	private static Vector2 startPos;
 	private static bool couldBeSwipe;
@@ -217,6 +133,89 @@ public class GameEnvironment : MonoBehaviour {
 		dir.y = dir.z; dir.z = 0;
 			
 		return dir;
+	}}
+	#else
+	private static float lastx;
+	private static bool lastpressed = false;
+	public static float Swipe { get {
+		float mouseposx = Input.mousePosition.x/Screen.width;
+		float res = 0.0f;
+		
+		if( lastpressed )
+		{
+			if( lastx != mouseposx ) IgnoreButtons();
+			res = lastx-mouseposx;
+		}
+		lastpressed = Input.GetMouseButton(0);
+		if( lastpressed )
+			lastx = mouseposx;
+				
+		return 30.0f*res;
+	}}
+	
+	public static Vector2 lastInput = Vector2.zero;
+	public static Vector2 lastInput01 { get { 
+		Vector2 v = lastInput;
+		v.x /= Screen.width;
+		v.y /= Screen.height;
+		return v;
+		}}
+	
+	public static bool FireButton { get {
+			bool ans = false;
+			if( Input.GetMouseButtonUp(0) && !ignore)
+			{
+				lastInput = Input.mousePosition;
+				ans = true;
+			}
+			if( Input.GetMouseButtonUp(0) )
+				ignore = false;
+			return ans;
+		}}
+	public static bool FlameButton { get {
+			bool ans = false;
+			if( Input.GetMouseButton(0) && !ignore)
+			{
+				lastInput = Input.mousePosition;
+				ans = true;
+			}
+			if( Input.GetMouseButtonUp(0) )
+				ignore = false;
+			return ans;
+		}}
+	
+	public static bool TouchedScreen { get {
+			bool ans = false;
+			if( Input.GetMouseButton(0) )
+			{
+				lastInput = Input.mousePosition;
+				ans = true;			
+			}
+			//if( Input.GetMouseButtonUp(0) )
+			//	ignore = false;
+		return ans;
+		}}
+	private static Vector2 last;
+	public static Vector2 AbsoluteSwipe { get {
+		Vector2 mousepos = Input.mousePosition;
+		mousepos.x /= Screen.width;
+		mousepos.y /= Screen.height;
+
+		Vector2 res = Vector2.zero;
+		if( Input.GetMouseButtonDown(0) )
+		{
+			last = mousepos;
+		}
+		if( Input.GetMouseButtonUp(0) )
+		{
+			res = mousepos-last;
+		}
+		
+		return res;
+	}}
+	
+	public static Vector3 InputAxis { get {
+		return new Vector3(Input.GetAxis("Horizontal"),Input.GetAxis("Vertical"),0f);
 	}}
 	#endif
 	

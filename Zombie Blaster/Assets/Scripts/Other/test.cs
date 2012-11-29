@@ -3,7 +3,7 @@ using System.Collections;
 
 public class test : MonoBehaviour {
 	
-	public string animname = "Take 001";
+	public string animname = "walk";
 	
 	// Use this for initialization
 	void Start () {

@@ -12,7 +12,7 @@ public class BulletGrenade : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		transform.position = new Vector3(transform.position.x,Y,transform.position.z);
-		rigidbody.AddForce(20000*transform.forward);
+		rigidbody.AddForce(2000*transform.forward);
 	}
 	
 	// Update is called once per frame
@@ -42,6 +42,7 @@ public class BulletGrenade : MonoBehaviour {
 		if( GameEnvironment.DistXZ(control.transform.position,transform.position ) <= 2*ExplosionRadius )
 			control.GetHealth(-0.2f);
 		
+		iTween.ShakeRotation( LevelInfo.Environments.mainCamera.gameObject,new Vector3(1f,1f,0f),1f);
 		Instantiate(ParticleExplosion,transform.position,Quaternion.identity);
 		Destroy(this.gameObject);
 	}

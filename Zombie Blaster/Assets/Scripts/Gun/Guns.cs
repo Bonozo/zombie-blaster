@@ -86,6 +86,7 @@ public class Guns : MonoBehaviour {
 						current = i;
 						GameEnvironment.IgnoreButtons();
 					}
+					GUI.Label(new Rect(gbw+pbw/*pbw*/+j*/*gbw*/pbw+5,Screen.height-pbh-20,pbw,pbh),gun[i].AmmoInformation);		
 					j++;
 				}
 		/*}*/
