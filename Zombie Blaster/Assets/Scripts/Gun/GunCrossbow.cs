@@ -6,12 +6,10 @@ public class GunCrossbow : GunBase{
 	public GameObject BulletPrefab;
 	public GUITexture scopeTarget;
 	
-	private Camera mainCamera;
 	private float waitforscopetarget = 0.5f;
 
 	void Start()
 	{
-		mainCamera = (Camera)GameObject.FindObjectOfType(typeof(Camera));
 	}
 	
 	public override float ManualUpdate (Weapon weapon) 
@@ -43,11 +41,11 @@ public class GunCrossbow : GunBase{
 		AmmoLost();
 		
 		// Institate Bullet
-		Ray ray = mainCamera.ScreenPointToRay (GameEnvironment.lastInput);	
+		Ray ray = LevelInfo.Environments.mainCamera.ScreenPointToRay (GameEnvironment.lastInput);	
 		RaycastHit hit;
 		Physics.Raycast(ray.origin,ray.direction,out hit);
 		GameObject g = (GameObject)Instantiate(BulletPrefab,transform.position,Quaternion.identity);
-		g.transform.LookAt(RaycastsTargetPosition(mainCamera,ray,hit),Vector3.up);
+		g.transform.LookAt(RaycastsTargetPosition(LevelInfo.Environments.mainCamera,ray,hit),Vector3.up);
 		audio.PlayOneShot(AudioFire);
 		
 		if( Ammo == 0.0f ) Reload();

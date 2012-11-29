@@ -5,6 +5,8 @@ public class Control : MonoBehaviour {
 	
 	#region Parameters
 	
+	public GameObject guiPlayGame;
+	
 	public float Speed = 3f;
 	
 	public Vector3[] VantagePoints;
@@ -33,7 +35,10 @@ public class Control : MonoBehaviour {
 		set
 		{
 			if( _state == GameState.Paused && value != GameState.Paused)
+			{
 				LevelInfo.Audio.PlayAudioPause(false);
+				guiPlayGame.SetActiveRecursively(true);
+			}
 			
 			_state = value;
 			
@@ -47,6 +52,7 @@ public class Control : MonoBehaviour {
 				Time.timeScale = 1f;
 				break;
 			case GameState.Paused:
+				guiPlayGame.SetActiveRecursively(false);
 				LevelInfo.Audio.PlayAudioPause(true);
 				Time.timeScale = 0f;
 				GameObject.Find("Store").GetComponent<Store>().showStore = true;
@@ -103,6 +109,7 @@ public class Control : MonoBehaviour {
 		
 		LevelInfo.Environments.lightSpot.SetActiveRecursively(Option.SpotLight);
 		LevelInfo.Environments.lightDirectional.SetActiveRecursively(!Option.SpotLight);
+		LevelInfo.Environments.lightSpot.GetComponent<Light>().spotAngle = Option.SpotLightAngle;
 		
 		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActiveRecursively(false);
 		
@@ -268,13 +275,13 @@ public class Control : MonoBehaviour {
 	
 	void UpdateHealthBar()
 	{
-		GUITexture h = LevelInfo.Environments.healthbarHealth;
+		GameObject h = LevelInfo.Environments.healthbarHealth;
 		Vector3 v = h.transform.localScale;
 		v.x = Mathf.Clamp01(healthshow/LevelInfo.State.playerMaxHealth);
 		h.transform.localScale = v;
 		
 		v = h.transform.localPosition;
-		v.x = -0.01500002f-0.5f*(1-h.transform.localScale.x);
+		v.x = 0.2996645f-0.5f*(1-h.transform.localScale.x);
 		h.transform.localPosition = v;
 		
 	}

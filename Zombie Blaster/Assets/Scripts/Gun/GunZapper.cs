@@ -5,11 +5,8 @@ public class GunZapper : GunBase {
 
 	public GunCylinderBase zapper;
 	
-	private Camera mainCamera;
-	
 	void Start()
 	{
-		mainCamera = (Camera)GameObject.FindObjectOfType(typeof(Camera));
 		audio.clip = AudioFire;
 	}
 	
@@ -36,7 +33,7 @@ public class GunZapper : GunBase {
 		
 		AmmoLost();
 		
-		Ray ray = mainCamera.ScreenPointToRay (GameEnvironment.lastInput);
+		Ray ray = LevelInfo.Environments.mainCamera.ScreenPointToRay (GameEnvironment.lastInput);
 		zapper.ChangeRotation(Quaternion.LookRotation(ray.direction));
 		zapper.Stream(Time.deltaTime);
 

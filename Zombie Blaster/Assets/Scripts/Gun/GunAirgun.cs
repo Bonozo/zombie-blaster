@@ -6,26 +6,25 @@ public class GunAirgun : GunBase {
 	public GameObject BulletPrefab;
 	public GUITexture scopeTarget;
 	
-	private Camera mainCamera;
 	private float dt = 0.5f;
 
 	void Start()
 	{
-		mainCamera = (Camera)GameObject.FindObjectOfType(typeof(Camera));
 	}
 	
 	public override float ManualUpdate (Weapon weapon) 
 	{
+		scopeTarget.enabled = false;
+		if( weapon != Weapon.BB) return Ammo;
+		
 		Vector3 lastinputnext = GameEnvironment.lastInput;
-		Ray ray = mainCamera.ScreenPointToRay (lastinputnext);	
+		Ray ray = LevelInfo.Environments.mainCamera.ScreenPointToRay (lastinputnext);	
 		
 		//lastinputnext = GameEnvironment.lastInput01; lastinputnext.y -= 0.2f;
 		lastinputnext.x /= Screen.width;
 		lastinputnext.y /= Screen.height;
 		
-		scopeTarget.enabled = false;
-		
-		if( weapon != Weapon.BB) return Ammo;
+
 		
 		if( GameEnvironment.TouchedScreen )
 		{
@@ -46,11 +45,12 @@ public class GunAirgun : GunBase {
 		}
 		AmmoLost();
 		
+		
 		RaycastHit hit;
 		Physics.Raycast(ray.origin,ray.direction,out hit);
 		
 		GameObject g = (GameObject)Instantiate(BulletPrefab,transform.position,Quaternion.identity);
-		g.transform.LookAt(RaycastsTargetPosition(mainCamera,ray,hit),Vector3.up);
+		g.transform.LookAt(RaycastsTargetPosition(LevelInfo.Environments.mainCamera,ray,hit),Vector3.up);
 		audio.PlayOneShot(AudioFire);
 		
 		if( Ammo == 0.0f ) Reload();

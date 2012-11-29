@@ -4,12 +4,9 @@ using System.Collections;
 public class GunRocket : GunBase {
 
 	public GameObject BulletPrefab;
-	
-	private Camera mainCamera;
 
 	void Start()
 	{
-		mainCamera = (Camera)GameObject.FindObjectOfType(typeof(Camera));
 	}
 	
 	public override float ManualUpdate (Weapon weapon) 
@@ -25,7 +22,7 @@ public class GunRocket : GunBase {
 		AmmoLost();
 		
 		// Calculate Fire Direction
-		Ray ray = mainCamera.ScreenPointToRay (GameEnvironment.lastInput);
+		Ray ray = LevelInfo.Environments.mainCamera.ScreenPointToRay (GameEnvironment.lastInput);
 		Quaternion q = Quaternion.LookRotation(ray.direction);
 			
 		// Institate Bullet

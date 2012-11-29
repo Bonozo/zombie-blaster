@@ -18,6 +18,7 @@ public class Zombi : MonoBehaviour {
 	public GameObject ZombieFire;
 	public GameObject ZombieSmoke;
 	public HeadHit headHit;
+	public GameObject head;
 
 	// Scores
 	public float BitePoint = 0.01f;
@@ -199,8 +200,12 @@ public class Zombi : MonoBehaviour {
 		
 	}
 	
+	private float nhdt = 0f;
 	private void NormalizeHeight()
 	{
+		nhdt -= Time.deltaTime;
+		if( nhdt > 0f ) return;
+		nhdt = 1.3f;
 		RaycastHit hit;    
 		
 		Vector3 pos = transform.position;
@@ -211,16 +216,31 @@ public class Zombi : MonoBehaviour {
 		
 		pos.y += 1f;
 		
-		if(Physics.Raycast(pos, -transform.up, out hit, CollisionToDownLenght+0.01f+1f) /*&& 
-			hit.collider.gameObject.name == "ground" */)
+		/*if(Physics.Raycast(pos, -transform.up, out hit, CollisionToDownLenght+0.01f+1f) && 
+			hit.collider.gameObject.tag != "Flamethrower" )
 			transform.Translate(0,0.02f,0);
 		if( !Physics.Raycast(pos, -transform.up, out hit, CollisionToDownLenght-0.03f+1f) )
 			transform.Translate(0,-0.02f,0);
-		
+		*/
+		if(Physics.Raycast(pos, -transform.up, out hit, CollisionToDownLenght+10f) && hit.collider.gameObject.tag != "Flamethrower" )
+		{
+			transform.Translate(0f,-hit.distance+CollisionToDownLenght+1f,0f);
+		}
 		Debug.DrawRay(pos, -CollisionToDownLenght*transform.up, Color.green);
 	}
 	
+	private float cmftd = 0;
+	private bool _canmoveforward = true;
 	private bool CanMoveForward()
+	{
+		cmftd -= Time.deltaTime;
+		if(cmftd > 0 ) return _canmoveforward;
+		cmftd = 1.1f;
+		_canmoveforward = CanMoveForwardHelper();
+		return _canmoveforward;
+	
+	}
+	private bool CanMoveForwardHelper()
 	{
 		float forwarddist = 0.5f;
 		float leftrightdist = 0.3f;
@@ -271,42 +291,6 @@ public class Zombi : MonoBehaviour {
 	#endregion
 	
 	#region Zombie Get Hit Setup
-	/*
-	void OnTriggerEnter(Collider col)
-	{
-		// Zapper Attack
-		if( HitWithName(col.gameObject.name,"Zapper") )
-		{
-			smoking -= Time.deltaTime;
-			ZombieSmoke.particleEmitter.minSize = ZombieSmoke.particleEmitter.maxSize = (1-smoking)*1f;
-			animation.Play("zap");
-			if( smoking <= 0 )
-			{
-				DieNormal();
-				return;
-			}
-		}
-		
-		// Microwave Attack
-		if( HitWithName(col.gameObject.name,"Microwave") )
-		{
-			DieNormal();
-			return;
-		}
-		
-		// Flame Attack
-		if( HitWithName(col.gameObject.name,"Flame") )
-		{
-			flaming -= Time.deltaTime;
-			ZombieFire.particleEmitter.minSize = ZombieFire.particleEmitter.maxSize = (1-flaming)*1f;
-			if( flaming <= 0 )
-			{
-				DieNormal();
-				return;
-			}
-		}
-	}
-	*/
 	
 	void OnTriggerStay(Collider col)
 	{	

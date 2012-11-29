@@ -23,7 +23,7 @@ public class GameEnvironment : MonoBehaviour {
 	private static float startTime;
 	private static Vector2 startPos;
 	private static bool couldBeSwipe;
-	private static bool moved = false;
+	public static bool moved = false;
 	public static float Swipe { get {
 		float res = 0.0f;
 		if (Input.touchCount > 0) 
@@ -188,8 +188,9 @@ public class GameEnvironment : MonoBehaviour {
 			bool ans = false;
 			if( Input.GetMouseButton(0) )
 			{
-				lastInput = Input.mousePosition;
-				ans = true;			
+				if( lastInput.x == Input.mousePosition.x && lastInput.y == Input.mousePosition.y )
+					ans = true;
+				lastInput = Input.mousePosition;			
 			}
 			//if( Input.GetMouseButtonUp(0) )
 			//	ignore = false;

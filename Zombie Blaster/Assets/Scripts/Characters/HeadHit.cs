@@ -11,6 +11,7 @@ public class HeadHit : MonoBehaviour {
 	{
 		boxCollider = (BoxCollider)transform.collider;
 		beginsize = boxCollider.size;
+		//Destroy(this.collider);
 	}
 	
 	void Update()

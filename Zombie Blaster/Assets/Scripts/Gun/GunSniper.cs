@@ -5,18 +5,15 @@ public class GunSniper : GunBase {
 	
 	public GameObject BulletPrefab;
 	public GUITexture scopeTarget;
-	
-	private Camera mainCamera;
 
 	void Start()
 	{
-		mainCamera = (Camera)GameObject.FindObjectOfType(typeof(Camera));
 	}
 	
 	public override float ManualUpdate (Weapon weapon) 
 	{
 		Vector3 lastinputnext = GameEnvironment.lastInput; lastinputnext.y -= 0.2f*Screen.height;
-		Ray ray = mainCamera.ScreenPointToRay (lastinputnext);	
+		Ray ray = LevelInfo.Environments.mainCamera.ScreenPointToRay (lastinputnext);	
 		
 		//lastinputnext = GameEnvironment.lastInput01; lastinputnext.y -= 0.2f;
 		lastinputnext.x /= Screen.width;
@@ -46,7 +43,7 @@ public class GunSniper : GunBase {
 		AmmoLost();
 		
 		GameObject g = (GameObject)Instantiate(BulletPrefab,transform.position,Quaternion.identity);
-		g.transform.LookAt(RaycastsTargetPosition(mainCamera,ray,hit),Vector3.up);
+		g.transform.LookAt(RaycastsTargetPosition(LevelInfo.Environments.mainCamera,ray,hit),Vector3.up);
 		g.SendMessage("SetReticleTarget",lastinputnext);
 		audio.PlayOneShot(AudioFire);
 		

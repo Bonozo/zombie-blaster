@@ -269,30 +269,39 @@ public class Store : MonoBehaviour {
 	#endregion
 	*/
 	
-	#region Google
+	#region Google, Tapjoy
 
 	//--------------- store purchase code ------------------//
 	
 	public string storePublicKey;
+	public static bool tapjoyConnected = false;
 	
 	void OnEnable()
 	{
 		IABAndroidManager.purchaseSucceededEvent += HandleIABAndroidManagerpurchaseSucceededEvent;
+		TapjoyAndroidManager.fullScreenAdDidLoadEvent += fullScreenAdDidLoadEvent;
 	}
 	
 	void OnDisable()
 	{
 		IABAndroidManager.purchaseSucceededEvent -= HandleIABAndroidManagerpurchaseSucceededEvent;
+		TapjoyAndroidManager.fullScreenAdDidLoadEvent -= fullScreenAdDidLoadEvent;
 	}
 	
 	void HandleIABAndroidManagerpurchaseSucceededEvent (string obj)
 	{
 		Store.zombieHeads = Store.zombieHeads + 1000;
 	}
-	
+
+	void fullScreenAdDidLoadEvent( bool didLoad )
+	{
+		tapjoyConnected = didLoad;
+	}
+
 	void Start()
 	{
 		IABAndroid.init( storePublicKey );
+		TapjoyAndroid.init( "6f8b509b-f292-4dd3-b440-eab33f211089", "7TYeZbZ6GTqRncoALV3W", false );
 	}
 	
 	public void OnApplicationQuit()

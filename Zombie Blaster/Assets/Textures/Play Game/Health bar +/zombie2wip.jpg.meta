@@ -20,7 +20,7 @@ TextureImporter:
   grayScaleToAlpha: 0
   generateCubemap: 0
   textureFormat: -3
-  maxTextureSize: 64
+  maxTextureSize: 4096
   textureSettings:
     filterMode: -1
     aniso: 1
@@ -29,5 +29,9 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  textureType: 2
-  buildTargetSettings: []
+  textureType: 5
+  buildTargetSettings:
+  - buildTarget: Android
+    maxTextureSize: 128
+    textureFormat: 4
+    compressionQuality: 50

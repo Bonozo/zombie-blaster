@@ -26,8 +26,8 @@ public class GameManager : MonoBehaviour {
 	public GUIText guiZombiesLeft;
 	public GUIText guiLives;
 	
-	public GUITexture healthbarHealth;
-	public GUITexture healthbarArmor;
+	public GameObject healthbarHealth;
+	public GameObject healthbarArmor;
 	
 	public Texture ProgressBarZombieEmpty;
 	public Texture ProgressBarZombieFull;

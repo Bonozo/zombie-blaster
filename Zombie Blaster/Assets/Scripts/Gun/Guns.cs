@@ -81,12 +81,14 @@ public class Guns : MonoBehaviour {
 			for(int i=0,j=0;i<gun.Length;i++)
 				if(gun[i].EnabledGun)
 				{
+					fullTexture = gun[i].reloading ? ProgressBarReloading : ProgressBarFull;
+					GUI.DrawTexture(new Rect(gbw+pbw/*pbw*/+j*/*gbw*/pbw,Screen.height-pbh,pbw*Mathf.Clamp01(gun[i].AmmoCurrentPercent),pbh), fullTexture);
 					if( GUI.Button(new Rect(gbw+pbw/*pbw*/+j*/*gbw*/pbw,Screen.height-pbh,pbw,pbh/*gbh,gbw,gbh*/),gun[i].texture) )
 					{
 						current = i;
 						GameEnvironment.IgnoreButtons();
 					}
-					GUI.Label(new Rect(gbw+pbw/*pbw*/+j*/*gbw*/pbw+5,Screen.height-pbh-20,pbw,pbh),gun[i].AmmoInformation);		
+					//GUI.Label(new Rect(gbw+pbw/*pbw*/+j*/*gbw*/pbw+5,Screen.height-pbh-20,pbw,pbh),gun[i].AmmoInformation);		
 					j++;
 				}
 		/*}*/

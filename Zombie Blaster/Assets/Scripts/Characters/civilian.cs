@@ -48,6 +48,8 @@ public class civilian : MonoBehaviour {
 	
 	private void NormalizeHeight()
 	{
+		if( Random.Range(0,30) != 1 ) return;
+		
 		RaycastHit hit;    
 		
 		Vector3 pos = transform.position;

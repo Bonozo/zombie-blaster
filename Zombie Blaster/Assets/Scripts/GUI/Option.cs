@@ -13,6 +13,7 @@ public class Option : MonoBehaviour {
 	public static bool Vibration = true;
 	public static bool SpotLight = true;
 	public static bool Fog = false;
+	public static float SpotLightAngle = 65f;
 	//public static int Quality = QualitySettings.GetQualityLevel();
 	
 	// Update is called once per frame
@@ -99,5 +100,12 @@ public class Option : MonoBehaviour {
 		GUI.Label(textRect(12),"Fog");
 		if( GUI.Button(buttonRect(12),Fog?"ON":"OFF" ) )
 			Fog = !Fog;
+		
+		GUI.Label(textRect(13),"Spot Light Angle (" + (int)SpotLightAngle + ")");
+		SpotLightAngle = GUI.HorizontalSlider(buttonRect(13),SpotLightAngle,0f,100f);
+		
+		GUI.Label(textRect(14),"Tapjoy Connected Status");
+		GUI.Box(buttonRect(14),"" + Store.tapjoyConnected );
+			
 	}
 }

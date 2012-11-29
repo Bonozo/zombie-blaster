@@ -95,9 +95,9 @@
      <None Include="Assets\Plugins\Android\res\anim\gree_rotate.xml" />
      <None Include="Assets\TK2DROOT\tk2d\Shaders\LitSolidVertexColor.shader" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_txtbtn_left_emboss_bg_default.xml" />
+     <None Include="Assets\Art\Weapons\flamethrower\cf_log.txt" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_um_selector.xml" />
      <None Include="Assets\Plugins\Android\res\layout\gree_dashboard_button.xml" />
-     <None Include="Assets\Testing\ShopFont1.txt" />
      <None Include="Assets\TK2DROOT\tk2d\Shaders\SolidVertexColor.shader" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_popup_dialog_close_selector.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_emoji_palette_arrow_left_selector.xml" />

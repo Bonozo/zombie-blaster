@@ -7,11 +7,9 @@ public class GunFlamethrower : GunBase {
 	public GunCylinderBase FlameThrowerTarget;
 	public float MaxEffectDistance = 10;
 	
-	private Camera mainCamera;
 	
 	void Start()
 	{
-		mainCamera = (Camera)GameObject.FindObjectOfType(typeof(Camera));
 		audio.clip = AudioFire;
 	}
 	
@@ -39,7 +37,7 @@ public class GunFlamethrower : GunBase {
 		
 		AmmoLost();
 		
-		Ray ray = mainCamera.ScreenPointToRay (GameEnvironment.lastInput);
+		Ray ray = LevelInfo.Environments.mainCamera.ScreenPointToRay (GameEnvironment.lastInput);
 
 		FlameThrowerTarget.ChangeRotation(Quaternion.LookRotation(ray.direction));
 		FlameThrower.transform.rotation = Quaternion.LookRotation(ray.direction);

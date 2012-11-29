@@ -3,6 +3,8 @@ using System.Collections;
 
 public class ButtonPause : MonoBehaviour {
 	
+	
+	
 	void Update()
 	{
 		if( LevelInfo.Environments.control.state == GameState.Play )

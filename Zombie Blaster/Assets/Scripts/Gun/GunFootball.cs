@@ -5,11 +5,9 @@ public class GunFootball : GunBase {
 
 	public GameObject BulletPrefab;
 	
-	private Camera mainCamera;
 	
 	void Start()
 	{
-		mainCamera = (Camera)GameObject.FindObjectOfType(typeof(Camera));
 	}
 	
 	// Update is called once per frame
@@ -26,11 +24,11 @@ public class GunFootball : GunBase {
 		AmmoLost();
 		
 		// Institate Bullet
-		Ray ray = mainCamera.ScreenPointToRay (GameEnvironment.lastInput);	
+		Ray ray = LevelInfo.Environments.mainCamera.ScreenPointToRay (GameEnvironment.lastInput);	
 		RaycastHit hit;
 		Physics.Raycast(ray.origin,ray.direction,out hit);
 		GameObject g = (GameObject)Instantiate(BulletPrefab,transform.position,Quaternion.identity);
-		g.transform.LookAt(RaycastsTargetPosition(mainCamera,ray,hit),Vector3.up);	
+		g.transform.LookAt(RaycastsTargetPosition(LevelInfo.Environments.mainCamera,ray,hit),Vector3.up);	
 		audio.PlayOneShot(AudioFire);
 		
 		if( Ammo == 0.0f ) Reload();

@@ -111,9 +111,11 @@ public class HealthPack : MonoBehaviour {
 		
 		foreach(Touch touch in Input.touches)
 		{
-        	ray = LevelInfo.Environments.mainCamera.ScreenPointToRay(touch.position);
-	        if(touch.phase == TouchPhase.Began && Physics.Raycast(ray.origin,ray.direction,out hit)){
-				if(hit.collider.gameObject == gameObject )
+        	
+	        if(touch.phase == TouchPhase.Began)
+			{
+				ray = LevelInfo.Environments.mainCamera.ScreenPointToRay(touch.position);
+				if( Physics.Raycast(ray.origin,ray.direction,out hit) && hit.collider.gameObject == gameObject )
 				{
 					StartCoroutine(PickedUp());
 					return;
