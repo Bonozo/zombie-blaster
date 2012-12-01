@@ -27,43 +27,64 @@ public class ZBTapjoy : MonoBehaviour {
 	
 		if( GUI.Button( new Rect( xPos, yPos, width, height ), "Init" ) )
 		{
+			#if UNITY_ANDROID
 			TapjoyAndroid.init( "6f8b509b-f292-4dd3-b440-eab33f211089", "7TYeZbZ6GTqRncoALV3W", true );
+			#endif
+			
 		}
 	
 	
 		if( GUI.Button( new Rect( xPos, yPos += heightPlus, width, height ), "Load Ad Banner" ) )
 		{
+			#if UNITY_ANDROID
 			TapjoyAndroid.getDisplayAd( TapjoyAd.Size640x100, true );
+			#endif
+			
 		}
 	
 	
 		if( GUI.Button( new Rect( xPos, yPos += heightPlus, width, height ), "Show Ad Banner" ) )
 		{
+			#if UNITY_ANDROID
 			TapjoyAndroid.showDisplayAd( TapjoyAdPlacement.BottomCenter );
+			#endif
+			
 		}
 	
 	
 		if( GUI.Button( new Rect( xPos, yPos += heightPlus, width, height ), "Destroy Banner" ) )
 		{
+			#if UNITY_ANDROID
 			TapjoyAndroid.destroyBanner();
+			#endif
+			
 		}
 		
 		
 		if( GUI.Button( new Rect( xPos, yPos += heightPlus, width, height ), "Action Complete" ) )
 		{
+			#if UNITY_ANDROID
 			TapjoyAndroid.actionComplete( "some_action" );
+			#endif
+			
 		}
 		
 		
 		if( GUI.Button( new Rect( xPos, yPos += heightPlus, width, height ), "Get Daily Reward Ad" ) )
 		{
+			#if UNITY_ANDROID
 			TapjoyAndroid.getDailyRewardAd();
+			#endif
+			
 		}
 		
 		
 		if( GUI.Button( new Rect( xPos, yPos += heightPlus, width, height ), "Show Daily Reward Ad" ) )
 		{
+			#if UNITY_ANDROID
 			TapjoyAndroid.showDailyRewardAd();
+			#endif
+			
 		}
 
 
@@ -74,31 +95,44 @@ public class ZBTapjoy : MonoBehaviour {
 		
 		if( GUI.Button( new Rect( xPos, yPos, width, height ), "Show Full Screen Ad" ) )
 		{
+			#if UNITY_ANDROID
 			TapjoyAndroid.showFullScreenAd();
+			#endif
+			
 		}
 		
 		
 		if( GUI.Button( new Rect( xPos, yPos += heightPlus, width, height ), "Show Offers" ) )
 		{
+			#if UNITY_ANDROID
 			TapjoyAndroid.showOffers();
+			#endif
+			
 		}
 		
 		
 		if( GUI.Button( new Rect( xPos, yPos += heightPlus, width, height ), "Get Tap Points" ) )
 		{
+			#if UNITY_ANDROID
 			TapjoyAndroid.getTapPoints();
+			#endif
+			
 		}
 		
 		
 		if( GUI.Button( new Rect( xPos, yPos += heightPlus, width, height ), "Spend Tap Points" ) )
 		{
+			#if UNITY_ANDROID
 			TapjoyAndroid.spendTapPoints( 11 );
+			#endif
 		}
 		
 		
 		if( GUI.Button( new Rect( xPos, yPos += heightPlus, width, height ), "Set Video Cache Count" ) )
 		{
+			#if UNITY_ANDROID
 			TapjoyAndroid.setVideoCacheCount( 4 );
+			#endif
 		}
 		
 		GUI.Label(new Rect(0f,0.9f*Screen.height,Screen.width,0.1f*Screen.height),"tapjoy : " + message);
@@ -107,6 +141,7 @@ public class ZBTapjoy : MonoBehaviour {
 	void OnEnable()
 	{
 		// Listen to all events for illustration purposes
+		#if UNITY_ANDROID
 		TapjoyAndroidManager.fullScreenAdDidLoadEvent += fullScreenAdDidLoadEvent;
 		TapjoyAndroidManager.dailyRewardAdLoadedEvent += dailyRewardAdLoadedEvent;
 		TapjoyAndroidManager.getUpdatePointsEvent += getUpdatePointsEvent;
@@ -122,12 +157,15 @@ public class ZBTapjoy : MonoBehaviour {
 		TapjoyAndroidManager.videoReadyEvent += videoReadyEvent;
 		TapjoyAndroidManager.videoErrorEvent += videoErrorEvent;
 		TapjoyAndroidManager.videoCompleteEvent += videoCompleteEvent;
+		#endif
+		
 	}
 
 
 	void OnDisable()
 	{
 		// Remove all event handlers
+		#if UNITY_ANDROID
 		TapjoyAndroidManager.fullScreenAdDidLoadEvent -= fullScreenAdDidLoadEvent;
 		TapjoyAndroidManager.dailyRewardAdLoadedEvent -= dailyRewardAdLoadedEvent;
 		TapjoyAndroidManager.getUpdatePointsEvent -= getUpdatePointsEvent;
@@ -143,6 +181,11 @@ public class ZBTapjoy : MonoBehaviour {
 		TapjoyAndroidManager.videoReadyEvent -= videoReadyEvent;
 		TapjoyAndroidManager.videoErrorEvent -= videoErrorEvent;
 		TapjoyAndroidManager.videoCompleteEvent -= videoCompleteEvent;
+		#endif
+		#if UNITY_ANDROID
+		
+		#endif
+		
 	}
 
 

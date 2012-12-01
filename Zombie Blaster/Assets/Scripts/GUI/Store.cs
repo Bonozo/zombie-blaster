@@ -278,14 +278,20 @@ public class Store : MonoBehaviour {
 	
 	void OnEnable()
 	{
+		#if UNITY_ANDROID
 		IABAndroidManager.purchaseSucceededEvent += HandleIABAndroidManagerpurchaseSucceededEvent;
 		TapjoyAndroidManager.fullScreenAdDidLoadEvent += fullScreenAdDidLoadEvent;
+		#endif
+		
 	}
 	
 	void OnDisable()
 	{
+		#if UNITY_ANDROID
 		IABAndroidManager.purchaseSucceededEvent -= HandleIABAndroidManagerpurchaseSucceededEvent;
 		TapjoyAndroidManager.fullScreenAdDidLoadEvent -= fullScreenAdDidLoadEvent;
+		#endif
+		
 	}
 	
 	void HandleIABAndroidManagerpurchaseSucceededEvent (string obj)
@@ -300,13 +306,19 @@ public class Store : MonoBehaviour {
 
 	void Start()
 	{
+		#if UNITY_ANDROID
 		IABAndroid.init( storePublicKey );
 		TapjoyAndroid.init( "6f8b509b-f292-4dd3-b440-eab33f211089", "7TYeZbZ6GTqRncoALV3W", false );
+		#endif
+		
 	}
 	
 	public void OnApplicationQuit()
 	{
+		#if UNITY_ANDROID
 		IABAndroid.stopBillingService();
+		#endif
+		
 	}
 	
 	//--------------- store purchase code end ------------------//
@@ -396,7 +408,9 @@ public class Store : MonoBehaviour {
 		
 		if( buttonGet1000Heads.PressedUp )
 		{
+			#if UNITY_ANDROID
 			IABAndroid.purchaseProduct("android.test.purchased");
+			#endif
 		}
 	}
 	

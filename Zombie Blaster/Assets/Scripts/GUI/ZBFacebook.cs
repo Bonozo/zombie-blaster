@@ -26,7 +26,10 @@ public class ZBFacebook : ButtonBase {
 		FacebookManager.loginFailedEvent += facebookLoginFailed;
 		FacebookManager.loggedOutEvent += facebookDidLogoutEvent;
 		
+		
+		#if UNITY_ANDROID
 		FacebookAndroid.init(appID);
+		#endif
 	}
 	
 	// Use this for initialization
@@ -38,7 +41,9 @@ public class ZBFacebook : ButtonBase {
 		base.Update();
 		if(base.PressedUp )
 		{
+			#if UNITY_ANDROID
 			FacebookAndroid.loginWithRequestedPermissions( new string[] { "publish_stream", "email", "user_birthday" } );
+			#endif
 		}
 	}
 	
@@ -74,10 +79,14 @@ public class ZBFacebook : ButtonBase {
 	{
 		if( error != null )
 		{
+			#if UNITY_ANDROID
 			if( ! FacebookAndroid.isSessionValid() )
 				message = "Post Message : Please Log in first";
 			else
 				message = "Post Message Eroor : " + error ;
+			#endif
+			
+			
 		}
 		else
 		{
