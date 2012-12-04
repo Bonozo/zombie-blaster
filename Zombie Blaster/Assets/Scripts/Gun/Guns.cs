@@ -5,6 +5,10 @@ public class Guns : MonoBehaviour {
 	
 	public GunBase[] gun;
 	
+	/*public tk2dSprite currentGun;
+	public tk2dSprite currentFull;
+	public tk2dButton currentButton;*/
+	
 	public Texture2D ProgressBarFull;
 	public Texture2D ProgressBarReloading;
 	public Texture2D ButtonReload;
@@ -30,10 +34,36 @@ public class Guns : MonoBehaviour {
 				GameEnvironment.storeGun[i].SetAsUnlimited();
 	}
 	
+	
+	/*void OnEnable()
+	{
+		currentButton.ButtonDownEvent += HandleCurrentButtonButtonDownEvent;
+	}
+
+	void OnDisable()
+	{
+		currentButton.ButtonDownEvent -= HandleCurrentButtonButtonDownEvent;
+	}*/
+	
+	void HandleCurrentButtonButtonDownEvent (tk2dButton source)
+	{
+		GameEnvironment.IgnoreButtons();
+		gun[current].Reload();
+	}
+	
+	
 	// Update is called once per frame
 	void Update () {
 		if( Time.timeScale == 0.0f ) return;
 		foreach( GunBase g in gun ) g.ManualUpdate((Weapon)current );
+		
+		/*if( LevelInfo.Environments.control.state == GameState.Play )
+		{
+			Vector3 v = currentFull.scale;
+			v.x = Mathf.Clamp01(gun[current].AmmoCurrentPercent);
+			currentFull.scale = v;
+			currentGun.spriteId = 10+current;
+		}*/
 	}
 	
 	#region OnGUI
@@ -102,7 +132,7 @@ public class Guns : MonoBehaviour {
 		
 		// Draw Ammo Information
 		//GUI.color = Color.black;
-		GUI.Label(new Rect(20f,Screen.height-gbh-20f,gbw,20f),gun[current].AmmoInformation);		
+		GUI.Label(new Rect(20f,Screen.height-gbh-40f,gbw,20f),gun[current].AmmoInformation);		
 	}
 	
 	#endregion

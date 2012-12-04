@@ -22,12 +22,11 @@ public class ZBFacebook : ButtonBase {
 	
 	void Awake()
 	{
+		#if UNITY_ANDROID
 		FacebookManager.loginSucceededEvent += facebookLogin;
 		FacebookManager.loginFailedEvent += facebookLoginFailed;
 		FacebookManager.loggedOutEvent += facebookDidLogoutEvent;
 		
-		
-		#if UNITY_ANDROID
 		FacebookAndroid.init(appID);
 		#endif
 	}

@@ -13,6 +13,7 @@ public class BulletGrenade : MonoBehaviour {
 	void Start () {
 		transform.position = new Vector3(transform.position.x,Y,transform.position.z);
 		rigidbody.AddForce(2000*transform.forward);
+		rigidbody.angularVelocity = Random.rotation.eulerAngles;
 	}
 	
 	// Update is called once per frame

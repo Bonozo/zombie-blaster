@@ -118,6 +118,7 @@ public class Zombi : MonoBehaviour {
 				{
 					Instantiate(shootBullet,shootTransform.position,Quaternion.identity);
 					shotDeltaTime = animation["shoot"].length-animation["shoot"].time+0.05f;
+					if( shootAudio != null ) LevelInfo.Audio.audioSourceZombies.PlayOneShot(shootAudio);
 				}
 			}
 			return;
@@ -153,7 +154,6 @@ public class Zombi : MonoBehaviour {
 			/// Shoot
 			if( runningTime <= 0f &&  canShoot && Random.Range(0,300)==1)
 			{
-				if( shootAudio != null ) LevelInfo.Audio.audioSourceZombies.PlayOneShot(shootAudio);
 				animation.Play("shoot");
 				return;
 			}

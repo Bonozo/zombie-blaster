@@ -281,7 +281,7 @@ public class Control : MonoBehaviour {
 		h.transform.localScale = v;
 		
 		v = h.transform.localPosition;
-		v.x = 0.2996645f-0.5f*(1-h.transform.localScale.x);
+		v.x = 98.31665f-98.31665f*(1-h.transform.localScale.x);
 		h.transform.localPosition = v;
 		
 	}

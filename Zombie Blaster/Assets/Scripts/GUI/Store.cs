@@ -411,6 +411,10 @@ public class Store : MonoBehaviour {
 			#if UNITY_ANDROID
 			IABAndroid.purchaseProduct("android.test.purchased");
 			#endif
+			
+			#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX
+			Store.zombieHeads = Store.zombieHeads + 1000;
+			#endif
 		}
 	}
 	
