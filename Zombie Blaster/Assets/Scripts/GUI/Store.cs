@@ -310,7 +310,6 @@ public class Store : MonoBehaviour {
 		IABAndroid.init( storePublicKey );
 		TapjoyAndroid.init( "6f8b509b-f292-4dd3-b440-eab33f211089", "7TYeZbZ6GTqRncoALV3W", false );
 		#endif
-		
 	}
 	
 	public void OnApplicationQuit()
@@ -577,11 +576,11 @@ public class Store : MonoBehaviour {
 				GUI.Box(new Rect(0.02f*Screen.width,j*itemHeight,0.3f*Screen.width,0.08f*Screen.height),GameEnvironment.storeGun[i].name,myStyle);	
 				if(wooi==-1)
 				{			
-					if( GUI.Button(new Rect(0.335f*Screen.width,(j+0.5f)*itemHeight,0.14f*Screen.width,0.08f*Screen.height),"100",myStyle) )
+					if( GUI.Button(new Rect(0.335f*Screen.width,(j+0.5f)*itemHeight,0.14f*Screen.width,0.08f*Screen.height),"" + (25*i),myStyle) )
 						wooi = i;
 				}
 				else
-					GUI.Box(new Rect(0.335f*Screen.width,(j+0.5f)*itemHeight,0.14f*Screen.width,0.08f*Screen.height),"100",myStyle);
+					GUI.Box(new Rect(0.335f*Screen.width,(j+0.5f)*itemHeight,0.14f*Screen.width,0.08f*Screen.height),"" + (25*i),myStyle);
 				j++;
 			}
 		
@@ -669,7 +668,7 @@ public class Store : MonoBehaviour {
 	
 	private void ShowWeaponBuyDialog()
 	{
-		if( Store.zombieHeads >= 100 )
+		if( Store.zombieHeads >= 25*wooi )
 		{
 			GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"Do you want to buy this item?");
 			
@@ -678,7 +677,7 @@ public class Store : MonoBehaviour {
 				Store.UnlockWeapon(wooi);
 				showWeapon[wooi] = true;
 				audio.Play();
-				Store.zombieHeads -= 100;
+				Store.zombieHeads -= 25*wooi;
 				if( IsLevelGamePlay && ExistGunInCurrentLevel((Weapon)wooi))
 				{
 					GameEnvironment.storeGun[wooi].store += 5*GameEnvironment.storeGun[wooi].pocketsize;

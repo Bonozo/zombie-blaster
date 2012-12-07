@@ -11,7 +11,7 @@ public class SelectArea : MonoBehaviour {
 	public GUIText headsText;
 	
 	private bool[] unlocked = new bool[5];
-	private int[] unlock_heads = new int [5] {0,1000,2500,5000,10000};
+	private int[] unlock_heads = new int [5] {0,500,1000,1500,2000};
 	private int unlock_index = 0;
 	private int countUnlocked=0;
 	

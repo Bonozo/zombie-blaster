@@ -33,7 +33,7 @@ public class Generator : MonoBehaviour {
 	private	Vector3 RandomPosition()
 	{
 		//return new Vector3(0,0,8);
-		float r = Random.Range(Option.SpawnDistanceMin,Option.SpawnDistanceMax);
+		float r = Random.Range(10f,13f);
 		float alpa = Random.Range(0f,360f);
 		Vector3 v = Vector3.zero;
 		v.x = r*Mathf.Cos(alpa);

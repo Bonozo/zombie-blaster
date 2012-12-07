@@ -18,7 +18,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_3_5_5;UNITY_3_5;UNITY_EDITOR;ENABLE_PROFILER;UNITY_STANDALONE_OSX;ENABLE_GENERICS;ENABLE_DUCK_TYPING;ENABLE_TERRAIN;ENABLE_MOVIES;ENABLE_WEBCAM;ENABLE_MICROPHONE;ENABLE_NETWORK;ENABLE_CLOTH;ENABLE_WWW;ENABLE_SUBSTANCE</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_GENERICS;UNITY_ANDROID_API;ENABLE_CLOTH;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;UNITY_4_0_0;UNITY_4_0;ENABLE_PROFILER;UNITY_EDITOR;UNITY_TEAM_LICENSE;ENABLE_DUCK_TYPING</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -102,7 +102,6 @@
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_popup_dialog_close_selector.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_emoji_palette_arrow_left_selector.xml" />
      <None Include="Assets\Plugins\Android\res\values\gree_themes.xml" />
-     <None Include="Assets\Standard Assets\UIToolkit\DemoAssets\Resources\textDemoSheet2x.txt" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_notifications_selector.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_close_selector.xml" />
      <None Include="Assets\Plugins\Android\res\layout\gree_status_bar.xml" />
@@ -121,7 +120,6 @@
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_txtbtn_left_emboss_selector.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_activity_open_exit.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_status_game_notification_with_badge_selector.xml" />
-     <None Include="Assets\Standard Assets\UIToolkit\DemoAssets\Resources\colorPickerSheet.txt" />
      <None Include="Assets\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
      <None Include="Assets\Plugins\Android\res\menu\gree_subbrowser.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_subnavi_background_highlighted.xml" />
@@ -150,7 +148,6 @@
      <None Include="Assets\Plugins\Android\res\layout-land\gree_popup_dialog_layout.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_dialog_bottom_exit.xml" />
      <None Include="Assets\Plugins\Android\res\layout-land\gree_notification_board_layout.xml" />
-     <None Include="Assets\Standard Assets\UIToolkit\DemoAssets\Resources\joystickSheet.txt" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_emoji_palette_page_indicator_active.xml" />
      <None Include="Assets\Plugins\Android\res\layout\gree_expandable_status_bar_right.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_dialog_enter.xml" />
@@ -177,7 +174,6 @@
      <None Include="Assets\Plugins\Android\res\drawable\gree_navigationbar_background.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_dialog_bottom_enter.xml" />
      <None Include="Assets\Plugins\Android\res\layout\gree_posting_multiple_layout.xml" />
-     <None Include="Assets\Standard Assets\UIToolkit\DemoAssets\Resources\kitchenSinkSheet.txt" />
      <None Include="Assets\Plugins\Android\Unity35Manifest.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_btn_navibar_txtbtn_right_emboss_bg_default.xml" />
      <None Include="Assets\TK2DROOT\tk2d\Shaders\CutoutVertexColor.shader" />
@@ -188,19 +184,14 @@
      <None Include="Assets\Plugins\Android\res\layout\gree_pull_to_refresh_header.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_palette_out_to_left.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_slide_in_right.xml" />
-     <None Include="Assets\Standard Assets\UIToolkit\DemoAssets\Resources\joystickSheet2x.txt" />
      <None Include="Assets\Plugins\UIToolkit\Shaders\UIToolkit No Alpha.shader" />
-     <None Include="Assets\Standard Assets\UIToolkit\DemoAssets\Resources\textDemoSheet.txt" />
      <None Include="Assets\TK2DROOT\tk2d\Shaders\LitBlendVertexColor.shader" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_status_user_notification_with_badge_selector.xml" />
-     <None Include="Assets\Standard Assets\UIToolkit\DemoAssets\Resources\prototype.txt" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_status_notification_badge_left_selector.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_status_capture_selector.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_overscroll_icon_up_to_down.xml" />
-     <None Include="Assets\Standard Assets\UIToolkit\DemoAssets\Resources\kitchenSinkSheet2x.txt" />
      <None Include="Assets\Plugins\Android\res\anim\gree_status_bar_translate_out_right.xml" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_status_notification_badge_right_selector.xml" />
-     <None Include="Assets\Standard Assets\UIToolkit\DemoAssets\Resources\prototype2x.txt" />
      <None Include="Assets\Plugins\Android\res\anim\gree_notification_board_close.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_status_bar_translate_out_left.xml" />
      <None Include="Assets\Plugins\Android\res\values\gree_strings.xml" />
@@ -228,6 +219,9 @@
  </Reference>
  <Reference Include="tk2dExternal">
  <HintPath>Assets\TK2DROOT\tk2d\Editor\tk2dExternal.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.Graphs">
+ <HintPath>C:\Program Files\Unity\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>

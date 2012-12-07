@@ -14,6 +14,10 @@ public class Guns : MonoBehaviour {
 	public Texture2D ButtonReload;
 	public Texture2D ButtonPlus,ButtonMinus;
 	
+	public GUIText guiTextAmmoInformation;
+	public GUITexture guiTextureCurrentWeaponPercent;
+	public GUITexture guiTextureCurrentGun;
+	
 	private int current = 0;
 	//private bool showotherbuttons = false;
 	
@@ -49,6 +53,7 @@ public class Guns : MonoBehaviour {
 	{
 		GameEnvironment.IgnoreButtons();
 		gun[current].Reload();
+		
 	}
 	
 	
@@ -57,15 +62,41 @@ public class Guns : MonoBehaviour {
 		if( Time.timeScale == 0.0f ) return;
 		foreach( GunBase g in gun ) g.ManualUpdate((Weapon)current );
 		
-		/*if( LevelInfo.Environments.control.state == GameState.Play )
+		if( LevelInfo.Environments.control.state == GameState.Play )
 		{
-			Vector3 v = currentFull.scale;
-			v.x = Mathf.Clamp01(gun[current].AmmoCurrentPercent);
-			currentFull.scale = v;
-			currentGun.spriteId = 10+current;
-		}*/
+			guiTextAmmoInformation.text = gun[current].AmmoInformation;
+			
+			guiTextureCurrentWeaponPercent.texture = gun[current].reloading ? ProgressBarReloading : ProgressBarFull;
+			Vector3 v = guiTextureCurrentWeaponPercent.gameObject.transform.localScale;
+			v.x = 0.1f*Mathf.Clamp01(gun[current].AmmoCurrentPercent);
+			guiTextureCurrentWeaponPercent.gameObject.transform.localScale = v;
+			
+			guiTextureCurrentGun.texture = gun[current].texture;
+			
+			if( pressed(guiTextureCurrentGun) ) gun[current].Reload();
+				
+		}
 	}
-	
+		
+	bool pressed(GUITexture button)
+	{
+		if( LevelInfo.Environments.control.state == GameState.Play )
+		{
+			foreach(Touch touch in Input.touches)
+				if( touch.phase == TouchPhase.Ended && button.HitTest(touch.position) )
+				{
+					GameEnvironment.IgnoreButtons();
+					return true;
+				}
+		}
+		
+		if( Input.GetMouseButtonUp(0) && button.HitTest(Input.mousePosition) )
+		{
+			GameEnvironment.IgnoreButtons();
+			return true;	
+		}
+		return false;
+	}
 	#region OnGUI
 	
 	private float gbw=80f, gbh=80;
@@ -83,20 +114,20 @@ public class Guns : MonoBehaviour {
 	{
 		// Draw Progress Bar
 	    Texture2D fullTexture = gun[current].reloading ? ProgressBarReloading : ProgressBarFull;
-		GUI.DrawTexture(new Rect(0,Screen.height-gbh,gbw*Mathf.Clamp01(gun[current].AmmoCurrentPercent),gbh), fullTexture);
+		//GUI.DrawTexture(new Rect(0,Screen.height-gbh,gbw*Mathf.Clamp01(gun[current].AmmoCurrentPercent),gbh), fullTexture);
 		
 		
 		// Select Gun with tapping current gun icon
-		if( GUI.Button(new Rect(0,Screen.height-gbh,gbw,gbh),gun[current].texture ))
+		/*if( GUI.Button(new Rect(0,Screen.height-gbh,gbw,gbh),gun[current].texture ))
 		{
 			GameEnvironment.IgnoreButtons();
-			/*while(true)
+			while(true)
 			{
 				if( ++current == gun.Length ) current = 0;
 				if( gun[current].EnabledGun ) break;
-			}*/
+			}
 			gun[current].Reload();//New
-		}
+		}*/
 		
 		// Select Plus or Minus Button
 		/*var pmtex = showotherbuttons? ButtonMinus : ButtonPlus;
@@ -132,7 +163,7 @@ public class Guns : MonoBehaviour {
 		
 		// Draw Ammo Information
 		//GUI.color = Color.black;
-		GUI.Label(new Rect(20f,Screen.height-gbh-40f,gbw,20f),gun[current].AmmoInformation);		
+		//GUI.Label(new Rect(20f,Screen.height-gbh-40f,gbw,20f),gun[current].AmmoInformation);		
 	}
 	
 	#endregion

@@ -114,6 +114,7 @@ public class Control : MonoBehaviour {
 		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActiveRecursively(false);
 		
 		RenderSettings.fog = Option.Fog;
+		RenderSettings.ambientLight = new Color(Option.BackgroundAmbient/256f,Option.BackgroundAmbient/256f,Option.BackgroundAmbient/256f);
 		
 		LevelInfo.Environments.generator.GenerateMessageText(new Vector3(0.2f,0.2f,10),"TAP TO SHOOT and SWIPE TO TURN",false,4f);
 	}
@@ -201,7 +202,7 @@ public class Control : MonoBehaviour {
 			}
 			else
 			{
-				GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"YOU ARE DIED.");
+				GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"YOU ARE DEAD.");
 				if( GUI.Button(new Rect(0.35f*Screen.width,0.5f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "MENU" ) )
 				{
 					Time.timeScale = 1.0f;
@@ -281,7 +282,7 @@ public class Control : MonoBehaviour {
 		h.transform.localScale = v;
 		
 		v = h.transform.localPosition;
-		v.x = 98.31665f-98.31665f*(1-h.transform.localScale.x);
+		v.x = -0.01500002f-0.5f*(1-h.transform.localScale.x);
 		h.transform.localPosition = v;
 		
 	}
@@ -293,7 +294,7 @@ public class Control : MonoBehaviour {
 	
 	public bool Died { get { return healthshow <= 0; }}
 	
-	public float Health { get { return healthshow; } set { healthshow = value; } }
+	public float Health { get { return healthshow; } set { health = value; } }
 	
 	#endregion
 

@@ -18,7 +18,7 @@ public class Zombi : MonoBehaviour {
 	public GameObject ZombieFire;
 	public GameObject ZombieSmoke;
 	public HeadHit headHit;
-	public GameObject head;
+	public Transform head;
 
 	// Scores
 	public float BitePoint = 0.01f;
@@ -118,7 +118,6 @@ public class Zombi : MonoBehaviour {
 				{
 					Instantiate(shootBullet,shootTransform.position,Quaternion.identity);
 					shotDeltaTime = animation["shoot"].length-animation["shoot"].time+0.05f;
-					if( shootAudio != null ) LevelInfo.Audio.audioSourceZombies.PlayOneShot(shootAudio);
 				}
 			}
 			return;
@@ -155,6 +154,7 @@ public class Zombi : MonoBehaviour {
 			if( runningTime <= 0f &&  canShoot && Random.Range(0,300)==1)
 			{
 				animation.Play("shoot");
+				if( shootAudio != null ) LevelInfo.Audio.audioSourceZombies.PlayOneShot(shootAudio);
 				return;
 			}
 			// Jump
@@ -222,8 +222,10 @@ public class Zombi : MonoBehaviour {
 		if( !Physics.Raycast(pos, -transform.up, out hit, CollisionToDownLenght-0.03f+1f) )
 			transform.Translate(0,-0.02f,0);
 		*/
-		if(Physics.Raycast(pos, -transform.up, out hit, CollisionToDownLenght+10f) && hit.collider.gameObject.tag != "Flamethrower" )
+		if(Physics.Raycast(pos, -transform.up, out hit, CollisionToDownLenght+10f) && hit.collider.gameObject.name != "Flame" )
 		{
+			if( hit.collider.gameObject.name != "ground")
+				Debug.Log(hit.collider.gameObject.name);
 			transform.Translate(0f,-hit.distance+CollisionToDownLenght+1f,0f);
 		}
 		Debug.DrawRay(pos, -CollisionToDownLenght*transform.up, Color.green);
@@ -350,6 +352,51 @@ public class Zombi : MonoBehaviour {
 		animation.Play("get hit");
 		animation["get hit"].time = 0.0f;
 	}
+	
+	/*public void GetHitFinished(Weapon weapon,Vector3 contactpoint,int hitpoints)
+	{
+		bool headhit = contactpoint.y>head.position.y-0.3f;
+		if( animation.IsPlaying("spawn") ) headhit = Mathf.Abs(contactpoint.y-head.position.y) <= 0.3f;
+		
+		if( headhit )
+			LevelInfo.Environments.generator.GenerateMessageText(head.position + new Vector3(0f,0.75f,0),"Headshot");
+		
+		if( LevelInfo.Environments.control.DamageMultiplied ) hitpoints *= 4;
+		damage -= hitpoints;
+		if( headhit && !haveHelmet ) damage = 0;
+		animation.Play("get hit");
+		animation["get hit"].time = 0.0f;
+		
+		if( damage <= 0 )
+		{
+			if(haveHelmet && ( weapon == Weapon.BB || weapon == Weapon.Crossbow || weapon == Weapon.MachineGun ) )
+			{
+				haveHelmet = false;
+				
+				GameObject g = (GameObject)Instantiate(HelmetPrefab,HelmetPrefab.transform.position,HelmetPrefab.transform.rotation);
+				g.transform.localScale = HelmetPrefab.transform.lossyScale;
+				g.AddComponent<ThrowingOut>();
+				
+				HelmetPrefab.SetActiveRecursively(false);
+				
+				damage = 10;		
+			}
+			else
+			{
+				if(NearPlayer()) GameObject.Find("Goo").SendMessage("Show");
+				Store.zombieHeads++;
+				LevelInfo.Environments.control.score += LevelInfo.State.scoreForHeadShot - LevelInfo.State.scoreForZombie;
+				LevelInfo.Audio.PlayZombieHeadShot();
+				switch(weapon)
+				{
+				case Weapon.BB:
+					DieNormal();
+					break;
+				}
+			}
+		}
+
+	}*/
 	
 	#endregion
 	

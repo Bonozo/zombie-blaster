@@ -26,6 +26,7 @@ public class BulletGunAirgun : MonoBehaviour {
 	void OnCollisionEnter(Collision col)
 	{
 		if( col.gameObject.tag == "Zombie" )
+		//	col.gameObject.GetComponent<Zombi>().GetHitFinished(Weapon.BB,col.contacts[0].point,damage);
 			col.gameObject.SendMessage("GetHitDamaged",damage);
 		
 		if( col.gameObject.tag == "ZombieHead" )
