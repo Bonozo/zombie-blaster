@@ -205,7 +205,7 @@ public class Zombi : MonoBehaviour {
 	{
 		nhdt -= Time.deltaTime;
 		if( nhdt > 0f ) return;
-		nhdt = 1.3f;
+		nhdt = 0.291f;
 		RaycastHit hit;    
 		
 		Vector3 pos = transform.position;

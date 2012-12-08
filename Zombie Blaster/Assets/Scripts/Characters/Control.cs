@@ -20,6 +20,7 @@ public class Control : MonoBehaviour {
 	
 	private float health = 1f;
 	private float healthshow = 1f;
+	private float waitfornewwave = 3f;
 	
 	#endregion
 	
@@ -59,6 +60,7 @@ public class Control : MonoBehaviour {
 				break;
 			case GameState.WaveCompleted:
 				Time.timeScale = 0;
+				waitfornewwave = Time.realtimeSinceStartup + 3f;
 				break;
 			}
 		}
@@ -213,12 +215,12 @@ public class Control : MonoBehaviour {
 		case GameState.WaveCompleted:
 			GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"WAVE COMPLETE.");
 			
-			GUI.Label(new Rect(0.35f*Screen.width,0.4f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "REWARD		" + (bonusForWaveComplete==0?"Xtra Live":"+100 Heads")  ) ;
+			GUI.Label(new Rect(0.35f*Screen.width,0.5f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "REWARD" ) ;
+
+			GUI.DrawTexture(new Rect(0.525f*Screen.width,0.47f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),(bonusForWaveComplete==0?LevelInfo.Environments.texturePickUpXtraLife:LevelInfo.Environments.texturePickUpBonusHeads) );
 			
-			if( GUI.Button(new Rect(0.35f*Screen.width,0.6f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "Continue" ) )
-			{
+			if( Time.realtimeSinceStartup > waitfornewwave )
 				PrepareAndCreateNewWave();
-			}
 			break;
 		}
 	}

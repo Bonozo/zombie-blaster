@@ -88,6 +88,7 @@ public class GunBase : MonoBehaviour {
 	public void GetAmmoStorePacketWithMaxAmmo()
 	{
 		AmmoStore += PacketSize*5;
+		Ammo = PacketSize;
 	}
 	
 	public void Reload()

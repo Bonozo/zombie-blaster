@@ -12,15 +12,16 @@ public enum Levels
 
 public enum Weapon
 {
+	// // Crossbow, Shotgun, Flame Thrower, Football, Machine Gun, Grenades, Revolver, Rocket Launcher
 	BB,
-	Flamethrower,
-	Rocket,
-	PulseShotGun,
-	Grenade,
-	MachineGun,
 	Crossbow,
+	PulseShotGun,
+	Flamethrower,
 	Football,
+	MachineGun,
+	Grenade,
 	Revolver,
+	Rocket,
 	Sniper,
 	Zapper,
 	Microwave,
@@ -107,167 +108,6 @@ public class Store : MonoBehaviour {
 	}
 	
 	#endregion
-	/*
-	#region Game Store
-	
-	public Texture2D textureBackground;
-	public Texture2D textureScreenShot;
-	public Texture2D textureZombieHead;
-	
-	private readonly float updownbuttonheight = 0.1f*Screen.height;
-	private readonly float armorydown = 0.25f*Screen.height;
-	
-	private static Vector2 scrollposition = Vector2.zero;
-	private static int wooi = -1;
-	
-	private static int cost = 100;
-	
-	public bool isPlayGame = false;
-	
-	private bool[] showWeapon = new bool[countWeapons];
-	private bool _showStore = false;
-	public bool showStore
-	{
-		get
-		{
-			return _showStore;
-		}
-		set
-		{
-			_showStore = value;
-			if( _showStore )
-			{
-				for(int i=0;i<countWeapons;i++) showWeapon[i]=WeaponUnlocked(i);
-				for(int i=0;i<countLevel;i++)
-					if( LevelUnlocked(i) )
-						for(int j=0;j<weaponsForLevel[i].Length;j++)
-							showWeapon[(int)weaponsForLevel[i][j]] = true;
-			}
-		}
-	}
-	
-	
-	public GUIStyle myStyle;
-	
-	public void DrawStore()
-	{
-		// Background
-		GUI.DrawTexture(new Rect(0f,0f,Screen.width,Screen.height),textureBackground);
-		
-		// Current Zombie Head Amount
-		GUI.DrawTexture(new Rect(0.1f*Screen.width,0.005f*Screen.height,Screen.width*0.1f,Screen.height*0.09f),textureZombieHead);
-		GUI.Box(new Rect(0.25f*Screen.width,0,0.25f*Screen.width,updownbuttonheight),"" + Store.zombieHeads,myStyle);
-		
-		// Get 1000 Head
-		if( GUI.Button(new Rect(Screen.width*0.5f,0,Screen.width*0.5f,updownbuttonheight),"Get 1000 Heads",myStyle) )
-		{
-			IABAndroid.purchaseProduct("android.test.purchased");
-		}
-		
-		// Return to Game
-		if( GUI.Button(new Rect(0,Screen.height-updownbuttonheight,Screen.width*0.5f,updownbuttonheight),"Return to Game",myStyle) )
-		{
-			wooi = -1;
-			showStore = false;
-			GameEnvironment.IgnoreButtons();
-			if( IsLevelOption )
-			{
-				MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
-				mainmenu.GoMainState();
-			}
-			else if( IsLevelGamePlay )
-				LevelInfo.Environments.control.state = GameState.Play;
-	
-		}
-		
-		if( GUI.Button(new Rect(Screen.width*0.5f,Screen.height-updownbuttonheight,Screen.width*0.5f,updownbuttonheight),"Main Menu",myStyle) )
-		{
-			Application.LoadLevel("mainmenu");
-
-		}	
-		if( wooi == -1 )
-		{		
-			// Screen Shot
-			GUI.DrawTexture(new Rect(Screen.width*0.5f,updownbuttonheight,Screen.width*0.5f,Screen.height-2*updownbuttonheight),textureScreenShot);
-		
-			// Armory
-			GUI.color = Color.white;
-			GUI.Box(new Rect(0,updownbuttonheight,Screen.width*0.5f,armorydown-updownbuttonheight),"Armory",myStyle);
-		
-			// Weapon List
-			scrollposition = GUI.BeginScrollView(new Rect(0,armorydown,Screen.width*0.5f,Screen.height-armorydown-updownbuttonheight),
-				scrollposition,new Rect(0,0,Screen.width*0.48f,(GameEnvironment.storeGun.Length-1)*updownbuttonheight),false,false);
-		
-			for(int i=1;i<GameEnvironment.storeGun.Length;i++)
-			{
-				string showname = showWeapon[i]?GameEnvironment.storeGun[i].name:"????????????";
-				if( GUI.Button(new Rect(0f,(i-1)*updownbuttonheight,Screen.width*0.24f,updownbuttonheight),showname,myStyle ) )
-					wooi = i;
-				GUI.Box(new Rect(Screen.width*0.24f,(i-1)*updownbuttonheight,Screen.width*0.24f,updownbuttonheight),GameEnvironment.storeGun[i].AmmoInformation,myStyle );
-			}
-		
-			GUI.EndScrollView();
-		}
-		else
-		{
-			// Weapon Name
-			string showname = showWeapon[wooi]?GameEnvironment.storeGun[wooi].name:"????????????";
-			GUI.Box(new Rect(0,updownbuttonheight,Screen.width*0.5f,updownbuttonheight),showname,myStyle);
-			
-			// Cost of Ammo
-			GUI.Box(new Rect(Screen.width*0.5f,updownbuttonheight,Screen.width*0.5f,updownbuttonheight),"Cost : " + cost,myStyle);
-			
-			// Description
-			GUI.Box(new Rect(0,2*updownbuttonheight,Screen.width*0.5f,Screen.height-3*updownbuttonheight),"Current Ammo" + GameEnvironment.storeGun[wooi].AmmoInformation,myStyle);
-		
-			// Purchases
-			if( Store.WeaponUnlocked(wooi) )
-			{
-				bool ew = ExistGunInCurrentLevel((Weapon)wooi);
-				if( IsLevelOption || !ew )
-					GUI.Box(new Rect(Screen.width*0.5f,Screen.height-2*updownbuttonheight,Screen.width*0.25f,updownbuttonheight),"Owned",myStyle); 
-				if(ew && GUI.Button(new Rect(Screen.width*0.5f,Screen.height-2*updownbuttonheight,Screen.width*0.25f,updownbuttonheight),"Fill Ammo",myStyle) ) 
-				{
-					if( Store.zombieHeads >= cost )
-					{
-						audio.Play();
-						Store.zombieHeads -= cost;
-						GameEnvironment.storeGun[wooi].store += 5*GameEnvironment.storeGun[wooi].pocketsize;
-					}
-				}
-			}
-			else
-			{
-				if( GUI.Button(new Rect(Screen.width*0.5f,Screen.height-2*updownbuttonheight,Screen.width*0.25f,updownbuttonheight),"Purchase",myStyle) ) 
-				{
-					if( Store.zombieHeads >= cost )
-					{
-						Store.UnlockWeapon(wooi);
-						showWeapon[wooi] = true;
-						audio.Play();
-						Store.zombieHeads -= cost;
-						if( IsLevelGamePlay && ExistGunInCurrentLevel((Weapon)wooi))
-						{
-							GameEnvironment.storeGun[wooi].store += 5*GameEnvironment.storeGun[wooi].pocketsize;
-							GameEnvironment.storeGun[wooi].enabled = true;
-						}
-					}
-				}
-			}
-			if( GUI.Button(new Rect(Screen.width*0.75f,Screen.height-2*updownbuttonheight,Screen.width*0.25f,updownbuttonheight),"Back",myStyle) ) 
-			{
-				wooi = -1;
-			}
-		}
-	}
-	
-	void OnGUI()
-	{
-		if( showStore ) DrawStore();
-	}
-	
-	#endregion
-	*/
 	
 	#region Google, Tapjoy
 
@@ -308,28 +148,36 @@ public class Store : MonoBehaviour {
 	{
 		#if UNITY_ANDROID
 		IABAndroid.init( storePublicKey );
-		TapjoyAndroid.init( "6f8b509b-f292-4dd3-b440-eab33f211089", "7TYeZbZ6GTqRncoALV3W", false );
+		TapjoyAndroid.init( "6f8b509b-f292-4dd3-b440-eab33f211089", "7TYeZbZ6GTqRncoALV3W", false );//old
+		//TapjoyAndroid.init( "b1f6ad92-1ff9-47ca-a962-a4b7ecddebd2", "wNZUPjewwCeVRkgpCCZQ", false );//new
 		#endif
+		/*
+		 * Lock All
+		PlayerPrefs.SetInt("zombieHeads",100000);
+		for(int i=1;i<_playerprefs_unlockweapon.Length;i++)
+			PlayerPrefs.SetInt("weapon"+i,0);
+		for(int i=1;i<_playerprefs_unlocklevel.Length;i++)
+			PlayerPrefs.SetInt("level"+i,0);*/
 	}
 	
 	public void OnApplicationQuit()
 	{
 		#if UNITY_ANDROID
 		IABAndroid.stopBillingService();
-		#endif
-		
+		#endif	
 	}
 	
 	//--------------- store purchase code end ------------------//
 	
 	#endregion
 
-
 	#region GUI
 	
+	public AudioClip audioScrolling;
 	public Texture2D[] textureWeapons;
 	public Texture2D textureWeaponUnknown;
 	public GameObject[] objectWeapons;
+	public GameObject objectsWeaponsUnknown1,objectsWeaponsUnknown2;
 	
 	public GameObject StoreGUI;
 	public ButtonBase buttonMainMenu;
@@ -337,6 +185,18 @@ public class Store : MonoBehaviour {
 	public ButtonBase buttonGAME;
 	public ButtonBase buttonTrash;
 	public GUIText zombieHeadText;
+	
+	public GUIText ShopWeaponName;
+	public GUIText ShopWeaponBuyText;
+	public ButtonBase shotItemBuy;
+	private int currentshopitem = -2;
+	
+	public GUIText StashWeaponName;
+	public GUIText StashWeaponBuyText;
+	public ButtonBase StashItemBuy;
+	private int currentStashitem = -2;
+	
+	private bool spwchannel = false;
 	
 	private int showZombieHeads = -1; 
 	private bool[] showWeapon = new bool[countWeapons];
@@ -355,7 +215,12 @@ public class Store : MonoBehaviour {
 			
 			if( _showStore )
 			{
-				for(int i=0;i<countWeapons;i++) showWeapon[i]=WeaponUnlocked(i);
+				for(int i=0;i<countWeapons;i++) showWeapon[i]=false;
+				for(int i=0;i<countLevel;i++)
+					if( LevelUnlocked(i) )
+						for(int j=0;j<weaponsForLevel[i].Length;j++)
+							showWeapon[(int)weaponsForLevel[i][j]]=true;
+				
 				for(int i=0;i<countWeapons;i++) showFillIn[i]=false;
 				if( IsLevelGamePlay )
 					for(int j=0;j<weaponsForLevel[LevelInfo.Environments.control.currentLevel].Length;j++)
@@ -380,11 +245,12 @@ public class Store : MonoBehaviour {
 		if( showZombieHeads < zombieHeads ) showZombieHeads+=delta;
 		if( showZombieHeads > zombieHeads ) showZombieHeads-=delta;
 		zombieHeadText.text = "" + showZombieHeads;
-		
 	}
 	
 	void Update()
 	{
+		if(!_showStore) return;
+		
 		UpdateZombieHeads();
 		
 		if( buttonGAME.PressedUp ) 
@@ -415,7 +281,163 @@ public class Store : MonoBehaviour {
 			Store.zombieHeads = Store.zombieHeads + 1000;
 			#endif
 		}
+		
+		if( currentshopitem == -2 )
+			currentshopitem = FirstWeapon(false);
+	
+		if( currentStashitem == -2 )
+			currentStashitem = FirstWeapon(true);
+		
+		bool enableshowshopitems = currentshopitem != -1 && shopitemslidecount==0;
+		
+		ShopWeaponName.enabled = enableshowshopitems;
+		ShopWeaponBuyText.enabled = enableshowshopitems;
+		shotItemBuy.enabled = enableshowshopitems&&wooi==-1;
+		
+		for(int i=0;i<countWeapons;i++)
+			SetLayer(objectWeapons[i],WeaponUnlocked(i)?9:8);
+		
+		Vector2 swp = GameEnvironment.AbsoluteSwipe;
+			if( Mathf.Abs(swp.x) > Mathf.Abs(swp.y) || spwchannel)
+			{
+				swp = Vector2.zero;
+				spwchannel = false;
+			}
+		// shop
+		if( enableshowshopitems && wooi==-1)
+		{
+			for(int i=0;i<countWeapons;i++)
+				if( !WeaponUnlocked(i) )
+					objectWeapons[i].transform.localPosition = new Vector3(0,1f,0);
+			objectsWeaponsUnknown1.transform.localPosition = new Vector3(0,1f,0);
+			objectsWeaponsUnknown2.transform.localPosition = new Vector3(0,1f,0);
+			
+			GameObject currentWeaponobj = showWeapon[currentshopitem]?objectWeapons[currentshopitem]:objectsWeaponsUnknown1;
+			currentWeaponobj.transform.localPosition = new Vector3(0f,0f,0f);
+			ShopWeaponName.text = showWeapon[currentshopitem]?GameEnvironment.storeGun[currentshopitem].name:"Mysery";
+			ShopWeaponBuyText.text = "" + GameEnvironment.storeGun[currentshopitem].price;
+			
+			if( shotItemBuy.PressedUp )
+			{
+				wooi = currentshopitem;
+			}	
+			
+			Rect shopRect = new Rect(0.01f*Screen.width,0.1f*Screen.height,0.487f*Screen.width,0.8f*Screen.height);
+			//Rect shopRect = new Rect(0.01f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
+			
+			if( RectContainPoint(shopRect,GameEnvironment.AbsoluteSwipeBegin) && RectContainPoint(shopRect,GameEnvironment.AbsoluteSwipeEnd) && swp.y > 0 )
+			{
+				int olditem = currentshopitem;
+				currentshopitem = NextWeapon(currentshopitem,false);
+				if( olditem != currentshopitem )
+				{
+					GameObject newWeaponobj = showWeapon[currentshopitem]?objectWeapons[currentshopitem]:objectsWeaponsUnknown2;
+					StartCoroutine(ShopItemsSlide(currentWeaponobj,0f,1f));
+					StartCoroutine(ShopItemsSlide(newWeaponobj,-1f,0f));
+				}
+			}
+			if( RectContainPoint(shopRect,GameEnvironment.AbsoluteSwipeBegin) && RectContainPoint(shopRect,GameEnvironment.AbsoluteSwipeEnd) && swp.y < 0 )
+			{
+				int olditem = currentshopitem;
+				currentshopitem = PrevWeapon(currentshopitem,false);
+				if( olditem != currentshopitem )
+				{
+					GameObject newWeaponobj = showWeapon[currentshopitem]?objectWeapons[currentshopitem]:objectsWeaponsUnknown2;
+					StartCoroutine(ShopItemsSlide(currentWeaponobj,0f,-1f));
+					StartCoroutine(ShopItemsSlide(newWeaponobj,1f,0f));
+				}
+			}
+		}
+		
+		bool enableshowstashitems = currentStashitem != -1 && stashitemslidecount==0;
+		
+		StashWeaponName.enabled = enableshowstashitems;
+		StashWeaponBuyText.enabled = enableshowstashitems&&IsLevelGamePlay&&showFillIn[currentStashitem];
+		StashItemBuy.enabled = enableshowstashitems&&wooi==-1&&IsLevelGamePlay&&showFillIn[currentStashitem];
+		
+		
+		
+		// Stash
+		if( enableshowstashitems && wooi==-1)
+		{
+			for(int i=0;i<countWeapons;i++)
+				if( WeaponUnlocked(i) )
+					objectWeapons[i].transform.localPosition = new Vector3(0,1f,0);
+			
+			objectWeapons[currentStashitem].transform.localPosition = new Vector3(0f,0f,0f);
+			
+			StashWeaponName.text = GameEnvironment.storeGun[currentStashitem].name;
+			StashWeaponBuyText.text = GameEnvironment.storeGun[currentStashitem].AmmoInformation;
+			
+			if( StashItemBuy.enabled && StashItemBuy.PressedUp )
+			{
+				wooi = currentStashitem;
+				fillin = true;
+			}	
+			
+			Rect StashRect = new Rect(0.51f*Screen.width,0.1f*Screen.height,0.487f*Screen.width,0.8f*Screen.height);
+			//Rect StashRect = new Rect(0.51f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
+			
+			if( RectContainPoint(StashRect,GameEnvironment.AbsoluteSwipeBegin) && RectContainPoint(StashRect,GameEnvironment.AbsoluteSwipeEnd) && swp.y > 0 )
+			{
+				int olditem = currentStashitem;
+				currentStashitem = NextWeapon(currentStashitem,true);
+				if( olditem != currentStashitem )
+				{
+					StartCoroutine(StashItemsSlide(objectWeapons[olditem],0f,1f));
+					StartCoroutine(StashItemsSlide(objectWeapons[currentStashitem],-1f,0f));
+				}
+			}
+			if( RectContainPoint(StashRect,GameEnvironment.AbsoluteSwipeBegin) && RectContainPoint(StashRect,GameEnvironment.AbsoluteSwipeEnd) && swp.y < 0 )
+			{
+				int olditem = currentStashitem;
+				currentStashitem = PrevWeapon(currentStashitem,true);
+				if( olditem != currentStashitem )
+				{
+					StartCoroutine(StashItemsSlide(objectWeapons[olditem],0f,-1f));
+					StartCoroutine(StashItemsSlide(objectWeapons[currentStashitem],1f,0f));
+				}
+			}
+		}
 	}
+	
+	private int shopitemslidecount=0;
+	private IEnumerator ShopItemsSlide(GameObject obj,float y1,float y2)
+	{
+		shopitemslidecount++;
+		float time = 1f;
+		while(time>0)
+		{
+			time -= 0.016f;
+			if( time < 0f ) time = 0.0f;
+			Vector3 v = obj.transform.localPosition;
+			v.y = y1+(y2-y1)*(1.0f-time);
+			obj.transform.localPosition = v;
+			yield return new WaitForEndOfFrame();
+		}
+		shopitemslidecount--;
+		audio.PlayOneShot(audioScrolling);
+	}
+	
+	private int stashitemslidecount=0;
+	private IEnumerator StashItemsSlide(GameObject obj,float y1,float y2)
+	{
+		stashitemslidecount++;
+		float time = 1f;
+		while(time>0)
+		{
+			time -= 0.016f;
+			if( time < 0f ) time = 0.0f;
+			Vector3 v = obj.transform.localPosition;
+			v.y = y1+(y2-y1)*(1.0f-time);
+			obj.transform.localPosition = v;
+			yield return new WaitForEndOfFrame();
+		}
+		stashitemslidecount--;
+		audio.PlayOneShot(audioScrolling);
+	}
+	
+	
 	
 	public GUIStyle myStyle;
 	
@@ -443,104 +465,6 @@ public class Store : MonoBehaviour {
 		}
 	}
 	
-	private int _current_shop_item = -1;
-	
-	private void FirstShopItem()
-	{
-		_current_shop_item=-1;
-		NextShopItem();
-	}
-	
-	private void NextShopItem()
-	{
-		for(int i=0;i<countWeapons;i++)
-			objectWeapons[i].SetActiveRecursively(false);	
-		
-		bool allunl = true;
-		for(int i=0;i<countWeapons;i++)
-			if( !WeaponUnlocked(i) )
-				allunl = false;
-		if( allunl ) {_current_shop_item = -1; return; }
-		
-		do { _current_shop_item = (_current_shop_item+1)%countWeapons; }
-		while( WeaponUnlocked(_current_shop_item) ); 
-			
-		ShowItems();
-	}
-	
-	private void PrevShopItem()
-	{
-		for(int i=0;i<countWeapons;i++)
-			objectWeapons[i].SetActiveRecursively(false);	
-		
-		bool allunl = true;
-		for(int i=0;i<countWeapons;i++)
-			if( !WeaponUnlocked(i) )
-				allunl = false;
-		if( allunl ) {_current_shop_item = -1; return; }
-		
-		do { _current_shop_item = (_current_shop_item-1+countWeapons)%countWeapons; }
-		while( WeaponUnlocked(_current_shop_item) );
-		ShowItems();
-	}	
-	
-	private int _current_stash_item = -1;
-	
-	private void FirstStashItem()
-	{
-		_current_stash_item=-1;
-		NextStashItem();
-	}
-	
-	private void NextStashItem()
-	{
-		
-		for(int i=0;i<countWeapons;i++)
-			objectWeapons[i].SetActiveRecursively(false);	
-		
-		bool allunl = true;
-		for(int i=0;i<countWeapons;i++)
-			if( WeaponUnlocked(i) )
-				allunl = false;
-		if( allunl ) { _current_stash_item = -1; return; }
-		
-		do { _current_stash_item = (_current_stash_item+1)%countWeapons; }
-		while( !WeaponUnlocked(_current_stash_item) ); 
-			
-		ShowItems();
-		
-	}
-	
-	private void PrevStashItem()
-	{
-		for(int i=0;i<countWeapons;i++)
-			objectWeapons[i].SetActiveRecursively(false);	
-		
-		bool allunl = true;
-		for(int i=0;i<countWeapons;i++)
-			if( WeaponUnlocked(i) )
-				allunl = false;
-		if( allunl ) {_current_stash_item = -1; return; }
-		
-		do { _current_stash_item = (_current_stash_item-1+countWeapons)%countWeapons; }
-		while( !WeaponUnlocked(_current_stash_item) );
-		ShowItems();
-	}	
-	
-	private void ShowItems()
-	{
-		if( _current_shop_item != -1 )
-		{
-			objectWeapons[_current_shop_item].SetActiveRecursively(true);
-			objectWeapons[_current_shop_item].transform.position = new Vector3(-0.28f,-0.05f,0.59f);
-		}
-		if( _current_stash_item != -1 )
-		{
-			objectWeapons[_current_stash_item].SetActiveRecursively(true);
-			objectWeapons[_current_stash_item].transform.position = new Vector3(0.18f,-0.05f,0.59f);		
-		}
-	}
-	
 	private void SetLayer(GameObject g,int n)
 	{
 		g.layer = n;
@@ -554,13 +478,43 @@ public class Store : MonoBehaviour {
 	private bool fillin = false;
 	private Vector2 scrollposition = Vector2.zero;
 	private Vector2 scrollposition2 = Vector2.zero;
+	
+	int FirstWeapon(bool unlocked)
+	{
+		for(int i=0;i<countWeapons;i++)
+			if( WeaponUnlocked(i) == unlocked ) 
+				return i;
+		return -1;
+	}
+	int NextWeapon(int current,bool unlocked)
+	{
+		for(int i=current+1;i<countWeapons;i++)
+			if( WeaponUnlocked(i) == unlocked ) 
+				return i;	
+		for(int i=current;i>=0;i--)
+			if( WeaponUnlocked(i) == unlocked ) 
+				return i;
+		return -1;
+	}
+	int PrevWeapon(int current,bool unlocked)
+	{
+		for(int i=current-1;i>=0;i--)
+			if( WeaponUnlocked(i) == unlocked ) 
+				return i;
+		for(int i=current;i<countWeapons;i++)
+			if( WeaponUnlocked(i) == unlocked ) 
+				return i;	
+		return -1;
+	}
+	
 	void OnGUI()
 	{
 		if(!_showStore) return;
 		
+
 		
 		// Shop
-		Rect shopRect = new Rect(0.01f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
+		/*Rect shopRect = new Rect(0.01f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
 		scrollposition = GUI.BeginScrollView(new Rect(0.01f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height),scrollposition,new Rect(0f,0f,0.457f*Screen.width,8*itemHeight),false,true);
 		foreach(Touch touch in Input.touches)
 			if( RectContainPoint(shopRect,touch.position))
@@ -584,11 +538,11 @@ public class Store : MonoBehaviour {
 				j++;
 			}
 		
-		GUI.EndScrollView();
+		GUI.EndScrollView();*/
 	
 		
 		// Stash
-		Rect stashRect = new Rect(0.51f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
+		/*Rect stashRect = new Rect(0.51f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
 		scrollposition2 = GUI.BeginScrollView(new Rect(0.51f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height),scrollposition2,new Rect(0f,0f,0.457f*Screen.width,8*itemHeight),false,true);
 		foreach(Touch touch in Input.touches)
 			if( RectContainPoint(stashRect,touch.position))
@@ -616,47 +570,7 @@ public class Store : MonoBehaviour {
 		
 		
 		GUI.EndScrollView();
-				
-		
-		/*if( _current_shop_item != -1 )
-		{
-			GUI.Box(new Rect(0.03f*Screen.width,0.3f*Screen.height,0.3f*Screen.width,0.1f*Screen.height),GameEnvironment.storeGun[_current_shop_item].name,myStyle);
-			
-			if( wooi == -1 )
-			{
-				if( GameEnvironment.AbsoluteSwipe.y > 0f )
-					PrevShopItem();
-				if( GameEnvironment.AbsoluteSwipe.y < 0f )
-					NextShopItem();
-				
-				
-				if( GUI.Button(new Rect(0.36f*Screen.width,0.4f*Screen.height,0.13f*Screen.width,0.08f*Screen.height),"Prev",myStyle) )
-					PrevShopItem();
-				if( GUI.Button(new Rect(0.36f*Screen.width,0.5f*Screen.height,0.13f*Screen.width,0.08f*Screen.height),"Next",myStyle) )
-					NextShopItem();
-				if( GUI.Button(new Rect(0.36f*Screen.width,0.6f*Screen.height,0.13f*Screen.width,0.08f*Screen.height),"Buy",myStyle) )
-					wooi = _current_shop_item;
-			}
-		}		
-		
-		if( _current_stash_item != -1 )
-		{
-			GUI.Box(new Rect(0.53f*Screen.width,0.3f*Screen.height,0.3f*Screen.width,0.1f*Screen.height),GameEnvironment.storeGun[_current_stash_item].name,myStyle);
-			
-			if( wooi == -1 )
-			{
-				if( GUI.Button(new Rect(0.86f*Screen.width,0.4f*Screen.height,0.13f*Screen.width,0.08f*Screen.height),"Prev",myStyle) )
-					PrevStashItem();
-				if( GUI.Button(new Rect(0.86f*Screen.width,0.5f*Screen.height,0.13f*Screen.width,0.08f*Screen.height),"Next",myStyle) )
-					NextStashItem();
-				if(IsLevelGamePlay && GUI.Button(new Rect(0.86f*Screen.width,0.6f*Screen.height,0.13f*Screen.width,0.08f*Screen.height),"Fill in",myStyle) )
-				{
-					wooi = _current_stash_item;
-					fillin = true;
-				}
-			}
-		}*/
-		
+		*/
 		if( wooi != -1 )
 		{
 			if(fillin)
@@ -668,7 +582,7 @@ public class Store : MonoBehaviour {
 	
 	private void ShowWeaponBuyDialog()
 	{
-		if( Store.zombieHeads >= 25*wooi )
+		if( Store.zombieHeads >= GameEnvironment.storeGun[wooi].price )
 		{
 			GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"Do you want to buy this item?");
 			
@@ -676,23 +590,32 @@ public class Store : MonoBehaviour {
 			{
 				Store.UnlockWeapon(wooi);
 				showWeapon[wooi] = true;
+				currentStashitem = wooi;
 				audio.Play();
-				Store.zombieHeads -= 25*wooi;
+				Store.zombieHeads -= GameEnvironment.storeGun[wooi].price;
 				if( IsLevelGamePlay && ExistGunInCurrentLevel((Weapon)wooi))
 				{
 					GameEnvironment.storeGun[wooi].store += 5*GameEnvironment.storeGun[wooi].pocketsize;
 					GameEnvironment.storeGun[wooi].enabled = true;
 				}
 				wooi = -1;
+				spwchannel = true;
+				currentshopitem = NextWeapon(currentshopitem,false);
 			}
 			if( GUI.Button(new Rect(0.35f*Screen.width,0.6f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "Back" ) )
-				wooi = -1;			
+			{
+				wooi = -1; 
+				spwchannel = true;
+			}
 		}
 		else
 		{
 			GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"You have not enough heads to buy this item.");
 			if( GUI.Button(new Rect(0.35f*Screen.width,0.5f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "Back") )
+			{
 				wooi = -1;
+				spwchannel = true;
+			}
 		}
 		
 
@@ -708,14 +631,18 @@ public class Store : MonoBehaviour {
 			{
 				audio.Play();
 				Store.zombieHeads -= 100;
-				GameEnvironment.storeGun[wooi].store += 5*GameEnvironment.storeGun[wooi].pocketsize;
+				//GameEnvironment.storeGun[wooi].store += 5*GameEnvironment.storeGun[wooi].pocketsize;
+				LevelInfo.Environments.guns.GetWeaponWithMAX((Weapon)wooi);
+				
 				wooi = -1;
 				fillin = false;
+				spwchannel = true;
 			}
 			if( GUI.Button(new Rect(0.35f*Screen.width,0.6f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "Back" ) )
 			{
 				wooi = -1;
 				fillin = false;
+				spwchannel = true;
 			}
 		}
 		else
@@ -725,6 +652,7 @@ public class Store : MonoBehaviour {
 			{
 				wooi = -1;
 				fillin = false;
+				spwchannel = true;
 			}
 		}
 		

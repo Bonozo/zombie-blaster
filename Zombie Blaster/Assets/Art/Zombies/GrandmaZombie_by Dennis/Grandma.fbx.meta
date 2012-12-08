@@ -60,6 +60,7 @@ ModelImporter:
     100108: r_thumb3
     100110: r_wrist
     100112: root
+    100114: fatkidMesh
     400000: back1
     400002: back2
     400004: chin
@@ -117,6 +118,7 @@ ModelImporter:
     400108: r_thumb3
     400110: r_wrist
     400112: root
+    400114: fatkidMesh
     2300000: glasses
     2300002: hair
     3300000: glasses
@@ -124,8 +126,10 @@ ModelImporter:
     4300000: polySurface179
     4300002: hair
     4300004: glasses
+    4300006: fatkidMesh
     9500000: //RootNode
     13700000: polySurface179
+    13700002: fatkidMesh
   materials:
     importMaterials: 1
     materialName: 0

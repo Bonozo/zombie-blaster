@@ -100,6 +100,7 @@ public class GameEnvironment : MonoBehaviour {
 		}}
 	
 	private static Vector2 startPos2;
+	private static Vector2 startPos3;
 	public static Vector2 AbsoluteSwipe { get {
 		Vector2 res = Vector2.zero;
 		if (Input.touchCount > 0) 
@@ -116,13 +117,21 @@ public class GameEnvironment : MonoBehaviour {
                 startPos2 = pos;
                 break;
             case TouchPhase.Ended:
-		        res = pos - startPos2;        
+		        res = pos - startPos2;       
+				startPos3 = pos;
                 break;
 			}
 		}
 		return res;
 	}}
 	
+	public static Vector2 AbsoluteSwipeBegin { get {
+		return new Vector2(Screen.width*startPos2.x,Screen.height*startPos2.y);
+		}}
+	public static Vector2 AbsoluteSwipeEnd { get {
+		return new Vector2(Screen.width*startPos3.x,Screen.height*startPos3.y);
+		}}	
+
 	public static Vector3 InputAxis { get {
 		Vector3 dir = Vector3.zero;
 		dir.x = -Input.acceleration.y;
@@ -197,6 +206,7 @@ public class GameEnvironment : MonoBehaviour {
 		return ans;
 		}}
 	private static Vector2 last;
+	private static Vector2 last2;
 	public static Vector2 AbsoluteSwipe { get {
 		Vector2 mousepos = Input.mousePosition;
 		mousepos.x /= Screen.width;
@@ -210,10 +220,20 @@ public class GameEnvironment : MonoBehaviour {
 		if( Input.GetMouseButtonUp(0) )
 		{
 			res = mousepos-last;
+			last2 = mousepos;
 		}
 		
 		return res;
 	}}
+
+
+	public static Vector2 AbsoluteSwipeBegin { get {
+		return new Vector2(Screen.width*last.x,Screen.height*last.y);
+		}}
+
+	public static Vector2 AbsoluteSwipeEnd { get {
+		return new Vector2(Screen.width*last2.x,Screen.height*last2.y);
+		}}
 	
 	public static Vector3 InputAxis { get {
 		return new Vector3(Input.GetAxis("Horizontal"),Input.GetAxis("Vertical"),0f);
@@ -231,17 +251,21 @@ public class GameEnvironment : MonoBehaviour {
 		public int store;
 		public bool enabled;
 		public int pocketsize;
-		public StoreGun(string name,bool enabled,int pocketsize)
+		public int price;
+		public StoreGun(string name,bool enabled,int pocketsize,int price)
 		{
 			this.name = name;
 			this.enabled = enabled;
 			this.pocketsize = pocketsize;
+			this.price = price;
 			
 			this.current = this.store = 0;
 			if( enabled )
 				ResetAmmoStandart();
 			else
 				ResetAmmoZero();
+			
+
 		}
 		
 		public void ResetAmmoZero()
@@ -283,15 +307,19 @@ public class GameEnvironment : MonoBehaviour {
 	
 	public static StoreGun[] storeGun = new StoreGun[9]
 	{
-		new StoreGun("BB",true,100),			//0
-		new StoreGun("Flamethrower",false,100),	//1
-		new StoreGun("Rocket",false,5),			//2
-		new StoreGun("PulseShotGun",false,5),	//3
-		new StoreGun("Grenade",false,5),		//4
-		new StoreGun("MachineGun",false,100),	//5
-		new StoreGun("Crossbow",false,12),		//6
-		new StoreGun("Football",false,5),		//7
-		new StoreGun("Revolver",false,6)		//8
+		
+		new StoreGun("BB",true,100,0),				//0
+		new StoreGun("Crossbow",false,12,30),		//1
+		new StoreGun("Shotgun",false,5,75),			//2
+		new StoreGun("Flamethrower",false,100,100),	//3
+		new StoreGun("Football",false,5,100),		//4
+		new StoreGun("Machine Gun",false,100,150),	//5
+		new StoreGun("Grenades",false,5,150),		//6
+		new StoreGun("Revolver",false,6,300),		//7
+		new StoreGun("Rocket Launcher",false,5,300) //8
+		
+		
+		
 		//new StoreGun("Sniper",false,12)		//9
 	};
 	
