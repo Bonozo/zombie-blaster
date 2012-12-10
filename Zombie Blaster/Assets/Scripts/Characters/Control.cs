@@ -22,6 +22,8 @@ public class Control : MonoBehaviour {
 	private float healthshow = 1f;
 	private float waitfornewwave = 3f;
 	
+	private bool restartLevel = false;
+	
 	#endregion
 	
 	#region State
@@ -59,8 +61,8 @@ public class Control : MonoBehaviour {
 				GameObject.Find("Store").GetComponent<Store>().showStore = true;
 				break;
 			case GameState.WaveCompleted:
-				Time.timeScale = 0;
-				waitfornewwave = Time.realtimeSinceStartup + 3f;
+				//Time.timeScale = 0;
+				//waitfornewwave = Time.realtimeSinceStartup + 3f;
 				break;
 			}
 		}
@@ -118,7 +120,8 @@ public class Control : MonoBehaviour {
 		RenderSettings.fog = Option.Fog;
 		RenderSettings.ambientLight = new Color(Option.BackgroundAmbient/256f,Option.BackgroundAmbient/256f,Option.BackgroundAmbient/256f);
 		
-		LevelInfo.Environments.generator.GenerateMessageText(new Vector3(0.2f,0.2f,10),"TAP TO SHOOT and SWIPE TO TURN",false,4f);
+		if( !restartLevel )
+			LevelInfo.Environments.generator.GenerateMessageText(new Vector3(0.2f,0.2f,10),"TAP TO SHOOT and SWIPE TO TURN",false,4f);
 	}
 	
 	// Update is called once per frame
@@ -187,16 +190,18 @@ public class Control : MonoBehaviour {
 			if( lives > 0 )
 			{
 				GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"CONTINUE?");
-				if( GUI.Button(new Rect(0.35f*Screen.width,0.4f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "CONTINUE" ) )	
+				if( GUI.Button(new Rect(0.35f*Screen.width,0.4f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "YES" ) )	
 				{
 					GameEnvironment.StartWave = currentWave-1;
 					startLives = lives;
 					startScore = score;
 					
+					restartLevel = true;
+					
 					Time.timeScale = 1.0f;
 					Application.LoadLevel(Application.loadedLevel);
 				}
-				if( GUI.Button(new Rect(0.35f*Screen.width,0.6f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "MENU" ) )
+				if( GUI.Button(new Rect(0.35f*Screen.width,0.6f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "NO") )
 				{
 					Time.timeScale = 1.0f;
 					Application.LoadLevel("mainmenu");
@@ -205,22 +210,23 @@ public class Control : MonoBehaviour {
 			else
 			{
 				GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"YOU ARE DEAD.");
-				if( GUI.Button(new Rect(0.35f*Screen.width,0.5f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "MENU" ) )
+				if( GUI.Button(new Rect(0.35f*Screen.width,0.5f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "MENU") )
 				{
 					Time.timeScale = 1.0f;
 					Application.LoadLevel("mainmenu");
 				}
 			}
 			break;
-		case GameState.WaveCompleted:
+		case GameState.Play:
+			if( !Moving || angling || Time.realtimeSinceStartup > waitfornewwave ) break;
 			GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"WAVE COMPLETE.");
 			
 			GUI.Label(new Rect(0.35f*Screen.width,0.5f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "REWARD" ) ;
 
 			GUI.DrawTexture(new Rect(0.525f*Screen.width,0.47f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),(bonusForWaveComplete==0?LevelInfo.Environments.texturePickUpXtraLife:LevelInfo.Environments.texturePickUpBonusHeads) );
 			
-			if( Time.realtimeSinceStartup > waitfornewwave )
-				PrepareAndCreateNewWave();
+			//if( Time.realtimeSinceStartup > waitfornewwave )
+			//	PrepareAndCreateNewWave();
 			break;
 		}
 	}
@@ -234,7 +240,7 @@ public class Control : MonoBehaviour {
 			// c.y > angleY
 			if( c.y - angleY <= 180.0f ) c.y -= MovingRotateSpeed*Time.deltaTime;
 			else c.y += MovingRotateSpeed*Time.deltaTime;
-			if( Mathf.Abs(c.y - angleY) <= 1f )	{ c.y = angleY; angling = false; }
+			if( Mathf.Abs(c.y - angleY) <= 1f )	{ c.y = angleY; angling = false;  waitfornewwave = Time.realtimeSinceStartup + 3f; }
 			transform.rotation = Quaternion.Euler(c);
 			return;
 		}
@@ -280,13 +286,21 @@ public class Control : MonoBehaviour {
 	{
 		GameObject h = LevelInfo.Environments.healthbarHealth;
 		Vector3 v = h.transform.localScale;
-		v.x = Mathf.Clamp01(healthshow/LevelInfo.State.playerMaxHealth);
+		v.x = Mathf.Clamp01(healthshow);
 		h.transform.localScale = v;
 		
 		v = h.transform.localPosition;
 		v.x = -0.01500002f-0.5f*(1-h.transform.localScale.x);
 		h.transform.localPosition = v;
 		
+		h = LevelInfo.Environments.healthbarArmor;
+		v = h.transform.localScale;
+		v.x = 0.525f*Mathf.Clamp01(healthshow-1);
+		h.transform.localScale = v;
+		
+		v = h.transform.localPosition;
+		v.x = -0.25f-0.5f*(0.525f-h.transform.localScale.x);
+		h.transform.localPosition = v;
 	}
 	
 	
@@ -343,6 +357,8 @@ public class Control : MonoBehaviour {
 		LevelInfo.Audio.audioSourceZombies.PlayOneShot(LevelInfo.Audio.AudioWaveComplete);
 		bonusForWaveComplete = Random.Range(0,2);
 		state = GameState.WaveCompleted;
+		waitfornewwave = Time.realtimeSinceStartup + 3f;
+		PrepareAndCreateNewWave();
 	}
 	
 	public void PrepareAndCreateNewWave()

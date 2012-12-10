@@ -49,14 +49,6 @@ public class Guns : MonoBehaviour {
 		currentButton.ButtonDownEvent -= HandleCurrentButtonButtonDownEvent;
 	}*/
 	
-	void HandleCurrentButtonButtonDownEvent (tk2dButton source)
-	{
-		GameEnvironment.IgnoreButtons();
-		gun[current].Reload();
-		
-	}
-	
-	
 	// Update is called once per frame
 	void Update () {
 		if( Time.timeScale == 0.0f ) return;
