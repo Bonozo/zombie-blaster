@@ -21,10 +21,15 @@ public class GameManager : MonoBehaviour {
 	public WaveInfo waveInfo;
 	public GUIText guiDamageMultiplier;
 	
-	public GUIText guiZombieHeads;
+	/*public GUIText guiZombieHeads;
 	public GUIText guiScore;
 	public GUIText guiZombiesLeft;
-	public GUIText guiLives;
+	public GUIText guiLives;*/
+	
+	public UILabel uiZombieHeads;
+	public UILabel uiScore;
+	public UILabel uiZombiesLeft;
+	public UILabel uiLives;
 	
 	public GameObject healthbarHealth;
 	public GameObject healthbarArmor;
@@ -50,6 +55,7 @@ public class GameManager : MonoBehaviour {
 	
 	public GameObject dirtyClodPrefab;
 	public GameObject dirtyClodCityPrefab;
+	public GameObject zombieHealthBar;
 	
 	#endregion
 }

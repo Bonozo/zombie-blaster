@@ -3,7 +3,26 @@ using System.Collections;
 
 public class Guns : MonoBehaviour {
 	
+	#region Methods
+	
+	public void ReloadCurrentWeapon()
+	{
+		gun[current].Reload();
+	}
+	
+	public float CurrentWeaponsAmmoPercent()
+	{
+		return gun[current].AmmoCurrentPercent;
+	}
+	
+	public GunBase CurrentWeapon { get { return gun[current]; } }
+	public int CurrentWeaponIndex { get { return current; } set { current = value; }}
+	
+	#endregion
+	
 	public GunBase[] gun;
+	
+	public ButtonWeapon[] weaponsUI;
 	
 	/*public tk2dSprite currentGun;
 	public tk2dSprite currentFull;
@@ -14,9 +33,9 @@ public class Guns : MonoBehaviour {
 	public Texture2D ButtonReload;
 	public Texture2D ButtonPlus,ButtonMinus;
 	
-	public GUIText guiTextAmmoInformation;
+	/*public GUIText guiTextAmmoInformation;
 	public GUITexture guiTextureCurrentWeaponPercent;
-	public GUITexture guiTextureCurrentGun;
+	public GUITexture guiTextureCurrentGun;*/
 	
 	private int current = 0;
 	//private bool showotherbuttons = false;
@@ -54,20 +73,15 @@ public class Guns : MonoBehaviour {
 		if( Time.timeScale == 0.0f ) return;
 		foreach( GunBase g in gun ) g.ManualUpdate((Weapon)current );
 		
-		if( LevelInfo.Environments.control.state == GameState.Play )
-		{
-			guiTextAmmoInformation.text = gun[current].AmmoInformation;
-			
-			guiTextureCurrentWeaponPercent.texture = gun[current].reloading ? ProgressBarReloading : ProgressBarFull;
-			Vector3 v = guiTextureCurrentWeaponPercent.gameObject.transform.localScale;
-			v.x = 0.1f*Mathf.Clamp01(gun[current].AmmoCurrentPercent);
-			guiTextureCurrentWeaponPercent.gameObject.transform.localScale = v;
-			
-			guiTextureCurrentGun.texture = gun[current].texture;
-			
-			if( pressed(guiTextureCurrentGun) ) gun[current].Reload();
-				
-		}
+		int cweapon = 0;
+		for(int i=0;i<gun.Length;i++)
+				if(gun[i].EnabledGun)
+				{
+					weaponsUI[cweapon].gameObject.SetActive(true);
+					weaponsUI[cweapon].weaponIndex = i;
+					cweapon++;
+				}
+		for(;cweapon<weaponsUI.Length;cweapon++) weaponsUI[cweapon].gameObject.SetActive(false);
 	}
 		
 	bool pressed(GUITexture button)
@@ -105,7 +119,7 @@ public class Guns : MonoBehaviour {
 	private void DrawWeapons()
 	{
 		// Draw Progress Bar
-	    Texture2D fullTexture = gun[current].reloading ? ProgressBarReloading : ProgressBarFull;
+	    //Texture2D fullTexture = gun[current].reloading ? ProgressBarReloading : ProgressBarFull;
 		//GUI.DrawTexture(new Rect(0,Screen.height-gbh,gbw*Mathf.Clamp01(gun[current].AmmoCurrentPercent),gbh), fullTexture);
 		
 		
@@ -131,19 +145,19 @@ public class Guns : MonoBehaviour {
 		
 		/*if( showotherbuttons )
 		{*/
-			for(int i=0,j=0;i<gun.Length;i++)
-				if(gun[i].EnabledGun)
-				{
-					fullTexture = gun[i].reloading ? ProgressBarReloading : ProgressBarFull;
-					GUI.DrawTexture(new Rect(gbw+pbw/*pbw*/+j*/*gbw*/pbw,Screen.height-pbh,pbw*Mathf.Clamp01(gun[i].AmmoCurrentPercent),pbh), fullTexture);
-					if( GUI.Button(new Rect(gbw+pbw/*pbw*/+j*/*gbw*/pbw,Screen.height-pbh,pbw,pbh/*gbh,gbw,gbh*/),gun[i].texture) )
-					{
-						current = i;
-						GameEnvironment.IgnoreButtons();
-					}
+		//	for(int i=0,j=0;i<gun.Length;i++)
+		//		if(gun[i].EnabledGun)
+		//		{
+		//			fullTexture = gun[i].reloading ? ProgressBarReloading : ProgressBarFull;
+		//			GUI.DrawTexture(new Rect(gbw+pbw/*pbw*/+j*/*gbw*/pbw,Screen.height-pbh,pbw*Mathf.Clamp01(gun[i].AmmoCurrentPercent),pbh), fullTexture);
+		//			if( GUI.Button(new Rect(gbw+pbw/*pbw*/+j*/*gbw*/pbw,Screen.height-pbh,pbw,pbh/*gbh,gbw,gbh*/),gun[i].texture) )
+		//			{
+		//				current = i;
+		//				GameEnvironment.IgnoreButtons();
+		//			}
 					//GUI.Label(new Rect(gbw+pbw/*pbw*/+j*/*gbw*/pbw+5,Screen.height-pbh-20,pbw,pbh),gun[i].AmmoInformation);		
-					j++;
-				}
+		//			j++;
+		//		}
 		/*}*/
 		
 		// Select Reload Button

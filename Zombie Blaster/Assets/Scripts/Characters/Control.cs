@@ -73,15 +73,15 @@ public class Control : MonoBehaviour {
 	public int currentWave = 0;
 	
 	private int _zombiesLeftForThisWave = 0;
-	public int zombiesLeftForThisWave { get { return _zombiesLeftForThisWave; } set {_zombiesLeftForThisWave = value; LevelInfo.Environments.guiZombiesLeft.text = "" + _zombiesLeftForThisWave; } }
+	public int zombiesLeftForThisWave { get { return _zombiesLeftForThisWave; } set {_zombiesLeftForThisWave = value; LevelInfo.Environments.uiZombiesLeft.text = "" + _zombiesLeftForThisWave; } }
 		
 	private static int startScore = 0;
 	private int _score = 0;
-	public int score { get { return _score; } set {_score = value; LevelInfo.Environments.guiScore.text = "" + _score; } }
+	public int score { get { return _score; } set {_score = value; LevelInfo.Environments.uiScore.text = "" + _score; } }
 	
 	private static int startLives = 1;
 	private int _lives = 0;
-	public int lives { get { return _lives; } set {_lives = value; LevelInfo.Environments.guiLives.text = "" + _lives; } }
+	public int lives { get { return _lives; } set {_lives = value; LevelInfo.Environments.uiLives.text = "" + _lives; } }
 	
 	public void ForceLevel(int levelnumber,int currentwave)
 	{
@@ -179,7 +179,7 @@ public class Control : MonoBehaviour {
 		transform.rotation = Quaternion.Euler(rot);
 		
 		UpdateHealthBar();
-		LevelInfo.Environments.guiZombieHeads.text = "" + Store.zombieHeads;
+		LevelInfo.Environments.uiZombieHeads.text = "" + Store.zombieHeads;
 	}
 	
 	void OnGUI()

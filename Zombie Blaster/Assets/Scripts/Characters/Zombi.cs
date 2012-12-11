@@ -57,7 +57,7 @@ public class Zombi : MonoBehaviour {
 	private float RunningTime = 3f;
 	private float runningTime = 0.0f;
 	
-	private GameObject particleDirtClod;
+	private HealthBar healthBar;
 	
 	#endregion
 	
@@ -80,9 +80,13 @@ public class Zombi : MonoBehaviour {
 		
 		transform.position = new Vector3(transform.position.x,ZombieHeight,transform.position.z);
 		
+		// Institates
+		Destroy(Instantiate(LevelInfo.Environments.control.currentLevel % 2 == 1? LevelInfo.Environments.dirtyClodCityPrefab: LevelInfo.Environments.dirtyClodPrefab,
+			new Vector3(transform.position.x,1f,transform.position.z),Quaternion.identity),3f);
+		healthBar = ((GameObject)UICamera.Instantiate(LevelInfo.Environments.zombieHealthBar)).GetComponent<HealthBar>();
+		healthBar.gameObject.name = name + " health bar";
+		
 		// Playing Spawn Animation
-		particleDirtClod = LevelInfo.Environments.control.currentLevel % 2 == 1? LevelInfo.Environments.dirtyClodCityPrefab: LevelInfo.Environments.dirtyClodPrefab;
-		particleDirtClod = (GameObject)Instantiate(particleDirtClod,new Vector3(transform.position.x,1f,transform.position.z),Quaternion.identity);
 		if(spawning)
 		{
 			animation.Play("spawn");
@@ -96,6 +100,10 @@ public class Zombi : MonoBehaviour {
 	private float shotDeltaTime=0.0f;
 	// Update is called once per frame
 	void Update () {
+		UpdateHealthBar();
+		
+		if( Input.GetKeyUp(KeyCode.L) )
+			Destroy(healthBar.gameObject);
 		
 		// look to player.
 		Vector3 np = LevelInfo.Environments.control.transform.position-transform.position; np.y = 0;
@@ -271,7 +279,30 @@ public class Zombi : MonoBehaviour {
 		return true;
 	}
 	
-	void OnGUI()
+	void UpdateHealthBar()
+	{
+		if( healthBar == null ) return;
+		bool show = false;
+		if( Time.timeScale > 0.0f ) 
+		{
+			Vector3 head = headHit.transform.position; head.y += 0.5f;
+			Vector3 pos = LevelInfo.Environments.mainCamera.WorldToScreenPoint(head);
+			if( pos.z > 0 )
+			{
+				show = true;
+				
+				pos.y = Screen.height - pos.y;
+				pos.z = 1f;		
+				
+				healthBar.back.transform.localPosition = new Vector3(pos.x-20,-pos.y,0f);
+				healthBar.front.transform.localPosition = new Vector3(pos.x-20,-pos.y,0f);
+				healthBar.front.transform.localScale = new Vector3(damage*4,healthBar.front.transform.localScale.y,healthBar.front.transform.localScale.z);
+			}
+		}
+		healthBar.gameObject.SetActive(show);
+	}
+	
+	/*void OnGUI()
 	{
 		// showing healt bar
 		
@@ -288,7 +319,7 @@ public class Zombi : MonoBehaviour {
 			GUI.DrawTexture(new Rect(pos.x-20,pos.y,damage*4,5),LevelInfo.Environments.ProgressBarZombieFull);
 		}
 		//GUI.Label(new Rect(0,100,200,200),"Dist " + transform.position.magnitude );
-	}
+	}*/
 	
 	#endregion
 	
@@ -482,7 +513,8 @@ public class Zombi : MonoBehaviour {
 	
 	void OnDestroy()
 	{
-		Destroy(particleDirtClod);
+		if( healthBar != null )
+			Destroy(healthBar.gameObject);
 	}
 	
 	#endregion
