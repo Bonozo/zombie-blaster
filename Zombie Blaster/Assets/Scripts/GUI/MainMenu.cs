@@ -24,6 +24,7 @@ public class MainMenu : MonoBehaviour {
 	public GUITexture guiOptionButton,guiPlayButton,guiStore,guiStats;
 	public GameObject objMenu,objOption,objCreadits,objAreaMap,objLeaderboard;
 	public AudioSource SoundBackground,SoundWind;
+	public ButtonBase backButton;
 	
 	private MenuState _state;
 	private MenuState State{
@@ -43,6 +44,8 @@ public class MainMenu : MonoBehaviour {
 			objCreadits.SetActiveRecursively(_state == MenuState.Credits);
 			objAreaMap.SetActiveRecursively(_state == MenuState.AreaMap);
 			objLeaderboard.SetActiveRecursively(_state == MenuState.Leaderboard);
+			
+			backButton.gameObject.SetActive(_state == MenuState.AreaMap || _state == MenuState.Leaderboard || _state == MenuState.Option );
 			
 			if( _state == MenuState.AreaMap )
 				SoundBackground.Stop();
@@ -107,18 +110,16 @@ public class MainMenu : MonoBehaviour {
 				GameObject.Find("Store").GetComponent<Store>().showStore = true;
 				State = MenuState.Store;
 			}
-			if( Input.GetKeyUp(KeyCode.Escape) )
-				Application.Quit();
 			break;
-		case MenuState.Option:
-			if( Input.GetKeyUp(KeyCode.Escape) ) State = MenuState.MainMenu;
-			break;
+		
 		case MenuState.Credits:
 			if( Input.GetKeyUp(KeyCode.Escape) ) State = MenuState.Option;
 			break;
 		case MenuState.AreaMap:
 		case MenuState.Leaderboard:
-			if( Input.GetKeyUp(KeyCode.Escape) ) State = MenuState.MainMenu;
+		case MenuState.Option:
+			//if( Input.GetKeyUp(KeyCode.Escape) ) State = MenuState.MainMenu;
+			if( backButton.PressedUp  ) State = MenuState.MainMenu;
 			break;
 		}
 	}
@@ -130,10 +131,8 @@ public class MainMenu : MonoBehaviour {
 		case MenuState.MainMenu:
 			break;
 		case MenuState.Option:
-			if( GUI.Button( new Rect(20,Screen.height-60,80,40),"Credits"))
+			if( GUI.Button( new Rect(Screen.width-100,Screen.height-60,80,40),"Credits"))
 				State = MenuState.Credits;
-			if( GUI.Button( new Rect(Screen.width-100,Screen.height-60,80,40),"Menu"))
-				State = MenuState.MainMenu;
 			break;
 		case MenuState.Credits:
 			break;

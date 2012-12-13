@@ -196,6 +196,9 @@ public class Store : MonoBehaviour {
 	public ButtonBase StashItemBuy;
 	private int currentStashitem = -2;
 	
+	public GUITexture scrollingInfo;
+	private float scrollingTime = 0.0f;
+	
 	private bool spwchannel = false;
 	
 	private int showZombieHeads = -1; 
@@ -250,6 +253,17 @@ public class Store : MonoBehaviour {
 	void Update()
 	{
 		if(!_showStore) return;
+		
+		if( scrollingTime < 3f )
+		{
+			scrollingTime += 0.0166666f;
+			Vector3 v = scrollingInfo.transform.position;
+			v.y = 0.5f + 0.1f*Mathf.Sin(2*scrollingTime);
+			scrollingInfo.transform.position = v;
+			
+			if( scrollingTime >= 3f )
+				scrollingInfo.enabled = false;
+		}
 		
 		UpdateZombieHeads();
 		

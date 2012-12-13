@@ -105,72 +105,8 @@ public class Guns : MonoBehaviour {
 	}
 	#region OnGUI
 	
-	private float gbw=80f, gbh=80;
-	private float pbw=50f,pbh=50f;
-	// ?? // End
-	
-	void OnGUI()
-	{
-		if( LevelInfo.Environments.control.state == GameState.Play )
-			DrawWeapons();
-		
-	}
-	
-	private void DrawWeapons()
-	{
-		// Draw Progress Bar
-	    //Texture2D fullTexture = gun[current].reloading ? ProgressBarReloading : ProgressBarFull;
-		//GUI.DrawTexture(new Rect(0,Screen.height-gbh,gbw*Mathf.Clamp01(gun[current].AmmoCurrentPercent),gbh), fullTexture);
-		
-		
-		// Select Gun with tapping current gun icon
-		/*if( GUI.Button(new Rect(0,Screen.height-gbh,gbw,gbh),gun[current].texture ))
-		{
-			GameEnvironment.IgnoreButtons();
-			while(true)
-			{
-				if( ++current == gun.Length ) current = 0;
-				if( gun[current].EnabledGun ) break;
-			}
-			gun[current].Reload();//New
-		}*/
-		
-		// Select Plus or Minus Button
-		/*var pmtex = showotherbuttons? ButtonMinus : ButtonPlus;
-		if( GUI.Button(new Rect(gbw,Screen.height-pbh,pbw,pbh),pmtex) )
-		{
-			showotherbuttons = !showotherbuttons;
-			GameEnvironment.IgnoreButtons();
-		}*/
-		
-		/*if( showotherbuttons )
-		{*/
-		//	for(int i=0,j=0;i<gun.Length;i++)
-		//		if(gun[i].EnabledGun)
-		//		{
-		//			fullTexture = gun[i].reloading ? ProgressBarReloading : ProgressBarFull;
-		//			GUI.DrawTexture(new Rect(gbw+pbw/*pbw*/+j*/*gbw*/pbw,Screen.height-pbh,pbw*Mathf.Clamp01(gun[i].AmmoCurrentPercent),pbh), fullTexture);
-		//			if( GUI.Button(new Rect(gbw+pbw/*pbw*/+j*/*gbw*/pbw,Screen.height-pbh,pbw,pbh/*gbh,gbw,gbh*/),gun[i].texture) )
-		//			{
-		//				current = i;
-		//				GameEnvironment.IgnoreButtons();
-		//			}
-					//GUI.Label(new Rect(gbw+pbw/*pbw*/+j*/*gbw*/pbw+5,Screen.height-pbh-20,pbw,pbh),gun[i].AmmoInformation);		
-		//			j++;
-		//		}
-		/*}*/
-		
-		// Select Reload Button
-		/*if( GUI.Button(new Rect(Screen.width-gbw,Screen.height-gbh,gbw,gbh),ButtonReload ))
-		{
-			GameEnvironment.IgnoreButtons();
-			gun[current].Reload();
-		}*/
-		
-		// Draw Ammo Information
-		//GUI.color = Color.black;
-		//GUI.Label(new Rect(20f,Screen.height-gbh-40f,gbw,20f),gun[current].AmmoInformation);		
-	}
+	//private float gbw=80f, gbh=80;
+	//private float pbw=50f,pbh=50f;
 	
 	#endregion
 	

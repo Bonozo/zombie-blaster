@@ -233,7 +233,6 @@ public class Zombi : MonoBehaviour {
 		if(Physics.Raycast(pos, -transform.up, out hit, CollisionToDownLenght+10f) && hit.collider.gameObject.name != "Flame" )
 		{
 			if( hit.collider.gameObject.name != "ground")
-				Debug.Log(hit.collider.gameObject.name);
 			transform.Translate(0f,-hit.distance+CollisionToDownLenght+1f,0f);
 		}
 		Debug.DrawRay(pos, -CollisionToDownLenght*transform.up, Color.green);

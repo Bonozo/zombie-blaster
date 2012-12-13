@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ColorPlay : MonoBehaviour {
 	
-	public Color colmin,colmax;
+	public Color colmin = new Color(0.5f,0.5f,0.5f,0.5f),colmax = new Color(0.5f,0.5f,0.5f,0.5f);
 	public float speed = 0.1f;
 	
 	private bool up=true;

@@ -3,12 +3,12 @@ using System.Collections;
 
 public class SwipeUpCaution : MonoBehaviour {
 	
-	public GUITexture knockleft,knockright,swipeup;
+	public UISprite knockleft,knockright,swipeup;
 	
-	private float ymax = 0.2f;
-	private float speed = 0.25f;
+	private float ymax = 100f;
+	private float speed = 100f;
 	
-	private Vector3 beginpos = Vector3.zero;
+	private Vector3 beginpos = new Vector3(0,-50,0);
 	private float deltay = 0f;
 	private bool isactive = false;
 	private bool leftactive = false, leftactiveincrease = false;
@@ -22,9 +22,9 @@ public class SwipeUpCaution : MonoBehaviour {
 		{
 			if( !isactive )
 			{
-				beginpos = new Vector3(0.5f,0.4f,beginpos.z);
+				beginpos = new Vector3(0,-50,0);
 				deltay = 0f;
-				transform.position = beginpos;
+				swipeup.transform.localPosition = beginpos;
 				isactive = true;	
 			}
 			return;
@@ -61,9 +61,9 @@ public class SwipeUpCaution : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		swipeup.enabled = isactive;
-		knockleft.enabled = leftactive;
-		knockright.enabled = rightactive;
+		swipeup.gameObject.SetActive(isactive);
+		knockleft.gameObject.SetActive(leftactive);
+		knockright.gameObject.SetActive(rightactive);
 		
 		if( isactive )
 		{
@@ -71,7 +71,7 @@ public class SwipeUpCaution : MonoBehaviour {
 			deltay += speed*Time.deltaTime;
 			if( deltay > ymax ) isactive=false;
 			pos.y += deltay;
-			transform.position = pos;		
+			swipeup.transform.localPosition = pos;		
 		}
 		
 		if( leftactive )
