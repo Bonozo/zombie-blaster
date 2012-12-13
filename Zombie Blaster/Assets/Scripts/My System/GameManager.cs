@@ -19,7 +19,8 @@ public class GameManager : MonoBehaviour {
 	public civilian civilianPrefab;
 	
 	public WaveInfo waveInfo;
-	public GUIText guiDamageMultiplier;
+	public UILabel guiDamageMultiplier;
+	public Goo goo;
 	
 	/*public GUIText guiZombieHeads;
 	public GUIText guiScore;

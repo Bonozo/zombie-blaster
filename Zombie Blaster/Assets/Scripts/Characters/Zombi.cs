@@ -5,6 +5,7 @@ public class Zombi : MonoBehaviour {
 	
 	#region Parameters
 	
+	public bool scooby;
 	public AudioClip audioAttackwalk;
 	
 	// Placement
@@ -58,6 +59,7 @@ public class Zombi : MonoBehaviour {
 	private float runningTime = 0.0f;
 	
 	private HealthBar healthBar;
+	private float aliveTime = 0.0f;
 	
 	#endregion
 	
@@ -79,12 +81,22 @@ public class Zombi : MonoBehaviour {
 		}
 		
 		transform.position = new Vector3(transform.position.x,ZombieHeight,transform.position.z);
+	
+		/*
+		// other logic for cemetary level
+		bool cemetary = LevelInfo.Environments.control.currentLevel == 4;
+		if(!scooby && cemetary ) // Cemetary
+		{
+			scooby = LevelInfo.Environments.control.currentWave > 1;
+			if( scooby && Random.Range(0,2)==0 ) scooby = false;
+		}*/
 		
 		// Institates
 		Destroy(Instantiate(LevelInfo.Environments.control.currentLevel % 2 == 1? LevelInfo.Environments.dirtyClodCityPrefab: LevelInfo.Environments.dirtyClodPrefab,
 			new Vector3(transform.position.x,1f,transform.position.z),Quaternion.identity),3f);
 		healthBar = ((GameObject)UICamera.Instantiate(LevelInfo.Environments.zombieHealthBar)).GetComponent<HealthBar>();
 		healthBar.gameObject.name = name + " health bar";
+		healthBar.scoobyArrow.gameObject.SetActive(scooby);
 		
 		// Playing Spawn Animation
 		if(spawning)
@@ -95,6 +107,7 @@ public class Zombi : MonoBehaviour {
 		
 		if( audioAttackwalk == null )
 			audioAttackwalk = LevelInfo.Audio.AudioZombieAttackWalk;
+		
 	}
 	
 	private float shotDeltaTime=0.0f;
@@ -281,6 +294,7 @@ public class Zombi : MonoBehaviour {
 	void UpdateHealthBar()
 	{
 		if( healthBar == null ) return;
+		aliveTime += Time.deltaTime;
 		bool show = false;
 		if( Time.timeScale > 0.0f ) 
 		{
@@ -296,9 +310,17 @@ public class Zombi : MonoBehaviour {
 				healthBar.back.transform.localPosition = new Vector3(pos.x-20,-pos.y,0f);
 				healthBar.front.transform.localPosition = new Vector3(pos.x-20,-pos.y,0f);
 				healthBar.front.transform.localScale = new Vector3(damage*4,healthBar.front.transform.localScale.y,healthBar.front.transform.localScale.z);
+				
+				if( scooby )
+				{
+					//float delta = aliveTime%2f; if( delta > 1f) delta = 2-delta; delta *= 25f;
+					float delta = 12.5f+Mathf.Sin(4*aliveTime)*12.5f;
+					healthBar.scoobyArrow.transform.localPosition = new Vector3(pos.x-22,-pos.y+50+delta,0f);
+				}
 			}
 		}
 		healthBar.gameObject.SetActive(show);
+		healthBar.scoobyArrow.gameObject.SetActive(scooby);
 	}
 	
 	/*void OnGUI()
@@ -556,6 +578,7 @@ public class Zombi : MonoBehaviour {
 	public void DontSpawn()
 	{
 		spawning = false;
+		scooby = false;
 	}
 	
 	#endregion

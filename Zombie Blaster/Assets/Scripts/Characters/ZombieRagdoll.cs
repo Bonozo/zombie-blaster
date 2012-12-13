@@ -96,15 +96,7 @@ public class ZombieRagdoll : MonoBehaviour {
 				Destroy(this.gameObject);		
 			}
 			else
-			{
-				// other logic for cemetary level
-				bool cemetary = LevelInfo.Environments.control.currentLevel == 4;
-				if( cemetary ) // Cemetary
-				{
-					scooby = LevelInfo.Environments.control.currentWave > 1;
-					if( scooby && Random.Range(0,2)==0 ) scooby = false;
-				}
-				
+			{	
 				if(scooby || Random.Range(0,2)==1)
 				{
 					HealthPack er = (HealthPack)Instantiate(LevelInfo.Environments.healthPack,transform.position,transform.rotation);
@@ -138,5 +130,6 @@ public class ZombieRagdoll : MonoBehaviour {
 		//DestroyTime = 50;
 		throwedout = true;
 		iscivilian = true;
+		scooby = false;
 	}
 }

@@ -115,7 +115,7 @@ public class Control : MonoBehaviour {
 		LevelInfo.Environments.lightDirectional.SetActiveRecursively(!Option.SpotLight);
 		LevelInfo.Environments.lightSpot.GetComponent<Light>().spotAngle = Option.SpotLightAngle;
 		
-		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActiveRecursively(false);
+		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActive(false);
 		
 		RenderSettings.fog = Option.Fog;
 		RenderSettings.ambientLight = new Color(Option.BackgroundAmbient/256f,Option.BackgroundAmbient/256f,Option.BackgroundAmbient/256f);
@@ -284,23 +284,13 @@ public class Control : MonoBehaviour {
 	
 	void UpdateHealthBar()
 	{
-		GameObject h = LevelInfo.Environments.healthbarHealth;
-		Vector3 v = h.transform.localScale;
-		v.x = Mathf.Clamp01(healthshow);
-		h.transform.localScale = v;
+		var v = LevelInfo.Environments.healthbarHealth.transform.localScale;
+		v.x = 146.4f*Mathf.Clamp01(healthshow);
+		LevelInfo.Environments.healthbarHealth.transform.localScale = v;
 		
-		v = h.transform.localPosition;
-		v.x = -0.01500002f-0.5f*(1-h.transform.localScale.x);
-		h.transform.localPosition = v;
-		
-		h = LevelInfo.Environments.healthbarArmor;
-		v = h.transform.localScale;
-		v.x = 0.525f*Mathf.Clamp01(healthshow-1);
-		h.transform.localScale = v;
-		
-		v = h.transform.localPosition;
-		v.x = -0.25f-0.5f*(0.525f-h.transform.localScale.x);
-		h.transform.localPosition = v;
+		v = LevelInfo.Environments.healthbarArmor.transform.localScale;
+		v.x = 79f*Mathf.Clamp01(healthshow-1);
+		LevelInfo.Environments.healthbarArmor.transform.localScale = v;
 	}
 	
 	
@@ -394,16 +384,17 @@ public class Control : MonoBehaviour {
 	{
 		DamageMultiplied = true;
 		
-		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActiveRecursively(true);
+		
 		
 		damageMultiplieTime = Time.time + 30f;
 		while( Time.time < damageMultiplieTime )
 		{
+			LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActive(true);
 			LevelInfo.Environments.guiDamageMultiplier.text = "" + (int)(damageMultiplieTime-Time.time+1);
 			yield return new WaitForEndOfFrame();
 		}
 		
-		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActiveRecursively(false);
+		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActive(false);
 		DamageMultiplied = false;
 	}
 	

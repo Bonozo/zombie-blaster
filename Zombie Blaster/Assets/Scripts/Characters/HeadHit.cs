@@ -59,7 +59,7 @@ public class HeadHit : MonoBehaviour {
 	{
 		InstantiateMessage();
 		if( HeadContainer.NearPlayer() )
-			GameObject.Find("Goo").SendMessage("Show");
+			LevelInfo.Environments.goo.Show();
 		Store.zombieHeads++;
 		LevelInfo.Environments.control.score += LevelInfo.State.scoreForHeadShot - LevelInfo.State.scoreForZombie;
 		LevelInfo.Audio.PlayZombieHeadShot();

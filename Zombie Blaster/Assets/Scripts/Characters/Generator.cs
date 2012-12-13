@@ -18,7 +18,7 @@ public class Generator : MonoBehaviour {
 		GameObject z;
 		var level = LevelInfo.State.level[LevelInfo.Environments.control.currentLevel];
 		z = level.standardZombie[Random.Range(0,level.standardZombie.Length)];
-		if(LevelInfo.Environments.control.currentLevel != 4 && LevelInfo.Environments.control.currentWave > 1)
+		if(LevelInfo.Environments.control.currentWave > 1)
 		{
 			if(scoobyZombieCount <= 10 && Random.Range(0,scoobyZombieCount+1) == 0 )
 			{
