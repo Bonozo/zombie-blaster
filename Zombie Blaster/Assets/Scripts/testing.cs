@@ -5,11 +5,6 @@ public class testing : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+		iPhoneUtils.PlayMovie("Movies/zombieblasterpendingapproval9.mp4",Color.black, iPhoneMovieControlMode.Hidden);
 	}
 }

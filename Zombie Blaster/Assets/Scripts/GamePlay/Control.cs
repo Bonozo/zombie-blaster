@@ -73,7 +73,28 @@ public class Control : MonoBehaviour {
 	public int currentWave = 0;
 	
 	private int _zombiesLeftForThisWave = 0;
-	public int zombiesLeftForThisWave { get { return _zombiesLeftForThisWave; } set {_zombiesLeftForThisWave = value; LevelInfo.Environments.uiZombiesLeft.text = "" + _zombiesLeftForThisWave; } }
+	public int zombiesLeftForThisWave
+	{
+		get
+		{
+			return _zombiesLeftForThisWave;
+		}
+		set 
+		{
+			if( _zombiesLeftForThisWave != value )
+			{
+				_zombiesLeftForThisWave = value;
+				LevelInfo.Environments.uiZombiesLeft.text = "" + _zombiesLeftForThisWave; 
+				
+			}
+		}
+	}
+	
+	private void ChangeZombieLeftWithflash(int newvalue)
+	{
+		_zombiesLeftForThisWave = newvalue;
+		LevelInfo.Environments.uiZombiesLeft.GetComponent<FlashText>().Flash(Color.yellow,0.5f,""+newvalue);
+	}
 		
 	private static int startScore = 0;
 	private int _score = 0;
@@ -315,7 +336,8 @@ public class Control : MonoBehaviour {
 	public void GetZombie()
 	{
 		score += LevelInfo.State.scoreForZombie;
-		zombiesLeftForThisWave--;
+		//zombiesLeftForThisWave--;
+		ChangeZombieLeftWithflash(zombiesLeftForThisWave-1);
 		if( zombiesLeftForThisWave <= 0 && GameObject.FindGameObjectsWithTag("ZombieHead").Length == 1)
 			StartCoroutine(WaveComplete());
 	}

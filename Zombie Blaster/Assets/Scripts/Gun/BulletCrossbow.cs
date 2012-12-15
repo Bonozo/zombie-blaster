@@ -25,7 +25,7 @@ public class BulletCrossbow : MonoBehaviour {
 	void OnCollisionEnter(Collision col)
 	{
 		if( col.gameObject.tag == "Zombie" )
-			col.gameObject.SendMessage("GetHitDamaged",2);
+			col.gameObject.SendMessage("GetHitDamaged",4);
 		
 		if( col.gameObject.tag == "ZombieHead" )
 			col.gameObject.SendMessage("DieNormal");

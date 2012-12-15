@@ -4,6 +4,7 @@ using System.Collections;
 public class SelectArea : MonoBehaviour {
 	
 	public ButtonBase[] levelButton;
+	public Texture headSack;
 	
 	public Texture2D lockedTexture;
 	public GUITexture loadingTexture;
@@ -25,8 +26,12 @@ public class SelectArea : MonoBehaviour {
 		}
 	}
 	
+	private Store store;
+	
 	// Use this for initialization
 	void Start () {
+		
+		store = (Store)GameObject.FindObjectOfType(typeof(Store));
 		
 		GameEnvironment.StartLevel = 0;
 		loadingTexture.enabled = false;
@@ -76,22 +81,45 @@ public class SelectArea : MonoBehaviour {
 		if( unlock_index != 0 )
 		{
 			bool can_bay = Store.zombieHeads >= unlock_heads[unlock_index];
-			if( can_bay)
-				GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"Would you like to unlock this level with " + unlock_heads[unlock_index] + " ZB heads");
-			else
-				GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"You need " + unlock_heads[unlock_index] + " ZB heads to unlock this level");
+
+			GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"");
+			GUI.Label(new Rect(0.45f*Screen.width,0.305f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),"" + unlock_heads[unlock_index]);
+			GUI.DrawTexture(new Rect(0.5f*Screen.width,0.29f*Screen.height,0.08f*Screen.width,0.08f*Screen.height),headSack);
 			
-			if(can_bay && GUI.Button(new Rect(0.35f*Screen.width,0.4f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "UNLOCK" ) )	
+			int cc = 0;
+			for(int i=0; i<Store.weaponsForLevel[unlock_index].Length; i++)
+				if( Store.WeaponUnlocked((int)Store.weaponsForLevel[unlock_index][i]) )
+					cc++;
+			for(int i=0,j=0; i<Store.weaponsForLevel[unlock_index].Length; i++)
+				if( Store.WeaponUnlocked((int)Store.weaponsForLevel[unlock_index][i]) )
+				{
+				if( j < 5 )
+					GUI.DrawTexture(new Rect( (0.5f-0.05f*Mathf.Min(cc,5)+0.1f*j)*Screen.width,0.41f*Screen.height,0.08f*Screen.width,0.08f*Screen.height),store.weaponIcon[(int)Store.weaponsForLevel[unlock_index][i]]);
+				else
+					GUI.DrawTexture(new Rect( (0.5f-0.05f*(cc-5)+0.1f*(j-5))*Screen.width,0.51f*Screen.height,0.08f*Screen.width,0.08f*Screen.height),store.weaponIcon[(int)Store.weaponsForLevel[unlock_index][i]]);
+					j++;
+				}
+			
+			if( can_bay)
 			{
-				Store.UnlockLevel(unlock_index);
-				unlocked[unlock_index] = true;
-				countUnlocked++;
-				UpdateBlood();
-				Store.zombieHeads = Store.zombieHeads - unlock_heads[unlock_index];
-				levelButton[unlock_index].canPressed = unlocked[unlock_index];
-				unlock_index = 0;
+				if(GUI.Button(new Rect(0.26f*Screen.width,0.6f*Screen.height,0.19f*Screen.width,0.1f*Screen.height), "UNLOCK" ) )	
+				{
+					Store.UnlockLevel(unlock_index);
+					unlocked[unlock_index] = true;
+					countUnlocked++;
+					UpdateBlood();
+					Store.zombieHeads = Store.zombieHeads - unlock_heads[unlock_index];
+					levelButton[unlock_index].canPressed = unlocked[unlock_index];
+					unlock_index = 0;
+				}
 			}
-			if( GUI.Button(new Rect(0.35f*Screen.width,0.6f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "CANCEL" ) )
+			else
+			{
+				if( GUI.Button(new Rect(0.26f*Screen.width,0.6f*Screen.height,0.19f*Screen.width,0.1f*Screen.height),"GET MORE HEADS"))
+					store.Get1000HeadsEvent();
+			}
+	
+			if( GUI.Button(new Rect(0.54f*Screen.width,0.6f*Screen.height,0.19f*Screen.width,0.1f*Screen.height), "CANCEL" ) )
 				unlock_index = 0;
 		}
 

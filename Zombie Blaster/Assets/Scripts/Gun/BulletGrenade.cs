@@ -12,7 +12,9 @@ public class BulletGrenade : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		transform.position = new Vector3(transform.position.x,Y,transform.position.z);
-		rigidbody.AddForce(2000*transform.forward);
+		Vector3 throwto = transform.forward; throwto.y+=0.3f;
+		throwto.x *= 500f; throwto.y *= 500f; throwto.z *= 500f;
+		rigidbody.AddForce(throwto);
 		rigidbody.angularVelocity = Random.rotation.eulerAngles;
 	}
 	

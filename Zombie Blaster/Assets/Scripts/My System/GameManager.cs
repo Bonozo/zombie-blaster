@@ -3,8 +3,6 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour {
 	
-
-	
 	#region Main Objects
 	
 	public Camera mainCamera;
@@ -57,6 +55,10 @@ public class GameManager : MonoBehaviour {
 	public GameObject dirtyClodPrefab;
 	public GameObject dirtyClodCityPrefab;
 	public GameObject zombieHealthBar;
+	
+	#endregion
+	
+	#region HUB
 	
 	#endregion
 }

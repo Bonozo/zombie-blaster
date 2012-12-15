@@ -1,33 +1,33 @@
 using UnityEngine;
 using System.Collections;
 
-public class tractor : MonoBehaviour {
+public class ExplosibleObject : MonoBehaviour {
 	
 	public GameObject FlameParticle;
-	public int countToExplode = 10;
+	public Transform explodeTransform;
+	public int countToExplode = 1;
 	private bool exploded = false;
+	public bool destroyWhenExplode = true;
+	public float explodeSize = 5;
 	
 	// Use this for initialization
 	void Start () {
-		gameObject.tag = "Barrel";
-		FlameParticle.particleEmitter.maxSize = FlameParticle.particleEmitter.minSize = 15f;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+		gameObject.tag = "Explosible";
+		FlameParticle.particleEmitter.maxSize = FlameParticle.particleEmitter.minSize = explodeSize;
+		if( explodeTransform == null ) explodeTransform = gameObject.transform;
 	}
 	
 	void Explode()
 	{
 		if( exploded ) return;
 		exploded = true;
-		Instantiate(FlameParticle,transform.position,Quaternion.identity);
+		Instantiate(FlameParticle,explodeTransform.position,Quaternion.identity);
+		if(destroyWhenExplode ) Destroy(this.gameObject);
 	}
 	
 	void OnCollisionEnter(Collision col)
 	{		
-		//  PulseShotGun Attack
+		if( exploded ) return;
 		if( HitWithName(col.gameObject.name,"BulletPulseShotGun") ||
 			HitWithName(col.gameObject.name,"BulletAirgun")  ||
 			HitWithName(col.gameObject.name,"BulletCrossbow") )

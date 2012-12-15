@@ -42,6 +42,8 @@ public class Store : MonoBehaviour {
 		new Weapon[] {Weapon.BB,Weapon.Flamethrower,Weapon.Crossbow,Weapon.Grenade,Weapon.MachineGun,Weapon.Rocket,Weapon.Football,Weapon.PulseShotGun,Weapon.Revolver}
 	};
 	
+	public Texture2D[] weaponIcon;
+	
 	#region Player Prefs
 	
 	public static int _playerprefs_zombieHeads=0;
@@ -151,13 +153,13 @@ public class Store : MonoBehaviour {
 		TapjoyAndroid.init( "6f8b509b-f292-4dd3-b440-eab33f211089", "7TYeZbZ6GTqRncoALV3W", false );//old
 		//TapjoyAndroid.init( "b1f6ad92-1ff9-47ca-a962-a4b7ecddebd2", "wNZUPjewwCeVRkgpCCZQ", false );//new
 		#endif
-		/*
-		 * Lock All
-		PlayerPrefs.SetInt("zombieHeads",100000);
-		for(int i=1;i<_playerprefs_unlockweapon.Length;i++)
-			PlayerPrefs.SetInt("weapon"+i,0);
-		for(int i=1;i<_playerprefs_unlocklevel.Length;i++)
-			PlayerPrefs.SetInt("level"+i,0);*/
+		
+		//Lock All
+		//PlayerPrefs.SetInt("zombieHeads",100000);
+		//for(int i=1;i<_playerprefs_unlockweapon.Length;i++)
+		//	PlayerPrefs.SetInt("weapon"+i,0);
+		//for(int i=1;i<_playerprefs_unlocklevel.Length;i++)
+		//	PlayerPrefs.SetInt("level"+i,0);
 	}
 	
 	public void OnApplicationQuit()
@@ -250,6 +252,17 @@ public class Store : MonoBehaviour {
 		zombieHeadText.text = "" + showZombieHeads;
 	}
 	
+	public void Get1000HeadsEvent()
+	{
+		#if UNITY_ANDROID
+		IABAndroid.purchaseProduct("android.test.purchased");
+		#endif
+			
+		#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX
+		Store.zombieHeads = Store.zombieHeads + 1000;
+		#endif
+	}
+	
 	void Update()
 	{
 		if(!_showStore) return;
@@ -287,13 +300,7 @@ public class Store : MonoBehaviour {
 		
 		if( buttonGet1000Heads.PressedUp )
 		{
-			#if UNITY_ANDROID
-			IABAndroid.purchaseProduct("android.test.purchased");
-			#endif
-			
-			#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX
-			Store.zombieHeads = Store.zombieHeads + 1000;
-			#endif
+			Get1000HeadsEvent();
 		}
 		
 		if( currentshopitem == -2 )
@@ -363,6 +370,12 @@ public class Store : MonoBehaviour {
 			}
 		}
 		
+		if( currentshopitem == -1 )
+		{
+			objectsWeaponsUnknown1.transform.localPosition = new Vector3(0,1f,0);
+			objectsWeaponsUnknown2.transform.localPosition = new Vector3(0,1f,0);		
+		}
+		
 		bool enableshowstashitems = currentStashitem != -1 && stashitemslidecount==0;
 		
 		StashWeaponName.enabled = enableshowstashitems;
@@ -419,13 +432,13 @@ public class Store : MonoBehaviour {
 	private IEnumerator ShopItemsSlide(GameObject obj,float y1,float y2)
 	{
 		shopitemslidecount++;
-		float time = 1f;
+		float time = 0.5f;
 		while(time>0)
 		{
 			time -= 0.016f;
 			if( time < 0f ) time = 0.0f;
 			Vector3 v = obj.transform.localPosition;
-			v.y = y1+(y2-y1)*(1.0f-time);
+			v.y = y1+(y2-y1)*(1.0f-2*time);
 			obj.transform.localPosition = v;
 			yield return new WaitForEndOfFrame();
 		}
@@ -437,13 +450,13 @@ public class Store : MonoBehaviour {
 	private IEnumerator StashItemsSlide(GameObject obj,float y1,float y2)
 	{
 		stashitemslidecount++;
-		float time = 1f;
+		float time = 0.5f;
 		while(time>0)
 		{
 			time -= 0.016f;
 			if( time < 0f ) time = 0.0f;
 			Vector3 v = obj.transform.localPosition;
-			v.y = y1+(y2-y1)*(1.0f-time);
+			v.y = y1+(y2-y1)*(1.0f-2*time);
 			obj.transform.localPosition = v;
 			yield return new WaitForEndOfFrame();
 		}
@@ -457,9 +470,6 @@ public class Store : MonoBehaviour {
 	
 	//private readonly Rect shopRect = new Rect(0.01f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
 	//private readonly Rect stashRect = new Rect(0.51f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
-
-	private readonly float itemHeight = 0.42f*Screen.height;
-	
 	
 	private float itemdist = 0.6f;
 	private void PrepareShopItems()
@@ -490,8 +500,6 @@ public class Store : MonoBehaviour {
 	
 	private int wooi = -1;
 	private bool fillin = false;
-	private Vector2 scrollposition = Vector2.zero;
-	private Vector2 scrollposition2 = Vector2.zero;
 	
 	int FirstWeapon(bool unlocked)
 	{

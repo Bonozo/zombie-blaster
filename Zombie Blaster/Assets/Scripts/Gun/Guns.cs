@@ -75,7 +75,7 @@ public class Guns : MonoBehaviour {
 		
 		int cweapon = 0;
 		for(int i=0;i<gun.Length;i++)
-				if(gun[i].EnabledGun)
+				if(gun[i].EnabledGun && i!=current)
 				{
 					weaponsUI[cweapon].gameObject.SetActive(true);
 					weaponsUI[cweapon].weaponIndex = i;
