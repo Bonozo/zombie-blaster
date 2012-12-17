@@ -12,7 +12,7 @@ public class Credits : MonoBehaviour {
 	
 	public CreditStruct[] members;
 	
-	public float Speed = 0.1f;
+	public float Speed = 0.05f;
 	
 	public GUIStyle guiStyleTitle;
 	public GUIStyle guiStyleName;
@@ -41,7 +41,7 @@ public class Credits : MonoBehaviour {
 	void OnGUI()
 	{
 		foreach(Touch touch in Input.touches)
-				currentHeight += touch.deltaPosition.y/Screen.height;
+				currentHeight += 0.25f*touch.deltaPosition.y/Screen.height;
 		
 		float index = -currentHeight;
 		

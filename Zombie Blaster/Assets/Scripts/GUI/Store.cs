@@ -154,8 +154,8 @@ public class Store : MonoBehaviour {
 		//TapjoyAndroid.init( "b1f6ad92-1ff9-47ca-a962-a4b7ecddebd2", "wNZUPjewwCeVRkgpCCZQ", false );//new
 		#endif
 		
-		//Lock All
-		//PlayerPrefs.SetInt("zombieHeads",100000);
+		// Clear Prefabs
+		//PlayerPrefs.SetInt("zombieHeads",10000);
 		//for(int i=1;i<_playerprefs_unlockweapon.Length;i++)
 		//	PlayerPrefs.SetInt("weapon"+i,0);
 		//for(int i=1;i<_playerprefs_unlocklevel.Length;i++)
@@ -179,7 +179,9 @@ public class Store : MonoBehaviour {
 	public Texture2D[] textureWeapons;
 	public Texture2D textureWeaponUnknown;
 	public GameObject[] objectWeapons;
-	public GameObject objectsWeaponsUnknown1,objectsWeaponsUnknown2;
+	//public GameObject objectsWeaponsUnknown1,objectsWeaponsUnknown2;
+	
+
 	
 	public GameObject StoreGUI;
 	public ButtonBase buttonMainMenu;
@@ -187,6 +189,9 @@ public class Store : MonoBehaviour {
 	public ButtonBase buttonGAME;
 	public ButtonBase buttonTrash;
 	public GUIText zombieHeadText;
+	
+	public GUITexture loadingTexture;
+	private bool wantToExit = false;
 	
 	public GUIText ShopWeaponName;
 	public GUIText ShopWeaponBuyText;
@@ -232,6 +237,9 @@ public class Store : MonoBehaviour {
 						showFillIn[(int)weaponsForLevel[LevelInfo.Environments.control.currentLevel][j]] = true;
 				if( IsLevelOption ) buttonGAME.gameObject.SetActiveRecursively(false);
 				showZombieHeads = zombieHeads;
+				
+				loadingTexture.enabled = false;
+				wantToExit = false;
 				//FirstShopItem();
 				//FirstStashItem();
 			}
@@ -266,6 +274,7 @@ public class Store : MonoBehaviour {
 	void Update()
 	{
 		if(!_showStore) return;
+		if( wantToExit ) return;
 		
 		if( scrollingTime < 3f )
 		{
@@ -289,7 +298,7 @@ public class Store : MonoBehaviour {
 		
 		if( buttonMainMenu.PressedUp )
 		{
-			if( IsLevelGamePlay ) Application.LoadLevel("mainmenu");
+			if( IsLevelGamePlay ) wantToExit = true;
 			if( IsLevelOption )
 			{
 				MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
@@ -325,15 +334,24 @@ public class Store : MonoBehaviour {
 				spwchannel = false;
 			}
 		// shop
+		
+		for(int i=2;i<countWeapons;i++)
+			if(showWeapon[i])
+				SetMaterial(objectWeapons[i],Color.white);
+			else
+				SetMaterial(objectWeapons[i],Color.black);
+		
 		if( enableshowshopitems && wooi==-1)
 		{
 			for(int i=0;i<countWeapons;i++)
 				if( !WeaponUnlocked(i) )
 					objectWeapons[i].transform.localPosition = new Vector3(0,1f,0);
-			objectsWeaponsUnknown1.transform.localPosition = new Vector3(0,1f,0);
-			objectsWeaponsUnknown2.transform.localPosition = new Vector3(0,1f,0);
+			////objectsWeaponsUnknown1.transform.localPosition = new Vector3(0,1f,0);
+			////objectsWeaponsUnknown2.transform.localPosition = new Vector3(0,1f,0);
 			
-			GameObject currentWeaponobj = showWeapon[currentshopitem]?objectWeapons[currentshopitem]:objectsWeaponsUnknown1;
+			////GameObject currentWeaponobj = showWeapon[currentshopitem]?objectWeapons[currentshopitem]:objectsWeaponsUnknown1;
+			GameObject currentWeaponobj = objectWeapons[currentshopitem];
+			
 			currentWeaponobj.transform.localPosition = new Vector3(0f,0f,0f);
 			ShopWeaponName.text = showWeapon[currentshopitem]?GameEnvironment.storeGun[currentshopitem].name:"Mystery";
 			ShopWeaponBuyText.text = "" + GameEnvironment.storeGun[currentshopitem].price;
@@ -352,7 +370,8 @@ public class Store : MonoBehaviour {
 				currentshopitem = NextWeapon(currentshopitem,false);
 				if( olditem != currentshopitem )
 				{
-					GameObject newWeaponobj = showWeapon[currentshopitem]?objectWeapons[currentshopitem]:objectsWeaponsUnknown2;
+					//GameObject newWeaponobj = showWeapon[currentshopitem]?objectWeapons[currentshopitem]:objectsWeaponsUnknown2;
+					GameObject newWeaponobj = objectWeapons[currentshopitem];
 					StartCoroutine(ShopItemsSlide(currentWeaponobj,0f,1f));
 					StartCoroutine(ShopItemsSlide(newWeaponobj,-1f,0f));
 				}
@@ -363,7 +382,8 @@ public class Store : MonoBehaviour {
 				currentshopitem = PrevWeapon(currentshopitem,false);
 				if( olditem != currentshopitem )
 				{
-					GameObject newWeaponobj = showWeapon[currentshopitem]?objectWeapons[currentshopitem]:objectsWeaponsUnknown2;
+					//GameObject newWeaponobj = showWeapon[currentshopitem]?objectWeapons[currentshopitem]:objectsWeaponsUnknown2;
+					GameObject newWeaponobj = objectWeapons[currentshopitem];
 					StartCoroutine(ShopItemsSlide(currentWeaponobj,0f,-1f));
 					StartCoroutine(ShopItemsSlide(newWeaponobj,1f,0f));
 				}
@@ -372,8 +392,8 @@ public class Store : MonoBehaviour {
 		
 		if( currentshopitem == -1 )
 		{
-			objectsWeaponsUnknown1.transform.localPosition = new Vector3(0,1f,0);
-			objectsWeaponsUnknown2.transform.localPosition = new Vector3(0,1f,0);		
+			//objectsWeaponsUnknown1.transform.localPosition = new Vector3(0,1f,0);
+			//objectsWeaponsUnknown2.transform.localPosition = new Vector3(0,1f,0);		
 		}
 		
 		bool enableshowstashitems = currentStashitem != -1 && stashitemslidecount==0;
@@ -497,6 +517,13 @@ public class Store : MonoBehaviour {
 			c.gameObject.layer = n;
 	}
 	
+	private void SetMaterial(GameObject g,Color col)
+	{
+		Transform[] gg = g.GetComponentsInChildren<Transform>();
+		foreach(Transform c in gg)
+			if( c.gameObject.renderer != null )
+				c.gameObject.renderer.material.color = col;
+	}
 	
 	private int wooi = -1;
 	private bool fillin = false;
@@ -533,6 +560,21 @@ public class Store : MonoBehaviour {
 	{
 		if(!_showStore) return;
 		
+		if( wantToExit ) // Only game play event
+		{
+			GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"Leave Game?");
+			
+			if(GUI.Button(new Rect(0.35f*Screen.width,0.4f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "Quit" ) )	
+			{
+				loadingTexture.enabled = true;
+				Application.LoadLevel("mainmenu");
+			}
+			if( GUI.Button(new Rect(0.35f*Screen.width,0.6f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "Back" ) )
+			{
+				wantToExit = false;
+			}	
+			return;
+		}
 
 		
 		// Shop
