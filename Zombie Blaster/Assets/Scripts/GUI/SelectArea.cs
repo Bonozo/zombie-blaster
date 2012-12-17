@@ -27,6 +27,14 @@ public class SelectArea : MonoBehaviour {
 	}
 	
 	private Store store;
+	private Weapon[][] newWeapos = new Weapon[][]
+	{
+		new Weapon[] {Weapon.Flamethrower,Weapon.Crossbow},
+		new Weapon[] {Weapon.Flamethrower,Weapon.Crossbow,Weapon.Grenade},
+		new Weapon[] {Weapon.Football,Weapon.MachineGun},
+		new Weapon[] {Weapon.Grenade,Weapon.Rocket},
+		new Weapon[] {Weapon.PulseShotGun,Weapon.Revolver}
+	};
 	
 	// Use this for initialization
 	void Start () {
@@ -87,16 +95,14 @@ public class SelectArea : MonoBehaviour {
 			GUI.DrawTexture(new Rect(0.5f*Screen.width,0.29f*Screen.height,0.08f*Screen.width,0.08f*Screen.height),headSack);
 			
 			int cc = 0;
-			for(int i=0; i<Store.weaponsForLevel[unlock_index].Length; i++)
-				if( Store.WeaponUnlocked((int)Store.weaponsForLevel[unlock_index][i]) )
+			for(int i=0; i<newWeapos[unlock_index] .Length; i++)
 					cc++;
-			for(int i=0,j=0; i<Store.weaponsForLevel[unlock_index].Length; i++)
-				if( Store.WeaponUnlocked((int)Store.weaponsForLevel[unlock_index][i]) )
+			for(int i=0,j=0; i<newWeapos[unlock_index].Length; i++)
 				{
 				if( j < 5 )
-					GUI.DrawTexture(new Rect( (0.5f-0.05f*Mathf.Min(cc,5)+0.1f*j)*Screen.width,0.41f*Screen.height,0.08f*Screen.width,0.08f*Screen.height),store.weaponIcon[(int)Store.weaponsForLevel[unlock_index][i]]);
+					GUI.DrawTexture(new Rect( (0.5f-0.045f*Mathf.Min(cc,5)+0.09f*j)*Screen.width,0.41f*Screen.height,0.08f*Screen.width,0.08f*Screen.height),store.weaponIcon[(int)newWeapos[unlock_index][i]]);
 				else
-					GUI.DrawTexture(new Rect( (0.5f-0.05f*(cc-5)+0.1f*(j-5))*Screen.width,0.51f*Screen.height,0.08f*Screen.width,0.08f*Screen.height),store.weaponIcon[(int)Store.weaponsForLevel[unlock_index][i]]);
+					GUI.DrawTexture(new Rect( (0.5f-0.045f*(cc-5)+0.09f*(j-5))*Screen.width,0.51f*Screen.height,0.08f*Screen.width,0.08f*Screen.height),store.weaponIcon[(int)newWeapos[unlock_index][i]]);
 					j++;
 				}
 			

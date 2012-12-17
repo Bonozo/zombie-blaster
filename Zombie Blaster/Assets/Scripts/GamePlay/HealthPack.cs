@@ -12,7 +12,6 @@ public enum HealthPackType
 	SuperAmmo,//orange
 	Weapon,//red
 	XtraLife,//pink
-	
 }
 
 public class HealthPack : MonoBehaviour {
@@ -62,6 +61,7 @@ public class HealthPack : MonoBehaviour {
 			case 6: packType = HealthPackType.Weapon; break;
 			}		
 		}
+		
 		var level = LevelInfo.State.level[LevelInfo.Environments.control.currentLevel];
 		
 		switch(packType)
@@ -93,8 +93,21 @@ public class HealthPack : MonoBehaviour {
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpSuperAmmo;
 			break;
 		case HealthPackType.Weapon:
-			gunindexifweapon = level.allowedGun[Random.Range(0,level.allowedGun.Length)];
-			gameObject.renderer.material.mainTexture = LevelInfo.Environments.guns.gun[(int)gunindexifweapon].texture;
+			gunindexifweapon = Weapon.None;
+			int ind = Random.Range(0,level.allowedGun.Length);
+			for(int i=0;i<level.allowedGun.Length;i++) 
+				if(!LevelInfo.Environments.guns.gun[(int)level.allowedGun[(ind+i)%level.allowedGun.Length]].EnabledGun)
+				{
+					gunindexifweapon = level.allowedGun[(ind+i)%level.allowedGun.Length];
+					break;
+				}
+			if( gunindexifweapon == Weapon.None )
+			{
+				packType = HealthPackType.Health;
+				gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpHealth;
+			}
+			else
+				gameObject.renderer.material.mainTexture = LevelInfo.Environments.guns.gun[(int)gunindexifweapon].texture;
 			//gameObject.renderer.material.color = Color.red;
 			break;
 		case HealthPackType.XtraLife:

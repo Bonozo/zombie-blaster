@@ -115,8 +115,7 @@ public class Zombi : MonoBehaviour {
 	void Update () {
 		UpdateHealthBar();
 		
-		if( Input.GetKeyUp(KeyCode.L) )
-			Destroy(healthBar.gameObject);
+		if( LevelInfo.Environments.control.state == GameState.Paused ) return;
 		
 		// look to player.
 		Vector3 np = LevelInfo.Environments.control.transform.position-transform.position; np.y = 0;

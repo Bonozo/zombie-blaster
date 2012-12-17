@@ -335,7 +335,7 @@ public class Store : MonoBehaviour {
 			
 			GameObject currentWeaponobj = showWeapon[currentshopitem]?objectWeapons[currentshopitem]:objectsWeaponsUnknown1;
 			currentWeaponobj.transform.localPosition = new Vector3(0f,0f,0f);
-			ShopWeaponName.text = showWeapon[currentshopitem]?GameEnvironment.storeGun[currentshopitem].name:"Mysery";
+			ShopWeaponName.text = showWeapon[currentshopitem]?GameEnvironment.storeGun[currentshopitem].name:"Mystery";
 			ShopWeaponBuyText.text = "" + GameEnvironment.storeGun[currentshopitem].price;
 			
 			if( shotItemBuy.PressedUp )

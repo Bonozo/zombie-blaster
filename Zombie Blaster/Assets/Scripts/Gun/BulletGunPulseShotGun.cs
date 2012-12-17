@@ -24,11 +24,16 @@ public class BulletGunPulseShotGun : MonoBehaviour {
 		
 	void OnCollisionEnter(Collision col)
 	{
+		bool blooded = false;
+		if( col.gameObject.tag == "Zombie" && (col.gameObject.GetComponent<Zombi>() == null || !col.gameObject.GetComponent<Zombi>().haveHelmet) ) blooded = true;
+		if( col.gameObject.tag == "ZombieHead" && !col.gameObject.GetComponent<HeadHit>().HeadContainer.haveHelmet ) blooded = true;
+		Instantiate(blooded?LevelInfo.Environments.particleBlood:LevelInfo.Environments.particleSpark,transform.position,Quaternion.identity);
+		
+		
 		if( col.gameObject.tag == "Zombie" )
 			col.gameObject.SendMessage("DieWithJump");	
 		else if( col.gameObject.tag == "ZombieHead" )
 			col.gameObject.SendMessage("DieWithJump");
-		Instantiate(ParticleSpark,transform.position,Quaternion.identity);
 		Destroy(this.gameObject);
 	}
 }

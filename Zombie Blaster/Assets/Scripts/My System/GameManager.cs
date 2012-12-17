@@ -39,6 +39,10 @@ public class GameManager : MonoBehaviour {
 	public GameObject lightSpot;
 	public GameObject lightDirectional;
 	
+	#endregion
+	
+	#region Weapons
+	
 	public Texture texturePickUpHealth;
 	public Texture texturePickUpAmmo;
 	public Texture texturePickUpSuperAmmo;
@@ -47,6 +51,9 @@ public class GameManager : MonoBehaviour {
 	public Texture texturePickUpDamageMultiplier;
 	public Texture texturePickUpArmor;
 	public Texture texturePickUpShields;
+	
+	public GameObject particleSpark;
+	public GameObject particleBlood;
 	
 	#endregion
 	
@@ -59,6 +66,8 @@ public class GameManager : MonoBehaviour {
 	#endregion
 	
 	#region HUB
+	
+	public UISprite hubZombiesLeft;
 	
 	#endregion
 }

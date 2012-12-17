@@ -4,10 +4,12 @@ using System.Collections;
 public class FlashText : MonoBehaviour {
 	
 	private UILabel label = null;
+	private Color beginColor;
 	
 	void Awake()
 	{
 		label = this.GetComponent<UILabel>();
+		beginColor = label.color;
 	}
 	
 	IEnumerator StartFlush(Color flashColor,float flashTime,string newvalue)
@@ -32,6 +34,8 @@ public class FlashText : MonoBehaviour {
 	
 			yield return new WaitForEndOfFrame();
 		}
+		
+		label.color = beginColor;
 	}
 	
 	public void Flash(Color flashColor,float flashTime,string newvalue)

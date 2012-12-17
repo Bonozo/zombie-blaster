@@ -55,6 +55,7 @@ public class Control : MonoBehaviour {
 				Time.timeScale = 1f;
 				break;
 			case GameState.Paused:
+				LevelInfo.Audio.StopEffects();
 				guiPlayGame.SetActiveRecursively(false);
 				LevelInfo.Audio.PlayAudioPause(true);
 				Time.timeScale = 0f;
@@ -93,7 +94,8 @@ public class Control : MonoBehaviour {
 	private void ChangeZombieLeftWithflash(int newvalue)
 	{
 		_zombiesLeftForThisWave = newvalue;
-		LevelInfo.Environments.uiZombiesLeft.GetComponent<FlashText>().Flash(Color.yellow,0.5f,""+newvalue);
+		LevelInfo.Environments.uiZombiesLeft.GetComponent<FlashText>().Flash(Color.yellow,0.25f,""+newvalue);
+		LevelInfo.Environments.hubZombiesLeft.GetComponent<FlashIcon>().Flash(Color.white,0.25f);
 	}
 		
 	private static int startScore = 0;
@@ -300,7 +302,7 @@ public class Control : MonoBehaviour {
 	}
 	
 	#endregion
-	
+
 	#region On GUI
 	
 	void UpdateHealthBar()
@@ -366,7 +368,7 @@ public class Control : MonoBehaviour {
 		while( Time.time < time )
 			yield return new WaitForEndOfFrame();
 		
-		LevelInfo.Audio.audioSourceZombies.PlayOneShot(LevelInfo.Audio.AudioWaveComplete);
+		LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.AudioWaveComplete);
 		bonusForWaveComplete = Random.Range(0,2);
 		state = GameState.WaveCompleted;
 		waitfornewwave = Time.realtimeSinceStartup + 3f;
@@ -391,6 +393,7 @@ public class Control : MonoBehaviour {
 		
 		LevelInfo.Environments.waveInfo.ShowWave(currentWave,zombiesLeftForThisWave);
 		LevelInfo.Audio.PlayLevel(currentWave);
+		LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.AudioWaveComplete);
 	}
 	
 	public void ToLose()

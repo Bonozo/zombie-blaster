@@ -45,7 +45,7 @@ public class MainMenu : MonoBehaviour {
 			objAreaMap.SetActiveRecursively(_state == MenuState.AreaMap);
 			objLeaderboard.SetActiveRecursively(_state == MenuState.Leaderboard);
 			
-			backButton.gameObject.SetActive(_state == MenuState.AreaMap || _state == MenuState.Leaderboard || _state == MenuState.Option );
+			backButton.gameObject.SetActive(_state == MenuState.AreaMap || _state == MenuState.Leaderboard || _state == MenuState.Option || _state == MenuState.Credits );
 			
 			if( _state == MenuState.AreaMap )
 				SoundBackground.Stop();
@@ -113,7 +113,7 @@ public class MainMenu : MonoBehaviour {
 			break;
 		
 		case MenuState.Credits:
-			if( Input.GetKeyUp(KeyCode.Escape) ) State = MenuState.Option;
+			if( backButton.PressedUp ) State = MenuState.Option;
 			break;
 		case MenuState.AreaMap:
 		case MenuState.Leaderboard:

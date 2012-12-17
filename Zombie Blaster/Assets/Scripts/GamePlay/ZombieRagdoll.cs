@@ -10,6 +10,7 @@ public class ZombieRagdoll : MonoBehaviour {
 	public GameObject Zombie;
 	
 	private float DestroyTime = 8f;
+	private bool healthpackok = false;
 	private bool throwedout = false;
 	private bool iscivilian = false;
 	
@@ -84,6 +85,16 @@ public class ZombieRagdoll : MonoBehaviour {
 			LevelInfo.Audio.PlayZombieFalls();
 		}
 		
+		if(  !healthpackok && !throwedout && DestroyTime <= 6 )
+		{
+			healthpackok = true;
+			if(scooby || Random.Range(0,2)==1)
+			{
+				HealthPack er = (HealthPack)Instantiate(LevelInfo.Environments.healthPack,transform.position,transform.rotation);
+				er.scooby = scooby;
+			}
+		}
+		
 		if( DestroyTime <= 0f )
 		{
 			if( throwedout )
@@ -97,11 +108,6 @@ public class ZombieRagdoll : MonoBehaviour {
 			}
 			else
 			{	
-				if(scooby || Random.Range(0,2)==1)
-				{
-					HealthPack er = (HealthPack)Instantiate(LevelInfo.Environments.healthPack,transform.position,transform.rotation);
-					er.scooby = scooby;
-				}
 				Destroy(this.gameObject);
 			}
 		}

@@ -3,7 +3,6 @@ using System.Collections;
 
 public class BulletGunAirgun : MonoBehaviour {
 	
-	public GameObject ParticleSpark;
 	
 	public float DestroyTime = 4f;
 	public float Speed = 5f;
@@ -25,6 +24,11 @@ public class BulletGunAirgun : MonoBehaviour {
 	
 	void OnCollisionEnter(Collision col)
 	{
+		bool blooded = false;
+		if( col.gameObject.tag == "Zombie" && (col.gameObject.GetComponent<Zombi>() == null || !col.gameObject.GetComponent<Zombi>().haveHelmet) ) blooded = true;
+		if( col.gameObject.tag == "ZombieHead" && !col.gameObject.GetComponent<HeadHit>().HeadContainer.haveHelmet ) blooded = true;
+		Instantiate(blooded?LevelInfo.Environments.particleBlood:LevelInfo.Environments.particleSpark,transform.position,Quaternion.identity);
+		
 		if( col.gameObject.tag == "Zombie" )
 		//	col.gameObject.GetComponent<Zombi>().GetHitFinished(Weapon.BB,col.contacts[0].point,damage);
 			col.gameObject.SendMessage("GetHitDamaged",damage);
@@ -32,7 +36,6 @@ public class BulletGunAirgun : MonoBehaviour {
 		if( col.gameObject.tag == "ZombieHead" )
 			col.gameObject.SendMessage("DieNormal");
 		
-		Instantiate(ParticleSpark,transform.position,Quaternion.identity);
 		Destroy(this.gameObject);
 	}
 }

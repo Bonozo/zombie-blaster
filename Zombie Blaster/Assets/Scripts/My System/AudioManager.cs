@@ -41,6 +41,7 @@ public class AudioManager : MonoBehaviour {
 		audioSourceBackground.PlayOneShot(AudioGameOver);
 	}
 	
+	public AudioClip AudioWaveBegin;
 	public AudioClip AudioWaveComplete;
 	
 	public AudioClip AudioPause;
