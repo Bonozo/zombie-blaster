@@ -31,7 +31,8 @@ public class AudioManager : MonoBehaviour {
 	
 	public void PlayLevel(int number)
 	{
-		audioSourceBackground.clip = AudioGameplayBackground[number%AudioGameplayBackground.Length];
+		number%=LevelInfo.Environments.control.VantagePoints.Length;
+		audioSourceBackground.clip = AudioGameplayBackground[2*number+Random.Range(0,2)];
 		audioSourceBackground.Play();
 	}
 	

@@ -49,8 +49,10 @@ public class ButtonBase : MonoBehaviour {
 	private bool down = false;
 	private bool up = false;
 	
-	public bool PressedDown { get { return down; } }
-	public bool PressedUp { get {if(up) {up=false; return true;} else return false;} }
+	public bool PressedDown { get { if(audioPressed!=null) audioPressed.Play(); return down; } }
+	public bool PressedUp { get {if(up) {up=false; if(audioPressed!=null) audioPressed.Play(); return true;} else return false;} }
+	
+	public void Ignore() { down=up=false; }
 	
 	virtual protected void Update()
 	{
@@ -58,7 +60,7 @@ public class ButtonBase : MonoBehaviour {
 		{
 			if( this.guiTexture.HitTest(touch.position ) )
 			{
-				guiTexture.texture = (touch.phase!=TouchPhase.Ended && canPressed)?pressedTexture:standartTexture;
+				if(!aspressed) guiTexture.texture = (touch.phase!=TouchPhase.Ended && canPressed)?pressedTexture:standartTexture;
 				if( touch.phase == TouchPhase.Began ) down = true;
 				if( touch.phase == TouchPhase.Ended && down) up = true;
 				return;
@@ -69,11 +71,18 @@ public class ButtonBase : MonoBehaviour {
 		{
 			if( Input.GetMouseButtonDown(0) ) down=true;
 			if( Input.GetMouseButtonUp(0) && down) up=true;
-			guiTexture.texture = (Input.GetMouseButton(0) && canPressed)?pressedTexture:standartTexture;
+			if(!aspressed) guiTexture.texture = (Input.GetMouseButton(0) && canPressed)?pressedTexture:standartTexture;
 			return;
 		}
 		
 		down = up = false;
-		guiTexture.texture = standartTexture;
+		if(!aspressed) guiTexture.texture = standartTexture;
+	}
+	
+	private bool aspressed = false;
+	public void SetAsPressed()
+	{
+		aspressed = true;
+		guiTexture.texture = pressedTexture;
 	}
 }

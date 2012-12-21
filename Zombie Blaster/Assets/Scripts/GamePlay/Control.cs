@@ -134,8 +134,8 @@ public class Control : MonoBehaviour {
 		lives = startLives;
 		score = startScore;
 		
-		LevelInfo.Environments.lightSpot.SetActiveRecursively(Option.SpotLight);
-		LevelInfo.Environments.lightDirectional.SetActiveRecursively(!Option.SpotLight);
+		LevelInfo.Environments.lightSpot.SetActive(Option.SpotLight);
+		LevelInfo.Environments.lightDirectional.SetActive(!Option.SpotLight);
 		LevelInfo.Environments.lightSpot.GetComponent<Light>().spotAngle = Option.SpotLightAngle;
 		
 		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActive(false);
@@ -144,7 +144,20 @@ public class Control : MonoBehaviour {
 		RenderSettings.ambientLight = new Color(Option.BackgroundAmbient/256f,Option.BackgroundAmbient/256f,Option.BackgroundAmbient/256f);
 		
 		if( !restartLevel )
-			LevelInfo.Environments.generator.GenerateMessageText(new Vector3(0.2f,0.2f,10),"TAP TO SHOOT and SWIPE TO TURN",false,4f);
+			StartCoroutine(ShowHints());
+	}
+	
+	IEnumerator ShowHints()
+	{
+		float wait;
+		
+		wait = 4f;
+		while(wait > 0 )
+		{
+			wait -= Time.deltaTime;
+			yield return new WaitForEndOfFrame();
+		}
+		LevelInfo.Environments.generator.GenerateMessageText(new Vector3(0.25f,0.2f,10),"Tap to shoot and swipe to turn",false,4f);
 	}
 	
 	// Update is called once per frame

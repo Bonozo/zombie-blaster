@@ -85,6 +85,9 @@ public class MainMenu : MonoBehaviour {
 	{
 		Time.timeScale = 1f;
 		GameObject.Find("Store").GetComponent<Store>().showStore = false;
+		GameObject.Find("Store").GetComponent<Store>().LoadingGUI.SetActive(false);
+		
+		Application.targetFrameRate = 60;
 	}
 	
 	// Use this for initialization

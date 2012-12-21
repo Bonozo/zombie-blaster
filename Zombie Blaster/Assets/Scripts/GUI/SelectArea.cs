@@ -4,19 +4,21 @@ using System.Collections;
 public class SelectArea : MonoBehaviour {
 	
 	public ButtonBase[] levelButton;
+	public GUITexture[] lockIcon;
 	public Texture headSack;
 	
 	public Texture2D lockedTexture;
 	public GUITexture loadingTexture;
 	public GUITexture[] bloods;
 	public GUIText headsText;
+	public GUITexture popupTexture;
 	
 	private bool[] unlocked = new bool[5];
 	private int[] unlock_heads = new int [5] {0,500,1000,1500,2000};
 	private int unlock_index = 0;
 	private int countUnlocked=0;
-	
-	private void UpdateBlood()
+
+	private void UpdateSelectAreaScreen()
 	{
 		foreach(var g in bloods )
 		{
@@ -24,6 +26,8 @@ public class SelectArea : MonoBehaviour {
 			c.a = 0.115f*(countUnlocked-1);
 			g.color = c;
 		}
+		for(int i=0;i<5;i++)
+			lockIcon[i].enabled = !unlocked[i];
 	}
 	
 	private Store store;
@@ -48,7 +52,7 @@ public class SelectArea : MonoBehaviour {
 			unlocked[i] = Store.LevelUnlocked(i);
 			if(unlocked[i]) countUnlocked++;
 		}
-		UpdateBlood();
+		UpdateSelectAreaScreen();
 
 		
 		for(int i=0;i<levelButton.Length;i++)
@@ -59,6 +63,7 @@ public class SelectArea : MonoBehaviour {
 	{
 		headsText.text = "" + Store.zombieHeads;
 		if( unlock_index != 0 ) return;
+		
 		
 		for(int i=0;i<levelButton.Length;i++)
 			if( !unlocked[i] && levelButton[i].PressedUp )
@@ -72,6 +77,7 @@ public class SelectArea : MonoBehaviour {
 			{
 				GameEnvironment.StartLevel = i;
 				loadingTexture.enabled = true;
+				levelButton[i].SetAsPressed();
 				Application.LoadLevel("playgame");	
 			}
 	}
@@ -79,18 +85,12 @@ public class SelectArea : MonoBehaviour {
 	// Update is called once per frame
 	void OnGUI ()
 	{ 
-		for(int i=0;i<levelButton.Length;i++)
-			if( !unlocked[i] )
-			{
-				Rect rect = new Rect(Screen.width*levelButton[i].gameObject.transform.position.x,Screen.height*(1-levelButton[i].gameObject.transform.position.y),50,50);
-				GUI.DrawTexture(rect,lockedTexture);
-			}
-		
+		popupTexture.enabled = unlock_index != 0;
 		if( unlock_index != 0 )
 		{
 			bool can_bay = Store.zombieHeads >= unlock_heads[unlock_index];
 
-			GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"");
+			//GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"");
 			GUI.Label(new Rect(0.45f*Screen.width,0.305f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),"" + unlock_heads[unlock_index]);
 			GUI.DrawTexture(new Rect(0.5f*Screen.width,0.29f*Screen.height,0.08f*Screen.width,0.08f*Screen.height),headSack);
 			
@@ -108,12 +108,12 @@ public class SelectArea : MonoBehaviour {
 			
 			if( can_bay)
 			{
-				if(GUI.Button(new Rect(0.26f*Screen.width,0.6f*Screen.height,0.19f*Screen.width,0.1f*Screen.height), "UNLOCK" ) )	
+				if(GUI.Button(new Rect(0.33f*Screen.width,0.55f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "UNLOCK" ) )	
 				{
 					Store.UnlockLevel(unlock_index);
 					unlocked[unlock_index] = true;
 					countUnlocked++;
-					UpdateBlood();
+					UpdateSelectAreaScreen();
 					Store.zombieHeads = Store.zombieHeads - unlock_heads[unlock_index];
 					levelButton[unlock_index].canPressed = unlocked[unlock_index];
 					unlock_index = 0;
@@ -121,12 +121,16 @@ public class SelectArea : MonoBehaviour {
 			}
 			else
 			{
-				if( GUI.Button(new Rect(0.26f*Screen.width,0.6f*Screen.height,0.19f*Screen.width,0.1f*Screen.height),"GET MORE HEADS"))
+				if( GUI.Button(new Rect(0.33f*Screen.width,0.55f*Screen.height,0.16f*Screen.width,0.1f*Screen.height),"GET MORE HEADS"))
 					store.Get1000HeadsEvent();
 			}
 	
-			if( GUI.Button(new Rect(0.54f*Screen.width,0.6f*Screen.height,0.19f*Screen.width,0.1f*Screen.height), "CANCEL" ) )
+			if( GUI.Button(new Rect(0.52f*Screen.width,0.55f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "CANCEL" ) )
+			{
 				unlock_index = 0;
+				for(int i=0;i<levelButton.Length;i++)
+					levelButton[i].Ignore();
+			}
 		}
 
 	}
