@@ -13,6 +13,8 @@ public class SelectArea : MonoBehaviour {
 	public GUIText headsText;
 	public GUITexture popupTexture;
 	
+	public ButtonBase storeButton;
+	
 	private bool[] unlocked = new bool[5];
 	private int[] unlock_heads = new int [5] {0,500,1000,1500,2000};
 	private int unlock_index = 0;
@@ -62,6 +64,15 @@ public class SelectArea : MonoBehaviour {
 	void Update()
 	{
 		headsText.text = "" + Store.zombieHeads;
+		
+		if( storeButton.PressedUp )
+		{
+			MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
+			mainmenu.mapToStore = true;
+			mainmenu.GoState(MainMenu.MenuState.Store);
+			return;
+		}
+		
 		if( unlock_index != 0 ) return;
 		
 		

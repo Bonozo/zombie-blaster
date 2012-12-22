@@ -145,6 +145,8 @@ public class Control : MonoBehaviour {
 		
 		if( !restartLevel )
 			StartCoroutine(ShowHints());
+		
+		LevelInfo.Environments.fpsGUI.SetActive(Option.ShowFPS);
 	}
 	
 	IEnumerator ShowHints()

@@ -13,15 +13,18 @@ public class Option : MonoBehaviour {
 	public static bool Fog = false;
 	public static float SpotLightAngle = 65f;
 	public static float BackgroundAmbient = 101f;
+	public static bool ShowFPS = false;
 	//public static int Quality = QualitySettings.GetQualityLevel();
 	
 	bool debugScreen = false;
 	public GUIText title;
+	public GUIText version;
 	
 	// Update is called once per frame
 	void Update () 
 	{
 		AudioListener.volume = hSlideVolume;
+		version.gameObject.SetActive(debugScreen);
 	}
 	
 	private Vector2 textSize = new Vector2(Screen.width*0.2f,30);
@@ -67,7 +70,11 @@ public class Option : MonoBehaviour {
 		GUI.Label(textRect(6),"Unlimited Ammo");
 		if( GUI.Button(buttonRect(6),UnlimitedAmmo?"ON":"OFF" ) )
 			UnlimitedAmmo = !UnlimitedAmmo;			
-		
+	
+		GUI.Label(textRect(7),"Show FPS");
+		if( GUI.Button(buttonRect(7),ShowFPS?"ON":"OFF" ) )
+			ShowFPS = !ShowFPS;
+			
 		if( GUI.Button( new Rect(Screen.width*0.45f,Screen.height-100,0.1f*Screen.width,40),"Options"))
 		{
 			debugScreen = false;

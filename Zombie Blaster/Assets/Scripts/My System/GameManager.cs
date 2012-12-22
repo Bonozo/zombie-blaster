@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour {
 	public WaveInfo waveInfo;
 	public UILabel guiDamageMultiplier;
 	public Goo goo;
+	public GameObject fpsGUI;
 	
 	/*public GUIText guiZombieHeads;
 	public GUIText guiScore;

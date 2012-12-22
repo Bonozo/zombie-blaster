@@ -244,7 +244,6 @@ public class Zombi : MonoBehaviour {
 		*/
 		if(Physics.Raycast(pos, -transform.up, out hit, CollisionToDownLenght+10f) && hit.collider.gameObject.name != "Flame" )
 		{
-			if( hit.collider.gameObject.name != "ground")
 			transform.Translate(0f,-hit.distance+CollisionToDownLenght+1f,0f);
 		}
 		Debug.DrawRay(pos, -CollisionToDownLenght*transform.up, Color.green);
@@ -273,18 +272,18 @@ public class Zombi : MonoBehaviour {
 		Debug.DrawRay(pos, -leftrightdist*transform.right, Color.green);
 		Debug.DrawRay(pos, diagonaldist*0.5f*(transform.right+transform.forward), Color.green);
 		Debug.DrawRay(pos, diagonaldist*0.5f*(-transform.right+transform.forward), Color.green);
-		if(Physics.Raycast(pos, transform.forward, out hit, forwarddist))
+		if(Physics.Raycast(pos, transform.forward, out hit, forwarddist) && hit.collider.gameObject.tag == "Zombie")
 			return false;
-		if(Physics.Raycast(pos, transform.right, out hit, leftrightdist))
+		if(Physics.Raycast(pos, transform.right, out hit, leftrightdist) && hit.collider.gameObject.tag == "Zombie")
 			if( transform.position.magnitude > hit.collider.gameObject.transform.position.magnitude )
 				return false;
-		if(Physics.Raycast(pos, -transform.right, out hit, leftrightdist))
+		if(Physics.Raycast(pos, -transform.right, out hit, leftrightdist) && hit.collider.gameObject.tag == "Zombie")
 			if( transform.position.magnitude > hit.collider.gameObject.transform.position.magnitude )
 				return false;
-		if(Physics.Raycast(pos, 0.5f*(transform.right+transform.forward), out hit, diagonaldist))
+		if(Physics.Raycast(pos, 0.5f*(transform.right+transform.forward), out hit, diagonaldist) && hit.collider.gameObject.tag == "Zombie")
 			if( transform.position.magnitude > hit.collider.gameObject.transform.position.magnitude )
 				return false;
-		if(Physics.Raycast(pos, 0.5f*(-transform.right+transform.forward), out hit, diagonaldist))
+		if(Physics.Raycast(pos, 0.5f*(-transform.right+transform.forward), out hit, diagonaldist) && hit.collider.gameObject.tag == "Zombie")
 			if( transform.position.magnitude > hit.collider.gameObject.transform.position.magnitude )
 				return false;
 		return true;
@@ -292,6 +291,9 @@ public class Zombi : MonoBehaviour {
 	
 	void UpdateHealthBar()
 	{
+		healthBar.gameObject.SetActive(false);
+		return;
+		
 		if( healthBar == null ) return;
 		aliveTime += Time.deltaTime;
 		bool show = false;

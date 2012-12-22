@@ -308,7 +308,7 @@ public class GameEnvironment : MonoBehaviour {
 	public static StoreGun[] storeGun = new StoreGun[9]
 	{
 		
-		new StoreGun("Airsoft",true,100,0),			//0
+		new StoreGun("Airsoft",true,20,0),			//0
 		new StoreGun("Crossbow",false,12,30),		//1
 		new StoreGun("Shotgun",false,5,75),			//2
 		new StoreGun("Flamethrower",false,100,100),	//3

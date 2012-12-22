@@ -49,8 +49,8 @@ public class ButtonBase : MonoBehaviour {
 	private bool down = false;
 	private bool up = false;
 	
-	public bool PressedDown { get { if(audioPressed!=null) audioPressed.Play(); return down; } }
-	public bool PressedUp { get {if(up) {up=false; if(audioPressed!=null) audioPressed.Play(); return true;} else return false;} }
+	public bool PressedDown { get {if(down&&!up) {down=up=false; if(audioPressed!=null) audioPressed.Play(); return true;} else return false;} }
+	public bool PressedUp { get {if(up) {down=up=false; if(audioPressed!=null) audioPressed.Play(); return true;} else return false;} }
 	
 	public void Ignore() { down=up=false; }
 	

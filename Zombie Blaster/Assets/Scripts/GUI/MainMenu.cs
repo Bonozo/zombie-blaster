@@ -52,9 +52,13 @@ public class MainMenu : MonoBehaviour {
 			
 			if( _state == MenuState.Credits )
 				audioCredits.Play();
+			
+			if( _state == MenuState.Store )
+				GameObject.Find("Store").GetComponent<Store>().showStore = true;
 		}
 	}
 	
+	public bool mapToStore = false;
 	public void GoState(MenuState state)
 	{
 		State = state;
@@ -110,7 +114,6 @@ public class MainMenu : MonoBehaviour {
 				State = MenuState.Leaderboard;
 			if( ButtonPressed(guiStore) )
 			{
-				GameObject.Find("Store").GetComponent<Store>().showStore = true;
 				State = MenuState.Store;
 			}
 			break;

@@ -307,7 +307,13 @@ public class Store : MonoBehaviour {
 			if( IsLevelOption )
 			{
 				MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
-				mainmenu.GoState(MainMenu.MenuState.MainMenu);
+				if( mainmenu.mapToStore )
+				{
+					mainmenu.mapToStore = false;
+					mainmenu.GoState(MainMenu.MenuState.AreaMap);
+				}
+				else
+					mainmenu.GoState(MainMenu.MenuState.MainMenu);
 				showStore = false;
 			}
 		}
