@@ -24,7 +24,7 @@ public class Option : MonoBehaviour {
 	void Update () 
 	{
 		AudioListener.volume = hSlideVolume;
-		version.gameObject.SetActive(debugScreen);
+		version.enabled = debugScreen;
 	}
 	
 	private Vector2 textSize = new Vector2(Screen.width*0.2f,30);

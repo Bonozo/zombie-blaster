@@ -49,7 +49,7 @@ public class Control : MonoBehaviour {
 			{
 			case GameState.Lose:
 				Time.timeScale = 0f;
-				lives--;
+				LevelInfo.Environments.hubLives.SetNumberWithFlash(LevelInfo.Environments.hubLives.GetNumber()-1);
 				break;
 			case GameState.Play:
 				Time.timeScale = 1f;
@@ -72,40 +72,9 @@ public class Control : MonoBehaviour {
 	public int currentLevel = 0;
 	
 	public int currentWave = 0;
-	
-	private int _zombiesLeftForThisWave = 0;
-	public int zombiesLeftForThisWave
-	{
-		get
-		{
-			return _zombiesLeftForThisWave;
-		}
-		set 
-		{
-			if( _zombiesLeftForThisWave != value )
-			{
-				_zombiesLeftForThisWave = value;
-				LevelInfo.Environments.uiZombiesLeft.text = "" + _zombiesLeftForThisWave; 
-				
-			}
-		}
-	}
-	
-	private void ChangeZombieLeftWithflash(int newvalue)
-	{
-		_zombiesLeftForThisWave = newvalue;
-		LevelInfo.Environments.uiZombiesLeft.GetComponent<FlashText>().Flash(Color.yellow,0.25f,""+newvalue);
-		LevelInfo.Environments.hubZombiesLeft.GetComponent<FlashIcon>().Flash(Color.white,0.25f);
-	}
 		
 	private static int startScore = 0;
-	private int _score = 0;
-	public int score { get { return _score; } set {_score = value; LevelInfo.Environments.uiScore.text = "" + _score; } }
-	
-	private static int startLives = 1;
-	private int _lives = 0;
-	public int lives { get { return _lives; } set {_lives = value; LevelInfo.Environments.uiLives.text = "" + _lives; } }
-	
+	private static int startLives = 1;	
 	public void ForceLevel(int levelnumber,int currentwave)
 	{
 		currentLevel = levelnumber;
@@ -131,8 +100,8 @@ public class Control : MonoBehaviour {
 		
 		CreateNewZombieWave();
 		
-		lives = startLives;
-		score = startScore;
+		LevelInfo.Environments.hubLives.SetNumber(startLives);
+		LevelInfo.Environments.hubScore.SetNumber(startScore);
 		
 		LevelInfo.Environments.lightSpot.SetActive(Option.SpotLight);
 		LevelInfo.Environments.lightDirectional.SetActive(!Option.SpotLight);
@@ -143,10 +112,12 @@ public class Control : MonoBehaviour {
 		RenderSettings.fog = Option.Fog;
 		RenderSettings.ambientLight = new Color(Option.BackgroundAmbient/256f,Option.BackgroundAmbient/256f,Option.BackgroundAmbient/256f);
 		
-		if( !restartLevel )
-			StartCoroutine(ShowHints());
+		//if( !restartLevel )
+		//	StartCoroutine(ShowHints());
 		
 		LevelInfo.Environments.fpsGUI.SetActive(Option.ShowFPS);
+		
+		LevelInfo.Environments.hubZombieHeads.SetNumber(Store.zombieHeads);
 	}
 	
 	IEnumerator ShowHints()
@@ -217,7 +188,7 @@ public class Control : MonoBehaviour {
 		transform.rotation = Quaternion.Euler(rot);
 		
 		UpdateHealthBar();
-		LevelInfo.Environments.uiZombieHeads.text = "" + Store.zombieHeads;
+		LevelInfo.Environments.hubZombieHeads.SetNumberWithFlash(Store.zombieHeads);
 	}
 	
 	void OnGUI()
@@ -225,14 +196,14 @@ public class Control : MonoBehaviour {
 		switch(state)
 		{
 		case GameState.Lose:
-			if( lives > 0 )
+			if( LevelInfo.Environments.hubLives.GetNumber() > 0 )
 			{
 				GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"CONTINUE?");
 				if( GUI.Button(new Rect(0.35f*Screen.width,0.4f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "YES" ) )	
 				{
 					GameEnvironment.StartWave = currentWave-1;
-					startLives = lives;
-					startScore = score;
+					startLives = LevelInfo.Environments.hubLives.GetNumber();
+					startScore = LevelInfo.Environments.hubScore.GetNumber();
 					
 					restartLevel = true;
 					
@@ -352,10 +323,10 @@ public class Control : MonoBehaviour {
 	
 	public void GetZombie()
 	{
-		score += LevelInfo.State.scoreForZombie;
+		LevelInfo.Environments.hubScore.SetNumberWithFlash(LevelInfo.Environments.hubScore.GetNumber()+LevelInfo.State.scoreForZombie);
 		//zombiesLeftForThisWave--;
-		ChangeZombieLeftWithflash(zombiesLeftForThisWave-1);
-		if( zombiesLeftForThisWave <= 0 && GameObject.FindGameObjectsWithTag("ZombieHead").Length == 1)
+		LevelInfo.Environments.hubZombiesLeft.SetNumberWithFlash(LevelInfo.Environments.hubZombiesLeft.GetNumber()-1);
+		if( LevelInfo.Environments.hubZombiesLeft.GetNumber() <= 0 && GameObject.FindGameObjectsWithTag("ZombieHead").Length == 1)
 			StartCoroutine(WaveComplete());
 	}
 	
@@ -393,20 +364,29 @@ public class Control : MonoBehaviour {
 	public void PrepareAndCreateNewWave()
 	{
 		LevelInfo.Audio.audioSourceZombies.Stop();
-		if( bonusForWaveComplete==0) lives++;
+		if( bonusForWaveComplete==0) LevelInfo.Environments.hubLives.SetNumberWithFlash(LevelInfo.Environments.hubLives.GetNumber()+1);
 		else Store.zombieHeads= Store.zombieHeads + 100;
 		state = GameState.Play;
 		MoveTo(VantagePoints[currentWave%VantagePoints.Length]);
 	}
 	
+	private void DestroyAllRemainedWithTag(string tag)
+	{
+		var c = GameObject.FindGameObjectsWithTag(tag);
+		foreach(var d in c) Destroy (d);
+	}
+	
 	public void CreateNewZombieWave()
 	{	
+		DestroyAllRemainedWithTag("Zombie");
+		DestroyAllRemainedWithTag("ZombieRagdoll");
+		
 		currentWave++;
 
-		zombiesLeftForThisWave = LevelInfo.State.zombiesCountFactor*currentWave;
-		LevelInfo.Environments.generator.StartNewWave(zombiesLeftForThisWave);
+		LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.State.zombiesCountFactor*currentWave);
+		LevelInfo.Environments.generator.StartNewWave(LevelInfo.Environments.hubZombiesLeft.GetNumber());
 		
-		LevelInfo.Environments.waveInfo.ShowWave(currentWave,zombiesLeftForThisWave);
+		LevelInfo.Environments.waveInfo.ShowWave(currentWave,LevelInfo.Environments.hubZombiesLeft.GetNumber());
 		LevelInfo.Audio.PlayLevel(currentWave);
 		LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.AudioWaveComplete);
 	}

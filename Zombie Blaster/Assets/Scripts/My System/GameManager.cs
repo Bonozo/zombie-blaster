@@ -7,10 +7,12 @@ public class GameManager : MonoBehaviour {
 	
 	public Camera mainCamera;
 	public Control control;
-
 	public Generator generator;
 	public HealthPack healthPack;
 	public Guns guns;
+	
+	public Transform nGUITopLeftTransform;
+
 	
 	public GameObject messageText;
 	public GameObject messageText2;
@@ -26,10 +28,10 @@ public class GameManager : MonoBehaviour {
 	public GUIText guiZombiesLeft;
 	public GUIText guiLives;*/
 	
-	public UILabel uiZombieHeads;
-	public UILabel uiScore;
-	public UILabel uiZombiesLeft;
-	public UILabel uiLives;
+	//public UILabel uiZombieHeads;
+	//public UILabel uiScore;
+	//public UILabel uiZombiesLeft;
+	//public UILabel uiLives;
 	
 	public GameObject healthbarHealth;
 	public GameObject healthbarArmor;
@@ -68,7 +70,11 @@ public class GameManager : MonoBehaviour {
 	
 	#region HUB
 	
-	public UISprite hubZombiesLeft;
+	public HubUI hubZombiesLeft;
+	public HubUI hubZombieHeads;
+	public HubUI hubScore;
+	public HubUI hubLives;
+	
 	
 	#endregion
 }

@@ -94,9 +94,14 @@ public class Zombi : MonoBehaviour {
 		// Institates
 		Destroy(Instantiate(LevelInfo.Environments.control.currentLevel % 2 == 1? LevelInfo.Environments.dirtyClodCityPrefab: LevelInfo.Environments.dirtyClodPrefab,
 			new Vector3(transform.position.x,1f,transform.position.z),Quaternion.identity),3f);
+		
+		// Healthbar :))))))))))
 		healthBar = ((GameObject)UICamera.Instantiate(LevelInfo.Environments.zombieHealthBar)).GetComponent<HealthBar>();
 		healthBar.gameObject.name = name + " health bar";
 		healthBar.scoobyArrow.gameObject.SetActive(scooby);
+		healthBar.gameObject.transform.parent = LevelInfo.Environments.nGUITopLeftTransform;
+		healthBar.gameObject.transform.localPosition = new Vector3(0,0,0);
+		healthBar.gameObject.transform.localScale = new Vector3(1,1,1);
 		
 		// Playing Spawn Animation
 		if(spawning)
@@ -123,7 +128,7 @@ public class Zombi : MonoBehaviour {
 		
 		if( transform.position.y < -10f )
 		{
-			LevelInfo.Environments.control.zombiesLeftForThisWave--;
+			LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()-1);
 			Destroy(this.gameObject);
 		}
 		
@@ -288,12 +293,10 @@ public class Zombi : MonoBehaviour {
 				return false;
 		return true;
 	}
+
 	
 	void UpdateHealthBar()
 	{
-		healthBar.gameObject.SetActive(false);
-		return;
-		
 		if( healthBar == null ) return;
 		aliveTime += Time.deltaTime;
 		bool show = false;
@@ -301,17 +304,18 @@ public class Zombi : MonoBehaviour {
 		{
 			Vector3 head = headHit.transform.position; head.y += 0.5f;
 			Vector3 pos = LevelInfo.Environments.mainCamera.WorldToScreenPoint(head);
+			//Debug.Log(pos);
 			if( pos.z > 0 )
 			{
 				show = true;
 				
 				pos.y = Screen.height - pos.y;
 				pos.z = 1f;		
-				
+				 
 				healthBar.back.transform.localPosition = new Vector3(pos.x-20,-pos.y,0f);
 				healthBar.front.transform.localPosition = new Vector3(pos.x-20,-pos.y,0f);
 				healthBar.front.transform.localScale = new Vector3(damage*4,healthBar.front.transform.localScale.y,healthBar.front.transform.localScale.z);
-				
+				  
 				if( scooby )
 				{
 					//float delta = aliveTime%2f; if( delta > 1f) delta = 2-delta; delta *= 25f;
@@ -320,6 +324,7 @@ public class Zombi : MonoBehaviour {
 				}
 			}
 		}
+		
 		healthBar.gameObject.SetActive(show);
 		healthBar.scoobyArrow.gameObject.SetActive(scooby);
 	}
@@ -488,7 +493,7 @@ public class Zombi : MonoBehaviour {
 		ragdoll.SendMessage("SetSmokeSize",ZombieSmoke.particleEmitter.maxSize);
 		var rigidbodies = ragdoll.GetComponentsInChildren(typeof(Rigidbody));
         foreach (Rigidbody child in rigidbodies) 
-			child.AddForce(new Vector3(Random.Range(-320f,320f),320f,Random.Range(-320f,320f)));
+			child.AddForce(new Vector3(Random.Range(-160f,160f),160f,Random.Range(-160f,160f)));
 		
 		Destroy(this.gameObject);
 	}

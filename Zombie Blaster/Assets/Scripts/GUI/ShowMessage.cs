@@ -5,6 +5,7 @@ public class ShowMessage : MonoBehaviour {
 	
 	public float ShowTime = 1f;
 	public float UpSpeed = 0.001f;
+	public bool transparentPlay = false;
 	private bool up = true;
 	
 	// Use this for initialization

@@ -47,7 +47,7 @@ public class Credits : MonoBehaviour {
 		
 		foreach(var mb in members )
 		{
-			GUI.Label(RectScreen(0.35f,index,0.3f,0.1f),mb.title,guiStyleTitle);
+			GUI.Label(RectScreen(0.25f,index,0.5f,0.1f),mb.title,guiStyleTitle);
 			index += 0.1f;
 			foreach(var nm in mb.name)
 			{

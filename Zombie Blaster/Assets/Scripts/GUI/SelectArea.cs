@@ -17,7 +17,7 @@ public class SelectArea : MonoBehaviour {
 	
 	private bool[] unlocked = new bool[5];
 	private int[] unlock_heads = new int [5] {0,500,1000,1500,2000};
-	private int unlock_index = 0;
+	private int unlock_index = -1;
 	private int countUnlocked=0;
 
 	private void UpdateSelectAreaScreen()
@@ -73,7 +73,7 @@ public class SelectArea : MonoBehaviour {
 			return;
 		}
 		
-		if( unlock_index != 0 ) return;
+		if( unlock_index != -1 ) return;
 		
 		
 		for(int i=0;i<levelButton.Length;i++)
@@ -92,17 +92,18 @@ public class SelectArea : MonoBehaviour {
 				Application.LoadLevel("playgame");	
 			}
 	}
-
-	// Update is called once per frame
+	
+	
+	public GUIStyle myStyle;
 	void OnGUI ()
 	{ 
-		popupTexture.enabled = unlock_index != 0;
-		if( unlock_index != 0 )
+		popupTexture.enabled = unlock_index != -1;
+		if( unlock_index != -1 )
 		{
 			bool can_bay = Store.zombieHeads >= unlock_heads[unlock_index];
 
 			//GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"");
-			GUI.Label(new Rect(0.45f*Screen.width,0.305f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),"" + unlock_heads[unlock_index]);
+			GUI.Label(new Rect(0.45f*Screen.width,0.305f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),"" + unlock_heads[unlock_index],myStyle);
 			GUI.DrawTexture(new Rect(0.5f*Screen.width,0.29f*Screen.height,0.08f*Screen.width,0.08f*Screen.height),headSack);
 			
 			int cc = 0;
@@ -127,7 +128,7 @@ public class SelectArea : MonoBehaviour {
 					UpdateSelectAreaScreen();
 					Store.zombieHeads = Store.zombieHeads - unlock_heads[unlock_index];
 					levelButton[unlock_index].canPressed = unlocked[unlock_index];
-					unlock_index = 0;
+					unlock_index = -1;
 				}
 			}
 			else
@@ -138,7 +139,7 @@ public class SelectArea : MonoBehaviour {
 	
 			if( GUI.Button(new Rect(0.52f*Screen.width,0.55f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "CANCEL" ) )
 			{
-				unlock_index = 0;
+				unlock_index = -1;
 				for(int i=0;i<levelButton.Length;i++)
 					levelButton[i].Ignore();
 			}

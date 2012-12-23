@@ -25,6 +25,8 @@ public class ZombieRagdoll : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		
+		gameObject.tag = "ZombieRagdoll";
+		
 		Fire.particleEmitter.emit = true;
 		Smoke.particleEmitter.emit = true;
 		
@@ -99,7 +101,7 @@ public class ZombieRagdoll : MonoBehaviour {
 		{
 			if( throwedout )
 			{
-				if( iscivilian ) LevelInfo.Environments.control.zombiesLeftForThisWave++;
+				if( iscivilian ) LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()+1);
 				GameObject zomb = (GameObject)Instantiate(Zombie,head.transform.position,Quaternion.identity);
 				zomb.SendMessage("DontSpawn");
 				zomb.SendMessage("SetFireSize",Fire.particleEmitter.maxSize);

@@ -200,7 +200,7 @@ public class HealthPack : MonoBehaviour {
 			break;
 			
 		case HealthPackType.XtraLife:
-			LevelInfo.Environments.control.lives++;
+			LevelInfo.Environments.hubLives.SetNumberWithFlash(LevelInfo.Environments.hubLives.GetNumber()+1);
 			pickupname = "Xtra Life";
 			break;	
 			
@@ -208,7 +208,7 @@ public class HealthPack : MonoBehaviour {
 		
 		LevelInfo.Environments.generator.GenerateMessageText(transform.position+ new Vector3(0,0.75f,0),pickupname);
 		
-		LevelInfo.Environments.control.score += LevelInfo.State.scoreForPickUp;
+		LevelInfo.Environments.hubScore.SetNumberWithFlash(LevelInfo.Environments.hubScore.GetNumber() + LevelInfo.State.scoreForPickUp);
 		
 		Destroy(this.gameObject);
 

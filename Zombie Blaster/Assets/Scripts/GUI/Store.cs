@@ -94,8 +94,7 @@ public class Store : MonoBehaviour {
 		}	
 		
 		// levels
-		Store._playerprefs_unlocklevel[0] = 1;
-		for(int i=1;i<_playerprefs_unlocklevel.Length;i++)
+		for(int i=0;i<_playerprefs_unlocklevel.Length;i++)
 		{
 			Store._playerprefs_unlocklevel[i] = PlayerPrefs.GetInt("level"+i,0);
 		}
@@ -158,7 +157,7 @@ public class Store : MonoBehaviour {
 		//PlayerPrefs.SetInt("zombieHeads",10000);
 		//for(int i=1;i<_playerprefs_unlockweapon.Length;i++)
 		//	PlayerPrefs.SetInt("weapon"+i,0);
-		//for(int i=1;i<_playerprefs_unlocklevel.Length;i++)
+		//for(int i=0;i<_playerprefs_unlocklevel.Length;i++)
 		//	PlayerPrefs.SetInt("level"+i,0);
 	}
 	
@@ -206,7 +205,7 @@ public class Store : MonoBehaviour {
 	private int currentStashitem = -2;
 	public GUITexture stashItemTexture;
 	
-	public GUITexture scrollingInfo;
+	public GUITexture[] scrollingInfo;
 	private float scrollingTime = 0.0f;
 	
 	private bool spwchannel = false;
@@ -246,6 +245,7 @@ public class Store : MonoBehaviour {
 				//FirstShopItem();
 				//FirstStashItem();
 				
+				scrollingTime = 0f;
 				Update ();
 			}
 		}
@@ -281,15 +281,20 @@ public class Store : MonoBehaviour {
 		if(!_showStore) return;
 		if( wantToExit ) return;
 		
-		if( scrollingTime < 3f )
+		int cco=0;
+		for(int i=0;i<countWeapons;i++)
+				if( WeaponUnlocked(i) ) cco++;
+		scrollingInfo[0].enabled = scrollingTime<3&&countWeapons-cco>1;
+		scrollingInfo[1].enabled = scrollingTime<3&&cco>1;
+		foreach(var c in scrollingInfo)
 		{
-			scrollingTime += 0.0166666f;
-			Vector3 v = scrollingInfo.transform.position;
-			v.y = 0.5f + 0.1f*Mathf.Sin(2*scrollingTime);
-			scrollingInfo.transform.position = v;
-			
-			if( scrollingTime >= 3f )
-				scrollingInfo.enabled = false;
+			if( scrollingTime < 3f )
+			{
+				scrollingTime += 0.0166666f;
+				Vector3 v = c.transform.position;
+				v.y = 0.5f + 0.1f*Mathf.Sin(2*scrollingTime);
+				c.transform.position = v;
+			}
 		}
 		
 		UpdateZombieHeads();
@@ -577,7 +582,7 @@ public class Store : MonoBehaviour {
 		if( wantToExit ) // Only game play event
 		{
 			GUI.DrawTexture(new Rect(0.2f*Screen.width,0.15f*Screen.height,0.6f*Screen.width,0.6f*Screen.height),popupTexture);
-			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Leave Game?");
+			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Leave Game?",myStyle);
 			//GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"Leave Game?");
 			
 			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Quit" ) )	
@@ -668,7 +673,7 @@ public class Store : MonoBehaviour {
 		{
 			//GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"Do you want to buy this item?");
 			
-			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Do you want to buy this item?");
+			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Do you want to buy this item?",myStyle);
 			
 			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Buy" ) )	
 			{
@@ -694,7 +699,7 @@ public class Store : MonoBehaviour {
 		}
 		else
 		{
-			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.3f*Screen.height),"You have not enough heads to buy this item.");
+			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.3f*Screen.height),"You have not enough heads to buy this item.",myStyle);
 			if( GUI.Button(new Rect(0.42f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Back") )
 			{
 				wooi = -1;

@@ -4,10 +4,10 @@ using System.Collections;
 public class WaveInfo : MonoBehaviour {
 	
 	public GameObject root;
-	public GUIText numberWave;
-	public GUIText countZombies;
+	public UILabel numberWave;
+	public UILabel countZombies;
 	public float Wait = 5.0f;
-	private float wait;
+	private float waitfor = 0f;
 	
 	// Use this for initialization
 	void Start () {
@@ -15,19 +15,14 @@ public class WaveInfo : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if( wait > 0f )
-		{
-			wait -= Time.deltaTime;
-			if (wait <= 0 )
-				root.SetActiveRecursively(false);
-		}
+		if( waitfor > 0f ) waitfor -= Time.deltaTime;
+		root.SetActive(waitfor>0&&Time.timeScale>0);
 	}
 	
 	public void ShowWave(int i,int zombieCount)
 	{
-		root.SetActiveRecursively(true);
-		numberWave.text = "" + i;
-		countZombies.text = "" + zombieCount;
-		wait = Wait;
+		numberWave.text = "Wave " + i;
+		countZombies.text = "" + zombieCount + " zombies";
+		waitfor = Wait;
 	}
 }
