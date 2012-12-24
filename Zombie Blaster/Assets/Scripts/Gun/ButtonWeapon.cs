@@ -4,7 +4,7 @@ using System.Collections;
 public class ButtonWeapon : MonoBehaviour {
 	
 	public UISprite weaponSprite;
-	public UISprite percentSprite;
+	public UIFilledSprite percentSprite;
 	public int weaponIndex = 0;
 	
 	void OnPress(bool isDown)
@@ -19,11 +19,10 @@ public class ButtonWeapon : MonoBehaviour {
 	void Update()
 	{
 		// Percent
-		Vector3 v = percentSprite.transform.localScale;
-		v.x = 80f*LevelInfo.Environments.guns.gun[weaponIndex].AmmoCurrentPercent;
-		percentSprite.transform.localScale = v;
+		percentSprite.fillAmount = LevelInfo.Environments.guns.gun[weaponIndex].AmmoCurrentPercent;
 		
-		// Weapon Icon
-		weaponSprite.spriteName = "weapon_" + GameEnvironment.storeGun[weaponIndex].name;
+		// Icon and Colors
+		percentSprite.spriteName = weaponSprite.spriteName = "weapon_" + GameEnvironment.storeGun[weaponIndex].name;
+		percentSprite.color = Color.red;
 	}
 }

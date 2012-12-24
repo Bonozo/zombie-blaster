@@ -320,7 +320,7 @@ public class Zombi : MonoBehaviour {
 				{
 					//float delta = aliveTime%2f; if( delta > 1f) delta = 2-delta; delta *= 25f;
 					float delta = 12.5f+Mathf.Sin(4*aliveTime)*12.5f;
-					healthBar.scoobyArrow.transform.localPosition = new Vector3(pos.x-22,-pos.y+50+delta,0f);
+					healthBar.scoobyArrow.transform.localPosition = new Vector3(pos.x-15,-pos.y+50+delta,0f);
 				}
 			}
 		}

@@ -18,7 +18,7 @@ public class SwipeUpCaution : MonoBehaviour {
 	{	
 		
 		// swipe up
-		if(scp.z > 0 && scp.x>=0 && scp.x <= Screen.width )
+		if(Option.ShoveHelper && scp.z > 0 && scp.x>=0 && scp.x <= Screen.width )
 		{
 			if( !isactive )
 			{

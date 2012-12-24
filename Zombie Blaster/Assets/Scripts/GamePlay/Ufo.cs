@@ -38,6 +38,7 @@ public class Ufo : MonoBehaviour {
 				if( GameEnvironment.DistXZ(zombi.transform.position,transform.position ) <= ExplosionRadius )
 					zombi.SendMessage("Explode");
 				
+			LevelInfo.Environments.control.Shake();
 			Destroy(this.gameObject);
 		}
 	}

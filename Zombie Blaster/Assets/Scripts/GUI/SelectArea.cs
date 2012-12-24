@@ -12,6 +12,7 @@ public class SelectArea : MonoBehaviour {
 	public GUITexture[] bloods;
 	public GUIText headsText;
 	public GUITexture popupTexture;
+	public GUIText helpMessage;
 	
 	public ButtonBase storeButton;
 	
@@ -29,7 +30,11 @@ public class SelectArea : MonoBehaviour {
 			g.color = c;
 		}
 		for(int i=0;i<5;i++)
+		{
 			lockIcon[i].enabled = !unlocked[i];
+			lockIcon[i].gameObject.GetComponent<ColorPlay>().colmax = 
+				(unlock_heads[i] <= Store.zombieHeads?Color.yellow:Color.white);
+		}
 	}
 	
 	private Store store;
@@ -54,6 +59,8 @@ public class SelectArea : MonoBehaviour {
 			unlocked[i] = Store.LevelUnlocked(i);
 			if(unlocked[i]) countUnlocked++;
 		}
+		if( countUnlocked == 5 && helpMessage != null)
+			Destroy(helpMessage);
 		UpdateSelectAreaScreen();
 
 		
@@ -87,6 +94,7 @@ public class SelectArea : MonoBehaviour {
 			if( unlocked[i] && levelButton[i].PressedUp )
 			{
 				GameEnvironment.StartLevel = i;
+				GameEnvironment.StartWave = 0;
 				loadingTexture.enabled = true;
 				levelButton[i].SetAsPressed();
 				Application.LoadLevel("playgame");	

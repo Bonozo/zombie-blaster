@@ -137,8 +137,6 @@ public class MainMenu : MonoBehaviour {
 		case MenuState.MainMenu:
 			break;
 		case MenuState.Option:
-			if( GUI.Button( new Rect(Screen.width-100,Screen.height-60,80,40),"Credits"))
-				State = MenuState.Credits;
 			break;
 		case MenuState.Credits:
 			break;

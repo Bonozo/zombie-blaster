@@ -14,17 +14,29 @@ public class Option : MonoBehaviour {
 	public static float SpotLightAngle = 65f;
 	public static float BackgroundAmbient = 101f;
 	public static bool ShowFPS = false;
+	public static bool ShoveHelper = true;
 	//public static int Quality = QualitySettings.GetQualityLevel();
 	
+	bool showdebug = true;
 	bool debugScreen = false;
 	public GUIText title;
 	public GUIText version;
+	public GUIStyle myStyle1;
+	public GUIStyle myStyle2;
 	
 	// Update is called once per frame
 	void Update () 
 	{
 		AudioListener.volume = hSlideVolume;
 		version.enabled = debugScreen;
+		if( GameEnvironment.AbsoluteSwipe.x < -0.5f )
+			showdebug = true;
+	}
+	
+	void OnEnable()
+	{
+		debugScreen = false;
+		showdebug = false;
 	}
 	
 	private Vector2 textSize = new Vector2(Screen.width*0.2f,30);
@@ -85,16 +97,16 @@ public class Option : MonoBehaviour {
 		else{
 			
 		
-		GUI.Label(textRect(1),"Volume");
+		GUI.Label(textRect(1),"Volume",myStyle1);
 		hSlideVolume = GUI.HorizontalSlider(buttonRect(1),hSlideVolume,0f,1f);
 		
-		GUI.Label(textRect(2),"Vibration");
-		if( GUI.Button(buttonRect(2),Vibration?"ON":"OFF" ) )
+		GUI.Label(textRect(2),"Vibration",myStyle1);
+		if( GUI.Button(buttonRect(2),Vibration?"ON":"OFF" ,myStyle2) )
 			Vibration = !Vibration;
 		
-		GUI.Label(textRect(3),"Quality");
+		GUI.Label(textRect(3),"Quality",myStyle1);
 		
-		if( GUI.Button(buttonRect(3),QualitySettings.names[QualitySettings.GetQualityLevel()] ) )
+		if( GUI.Button(buttonRect(3),QualitySettings.names[QualitySettings.GetQualityLevel()],myStyle2 ) )
 		{
 			if( QualitySettings.GetQualityLevel() == QualitySettings.names.Length-1 )
 				QualitySettings.SetQualityLevel(0);
@@ -102,19 +114,29 @@ public class Option : MonoBehaviour {
 				QualitySettings.IncreaseLevel();
 		}
 		
-		GUI.Label(textRect(4),"Light");
-		if( GUI.Button(buttonRect(4),SpotLight?"FlashLight":"Directional" ) )
+		GUI.Label(textRect(4),"Light",myStyle1);
+		if( GUI.Button(buttonRect(4),SpotLight?"FlashLight":"Directional",myStyle2 ) )
 			SpotLight = !SpotLight;
 		
-		GUI.Label(textRect(5),"Fog");
-		if( GUI.Button(buttonRect(5),Fog?"ON":"OFF" ) )
+		GUI.Label(textRect(5),"Fog",myStyle1);
+		if( GUI.Button(buttonRect(5),Fog?"ON":"OFF",myStyle2 ) )
 			Fog = !Fog;
 			
-		if( GUI.Button( new Rect(Screen.width*0.45f,Screen.height-100,0.1f*Screen.width,40),"Debug"))
+		GUI.Label(textRect(6),"Shove Helper",myStyle1);
+		if( GUI.Button(buttonRect(6),ShoveHelper?"ON":"OFF",myStyle2 ) )
+			ShoveHelper = !ShoveHelper;
+			
+		if(showdebug && GUI.Button( new Rect(Screen.width-200,Screen.height-60,80,40),"Debug",myStyle2))
 		{
 			debugScreen = true;
 			title.text = "Options Debug";
 		}
+			
+		if( GUI.Button( new Rect(Screen.width-100,Screen.height-60,80,40),"Credits",myStyle2))
+			{
+				MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
+				mainmenu.GoState(MainMenu.MenuState.Credits);
+			}
 		}
 		
 

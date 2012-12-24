@@ -53,7 +53,7 @@ public class BulletRocket : MonoBehaviour {
 		if( GameEnvironment.DistXZ(control.transform.position,transform.position ) <= 2*ExplosionRadius )
 			control.GetHealth(-0.2f);
 		
-		iTween.ShakeRotation( LevelInfo.Environments.mainCamera.gameObject,new Vector3(1f,1f,0f),0.5f);
+		LevelInfo.Environments.control.Shake();
 		Instantiate(ParticleExplosion,transform.position,Quaternion.identity);
 		Destroy(this.gameObject);
 	}

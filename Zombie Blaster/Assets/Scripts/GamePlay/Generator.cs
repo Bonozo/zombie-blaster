@@ -9,7 +9,7 @@ public class Generator : MonoBehaviour {
 	
 	public float GenerationRateMin = 2f, GenerationRateMax=4f;
 	
-	private float zombieRate = 0.0f;
+	private float zombieRate = 3f;
 	private int zombiesLeft = 0;
 	private int scoobyZombieCount = 10;
 	
@@ -30,14 +30,21 @@ public class Generator : MonoBehaviour {
 		return (GameObject)Instantiate(z,RandomPosition(),Quaternion.Euler(0,180,0) );
 	}
 	
+	// Where to spawn
 	private	Vector3 RandomPosition()
 	{
-		//return new Vector3(0,0,8);
 		float r = Random.Range(10f,13f);
 		float alpa = Random.Range(0f,360f);
+		
+		// special for Level1 Wave1
+		if( LevelInfo.Environments.control.currentLevel == 0 && LevelInfo.Environments.control.currentWave == 1 )
+		{
+			alpa = 90f+Random.Range(-35f,35f);
+		}
+
 		Vector3 v = Vector3.zero;
-		v.x = r*Mathf.Cos(alpa);
-		v.z = r*Mathf.Sin(alpa);
+		v.x = r*Mathf.Cos(alpa*Mathf.PI/180f);
+		v.z = r*Mathf.Sin(alpa*Mathf.PI/180f);
 		return v+LevelInfo.Environments.control.transform.position;
 	}
 	
@@ -82,6 +89,7 @@ public class Generator : MonoBehaviour {
 	{
 		zombiesLeft = numberzombies;
 		generateZombies = true;
+		zombieRate = 3f;
 	}
 	
 	#endregion

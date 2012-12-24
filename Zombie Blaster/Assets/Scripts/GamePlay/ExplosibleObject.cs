@@ -22,6 +22,7 @@ public class ExplosibleObject : MonoBehaviour {
 		if( exploded ) return;
 		exploded = true;
 		Instantiate(FlameParticle,explodeTransform.position,Quaternion.identity);
+		LevelInfo.Environments.control.Shake();
 		if(destroyWhenExplode ) Destroy(this.gameObject);
 	}
 	

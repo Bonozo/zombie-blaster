@@ -10,7 +10,7 @@ public class BulletFootball : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		transform.position = new Vector3(transform.position.x,Y,transform.position.z);
-		rigidbody.AddForce(2000*transform.forward);
+		rigidbody.AddForce(1000*transform.forward);
 	}
 	
 	// Update is called once per frame

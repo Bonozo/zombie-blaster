@@ -31,6 +31,8 @@ public class HealthPack : MonoBehaviour {
 	
 	public bool scooby = false;
 	
+	private bool firstvelmaforL1W3 = false;
+	
 	// Use this for initialization
 	void Start () {
 
@@ -40,6 +42,15 @@ public class HealthPack : MonoBehaviour {
 		if( scooby )
 		{
 			int r = Random.Range(0,3);
+			
+			// some complicated code
+			if( LevelInfo.Environments.control.currentLevel==0&&LevelInfo.Environments.control.currentWave==3
+				&& !firstvelmaforL1W3 )
+			{
+				r = 0;
+				firstvelmaforL1W3 = true;
+			}
+			
 			switch(r)
 			{
 			case 0: packType = HealthPackType.Weapon; break;
@@ -50,6 +61,15 @@ public class HealthPack : MonoBehaviour {
 		else
 		{
 			int r = Random.Range(0,6);
+			
+			// some complicated code
+			if( LevelInfo.Environments.control.currentLevel==0&&LevelInfo.Environments.control.currentWave<4
+				&& r==5)
+			{
+				r = Random.Range(0,5);
+				
+			}
+			
 			switch(r)
 			{
 			case 0: packType = HealthPackType.Ammo; break;
@@ -58,7 +78,6 @@ public class HealthPack : MonoBehaviour {
 			case 3: packType = HealthPackType.Health; break;
 			case 4: packType = HealthPackType.Shield; break;
 			case 5: packType = HealthPackType.SuperAmmo; break;
-			case 6: packType = HealthPackType.Weapon; break;
 			}		
 		}
 		
@@ -103,8 +122,16 @@ public class HealthPack : MonoBehaviour {
 				}
 			if( gunindexifweapon == Weapon.None )
 			{
-				packType = HealthPackType.Health;
-				gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpHealth;
+				if( Random.Range(0,2)==0 )
+				{
+					packType = HealthPackType.DamageMultiplier;
+					gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpDamageMultiplier;
+				}
+				else
+				{
+					packType = HealthPackType.XtraLife;
+					gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpXtraLife;
+				}
 			}
 			else
 				gameObject.renderer.material.mainTexture = LevelInfo.Environments.guns.gun[(int)gunindexifweapon].texture;
@@ -191,7 +218,7 @@ public class HealthPack : MonoBehaviour {
 			for(int i=0;i<LevelInfo.Environments.guns.gun.Length;i++)
 				if( LevelInfo.Environments.guns.gun[i].EnabledGun )
 					LevelInfo.Environments.guns.GetWeaponWithMAX((Weapon)i);
-			pickupname = "Super Ammo";
+			pickupname = "All Ammo";
 			break;
 			
 		case HealthPackType.Weapon:

@@ -180,7 +180,7 @@ public class Store : MonoBehaviour {
 	public GameObject[] objectWeapons;
 	//public GameObject objectsWeaponsUnknown1,objectsWeaponsUnknown2;
 	
-
+	public Font blackFont,redFont;
 	
 	public GameObject StoreGUI;
 	public GameObject LoadingGUI;
@@ -373,7 +373,15 @@ public class Store : MonoBehaviour {
 			
 			currentWeaponobj.transform.localPosition = new Vector3(0f,0f,0f);
 			ShopWeaponName.text = showWeapon[currentshopitem]?GameEnvironment.storeGun[currentshopitem].name:"Not Available";
-			ShopWeaponBuyText.text = "" + GameEnvironment.storeGun[currentshopitem].price;
+			
+			ShopWeaponName.font = showWeapon[currentshopitem]?blackFont:redFont;
+			
+			//ShopWeaponBuyText.text = "" + GameEnvironment.storeGun[currentshopitem].price;
+			ShopWeaponBuyText.text = 
+				"Ammo: " + GameEnvironment.storeGun[currentshopitem].pocketsize + 
+				"\nReload: " + GameEnvironment.storeGun[currentshopitem].reloadTime + 
+				"\nSpeed: " + GameEnvironment.storeGun[currentshopitem].speed + 
+				"\nPrice: " + GameEnvironment.storeGun[currentshopitem].price;
 			
 			if( shotItemBuy.PressedUp )
 			{
@@ -419,6 +427,7 @@ public class Store : MonoBehaviour {
 		
 		StashWeaponName.enabled = enableshowstashitems;
 		StashWeaponBuyText.enabled = enableshowstashitems&&IsLevelGamePlay&&showFillIn[currentStashitem];
+		StashItemBuy.gameObject.SetActive(IsLevelGamePlay);
 		StashItemBuy.enabled = enableshowstashitems&&wooi==-1&&IsLevelGamePlay&&showFillIn[currentStashitem];
 		stashItemTexture.enabled = enableshowstashitems;
 		if( stashItemTexture.enabled ) stashItemTexture.texture = weaponIcon[currentStashitem];
@@ -433,7 +442,13 @@ public class Store : MonoBehaviour {
 			objectWeapons[currentStashitem].transform.localPosition = new Vector3(0f,0f,0f);
 			
 			StashWeaponName.text = GameEnvironment.storeGun[currentStashitem].name;
-			StashWeaponBuyText.text = GameEnvironment.storeGun[currentStashitem].AmmoInformation;
+			
+			//StashWeaponBuyText.text = GameEnvironment.storeGun[currentStashitem].AmmoInformation;
+			StashWeaponBuyText.text = 
+				"Dmg: " + GameEnvironment.storeGun[currentStashitem].AmmoInformation +
+				"\nAmmo: " + GameEnvironment.storeGun[currentStashitem].pocketsize + 
+				"\nReload: " + GameEnvironment.storeGun[currentStashitem].reloadTime + 
+				"\nSpeed: " + GameEnvironment.storeGun[currentStashitem].speed;
 			
 			if( StashItemBuy.enabled && StashItemBuy.PressedUp )
 			{

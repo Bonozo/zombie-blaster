@@ -120,17 +120,14 @@ public class Control : MonoBehaviour {
 		LevelInfo.Environments.hubZombieHeads.SetNumber(Store.zombieHeads);
 	}
 	
-	IEnumerator ShowHints()
+	public IEnumerator ShowTip(string message,float wait)
 	{
-		float wait;
-		
-		wait = 4f;
 		while(wait > 0 )
 		{
 			wait -= Time.deltaTime;
 			yield return new WaitForEndOfFrame();
 		}
-		LevelInfo.Environments.generator.GenerateMessageText(new Vector3(0.25f,0.2f,10),"Tap to shoot and swipe to turn",false,4f);
+		LevelInfo.Environments.generator.GenerateMessageText(new Vector3(0.5f,0.2f,10),message,false,4f);
 	}
 	
 	// Update is called once per frame
@@ -142,6 +139,8 @@ public class Control : MonoBehaviour {
 		if( Input.GetKeyUp(KeyCode.J) )
 			health += 0.1f;
 	
+		ShakeUpdates();
+		
 		if( state != GameState.Play) return;//expect
 		if(Input.GetKey(KeyCode.Escape) )
 		{
@@ -179,13 +178,17 @@ public class Control : MonoBehaviour {
 		}
 		
 		
-		Vector3 rot = transform.rotation.eulerAngles;
-		if(rot.y >= 180.0f ) rot.y -= 360f;
+		// Rotate Updates
+		if( !(currentLevel==0&&currentWave==1) )
+		{
+			Vector3 rot = transform.rotation.eulerAngles;
+			if(rot.y >= 180.0f ) rot.y -= 360f;
 		
-		rot.y += Speed*Time.deltaTime*GameEnvironment.Swipe;
-		rot.y += Speed*Time.deltaTime*Input.GetAxis("Horizontal"); // for PC version test.
+			rot.y += Speed*Time.deltaTime*GameEnvironment.Swipe;
+			rot.y += Speed*Time.deltaTime*Input.GetAxis("Horizontal"); // for PC version test.
 		
-		transform.rotation = Quaternion.Euler(rot);
+			transform.rotation = Quaternion.Euler(rot);
+		}
 		
 		UpdateHealthBar();
 		LevelInfo.Environments.hubZombieHeads.SetNumberWithFlash(Store.zombieHeads);
@@ -265,6 +268,33 @@ public class Control : MonoBehaviour {
 	
 	#endregion
 	
+	#region Shake
+	
+	float shake_decay;
+	float shake_intensity;
+	
+	private void ShakeUpdates()
+	{
+		transform.rotation =  new Quaternion(0f,transform.rotation.y,0f,transform.rotation.w);	
+		if(shake_intensity > 0)
+		{
+    	    transform.rotation =  new Quaternion(
+        	            transform.rotation.x + Random.Range(-shake_intensity,shake_intensity)*.2f,
+                        transform.rotation.y + Random.Range(-shake_intensity,shake_intensity)*.05f,
+                        transform.rotation.z + Random.Range(-shake_intensity,shake_intensity)*.2f,
+                        transform.rotation.w + Random.Range(-shake_intensity,shake_intensity)*.2f);
+       		shake_intensity -= shake_decay;
+    	}
+	}
+	
+	public void Shake()
+	{
+    	shake_intensity = 0.07f;
+    	shake_decay = 0.001f;
+	}
+	
+	#endregion
+	
 	#region Moving
 	
 	public float MovingSpeed = 1f;
@@ -310,6 +340,8 @@ public class Control : MonoBehaviour {
 	public bool Died { get { return healthshow <= 0; }}
 	
 	public float Health { get { return healthshow; } set { health = value; } }
+	
+	public int ZombiesLeft { get { return LevelInfo.Environments.hubZombiesLeft.GetNumber(); } }
 	
 	#endregion
 
@@ -389,6 +421,22 @@ public class Control : MonoBehaviour {
 		LevelInfo.Environments.waveInfo.ShowWave(currentWave,LevelInfo.Environments.hubZombiesLeft.GetNumber());
 		LevelInfo.Audio.PlayLevel(currentWave);
 		LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.AudioWaveComplete);
+		
+		if( currentLevel==0 )
+		{
+			switch(currentWave)
+			{
+			case 1:
+				StartCoroutine(ShowTip("TIP: TAP TO SHOOT",4f));
+				break;
+			case 2:
+				StartCoroutine(ShowTip("TIP: SWIPE TO TURN",4f));
+				break;
+			case 3:
+				StartCoroutine(ShowTip("TIP: SHOOT RARE ZOMBIES FOR WEAPONS",4f));
+				break;
+			}
+		}
 	}
 	
 	public void ToLose()

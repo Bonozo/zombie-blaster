@@ -6,7 +6,7 @@ public class GameEnvironment : MonoBehaviour {
 	#region Static Local
 	
 	public static int StartLevel = 4;
-	public static int StartWave = 0;
+	public static int StartWave = 3;
 	
 	#endregion
 	
@@ -252,12 +252,16 @@ public class GameEnvironment : MonoBehaviour {
 		public bool enabled;
 		public int pocketsize;
 		public int price;
-		public StoreGun(string name,bool enabled,int pocketsize,int price)
+		public float speed;
+		public float reloadTime;
+		public StoreGun(string name,bool enabled,int pocketsize,int price,float speed,float reloadTime)
 		{
 			this.name = name;
 			this.enabled = enabled;
 			this.pocketsize = pocketsize;
 			this.price = price;
+			this.speed = speed;
+			this.reloadTime = reloadTime;
 			
 			this.current = this.store = 0;
 			if( enabled )
@@ -308,15 +312,15 @@ public class GameEnvironment : MonoBehaviour {
 	public static StoreGun[] storeGun = new StoreGun[9]
 	{
 		
-		new StoreGun("Airsoft",true,20,0),			//0
-		new StoreGun("Crossbow",false,12,30),		//1
-		new StoreGun("Shotgun",false,5,75),			//2
-		new StoreGun("Flamethrower",false,100,100),	//3
-		new StoreGun("Football",false,5,100),		//4
-		new StoreGun("Machine Gun",false,100,150),	//5
-		new StoreGun("Grenades",false,5,150),		//6
-		new StoreGun("Revolver",false,6,300),		//7
-		new StoreGun("Rocket Launcher",false,5,300) //8
+		new StoreGun("Airsoft",true,20,0,9,1),				//0
+		new StoreGun("Crossbow",false,12,30,25,3),			//1
+		new StoreGun("Shotgun",false,5,75,15,1),			//2
+		new StoreGun("Flamethrower",false,100,100,30,12),	//3
+		new StoreGun("Football",false,5,100,100,3),			//4
+		new StoreGun("Machine Gun",false,100,150,9,12),		//5
+		new StoreGun("Grenades",false,5,150,50,3),			//6
+		new StoreGun("Revolver",false,6,300,25,1),			//7
+		new StoreGun("Rocket Launcher",false,5,300,10,3) 	//8
 		
 		
 		
