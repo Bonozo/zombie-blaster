@@ -251,8 +251,8 @@ public class Store : MonoBehaviour {
 		}
 	}
 	
-	private bool IsLevelGamePlay { get { return Application.loadedLevel == 2; } }
-	private bool IsLevelOption { get { return Application.loadedLevel == 1; } }
+	private bool IsLevelGamePlay { get { return Application.loadedLevelName == "playgame"; } }
+	private bool IsLevelOption { get { return Application.loadedLevelName == "mainmenu"; } }
 	
 	private void UpdateZombieHeads()
 	{
@@ -590,6 +590,11 @@ public class Store : MonoBehaviour {
 		return -1;
 	}
 	
+	public Texture2D[] screen;
+	public string[] tip;
+	public GUITexture guiFullscreen;
+	public GUIText guiTip;
+	
 	void OnGUI()
 	{
 		if(!_showStore) return;
@@ -603,7 +608,11 @@ public class Store : MonoBehaviour {
 			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Quit" ) )	
 			{
 				showStore = false;
+				LevelInfo.Audio.StopAll();
+				Destroy(GameObject.Find("Audio Wind Loop"));
 				LoadingGUI.SetActive(true);
+				guiFullscreen.texture = screen[Random.Range(0,screen.Length)];
+				guiTip.text = tip[Random.Range(0,tip.Length)];
 				Application.LoadLevel("mainmenu");
 			}
 			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Back" ) )

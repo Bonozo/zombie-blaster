@@ -2,14 +2,13 @@ using UnityEngine;
 using System.Collections;
 
 public class MainMenuLoading : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		Application.LoadLevel("mainmenu");
-	}
+	
+	public float wait = 2f;
 	
 	// Update is called once per frame
 	void Update () {
-	
+		wait -= Time.deltaTime;
+		if (wait<=0f)
+			Application.LoadLevel("mainmenu");
 	}
 }

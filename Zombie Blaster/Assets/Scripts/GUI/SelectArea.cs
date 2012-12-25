@@ -8,13 +8,22 @@ public class SelectArea : MonoBehaviour {
 	public Texture headSack;
 	
 	public Texture2D lockedTexture;
-	public GUITexture loadingTexture;
 	public GUITexture[] bloods;
 	public GUIText headsText;
 	public GUITexture popupTexture;
 	public GUIText helpMessage;
 	
 	public ButtonBase storeButton;
+	
+	public AudioSource audioUnlocked;
+	public AudioSource audioLocked;
+	public AudioSource audioUnlockLevel;
+	
+	public GameObject guiLoading;
+	public Texture2D[] screen;
+	public string[] tip;
+	public GUITexture guiFullscreen;
+	public GUIText guiTip;
 	
 	private bool[] unlocked = new bool[5];
 	private int[] unlock_heads = new int [5] {0,500,1000,1500,2000};
@@ -34,6 +43,7 @@ public class SelectArea : MonoBehaviour {
 			lockIcon[i].enabled = !unlocked[i];
 			lockIcon[i].gameObject.GetComponent<ColorPlay>().colmax = 
 				(unlock_heads[i] <= Store.zombieHeads?Color.yellow:Color.white);
+			levelButton[i].audioPressed = unlocked[i]?audioUnlocked:audioLocked;
 		}
 	}
 	
@@ -47,13 +57,17 @@ public class SelectArea : MonoBehaviour {
 		new Weapon[] {Weapon.PulseShotGun,Weapon.Revolver}
 	};
 	
+	void OnEnable()
+	{
+		guiLoading.SetActive(false);
+	}
+	
 	// Use this for initialization
 	void Start () {
 		
 		store = (Store)GameObject.FindObjectOfType(typeof(Store));
 		
 		GameEnvironment.StartLevel = 0;
-		loadingTexture.enabled = false;
 		for(int i=0;i<Store.countLevel;i++)
 		{
 			unlocked[i] = Store.LevelUnlocked(i);
@@ -95,12 +109,17 @@ public class SelectArea : MonoBehaviour {
 			{
 				GameEnvironment.StartLevel = i;
 				GameEnvironment.StartWave = 0;
-				loadingTexture.enabled = true;
+				
 				levelButton[i].SetAsPressed();
+				
+				Destroy(GameObject.Find("Sound Background"));
+				Destroy(GameObject.Find("Sound Wind"));
+				guiLoading.SetActive(true);
+				guiFullscreen.texture = screen[Random.Range(0,screen.Length)];
+				guiTip.text = tip[Random.Range(0,tip.Length)];
 				Application.LoadLevel("playgame");	
 			}
 	}
-	
 	
 	public GUIStyle myStyle;
 	void OnGUI ()
@@ -136,6 +155,8 @@ public class SelectArea : MonoBehaviour {
 					UpdateSelectAreaScreen();
 					Store.zombieHeads = Store.zombieHeads - unlock_heads[unlock_index];
 					levelButton[unlock_index].canPressed = unlocked[unlock_index];
+					audioUnlockLevel.Play();
+					levelButton[unlock_index].standartTexture = levelButton[unlock_index].pressedTexture;
 					unlock_index = -1;
 				}
 			}

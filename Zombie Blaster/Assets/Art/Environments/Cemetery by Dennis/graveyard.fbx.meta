@@ -1,33 +1,120 @@
 fileFormatVersion: 2
-guid: 03b8f3721935bba4e8b22c8fa0595515
+guid: a2e46495627fcec4a9175f2cb7b72b3c
 ModelImporter:
+  serializedVersion: 15
   fileIDToRecycleName:
+    100000: fence:Mesh
+    100002: gates1
+    100004: grassblades
+    100006: //RootNode
+    100008: ground:Mesh
+    100010: lawn
+    100012: Mausoleums
+    100014: polySurface44
+    100016: polySurface591
+    100018: polySurface592
+    100020: polySurface593
+    100022: polySurface594
+    100024: rocks
+    100026: shrubs13
+    100028: skulls
+    100030: tombstones
+    100032: tree3
+    100034: tree4
+    100036: tree5
+    100038: tree6
+    400000: fence:Mesh
+    400002: gates1
+    400004: grassblades
+    400006: //RootNode
+    400008: ground:Mesh
+    400010: lawn
+    400012: Mausoleums
+    400014: polySurface44
+    400016: polySurface591
+    400018: polySurface592
+    400020: polySurface593
+    400022: polySurface594
+    400024: rocks
+    400026: shrubs13
+    400028: skulls
+    400030: tombstones
+    400032: tree3
+    400034: tree4
+    400036: tree5
+    400038: tree6
+    2300000: fence:Mesh
+    2300002: gates1
+    2300004: grassblades
+    2300006: ground:Mesh
+    2300008: lawn
+    2300010: Mausoleums
+    2300012: polySurface44
+    2300014: polySurface591
+    2300016: polySurface592
+    2300018: polySurface593
+    2300020: polySurface594
+    2300022: rocks
+    2300024: shrubs13
+    2300026: skulls
+    2300028: tombstones
+    2300030: tree3
+    2300032: tree4
+    2300034: tree5
+    2300036: tree6
+    3300000: fence:Mesh
+    3300002: gates1
+    3300004: grassblades
+    3300006: ground:Mesh
+    3300008: lawn
+    3300010: Mausoleums
+    3300012: polySurface44
+    3300014: polySurface591
+    3300016: polySurface592
+    3300018: polySurface593
+    3300020: polySurface594
+    3300022: rocks
+    3300024: shrubs13
+    3300026: skulls
+    3300028: tombstones
+    3300030: tree3
+    3300032: tree4
+    3300034: tree5
+    3300036: tree6
     4300000: lawn
-    4300002: trees
-    4300004: gates1
-    4300006: shrubs13
-    4300008: grassblades
-    4300010: Mausoleums
-    4300012: rocks
-    4300014: skulls
-    4300016: tombstones
-    4300018: ground:Mesh
-    4300020: fence:Mesh
-  serializedVersion: 10
+    4300002: gates1
+    4300004: shrubs13
+    4300006: grassblades
+    4300008: Mausoleums
+    4300010: rocks
+    4300012: skulls
+    4300014: tombstones
+    4300016: ground:Mesh
+    4300018: fence:Mesh
+    4300020: polySurface591
+    4300022: polySurface44
+    4300024: tree3
+    4300026: tree4
+    4300028: polySurface592
+    4300030: tree5
+    4300032: tree6
+    4300034: polySurface593
+    4300036: polySurface594
+    9500000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:
-    generateAnimations: 3
+    legacyGenerateAnimations: 4
     bakeSimulation: 0
-    splitAnimations: 1
     animationCompression: 1
     animationRotationError: .5
     animationPositionError: .5
     animationScaleError: .5
     animationWrapMode: 0
     clipAnimations: []
+    isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: .00999999978
@@ -36,7 +123,7 @@ ModelImporter:
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMesh: 0
+    optimizeMeshForGPU: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
@@ -46,157 +133,21 @@ ModelImporter:
     splitTangentsAcrossUV: 1
     normalImportMode: 0
     tangentImportMode: 1
-  textMetaNamesToFileIDs:
-    //RootNode:
-      data:
-        first: 1
-        second: b6860100
-      data:
-        first: 4
-        second: 961a0600
-      data:
-        first: 111
-        second: 605fa900
-    Mausoleums:
-      data:
-        first: 1
-        second: a2860100
-      data:
-        first: 4
-        second: 821a0600
-      data:
-        first: 23
-        second: 62182300
-      data:
-        first: 33
-        second: a25a3200
-    fence:Mesh:
-      data:
-        first: 1
-        second: a0860100
-      data:
-        first: 4
-        second: 801a0600
-      data:
-        first: 23
-        second: 60182300
-      data:
-        first: 33
-        second: a05a3200
-    gates1:
-      data:
-        first: 1
-        second: ac860100
-      data:
-        first: 4
-        second: 8c1a0600
-      data:
-        first: 23
-        second: 6c182300
-      data:
-        first: 33
-        second: ac5a3200
-    grassblades:
-      data:
-        first: 1
-        second: b4860100
-      data:
-        first: 4
-        second: 941a0600
-      data:
-        first: 23
-        second: 74182300
-      data:
-        first: 33
-        second: b45a3200
-    ground:Mesh:
-      data:
-        first: 1
-        second: a8860100
-      data:
-        first: 4
-        second: 881a0600
-      data:
-        first: 23
-        second: 68182300
-      data:
-        first: 33
-        second: a85a3200
-    lawn:
-      data:
-        first: 1
-        second: ae860100
-      data:
-        first: 4
-        second: 8e1a0600
-      data:
-        first: 23
-        second: 6e182300
-      data:
-        first: 33
-        second: ae5a3200
-    rocks:
-      data:
-        first: 1
-        second: b2860100
-      data:
-        first: 4
-        second: 921a0600
-      data:
-        first: 23
-        second: 72182300
-      data:
-        first: 33
-        second: b25a3200
-    shrubs13:
-      data:
-        first: 1
-        second: a6860100
-      data:
-        first: 4
-        second: 861a0600
-      data:
-        first: 23
-        second: 66182300
-      data:
-        first: 33
-        second: a65a3200
-    skulls:
-      data:
-        first: 1
-        second: a4860100
-      data:
-        first: 4
-        second: 841a0600
-      data:
-        first: 23
-        second: 64182300
-      data:
-        first: 33
-        second: a45a3200
-    tombstones:
-      data:
-        first: 1
-        second: b0860100
-      data:
-        first: 4
-        second: 901a0600
-      data:
-        first: 23
-        second: 70182300
-      data:
-        first: 33
-        second: b05a3200
-    trees:
-      data:
-        first: 1
-        second: aa860100
-      data:
-        first: 4
-        second: 8a1a0600
-      data:
-        first: 23
-        second: 6a182300
-      data:
-        first: 33
-        second: aa5a3200
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    handles: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  additionalBone: 1
+  animationType: 2
+  userData: 

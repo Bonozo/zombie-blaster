@@ -17,7 +17,17 @@ public class Generator : MonoBehaviour {
 	{
 		GameObject z;
 		var level = LevelInfo.State.level[LevelInfo.Environments.control.currentLevel];
+		
 		z = level.standardZombie[Random.Range(0,level.standardZombie.Length)];
+		// special for Farm Level
+		if( LevelInfo.Environments.control.currentLevel == 0 )
+		{
+			if( LevelInfo.Environments.control.currentWave < 2 )
+				z = level.standardZombie[Random.Range(0,level.standardZombie.Length-2)];
+			else if( LevelInfo.Environments.control.currentWave < 4 )
+				z = level.standardZombie[Random.Range(0,level.standardZombie.Length-1)];
+		}
+		
 		if(LevelInfo.Environments.control.currentWave > 1)
 		{
 			if(scoobyZombieCount <= 10 && Random.Range(0,scoobyZombieCount+1) == 0 )
