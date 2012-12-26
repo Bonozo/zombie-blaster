@@ -262,6 +262,7 @@ public class GameEnvironment : MonoBehaviour {
 		public int price;
 		public float speed;
 		public float reloadTime;
+		public bool unlimited;
 		public StoreGun(string name,bool enabled,int pocketsize,int price,float speed,float reloadTime)
 		{
 			this.name = name;
@@ -270,6 +271,7 @@ public class GameEnvironment : MonoBehaviour {
 			this.price = price;
 			this.speed = speed;
 			this.reloadTime = reloadTime;
+			this.unlimited = enabled;
 			
 			this.current = this.store = 0;
 			if( enabled )
@@ -311,9 +313,20 @@ public class GameEnvironment : MonoBehaviour {
 		{
 			get
 			{
-				if( Option.UnlimitedAmmo ) return enabled?"Unlimited":"0/0";	
+				if( Option.UnlimitedAmmo ) return "Unlimited";	
+				if(unlimited) return "" + current + "/...";
 				return "" + current + "/" + store;
 			}
+		}
+		
+		public string AmmoInformationFormal
+		{
+			get
+			{
+				if( Option.UnlimitedAmmo ) return "Unlimited";	
+				if(unlimited) return "" + pocketsize + "/...";
+				return "" + pocketsize + "/" + (5*pocketsize);
+			}			
 		}
 	}
 	

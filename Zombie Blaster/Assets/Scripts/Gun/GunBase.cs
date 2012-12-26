@@ -103,6 +103,8 @@ public class GunBase : MonoBehaviour {
 	
 	protected void Update()
 	{
+		if( GameEnvironment.storeGun[index].unlimited ) AmmoStore=int.MaxValue;
+		
 		if( AmmoStore == 0 )
 			reloading = false;
 		
@@ -124,6 +126,7 @@ public class GunBase : MonoBehaviour {
 	
 	public string AmmoInformation { get {
 		if( PacketSize == int.MaxValue ) return "Unlimited";
+		if( GameEnvironment.storeGun[index].unlimited ) return "" + Ammo + "/...";	
 		return "" + Ammo + "/" + AmmoStore;	
 	}}
 	

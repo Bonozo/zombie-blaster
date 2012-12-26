@@ -230,12 +230,12 @@ public class Control : MonoBehaviour {
 			}
 			break;
 		case GameState.Play:
-			if( !Moving || angling || Time.realtimeSinceStartup > waitfornewwave ) break;
+			if( !Moving || angling || Time.time > waitfornewwave ) break;
 			GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"WAVE COMPLETE.");
 			
 			GUI.Label(new Rect(0.35f*Screen.width,0.5f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "REWARD" ) ;
 
-			GUI.DrawTexture(new Rect(0.525f*Screen.width,0.47f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),(bonusForWaveComplete==0?LevelInfo.Environments.texturePickUpXtraLife:LevelInfo.Environments.texturePickUpBonusHeads) );
+			GUI.DrawTexture(new Rect(0.5f*Screen.width,0.445f*Screen.height,0.15f*Screen.width,0.15f*Screen.height),(bonusForWaveComplete==0?LevelInfo.Environments.texturePickUpXtraLife:LevelInfo.Environments.texturePickUpBonusHeads),ScaleMode.ScaleToFit );
 			
 			//if( Time.realtimeSinceStartup > waitfornewwave )
 			//	PrepareAndCreateNewWave();
@@ -252,7 +252,7 @@ public class Control : MonoBehaviour {
 			// c.y > angleY
 			if( c.y - angleY <= 180.0f ) c.y -= MovingRotateSpeed*Time.deltaTime;
 			else c.y += MovingRotateSpeed*Time.deltaTime;
-			if( Mathf.Abs(c.y - angleY) <= 1f )	{ c.y = angleY; angling = false;  waitfornewwave = Time.realtimeSinceStartup + 3f; }
+			if( Mathf.Abs(c.y - angleY) <= 1f )	{ c.y = angleY; angling = false;  waitfornewwave = Time.time + 3f; }
 			transform.rotation = Quaternion.Euler(c);
 			return;
 		}
@@ -430,7 +430,7 @@ public class Control : MonoBehaviour {
 				StartCoroutine(ShowTip("TIP: TAP TO SHOOT",4f));
 				break;
 			case 2:
-				StartCoroutine(ShowTip("TIP: SWIPE TO TURN",4f));
+				StartCoroutine(ShowTip("TIP: SWIPE LEFT OR RIGHT TO TURN",4f));
 				break;
 			case 3:
 				StartCoroutine(ShowTip("TIP: SHOOT RARE ZOMBIES FOR WEAPONS",4f));

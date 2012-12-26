@@ -42,7 +42,7 @@ public class SelectArea : MonoBehaviour {
 		{
 			lockIcon[i].enabled = !unlocked[i];
 			lockIcon[i].gameObject.GetComponent<ColorPlay>().colmax = 
-				(unlock_heads[i] <= Store.zombieHeads?Color.yellow:Color.white);
+				(unlock_heads[i] <= Store.zombieHeads?Color.green:Color.white);
 			levelButton[i].audioPressed = unlocked[i]?audioUnlocked:audioLocked;
 		}
 	}

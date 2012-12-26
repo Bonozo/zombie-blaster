@@ -237,7 +237,13 @@ public class Store : MonoBehaviour {
 				if( IsLevelGamePlay )
 					for(int j=0;j<weaponsForLevel[LevelInfo.Environments.control.currentLevel].Length;j++)
 						showFillIn[(int)weaponsForLevel[LevelInfo.Environments.control.currentLevel][j]] = true;
-				if( IsLevelOption ) buttonGAME.gameObject.SetActiveRecursively(false);
+		
+				if( IsLevelOption )
+				{
+					MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
+					if(!mainmenu.mapToStore)
+						buttonGAME.gameObject.SetActiveRecursively(false);
+				}
 				showZombieHeads = zombieHeads;
 				
 				LoadingGUI.SetActive(false);
@@ -302,7 +308,12 @@ public class Store : MonoBehaviour {
 		if( buttonGAME.PressedUp ) 
 		{
 			if( IsLevelGamePlay ) LevelInfo.Environments.control.state = GameState.Play;
-			if( IsLevelOption ) Debug.LogError("Game button should be disabled in MainMenu screen");
+			if( IsLevelOption ) 
+			{
+				MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
+				mainmenu.mapToStore = false;
+				mainmenu.GoState(MainMenu.MenuState.AreaMap);			
+			}
 			showStore = false;
 		}
 		
@@ -312,13 +323,8 @@ public class Store : MonoBehaviour {
 			if( IsLevelOption )
 			{
 				MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
-				if( mainmenu.mapToStore )
-				{
-					mainmenu.mapToStore = false;
-					mainmenu.GoState(MainMenu.MenuState.AreaMap);
-				}
-				else
-					mainmenu.GoState(MainMenu.MenuState.MainMenu);
+				mainmenu.mapToStore = false;
+				mainmenu.GoState(MainMenu.MenuState.MainMenu);
 				showStore = false;
 			}
 		}
@@ -378,7 +384,8 @@ public class Store : MonoBehaviour {
 			
 			//ShopWeaponBuyText.text = "" + GameEnvironment.storeGun[currentshopitem].price;
 			ShopWeaponBuyText.text = 
-				"Ammo: " + GameEnvironment.storeGun[currentshopitem].pocketsize + 
+				"Dmg: " + GameEnvironment.storeGun[currentshopitem].AmmoInformationFormal +
+				"\nAmmo: " + GameEnvironment.storeGun[currentshopitem].pocketsize + 
 				"\nReload: " + GameEnvironment.storeGun[currentshopitem].reloadTime + 
 				"\nSpeed: " + GameEnvironment.storeGun[currentshopitem].speed + 
 				"\nPrice: " + GameEnvironment.storeGun[currentshopitem].price;
@@ -388,7 +395,7 @@ public class Store : MonoBehaviour {
 				wooi = currentshopitem;
 			}	
 			
-			Rect shopRect = new Rect(0.01f*Screen.width,0.1f*Screen.height,0.487f*Screen.width,0.8f*Screen.height);
+			Rect shopRect = new Rect(0.01f*Screen.width,0.1f*Screen.height,0.487f*Screen.width,0.9f*Screen.height);
 			//Rect shopRect = new Rect(0.01f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
 			
 			if( RectContainPoint(shopRect,GameEnvironment.AbsoluteSwipeBegin) && RectContainPoint(shopRect,GameEnvironment.AbsoluteSwipeEnd) && swp.y > 0 )
@@ -426,8 +433,8 @@ public class Store : MonoBehaviour {
 		bool enableshowstashitems = currentStashitem != -1 && stashitemslidecount==0;
 		
 		StashWeaponName.enabled = enableshowstashitems;
-		StashWeaponBuyText.enabled = enableshowstashitems&&IsLevelGamePlay&&showFillIn[currentStashitem];
-		StashItemBuy.gameObject.SetActive(IsLevelGamePlay);
+		StashWeaponBuyText.enabled = enableshowstashitems;
+		StashItemBuy.gameObject.SetActive(enableshowstashitems&&IsLevelGamePlay&&showFillIn[currentStashitem]);
 		StashItemBuy.enabled = enableshowstashitems&&wooi==-1&&IsLevelGamePlay&&showFillIn[currentStashitem];
 		stashItemTexture.enabled = enableshowstashitems;
 		if( stashItemTexture.enabled ) stashItemTexture.texture = weaponIcon[currentStashitem];
@@ -444,11 +451,18 @@ public class Store : MonoBehaviour {
 			StashWeaponName.text = GameEnvironment.storeGun[currentStashitem].name;
 			
 			//StashWeaponBuyText.text = GameEnvironment.storeGun[currentStashitem].AmmoInformation;
-			StashWeaponBuyText.text = 
+			if( showFillIn[currentStashitem] && IsLevelGamePlay)
+				StashWeaponBuyText.text = 
 				"Dmg: " + GameEnvironment.storeGun[currentStashitem].AmmoInformation +
 				"\nAmmo: " + GameEnvironment.storeGun[currentStashitem].pocketsize + 
 				"\nReload: " + GameEnvironment.storeGun[currentStashitem].reloadTime + 
 				"\nSpeed: " + GameEnvironment.storeGun[currentStashitem].speed;
+			else
+				StashWeaponBuyText.text = 
+				"Dmg: " + GameEnvironment.storeGun[currentStashitem].AmmoInformationFormal +
+				"\nAmmo: " + GameEnvironment.storeGun[currentStashitem].pocketsize + 
+				"\nReload: " + GameEnvironment.storeGun[currentStashitem].reloadTime + 
+				"\nSpeed: " + GameEnvironment.storeGun[currentStashitem].speed;			
 			
 			if( StashItemBuy.enabled && StashItemBuy.PressedUp )
 			{
