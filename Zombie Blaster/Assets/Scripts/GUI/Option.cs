@@ -15,6 +15,7 @@ public class Option : MonoBehaviour {
 	public static float BackgroundAmbient = 101f;
 	public static bool ShowFPS = false;
 	public static bool ShoveHelper = true;
+	public static float Peturb = 1f;
 	//public static int Quality = QualitySettings.GetQualityLevel();
 	
 	bool showdebug = true;
@@ -37,6 +38,7 @@ public class Option : MonoBehaviour {
 	{
 		debugScreen = false;
 		showdebug = false;
+		Update();
 	}
 	
 	private Vector2 textSize = new Vector2(Screen.width*0.2f,30);
@@ -44,14 +46,14 @@ public class Option : MonoBehaviour {
 
 	private Rect textRect(float index)
 	{
-		index++;
+		index++; if(index>8) index++;
 		float w = 0f;
 		if( index > 8 ) { w = Screen.width*0.5f; index-=8; }
 		return new Rect(w + Screen.width*0.05f,index*40f,textSize.x,textSize.y);
 	}
 	private Rect buttonRect(float index)
 	{
-		index++;
+		index++; if(index>8) index++;
 		float w = 0f;
 		if( index > 8 ) { w = Screen.width*0.5f; index-=8; }
 		return new Rect(w+Screen.width*0.1f+textSize.x,index*40f,buttonSize.x,buttonSize.y);
@@ -61,37 +63,42 @@ public class Option : MonoBehaviour {
 	{
 		if( debugScreen ){
 			
-		GUI.Label(textRect(1),"Unlimited Health");
-		if( GUI.Button(buttonRect(1),UnlimitedHealth?"ON":"OFF" ) )
+		GUI.Label(textRect(1),"Unlimited Health",myStyle1);
+		if( GUI.Button(buttonRect(1),UnlimitedHealth?"ON":"OFF" ,myStyle2) )
 			UnlimitedHealth = !UnlimitedHealth;
 		
-		GUI.Label(textRect(2),"Tapjoy Connected Status");
-		GUI.Box(buttonRect(2),"" + Store.tapjoyConnected );
+		GUI.Label(textRect(2),"Tapjoy Connected",myStyle1);
+		GUI.Box(buttonRect(2),"" + Store.tapjoyConnected,myStyle2 );
 			
-		GUI.Label(textRect(3),"Health");
+		GUI.Label(textRect(3),"Health",myStyle1);
 		Health = GUI.HorizontalSlider(buttonRect(3),Health,0.05f,1f);
 
-		GUI.Label(textRect(4),"Background Ambient (" + (int)BackgroundAmbient + ")");
+		GUI.Label(textRect(4),"Ambient (" + (int)BackgroundAmbient + ")",myStyle1);
 		BackgroundAmbient = GUI.HorizontalSlider(buttonRect(4),BackgroundAmbient,0f,255f);
 		
 			
-		GUI.Label(textRect(5),"Spot Light Angle (" + (int)SpotLightAngle + ")");
+		GUI.Label(textRect(5),"Spot Light Angle (" + (int)SpotLightAngle + ")",myStyle1);
 		SpotLightAngle = GUI.HorizontalSlider(buttonRect(5),SpotLightAngle,0f,100f);
 	
 	
-		GUI.Label(textRect(6),"Unlimited Ammo");
-		if( GUI.Button(buttonRect(6),UnlimitedAmmo?"ON":"OFF" ) )
+		GUI.Label(textRect(6),"Unlimited Ammo",myStyle1);
+		if( GUI.Button(buttonRect(6),UnlimitedAmmo?"ON":"OFF" ,myStyle2) )
 			UnlimitedAmmo = !UnlimitedAmmo;			
 	
-		GUI.Label(textRect(7),"Show FPS");
-		if( GUI.Button(buttonRect(7),ShowFPS?"ON":"OFF" ) )
+		GUI.Label(textRect(7),"Show FPS",myStyle1);
+		if( GUI.Button(buttonRect(7),ShowFPS?"ON":"OFF" ,myStyle2) )
 			ShowFPS = !ShowFPS;
+		
+		GUI.Label(textRect(8),"Airsoft Peturb (" + ( ((float)((int)(100f*Peturb)))/100f/*:)*/ )+ "%)",myStyle1);
+		Peturb = GUI.HorizontalSlider(buttonRect(8),Peturb,0f,10f);
 			
-		if( GUI.Button( new Rect(Screen.width*0.45f,Screen.height-100,0.1f*Screen.width,40),"Options"))
+		if( GUI.Button( new Rect(Screen.width-100,Screen.height-60,80,40),"Options",myStyle2))
 		{
 			debugScreen = false;
 			title.text = "Options";
 		}
+			
+
 		}
 		
 		else{

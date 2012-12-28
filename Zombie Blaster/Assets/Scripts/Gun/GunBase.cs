@@ -75,7 +75,7 @@ public class GunBase : MonoBehaviour {
 		ammoTimeReduce -= Time.deltaTime;
 		if( ammoTimeReduce <= 0 )
 		{
-			if( PacketSize != int.MaxValue ) Ammo--;
+			if( !GameEnvironment.storeGun[index].unlimited ) Ammo--;
 			ammoTimeReduce = AmmoReduceDelta;
 		}
 	}
@@ -103,8 +103,6 @@ public class GunBase : MonoBehaviour {
 	
 	protected void Update()
 	{
-		if( GameEnvironment.storeGun[index].unlimited ) AmmoStore=int.MaxValue;
-		
 		if( AmmoStore == 0 )
 			reloading = false;
 		
@@ -125,12 +123,11 @@ public class GunBase : MonoBehaviour {
 	public virtual float ManualUpdate(Weapon weapon) { return Ammo; }
 	
 	public string AmmoInformation { get {
-		if( PacketSize == int.MaxValue ) return "Unlimited";
-		if( GameEnvironment.storeGun[index].unlimited ) return "" + Ammo + "/...";	
+		if( GameEnvironment.storeGun[index].unlimited ) return "Unlimited";	
 		return "" + Ammo + "/" + AmmoStore;	
 	}}
 	
-	public float AmmoCurrentPercent { get { if(PacketSize == int.MaxValue ) return 1f; return (float)Ammo/(float)PacketSize; }}
+	public float AmmoCurrentPercent { get { /*if(GameEnvironment.storeGun[index].unlimited ) return 1f;*/ return (float)Ammo/(float)PacketSize; }}
 	
 	protected Vector3 RaycastsTargetPosition(Camera mainCamera,Ray ray,RaycastHit hit)
 	{

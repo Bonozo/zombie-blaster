@@ -70,6 +70,7 @@ public class Guns : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		
 		if( Time.timeScale == 0.0f ) return;
 		foreach( GunBase g in gun ) g.ManualUpdate((Weapon)current );
 		

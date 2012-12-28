@@ -130,7 +130,7 @@ public class civilian : MonoBehaviour {
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
 		Vector3 dir = transform.position - control.transform.position; dir.Normalize();
         foreach (Rigidbody child in rigidbodies) 
-			child.AddForce(200f*dir);
+			child.AddForce(160f*dir);
 		
 		Destroy(this.gameObject);
 	}
@@ -143,7 +143,7 @@ public class civilian : MonoBehaviour {
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
 		Vector3 dir = transform.position - control.transform.position; dir.Normalize(); dir.y = 0.5f;
         foreach (Rigidbody child in rigidbodies) 
-			child.AddForce(400f*dir);
+			child.AddForce(200f*dir);
 		
 		Destroy(this.gameObject);
 	}
@@ -156,7 +156,7 @@ public class civilian : MonoBehaviour {
 		ragdoll.SendMessage("IsCivilian");
 		var rigidbodies = ragdoll.GetComponentsInChildren(typeof(Rigidbody));
         foreach (Rigidbody child in rigidbodies) 
-			child.AddForce(new Vector3(Random.Range(-320f,320f),320f,Random.Range(-320f,320f)));
+			child.AddForce(new Vector3(Random.Range(-160f,160f),160f,Random.Range(-160f,160f)));
 		Destroy(this.gameObject);
 	}
 	

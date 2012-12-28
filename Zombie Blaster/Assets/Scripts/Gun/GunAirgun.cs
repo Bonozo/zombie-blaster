@@ -18,6 +18,8 @@ public class GunAirgun : GunBase {
 		if( weapon != Weapon.BB) return Ammo;
 		
 		Vector3 lastinputnext = GameEnvironment.lastInput;
+		float phb = Mathf.Min(Screen.width,Screen.height)*Option.Peturb*0.01f;
+		lastinputnext += new Vector3( Random.Range(-phb,phb) , Random.Range(-phb,phb),0f);
 		Ray ray = LevelInfo.Environments.mainCamera.ScreenPointToRay (lastinputnext);	
 		
 		//lastinputnext = GameEnvironment.lastInput01; lastinputnext.y -= 0.2f;

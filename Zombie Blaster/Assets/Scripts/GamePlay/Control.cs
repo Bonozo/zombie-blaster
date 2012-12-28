@@ -6,6 +6,8 @@ public class Control : MonoBehaviour {
 	#region Parameters
 	
 	public GameObject guiPlayGame;
+	public GUIStyle myGUIStyle;
+	public Texture texturePopup;
 	
 	public float Speed = 3f;
 	
@@ -199,10 +201,13 @@ public class Control : MonoBehaviour {
 		switch(state)
 		{
 		case GameState.Lose:
+			GUI.DrawTexture(new Rect(0.2f*Screen.width,0.15f*Screen.height,0.6f*Screen.width,0.6f*Screen.height),texturePopup);
 			if( LevelInfo.Environments.hubLives.GetNumber() > 0 )
 			{
-				GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"CONTINUE?");
-				if( GUI.Button(new Rect(0.35f*Screen.width,0.4f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "YES" ) )	
+				//GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"CONTINUE?");
+				GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"CONTINUE?",myGUIStyle);
+				
+				if( GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "YES" ) )	
 				{
 					GameEnvironment.StartWave = currentWave-1;
 					startLives = LevelInfo.Environments.hubLives.GetNumber();
@@ -213,7 +218,7 @@ public class Control : MonoBehaviour {
 					Time.timeScale = 1.0f;
 					Application.LoadLevel(Application.loadedLevel);
 				}
-				if( GUI.Button(new Rect(0.35f*Screen.width,0.6f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "NO") )
+				if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "NO") )
 				{
 					Time.timeScale = 1.0f;
 					Application.LoadLevel("mainmenu");
@@ -221,8 +226,8 @@ public class Control : MonoBehaviour {
 			}
 			else
 			{
-				GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"YOU ARE DEAD.");
-				if( GUI.Button(new Rect(0.35f*Screen.width,0.5f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "MENU") )
+				GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.3f*Screen.height),"YOU ARE DEAD.",myGUIStyle);
+				if( GUI.Button(new Rect(0.42f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "MENU") )
 				{
 					Time.timeScale = 1.0f;
 					Application.LoadLevel("mainmenu");

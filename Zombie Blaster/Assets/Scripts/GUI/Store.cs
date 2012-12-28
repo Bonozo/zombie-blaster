@@ -175,6 +175,9 @@ public class Store : MonoBehaviour {
 	#region GUI
 	
 	public AudioClip audioScrolling;
+	public AudioClip clipBuy;
+	public AudioClip clipBack;
+	
 	public Texture2D[] textureWeapons;
 	public Texture2D textureWeaponUnknown;
 	public GameObject[] objectWeapons;
@@ -392,6 +395,7 @@ public class Store : MonoBehaviour {
 			
 			if( shotItemBuy.PressedUp )
 			{
+				audio.PlayOneShot(clipBuy);
 				wooi = currentshopitem;
 			}	
 			
@@ -466,6 +470,7 @@ public class Store : MonoBehaviour {
 			
 			if( StashItemBuy.enabled && StashItemBuy.PressedUp )
 			{
+				audio.PlayOneShot(clipBuy);
 				wooi = currentStashitem;
 				fillin = true;
 			}	
@@ -631,6 +636,7 @@ public class Store : MonoBehaviour {
 			}
 			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Back" ) )
 			{
+				audio.PlayOneShot(clipBack);
 				wantToExit = false;
 			}	
 			return;
@@ -731,6 +737,7 @@ public class Store : MonoBehaviour {
 			}
 			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Back" ) )
 			{
+				audio.PlayOneShot(clipBack);
 				wooi = -1; 
 				spwchannel = true;
 			}
@@ -767,6 +774,7 @@ public class Store : MonoBehaviour {
 			}
 			if( GUI.Button(new Rect(0.35f*Screen.width,0.6f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "Back" ) )
 			{
+				audio.PlayOneShot(clipBack);
 				wooi = -1;
 				fillin = false;
 				spwchannel = true;
@@ -777,6 +785,7 @@ public class Store : MonoBehaviour {
 			GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"You have not enough heads.");
 			if( GUI.Button(new Rect(0.35f*Screen.width,0.5f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "Back") )
 			{
+				audio.PlayOneShot(clipBack);
 				wooi = -1;
 				fillin = false;
 				spwchannel = true;

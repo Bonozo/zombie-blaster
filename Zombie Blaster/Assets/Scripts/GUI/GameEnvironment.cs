@@ -271,7 +271,7 @@ public class GameEnvironment : MonoBehaviour {
 			this.price = price;
 			this.speed = speed;
 			this.reloadTime = reloadTime;
-			this.unlimited = enabled;
+			this.unlimited = false;
 			
 			this.current = this.store = 0;
 			if( enabled )
@@ -289,6 +289,7 @@ public class GameEnvironment : MonoBehaviour {
 		
 		public void ResetAmmoStandart()
 		{
+			unlimited = false;
 			current = pocketsize;
 			store = 5*pocketsize;
 		}
@@ -304,7 +305,7 @@ public class GameEnvironment : MonoBehaviour {
 		
 		public void SetAsUnlimited()
 		{
-			pocketsize = int.MaxValue;
+			unlimited=true;
 			current = pocketsize;
 			store = pocketsize;
 		}
@@ -312,9 +313,8 @@ public class GameEnvironment : MonoBehaviour {
 		public string AmmoInformation
 		{
 			get
-			{
-				if( Option.UnlimitedAmmo ) return "Unlimited";	
-				if(unlimited) return "" + current + "/...";
+			{	
+				if(unlimited) return "Unlimited";
 				return "" + current + "/" + store;
 			}
 		}
@@ -323,8 +323,7 @@ public class GameEnvironment : MonoBehaviour {
 		{
 			get
 			{
-				if( Option.UnlimitedAmmo ) return "Unlimited";	
-				if(unlimited) return "" + pocketsize + "/...";
+				if(unlimited) return "Unlimited";
 				return "" + pocketsize + "/" + (5*pocketsize);
 			}			
 		}
@@ -337,7 +336,7 @@ public class GameEnvironment : MonoBehaviour {
 		new StoreGun("Crossbow",false,12,30,25,3),			//1
 		new StoreGun("Shotgun",false,5,75,15,1),			//2
 		new StoreGun("Flamethrower",false,100,100,30,12),	//3
-		new StoreGun("Football",false,5,100,100,3),			//4
+		new StoreGun("Football",false,5,100,50,3),			//4
 		new StoreGun("Machine Gun",false,100,150,9,12),		//5
 		new StoreGun("Grenades",false,5,150,50,3),			//6
 		new StoreGun("Revolver",false,6,300,25,1),			//7

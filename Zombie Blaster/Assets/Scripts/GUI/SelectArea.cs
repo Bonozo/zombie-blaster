@@ -18,6 +18,7 @@ public class SelectArea : MonoBehaviour {
 	public AudioSource audioUnlocked;
 	public AudioSource audioLocked;
 	public AudioSource audioUnlockLevel;
+	public AudioSource audioBack;
 	
 	public GameObject guiLoading;
 	public Texture2D[] screen;
@@ -42,7 +43,11 @@ public class SelectArea : MonoBehaviour {
 		{
 			lockIcon[i].enabled = !unlocked[i];
 			lockIcon[i].gameObject.GetComponent<ColorPlay>().colmax = 
-				(unlock_heads[i] <= Store.zombieHeads?Color.green:Color.white);
+				(unlock_heads[i] <= Store.zombieHeads?Color.green:Color.white);		
+			lockIcon[i].gameObject.GetComponent<ColorPlay>().speed = 
+				(unlock_heads[i] <= Store.zombieHeads?2:1);
+			lockIcon[i].gameObject.GetComponent<ColorPlay>().pause = 
+				(unlock_heads[i] <= Store.zombieHeads?0:2);
 			levelButton[i].audioPressed = unlocked[i]?audioUnlocked:audioLocked;
 		}
 	}
@@ -60,6 +65,11 @@ public class SelectArea : MonoBehaviour {
 	void OnEnable()
 	{
 		guiLoading.SetActive(false);
+		for(int i=0;i<5;i++)
+		{
+			lockIcon[i].gameObject.GetComponent<ColorPlay>().pauseInStart = 
+				(unlock_heads[i] <= Store.zombieHeads?false:true);
+		}
 	}
 	
 	// Use this for initialization
@@ -168,6 +178,7 @@ public class SelectArea : MonoBehaviour {
 	
 			if( GUI.Button(new Rect(0.52f*Screen.width,0.55f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "CANCEL" ) )
 			{
+				audioBack.Play();
 				unlock_index = -1;
 				for(int i=0;i<levelButton.Length;i++)
 					levelButton[i].Ignore();

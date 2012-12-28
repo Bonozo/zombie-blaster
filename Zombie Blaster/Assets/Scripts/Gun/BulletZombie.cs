@@ -13,21 +13,17 @@ public class BulletZombie : MonoBehaviour {
 	public FireType fireType;
 	public float Speed = 5f;
 	
-	private Control control;
-	
 	// Use this for initialization
 	void Start () {
 		
-		control = (Control)GameObject.FindObjectOfType(typeof(Control));
-		
 		if( fireType == FireType.Straight )
 		{
-			Vector3 to = control.transform.position; to.y = 2f;
+			Vector3 to = LevelInfo.Environments.control.transform.position; to.y = 2f;
 			transform.LookAt(to,Vector3.up);
 		}
 		else
 		{
-			Vector3 dir = control.transform.position - transform.position; dir.y=1;
+			Vector3 dir = LevelInfo.Environments.control.transform.position - transform.position; dir.y=1;
 			rigidbody.angularVelocity = new Vector3(Random.Range(0,360f),Random.Range(0,360f),Random.Range(0,360f));
 			rigidbody.AddForce(dir*Speed);
 		}
@@ -43,11 +39,11 @@ public class BulletZombie : MonoBehaviour {
 			transform.Translate(Time.deltaTime*Speed*Vector3.forward);
 		}
 
-		Vector3 v = transform.position-control.transform.position;
+		Vector3 v = LevelInfo.Environments.transform.position-LevelInfo.Environments.control.transform.position;
 		v.y = 0;
 		if( v.magnitude <= 0.5f )
 		{
-			control.GetHealth(-0.01f);
+			LevelInfo.Environments.control.GetHealth(-0.01f);
 			Destroy(this.gameObject);
 		}
 	}

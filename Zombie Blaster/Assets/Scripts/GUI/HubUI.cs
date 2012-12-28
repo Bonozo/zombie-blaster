@@ -16,6 +16,7 @@ public class HubUI : MonoBehaviour {
 	// icon
 	private Color beginColor;
 	private Vector3 beginpos,beginsc;
+	private Vector3 labelbeginpos,labelbeginsc;
 	private int threads = 0, threads1 = 0;
 	
 	public int GetNumber() { return number; }
@@ -29,6 +30,9 @@ public class HubUI : MonoBehaviour {
 		beginColor = sprite.color;
 		beginpos = transform.localPosition;
 		beginsc = transform.localScale;
+		
+		labelbeginpos = label.transform.localPosition;
+		labelbeginsc = label.transform.localScale;
 	}
 	
 	public void SetNumberWithFlash(int newnumber)
@@ -45,12 +49,23 @@ public class HubUI : MonoBehaviour {
 	{	
 		if( threads == 0 ) { threads++;
 		float time2 = Time.time + 0.5f*flashTime;
+		float extrapixel = 0.5f*iconScale;
 	
 		Color colmin = label.color, colmax = textFlashColor;
 		while( Time.time < time2 )
 		{
 			float percent = 1-2f*(time2-Time.time)/flashTime;
 			label.color = new Color(colmin.r + percent*(colmax.r-colmin.r),colmin.g + percent*(colmax.g-colmin.g),colmin.b + percent*(colmax.b-colmin.b),colmin.a + percent*(colmax.a-colmin.a) );
+			
+			var v = label.transform.localScale;
+			v.y += extrapixel*Time.deltaTime;
+			v.x += extrapixel*Time.deltaTime;
+			label.transform.localScale = v;
+			v = label.transform.localPosition;
+			v.y += 0.75f*extrapixel*Time.deltaTime;
+			//v.x += 0.5f*extrapixel*Time.deltaTime;
+			label.transform.localPosition = v;
+				
 			yield return new WaitForEndOfFrame();
 		}
 	
@@ -61,11 +76,22 @@ public class HubUI : MonoBehaviour {
 		{
 			float percent = 2f*(time2-Time.time)/flashTime;
 			label.color = new Color(colmin.r + percent*(colmax.r-colmin.r),colmin.g + percent*(colmax.g-colmin.g),colmin.b + percent*(colmax.b-colmin.b),colmin.a + percent*(colmax.a-colmin.a) );
-	
+
+			var v = label.transform.localScale;
+			v.y -= extrapixel*Time.deltaTime;
+			v.x -= extrapixel*Time.deltaTime;
+			label.transform.localScale = v;
+			v = label.transform.localPosition;
+			v.y -= 0.75f*extrapixel*Time.deltaTime;
+			//v.x -= 0.5f*extrapixel*Time.deltaTime;
+			label.transform.localPosition = v;
+				
 			yield return new WaitForEndOfFrame();
 		}
 		
 		label.color = textBeginColor;
+		label.transform.localPosition = labelbeginpos;
+		label.transform.localScale = labelbeginsc;
 		threads--;
 		}
 	}
