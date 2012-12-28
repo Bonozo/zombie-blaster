@@ -1,13 +1,53 @@
 using UnityEngine;
 using System.Collections;
+using System.Xml;
+using System;
 
 public class Control : MonoBehaviour {
+
+	#region LeaderBoardDemo
+	
+	string getScoreResponse;
+	string postScoreResponse;
+	
+	string []lines;
+	
+	string []splitByID;
+	string []splitByNAME;
+	string []splitBySCORE;
+	
+	string ID;
+	string NAME;
+	string SCORE;
+	
+	
+	string []idArray = new string[500];
+	string []nameArray = new string[500];
+	string []scoreArray = new string[500];	
+	
+	int j = 0;
+	int k = 0;
+	int l = 0;
+	
+	int noOfTimesScoreDisplay;
+	
+	bool isGet;
+	bool isPost;
+	bool isScoreDisplayed;
+	bool isName;
+	bool isConnectionError1;
+	bool isLeaderBoard;
+	
+	const float yPosition = 0.03f;
+	
+	string scoreLB;
+	string nameLB;
+	
+	#endregion
 	
 	#region Parameters
 	
 	public GameObject guiPlayGame;
-	public GUIStyle myGUIStyle;
-	public Texture texturePopup;
 	
 	public float Speed = 3f;
 	
@@ -77,6 +117,7 @@ public class Control : MonoBehaviour {
 		
 	private static int startScore = 0;
 	private static int startLives = 1;	
+	
 	public void ForceLevel(int levelnumber,int currentwave)
 	{
 		currentLevel = levelnumber;
@@ -93,6 +134,25 @@ public class Control : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
 	{
+		#region LeaderBoardDemo
+		Time.timeScale = 1;
+		noOfTimesScoreDisplay = 0;
+		
+		isGet = false;
+		isPost = false;
+		isScoreDisplayed = false;
+		isName = false;
+		isConnectionError1 = false;
+		isLeaderBoard = false;
+		
+		getScoreResponse = "";
+		postScoreResponse = "";
+		
+		nameLB = "";
+		scoreLB = "";
+		
+		#endregion
+		
 		health = Option.Health;
 	
 		int vi = GameEnvironment.StartWave % VantagePoints.Length;
@@ -131,6 +191,143 @@ public class Control : MonoBehaviour {
 		}
 		LevelInfo.Environments.generator.GenerateMessageText(new Vector3(0.5f,0.2f,10),message,false,4f);
 	}
+
+    IEnumerator WaitForRequest(WWW www)
+    //void ResponseData()
+	{
+        yield return www;
+		
+        if (www.error == null && isGet == true)
+        {
+			isConnectionError1 = false;
+			
+			getScoreResponse = www.text;
+			//getScoreResponse = "<gamescore><status>Top game store list</status><S_ID>2</S_ID><S_NAME>Jerry</S_NAME><S_SCORE>100</S_SCORE><S_ID>1</S_ID><S_NAME>Jam</S_NAME><S_SCORE>5</S_SCORE><RequestParam><method>Score details</method></RequestParam></gamescore>";
+			//Debug.Log(getScoreResponse);
+			
+			splitByID = new string [] {"<S_ID>"};
+			splitByNAME = new string [] {"<S_NAME>"};
+			splitBySCORE = new string [] {"<S_SCORE>"};
+			
+			string []linesID = getScoreResponse.Split(splitByID, StringSplitOptions.None);
+			string []linesNAME = getScoreResponse.Split(splitByNAME, StringSplitOptions.None);
+			string []linesSCORE = getScoreResponse.Split(splitBySCORE, StringSplitOptions.None);
+			
+			
+			#region ID
+			for(int i = 1; i < linesID.Length; i++)
+			{
+					
+				//Debug.Log(linesID[i]);
+				
+				foreach(char c in linesID[i])
+				{
+					if(c == '<')
+					{
+						break;
+					}
+					else
+					{
+						ID += c;
+					}
+				}
+				
+				if(ID != null)
+					idArray[j] = ID;
+				
+				ID = null;
+				j++;
+			}
+			
+			for(int i = 0; idArray[i] == null; i++)
+			{
+				Debug.Log(idArray[i]);
+			}
+			#endregion
+			
+			
+			#region NAME
+			for(int i1 = 1; i1 < linesNAME.Length; i1++)
+			{
+					
+				//Debug.Log(linesNAME[i1]);
+				
+				foreach(char c1 in linesNAME[i1])
+				{
+					if(c1 == '<')
+					{
+						break;
+					}
+					else
+					{
+						NAME += c1;
+					}
+				}
+				
+				if(NAME != null)
+					nameArray[k] = NAME;
+				
+				NAME = null;
+				k++;
+			}
+			
+			for(int i = 0; nameArray[i] == null; i++)
+			{
+				Debug.Log(nameArray[i]);
+			}
+			#endregion
+			
+			
+			#region SCORE			
+			for(int i3 = 1; i3 < linesSCORE.Length; i3++)
+			{
+					
+				//Debug.Log(linesSCORE[i3]);
+				
+				foreach(char c3 in linesSCORE[i3])
+				{
+					if(c3 == '<')
+					{
+						break;
+					}
+					else
+					{
+						SCORE += c3;
+					}
+				}
+				
+				if(SCORE != null)
+					scoreArray[l] = SCORE;
+				
+				SCORE = null;
+				l++;
+			}
+			
+			for(int i = 0; scoreArray[i] == null; i++)
+			{
+				Debug.Log(scoreArray[i]);
+			}
+			#endregion				
+			
+		} 
+		else if(www.error != null && isGet == true) 
+		{
+			isConnectionError1 = true;
+            //Debug.Log("WWW Error: "+ www.error);
+			getScoreResponse = "Error in Network Connection!";
+        } 
+		
+		if(www.error == null && isPost == true)
+		{
+			postScoreResponse = "Score is successfully posted!";
+			//Debug.Log("WWW Ok!: " + www.data);
+		}	
+		else if(www.error != null && isPost == true)
+		{
+			postScoreResponse = "Error in Network Connection!!";
+	         //Debug.Log("WWW Error: "+ www.error);
+		}	
+    }	
 	
 	// Update is called once per frame
 	void Update () 
@@ -201,14 +398,12 @@ public class Control : MonoBehaviour {
 		switch(state)
 		{
 		case GameState.Lose:
-			GUI.DrawTexture(new Rect(0.2f*Screen.width,0.15f*Screen.height,0.6f*Screen.width,0.6f*Screen.height),texturePopup);
-			if( LevelInfo.Environments.hubLives.GetNumber() > 0 )
+			if( (LevelInfo.Environments.hubLives.GetNumber() > 0) && (isLeaderBoard == false))
 			{
-				//GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"CONTINUE?");
-				GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"CONTINUE?",myGUIStyle);
-				
-				if( GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "YES" ) )	
+				GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"CONTINUE?");
+				if( GUI.Button(new Rect(0.35f*Screen.width,0.4f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "YES" ) )	
 				{
+					isLeaderBoard = false;
 					GameEnvironment.StartWave = currentWave-1;
 					startLives = LevelInfo.Environments.hubLives.GetNumber();
 					startScore = LevelInfo.Environments.hubScore.GetNumber();
@@ -218,20 +413,116 @@ public class Control : MonoBehaviour {
 					Time.timeScale = 1.0f;
 					Application.LoadLevel(Application.loadedLevel);
 				}
-				if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "NO") )
+				if( GUI.Button(new Rect(0.35f*Screen.width,0.6f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "NO") )
 				{
+					isLeaderBoard = true;
 					Time.timeScale = 1.0f;
-					Application.LoadLevel("mainmenu");
+					//Application.LoadLevel("mainmenu");
 				}			
 			}
+			
 			else
 			{
-				GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.3f*Screen.height),"YOU ARE DEAD.",myGUIStyle);
-				if( GUI.Button(new Rect(0.42f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "MENU") )
+				GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"YOU ARE DEAD.");
+				//Debug.Log("R");
+				#region
+				if( (GUI.Button(new Rect(0.27f*Screen.width,0.27f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "Get Top Score")) && (isScoreDisplayed == false) )
+				{	
+		        	string url = "http://crustdesigns.com/demo/game/gettopscore.php?top=10&format=xml";
+		        	WWW www = new WWW(url);
+		        	StartCoroutine(WaitForRequest(www));
+				
+					isPost = false;
+					isGet = true;
+					
+					isScoreDisplayed = true;	
+				}
+				if( GUI.Button(new Rect(0.58f*Screen.width,0.27f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "Post Score") )
+				{			
+					isGet = false;
+					isPost = true;
+										
+					isScoreDisplayed = false;					
+				}
+				
+				if(isGet)
 				{
+					if(isConnectionError1)
+						getScoreResponse = "Error in Network Connection!";
+					else
+						getScoreResponse = "Waiting for Response..";
+					
+					if(nameArray[0] != null && isConnectionError1 == false )
+					{	
+						GUI.Label(new Rect(0.38f*Screen.width,0.32f*Screen.height,0.15f*Screen.width,0.03f*Screen.height), "" + "NAME");				
+						
+						GUI.Label(new Rect(0.50f*Screen.width,0.32f*Screen.height,0.15f*Screen.width,0.03f*Screen.height), "" + "SCORE");					
+						
+						for(int i = 0; i < 10; i++)
+						{	
+							GUI.Label(new Rect(0.38f*Screen.width, (0.35f + yPosition*i)*Screen.height, 0.15f*Screen.width,0.03f*Screen.height), "" + nameArray[i].ToString());
+						}	
+							//GUI.Label(new Rect(400,40, 200, 70), "" + scoreArray[i].ToString());
+							
+							//GUI.Label(new Rect(200,40 + yPosition*(i+1), 200, 70), "" + nameArray[i].ToString());
+						for(int i = 0; i < 10; i++)
+						{			
+							GUI.Label(new Rect(0.50f*Screen.width, (0.35f + yPosition*i)*Screen.height, 0.15f*Screen.width,0.03f*Screen.height), "" + scoreArray[i].ToString());
+						}
+					}
+					else
+					{
+						GUI.Label(new Rect(0.35f*Screen.width,0.35f*Screen.height,0.30f*Screen.width,0.032f*Screen.height), getScoreResponse.ToString());
+					}
+					
+					//isGet = false;				
+				}
+				
+				if(isPost)
+				{
+					//GUI.Label(new Rect(100, 60, 200, 70), getScoreResponse.ToString());
+					GUI.Label(new Rect(0.38f*Screen.width,0.35f*Screen.height, 0.15f*Screen.width,0.03f*Screen.height), "NAME: ");
+					GUI.Label(new Rect(0.38f*Screen.width,0.40f*Screen.height, 0.15f*Screen.width,0.03f*Screen.height), "SCORE: ");
+					
+					nameLB = GUI.TextField(new Rect(0.45f*Screen.width,0.35f*Screen.height, 0.15f*Screen.width,0.035f*Screen.height), nameLB);
+					GUI.Label(new Rect(0.45f*Screen.width,0.40f*Screen.height, 0.15f*Screen.width,0.035f*Screen.height), (LevelInfo.Environments.hubScore.GetNumber()).ToString());
+					
+					//scoreLB = GUI.TextField(new Rect(0.45f*Screen.width,0.40f*Screen.height, 0.15f*Screen.width,0.035f*Screen.height), scoreLB);
+
+					if( GUI.Button(new Rect(0.45f*Screen.width,0.45f*Screen.height, 0.10f*Screen.width,0.035f*Screen.height), "Post") )
+					{
+						if(nameLB.Trim().Equals(""))	
+						{
+							isName = false;
+							postScoreResponse = "Please Enter Name!";
+						}
+						else
+						{	
+							isName = true;
+							string url = "http://crustdesigns.com/demo/game/addscoreresp.php?snm=" + nameLB + "&score=" + (LevelInfo.Environments.hubScore.GetNumber()).ToString() + "&format=xml";
+			        		WWW www = new WWW(url);
+			        		StartCoroutine(WaitForRequest(www));
+						}						
+					}
+					
+					if(!isName || (isPost == true))
+						GUI.Label(new Rect(0.38f*Screen.width,0.50f*Screen.height,0.30f*Screen.width,0.032f*Screen.height), postScoreResponse.ToString());					
+				}
+				#endregion
+	
+				if( GUI.Button(new Rect(0.35f*Screen.width,0.67f*Screen.height,0.3f*Screen.width,0.055f*Screen.height), "MENU") )
+				{
+					isLeaderBoard = false;
+					//Debug.Log("RR");					
 					Time.timeScale = 1.0f;
 					Application.LoadLevel("mainmenu");
 				}
+				
+				/*if( GUI.Button(new Rect(0.35f*Screen.width,0.5f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "MENU") )
+				{
+					Time.timeScale = 1.0f;
+					Application.LoadLevel("mainmenu");
+				}*/
 			}
 			break;
 		case GameState.Play:
@@ -280,14 +571,15 @@ public class Control : MonoBehaviour {
 	
 	private void ShakeUpdates()
 	{
+		
 		transform.rotation =  new Quaternion(0f,transform.rotation.y,0f,transform.rotation.w);	
 		if(shake_intensity > 0)
 		{
     	    transform.rotation =  new Quaternion(
-        	            transform.rotation.x + Random.Range(-shake_intensity,shake_intensity)*.2f,
-                        transform.rotation.y + Random.Range(-shake_intensity,shake_intensity)*.05f,
-                        transform.rotation.z + Random.Range(-shake_intensity,shake_intensity)*.2f,
-                        transform.rotation.w + Random.Range(-shake_intensity,shake_intensity)*.2f);
+        	            transform.rotation.x + UnityEngine.Random.Range(-shake_intensity,shake_intensity)*.2f,
+                        transform.rotation.y + UnityEngine.Random.Range(-shake_intensity,shake_intensity)*.05f,
+                        transform.rotation.z + UnityEngine.Random.Range(-shake_intensity,shake_intensity)*.2f,
+                        transform.rotation.w + UnityEngine.Random.Range(-shake_intensity,shake_intensity)*.2f);
        		shake_intensity -= shake_decay;
     	}
 	}
@@ -392,7 +684,7 @@ public class Control : MonoBehaviour {
 			yield return new WaitForEndOfFrame();
 		
 		LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.AudioWaveComplete);
-		bonusForWaveComplete = Random.Range(0,2);
+		bonusForWaveComplete = UnityEngine.Random.Range(0,2);
 		state = GameState.WaveCompleted;
 		waitfornewwave = Time.realtimeSinceStartup + 3f;
 		PrepareAndCreateNewWave();
