@@ -65,7 +65,8 @@ public class Control : MonoBehaviour {
 	
 	private float health = 1f;
 	private float healthshow = 1f;
-	private float waitfornewwave = 3f;
+	private float showWaveCompleteTime = 3f;
+	private float waitfornewwave = 0f;
 	
 	private bool restartLevel = false;
 	
@@ -102,7 +103,7 @@ public class Control : MonoBehaviour {
 			case GameState.Paused:
 				LevelInfo.Audio.StopEffects();
 				guiPlayGame.SetActiveRecursively(false);
-				LevelInfo.Audio.PlayAudioPause(true);
+				//LevelInfo.Audio.PlayAudioPause(true);
 				Time.timeScale = 0f;
 				GameObject.Find("Store").GetComponent<Store>().showStore = true;
 				break;
@@ -341,6 +342,9 @@ public class Control : MonoBehaviour {
 		if( Input.GetKeyUp(KeyCode.J) )
 			health += 0.1f;
 	
+		// Update Zombie Heads Number On Screen
+		LevelInfo.Environments.hubZombieHeads.SetNumberWithFlash(Store.zombieHeads);
+		
 		ShakeUpdates();
 		
 		if( state != GameState.Play) return;//expect
@@ -393,7 +397,6 @@ public class Control : MonoBehaviour {
 		}
 		
 		UpdateHealthBar();
-		LevelInfo.Environments.hubZombieHeads.SetNumberWithFlash(Store.zombieHeads);
 	}
 	
 	void OnGUI()
@@ -530,13 +533,36 @@ public class Control : MonoBehaviour {
 			}
 			break;
 		case GameState.Play:
-			if( !Moving || angling || Time.time > waitfornewwave ) break;
-			GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"WAVE COMPLETE.");
+			if( !Moving || angling )
+				break;
+			
+			
+			if( bonusForWaveComplete >= 0 )
+			{
+				if( Time.time > waitfornewwave )
+				{
+					LevelInfo.Environments.waveInfo.HideWaveComplete();
+					bonusForWaveComplete = -1;
+				}
+				else if(bonusForWaveComplete<1000 && Time.time > waitfornewwave-showWaveCompleteTime+0.5f)
+				{
+					// Writing Wave Complete
+					//Give reward to the player
+					if( bonusForWaveComplete==0) LevelInfo.Environments.hubLives.SetNumberWithFlash(LevelInfo.Environments.hubLives.GetNumber()+1);
+					else Store.zombieHeads= Store.zombieHeads + 100;
+					// Write To PlayerPrefs
+					Store.SetHighestWaveCompleted(currentLevel,currentWave);
+					
+					LevelInfo.Environments.waveInfo.ShowWaveComplete(bonusForWaveComplete);
+					bonusForWaveComplete = 1000;
+				}
+			}
+			/*GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"WAVE COMPLETE.");
 			
 			GUI.Label(new Rect(0.35f*Screen.width,0.5f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "REWARD" ) ;
 
 			GUI.DrawTexture(new Rect(0.5f*Screen.width,0.445f*Screen.height,0.15f*Screen.width,0.15f*Screen.height),(bonusForWaveComplete==0?LevelInfo.Environments.texturePickUpXtraLife:LevelInfo.Environments.texturePickUpBonusHeads),ScaleMode.ScaleToFit );
-			
+			*/
 			//if( Time.realtimeSinceStartup > waitfornewwave )
 			//	PrepareAndCreateNewWave();
 			break;
@@ -558,12 +584,17 @@ public class Control : MonoBehaviour {
 		}
 		
 		Vector3 dir = destination-GameEnvironment.ProjectionXZ(transform.position); dir.Normalize();
-		transform.Translate(dir*MovingSpeed*Time.deltaTime,Space.World);
 		if( GameEnvironment.DistXZ(transform.position,destination) <= 0.5f )
 		{
-			Moving = false;
-			CreateNewZombieWave();
+			if( Time.time > waitfornewwave )
+			{
+				LevelInfo.Environments.waveInfo.HideWaveComplete();
+				Moving = false;
+				CreateNewZombieWave();
+			}
 		}		
+		else
+			transform.Translate(dir*MovingSpeed*Time.deltaTime,Space.World);
 	}
 	
 	#endregion
@@ -620,7 +651,7 @@ public class Control : MonoBehaviour {
 	
 	#endregion
 
-	#region On GUI
+	#region Health Bar Update
 	
 	void UpdateHealthBar()
 	{
@@ -680,7 +711,7 @@ public class Control : MonoBehaviour {
 		}
 	}
 	
-	private int bonusForWaveComplete = 0;
+	private int bonusForWaveComplete = -1;
 	public IEnumerator WaveComplete()
 	{
 		float time = Time.time + 6f;
@@ -690,15 +721,13 @@ public class Control : MonoBehaviour {
 		LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.AudioWaveComplete);
 		bonusForWaveComplete = UnityEngine.Random.Range(0,2);
 		state = GameState.WaveCompleted;
-		waitfornewwave = Time.realtimeSinceStartup + 3f;
+		waitfornewwave = Time.realtimeSinceStartup + showWaveCompleteTime;
 		PrepareAndCreateNewWave();
 	}
 	
 	public void PrepareAndCreateNewWave()
 	{
 		LevelInfo.Audio.audioSourceZombies.Stop();
-		if( bonusForWaveComplete==0) LevelInfo.Environments.hubLives.SetNumberWithFlash(LevelInfo.Environments.hubLives.GetNumber()+1);
-		else Store.zombieHeads= Store.zombieHeads + 100;
 		state = GameState.Play;
 		MoveTo(VantagePoints[currentWave%VantagePoints.Length]);
 	}

@@ -61,6 +61,7 @@ public class Store : MonoBehaviour {
 	
 	private static int[] _playerprefs_unlockweapon = new int[countWeapons];
 	private static int[] _playerprefs_unlocklevel = new int[countLevel];
+	private static int[] _playerprefs_highestwavecompleted = new int[countLevel];
 		
 	public static bool WeaponUnlocked(int weapon)
 	{
@@ -80,6 +81,18 @@ public class Store : MonoBehaviour {
 		_playerprefs_unlocklevel[level] = 1;
 		PlayerPrefs.SetInt("level"+level,_playerprefs_unlocklevel[level]);
 	}
+	public static int HighestWaveCompleted(int level)
+	{
+		return _playerprefs_highestwavecompleted[level];
+	}
+	public static void SetHighestWaveCompleted(int level,int newscore)
+	{
+		if( newscore > _playerprefs_highestwavecompleted[level] )
+		{
+			_playerprefs_highestwavecompleted[level] = newscore;
+			PlayerPrefs.SetInt("highestwavecompleted"+level,_playerprefs_highestwavecompleted[level]);
+		}
+	}
 	
 	public void RestorePlayerPrefs()
 	{
@@ -98,6 +111,12 @@ public class Store : MonoBehaviour {
 		{
 			Store._playerprefs_unlocklevel[i] = PlayerPrefs.GetInt("level"+i,0);
 		}
+		
+		// highestwavecompleted
+		for(int i=0;i<_playerprefs_highestwavecompleted.Length;i++)
+		{
+			Store._playerprefs_highestwavecompleted[i] = PlayerPrefs.GetInt("highestwavecompleted"+i,0);
+		}		
 		
 	}
 	
@@ -211,6 +230,11 @@ public class Store : MonoBehaviour {
 	
 	public GUITexture[] scrollingInfo;
 	private float scrollingTime = 0.0f;
+	
+	public GUITexture arrowUpShow;
+	public GUITexture arrowDownShow;
+	public GUITexture arrowUpStash;
+	public GUITexture arrowDownStash;
 	
 	private bool spwchannel = false;
 	
@@ -368,6 +392,8 @@ public class Store : MonoBehaviour {
 				swp = Vector2.zero;
 				spwchannel = false;
 			}
+		
+		arrowUpShow.enabled = arrowDownShow.enabled = arrowUpStash.enabled = arrowDownStash.enabled = false;
 		// shop
 		
 		for(int i=2;i<countWeapons;i++)
@@ -378,6 +404,10 @@ public class Store : MonoBehaviour {
 		
 		if( enableshowshopitems && wooi==-1)
 		{
+			int nx = NextWeapon(currentshopitem,false),pv = PrevWeapon(currentshopitem,false);
+			arrowUpShow.enabled   = nx!=-1&&nx!=currentshopitem;
+			arrowDownShow.enabled = pv!=-1&&pv!=currentshopitem;
+			
 			for(int i=0;i<countWeapons;i++)
 				if( !WeaponUnlocked(i) )
 					objectWeapons[i].transform.localPosition = new Vector3(0,1f,0);
@@ -450,9 +480,14 @@ public class Store : MonoBehaviour {
 		stashItemTexture.enabled = enableshowstashitems;
 		if( stashItemTexture.enabled ) stashItemTexture.texture = weaponIcon[currentStashitem];
 		
+
 		// Stash
 		if( enableshowstashitems && wooi==-1)
-		{
+		{	
+			int nx = NextWeapon(currentStashitem,true),pv = PrevWeapon(currentStashitem,true);
+			arrowUpStash.enabled   = nx!=-1&&nx!=currentStashitem;
+			arrowDownStash.enabled = pv!=-1&&pv!=currentStashitem;
+			
 			for(int i=0;i<countWeapons;i++)
 				if( WeaponUnlocked(i) )
 					objectWeapons[i].transform.localPosition = new Vector3(0,1f,0);
@@ -597,6 +632,7 @@ public class Store : MonoBehaviour {
 	}
 	int NextWeapon(int current,bool unlocked)
 	{
+		if(current==-1) return -1;
 		for(int i=current+1;i<countWeapons;i++)
 			if( WeaponUnlocked(i) == unlocked ) 
 				return i;	
@@ -607,6 +643,7 @@ public class Store : MonoBehaviour {
 	}
 	int PrevWeapon(int current,bool unlocked)
 	{
+		if(current==-1) return -1;
 		for(int i=current-1;i>=0;i--)
 			if( WeaponUnlocked(i) == unlocked ) 
 				return i;

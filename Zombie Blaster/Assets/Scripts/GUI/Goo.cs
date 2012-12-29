@@ -16,6 +16,11 @@ public class Goo : MonoBehaviour {
 	
 	}
 	
+	void OnEnable()
+	{
+		Update();
+	}
+	
 	// Update is called once per frame
 	void Update () {
 		switch(state)

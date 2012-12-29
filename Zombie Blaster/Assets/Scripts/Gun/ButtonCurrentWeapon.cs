@@ -20,16 +20,16 @@ public class ButtonCurrentWeapon : MonoBehaviour {
 	{
 		// Percent
 		float p = LevelInfo.Environments.guns.CurrentWeapon.AmmoCurrentPercent;
-		percentSprite.fillAmount = p;
-		//p=.0f-p;	
+		percentSprite.fillAmount = 1f-p;	
 		
 		// Icon and Colors
 		percentSprite.spriteName = weaponSprite.spriteName = "weapon_" + GameEnvironment.storeGun[LevelInfo.Environments.guns.CurrentWeaponIndex].name;
 		
-		if(LevelInfo.Environments.guns.CurrentWeapon.reloading)
+		percentSprite.color = LevelInfo.Environments.guns.CurrentWeapon.reloading?Color.green:Color.red;
+		/*if(LevelInfo.Environments.guns.CurrentWeapon.reloading)
 			percentSprite.color = new Color(p,1f,p,1f);
 		else
-			percentSprite.color = new Color(1f,p,p,1f);
+			percentSprite.color = new Color(1f,p,p,1f);*/
 		
 		// Ammo Information
 		ammoInformation.text = LevelInfo.Environments.guns.CurrentWeapon.AmmoInformation;

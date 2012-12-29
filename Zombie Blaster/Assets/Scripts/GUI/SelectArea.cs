@@ -30,6 +30,7 @@ public class SelectArea : MonoBehaviour {
 	private bool[] unlocked = new bool[5];
 	private int[] unlock_heads = new int [5] {0,500,1000,1500,2000};
 	private int unlock_index = -1;
+	private int play_index = -1;
 	private int countUnlocked=0;
 
 	private void UpdateSelectAreaScreen()
@@ -65,6 +66,9 @@ public class SelectArea : MonoBehaviour {
 	
 	void OnEnable()
 	{
+		play_index = unlock_index = -1;
+		GameEnvironment.StartWave = 0;
+		
 		audioOpenMap.Play();
 		guiLoading.SetActive(false);
 		for(int i=0;i<5;i++)
@@ -78,6 +82,7 @@ public class SelectArea : MonoBehaviour {
 	void Start () {
 		
 		store = (Store)GameObject.FindObjectOfType(typeof(Store));
+		GameEnvironment.StartWave = 0;
 		
 		GameEnvironment.StartLevel = 0;
 		for(int i=0;i<Store.countLevel;i++)
@@ -110,7 +115,7 @@ public class SelectArea : MonoBehaviour {
 			return;
 		}
 		
-		if( unlock_index != -1 ) return;
+		if( unlock_index != -1 || play_index != -1) return;
 		
 		
 		for(int i=0;i<levelButton.Length;i++)
@@ -123,24 +128,14 @@ public class SelectArea : MonoBehaviour {
 		for(int i=0;i<levelButton.Length;i++)
 			if( unlocked[i] && levelButton[i].PressedUp )
 			{
-				GameEnvironment.StartLevel = i;
-				GameEnvironment.StartWave = 0;
-				
-				levelButton[i].SetAsPressed();
-				
-				Destroy(GameObject.Find("Sound Background"));
-				Destroy(GameObject.Find("Sound Wind"));
-				guiLoading.SetActive(true);
-				guiFullscreen.texture = screen[Random.Range(0,screen.Length)];
-				guiTip.text = tip[Random.Range(0,tip.Length)];
-				Application.LoadLevel("playgame");	
+				play_index = i;	
 			}
 	}
 	
 	public GUIStyle myStyle;
 	void OnGUI ()
 	{ 
-		popupTexture.enabled = unlock_index != -1;
+		popupTexture.enabled = unlock_index != -1 || play_index != -1;
 		if( unlock_index != -1 )
 		{
 			bool can_bay = Store.zombieHeads >= unlock_heads[unlock_index];
@@ -186,6 +181,50 @@ public class SelectArea : MonoBehaviour {
 			{
 				audioBack.Play();
 				unlock_index = -1;
+				for(int i=0;i<levelButton.Length;i++)
+					levelButton[i].Ignore();
+			}
+		}
+		
+		if( play_index != -1 )
+		{
+			GUI.Label(new Rect(0.35f*Screen.width,0.33f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),"Highest Wave Completed " + Store.HighestWaveCompleted(play_index),myStyle);
+			if(GUI.Button(new Rect(0.33f*Screen.width,0.55f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "PLAY" ) )
+			{
+				audioUnlocked.Play();
+				GameEnvironment.StartLevel = play_index;
+				
+				Destroy(GameObject.Find("Sound Background"));
+				Destroy(GameObject.Find("Sound Wind"));
+				guiLoading.SetActive(true);
+				guiFullscreen.texture = screen[Random.Range(0,screen.Length)];
+				guiTip.text = tip[Random.Range(0,tip.Length)];
+				play_index = -1;
+				Application.LoadLevel("playgame");	
+				return;
+			}
+			
+			if( Store.HighestWaveCompleted(play_index)>0 )
+			{		
+				GUI.Label(new Rect(0.35f*Screen.width,0.43f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),"Start Wave ",myStyle);
+				if( GUI.Button(new Rect(0.5f*Screen.width,0.42f*Screen.height, 0.05f*Screen.width,0.05f*Screen.height), "-") && GameEnvironment.StartWave > 0 )
+					GameEnvironment.StartWave--;
+				
+				myStyle.alignment = TextAnchor.MiddleCenter;	
+				GUI.Label(new Rect(0.57f*Screen.width,0.42f*Screen.height, 0.03f*Screen.width,0.05f*Screen.height), (GameEnvironment.StartWave+1).ToString(),myStyle);
+				myStyle.alignment = TextAnchor.UpperLeft;
+				
+				if( GUI.Button(new Rect(0.62f*Screen.width,0.42f*Screen.height, 0.05f*Screen.width,0.05f*Screen.height), "+") && GameEnvironment.StartWave < Store.HighestWaveCompleted(play_index) )
+					GameEnvironment.StartWave++;	
+			}
+			
+			
+			
+			if( GUI.Button(new Rect(0.52f*Screen.width,0.55f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "BACK" ) )
+			{
+				audioBack.Play();
+				play_index = -1;
+				GameEnvironment.StartWave = 0;
 				for(int i=0;i<levelButton.Length;i++)
 					levelButton[i].Ignore();
 			}
