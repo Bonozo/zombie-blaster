@@ -18,14 +18,21 @@ public class Generator : MonoBehaviour {
 		GameObject z;
 		var level = LevelInfo.State.level[LevelInfo.Environments.control.currentLevel];
 		
-		z = level.standardZombie[Random.Range(0,level.standardZombie.Length)];
+		
+		
 		// special for Farm Level
 		if( LevelInfo.Environments.control.currentLevel == 0 )
 		{
-			if( LevelInfo.Environments.control.currentWave < 2 )
+			if( LevelInfo.Environments.control.currentWave >=4 && Random.Range(0,6) == 1 )//16% Sheriff
+				z = level.standardZombie[level.standardZombie.Length-1];
+			else if( LevelInfo.Environments.control.currentWave >=2 && Random.Range(0,6) == 1)//16% Cowboy
+				z = level.standardZombie[level.standardZombie.Length-2];
+			else
 				z = level.standardZombie[Random.Range(0,level.standardZombie.Length-2)];
-			else if( LevelInfo.Environments.control.currentWave < 4 )
-				z = level.standardZombie[Random.Range(0,level.standardZombie.Length-1)];
+		}
+		else
+		{
+			z = level.standardZombie[Random.Range(0,level.standardZombie.Length)];
 		}
 		
 		if(LevelInfo.Environments.control.currentWave > 1)

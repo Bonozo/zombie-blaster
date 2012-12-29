@@ -15,14 +15,12 @@ public class ButtonPause : MonoBehaviour {
 					GameEnvironment.IgnoreButtons();
 					LevelInfo.Environments.control.state = GameState.Paused;
 				}
+			
+			if( Input.GetMouseButtonUp(0) && this.guiTexture.HitTest(Input.mousePosition) )
+			{
+				GameEnvironment.IgnoreButtons();
+				LevelInfo.Environments.control.state = GameState.Paused;		
+			}
 		}
-		
-		if( Input.GetMouseButtonUp(0) && this.guiTexture.HitTest(Input.mousePosition) )
-		{
-			GameEnvironment.IgnoreButtons();
-			LevelInfo.Environments.control.state = GameState.Paused;		
-		}
-		
-
 	}
 }

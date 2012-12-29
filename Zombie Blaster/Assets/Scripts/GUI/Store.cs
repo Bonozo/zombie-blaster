@@ -177,6 +177,7 @@ public class Store : MonoBehaviour {
 	public AudioClip audioScrolling;
 	public AudioClip clipBuy;
 	public AudioClip clipBack;
+	public AudioClip clipShowStore;
 	
 	public Texture2D[] textureWeapons;
 	public Texture2D textureWeaponUnknown;
@@ -230,6 +231,8 @@ public class Store : MonoBehaviour {
 			
 			if( _showStore )
 			{
+				audio.PlayOneShot(clipShowStore);
+				
 				for(int i=0;i<countWeapons;i++) showWeapon[i]=false;
 				for(int i=0;i<countLevel;i++)
 					if( LevelUnlocked(i) )
@@ -256,6 +259,10 @@ public class Store : MonoBehaviour {
 				
 				scrollingTime = 0f;
 				Update ();
+			}
+			else
+			{
+				audio.Stop();
 			}
 		}
 	}

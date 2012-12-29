@@ -21,7 +21,7 @@ public class MainMenu : MonoBehaviour {
 	
 	public AudioSource audioCredits;
 	public AudioSource audioPressed;
-	public GUITexture guiOptionButton,guiPlayButton,guiStore,guiStats;
+	public ButtonBase buttonOption,buttonPlay,buttonStore,buttonStats;
 	public GameObject objMenu,objOption,objCreadits,objAreaMap,objLeaderboard;
 	public AudioSource SoundBackground,SoundWind;
 	public ButtonBase backButton;
@@ -73,12 +73,12 @@ public class MainMenu : MonoBehaviour {
 		foreach(Touch touch in Input.touches)
 			if( button.HitTest(touch.position) && touch.phase == TouchPhase.Ended)
 			{
-				if( audioPressed != null ) audioPressed.Play();
+				//if( audioPressed != null ) audioPressed.Play();
 				return true;
 			}
 		if( Input.GetMouseButtonUp(0) && button.HitTest(Input.mousePosition) )
 		{
-			if( audioPressed != null ) audioPressed.Play();
+			//if( audioPressed != null ) audioPressed.Play();
 			return true;
 		}
 		
@@ -106,13 +106,13 @@ public class MainMenu : MonoBehaviour {
 		switch(State)
 		{
 		case MenuState.MainMenu:
-			if( ButtonPressed(guiOptionButton) )
+			if( buttonOption.PressedUp )
 				State = MenuState.Option;
-			if( ButtonPressed(guiPlayButton) )
+			if( buttonPlay.PressedUp )
 				State = MenuState.AreaMap;
-			if( ButtonPressed(guiStats) )
+			if( buttonStats.PressedUp )
 				State = MenuState.Leaderboard;
-			if( ButtonPressed(guiStore) )
+			if( buttonStore.PressedUp )
 			{
 				State = MenuState.Store;
 			}

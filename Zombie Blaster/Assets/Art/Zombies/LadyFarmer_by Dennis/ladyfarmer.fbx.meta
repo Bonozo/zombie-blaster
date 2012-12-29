@@ -46,6 +46,9 @@ ModelImporter:
     100080: farmer_waist_joint
     100082: //RootNode
     100084: pCube1
+    100086: polySurface1
+    100088: polySurface8
+    100090: sickle:Mesh
     400000: farmer:Mesh
     400002: farmer_back1_joint
     400004: farmer_back2_joint
@@ -89,10 +92,22 @@ ModelImporter:
     400080: farmer_waist_joint
     400082: //RootNode
     400084: pCube1
+    400086: polySurface1
+    400088: polySurface8
+    400090: sickle:Mesh
     2300000: pCube1
+    2300002: polySurface1
+    2300004: polySurface8
+    2300006: sickle:Mesh
     3300000: pCube1
+    3300002: polySurface1
+    3300004: polySurface8
+    3300006: sickle:Mesh
     4300000: farmer:Mesh
     4300002: pCube1
+    4300004: sickle:Mesh
+    4300006: polySurface1
+    4300008: polySurface8
     9500000: //RootNode
     13700000: farmer:Mesh
   materials:

@@ -235,7 +235,7 @@ public class Zombi : MonoBehaviour {
 		
 		Vector3 pos = transform.position;
 		// ?? // 
-		if( HitWithName(gameObject.name,"Fatkid") || HitWithName(gameObject.name,"Farmer2") ||
+		if( HitWithName(gameObject.name,"Fatkid") ||
 			HitWithName(gameObject.name,"Ballerina") || HitWithName(gameObject.name,"FootballPlayer"))
 			pos.y += 0.4f;
 		

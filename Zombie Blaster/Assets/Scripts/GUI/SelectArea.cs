@@ -19,6 +19,7 @@ public class SelectArea : MonoBehaviour {
 	public AudioSource audioLocked;
 	public AudioSource audioUnlockLevel;
 	public AudioSource audioBack;
+	public AudioSource audioOpenMap;
 	
 	public GameObject guiLoading;
 	public Texture2D[] screen;
@@ -64,6 +65,7 @@ public class SelectArea : MonoBehaviour {
 	
 	void OnEnable()
 	{
+		audioOpenMap.Play();
 		guiLoading.SetActive(false);
 		for(int i=0;i<5;i++)
 		{
@@ -81,7 +83,11 @@ public class SelectArea : MonoBehaviour {
 		for(int i=0;i<Store.countLevel;i++)
 		{
 			unlocked[i] = Store.LevelUnlocked(i);
-			if(unlocked[i]) countUnlocked++;
+			if(unlocked[i]) 
+			{
+				countUnlocked++;
+				levelButton[i].standartTexture = levelButton[i].pressedTexture;
+			}
 		}
 		if( countUnlocked == 5 && helpMessage != null)
 			Destroy(helpMessage);
