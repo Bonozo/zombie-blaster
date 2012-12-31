@@ -40,8 +40,13 @@ public class HubUI : MonoBehaviour {
 		if( number != newnumber)
 		{
 			number = newnumber;
-			StartCoroutine(FlashTextThread(number));
-			StartCoroutine(FlashIconThread());
+			if( sprite.gameObject.activeSelf )
+			{
+				StartCoroutine(FlashTextThread(number));
+				StartCoroutine(FlashIconThread());
+			}
+			else
+				label.text = "" + number;
 		}
 	}
 	

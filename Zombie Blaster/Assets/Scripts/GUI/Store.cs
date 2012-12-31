@@ -497,13 +497,13 @@ public class Store : MonoBehaviour {
 			StashWeaponName.text = GameEnvironment.storeGun[currentStashitem].name;
 			
 			//StashWeaponBuyText.text = GameEnvironment.storeGun[currentStashitem].AmmoInformation;
-			if( showFillIn[currentStashitem] && IsLevelGamePlay)
+			/*if( showFillIn[currentStashitem] && IsLevelGamePlay)
 				StashWeaponBuyText.text = 
 				"Dmg: " + GameEnvironment.storeGun[currentStashitem].AmmoInformation +
 				"\nAmmo: " + GameEnvironment.storeGun[currentStashitem].pocketsize + 
 				"\nReload: " + GameEnvironment.storeGun[currentStashitem].reloadTime + 
 				"\nSpeed: " + GameEnvironment.storeGun[currentStashitem].speed;
-			else
+			else*/
 				StashWeaponBuyText.text = 
 				"Dmg: " + GameEnvironment.storeGun[currentStashitem].AmmoInformationFormal +
 				"\nAmmo: " + GameEnvironment.storeGun[currentStashitem].pocketsize + 
@@ -658,6 +658,20 @@ public class Store : MonoBehaviour {
 	public GUITexture guiFullscreen;
 	public GUIText guiTip;
 	
+	public void GoMainMenuFromGamePlay()
+	{
+		if(!IsLevelGamePlay) Debug.LogError("Error at Store->GoMainMenuFromGamePlay()");
+		LevelInfo.Environments.control.guiPlayGame.SetActive(false);
+		LevelInfo.Environments.control.allowShowGUI = false;
+		showStore = false;
+		LevelInfo.Audio.StopAll();
+		Destroy(GameObject.Find("Audio Wind Loop"));
+		LoadingGUI.SetActive(true);
+		guiFullscreen.texture = screen[Random.Range(0,screen.Length)];
+		guiTip.text = tip[Random.Range(0,tip.Length)];
+		Application.LoadLevel("mainmenu");		
+	}
+	
 	void OnGUI()
 	{
 		if(!_showStore) return;
@@ -670,13 +684,7 @@ public class Store : MonoBehaviour {
 			
 			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Quit" ) )	
 			{
-				showStore = false;
-				LevelInfo.Audio.StopAll();
-				Destroy(GameObject.Find("Audio Wind Loop"));
-				LoadingGUI.SetActive(true);
-				guiFullscreen.texture = screen[Random.Range(0,screen.Length)];
-				guiTip.text = tip[Random.Range(0,tip.Length)];
-				Application.LoadLevel("mainmenu");
+				GoMainMenuFromGamePlay();
 			}
 			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Back" ) )
 			{

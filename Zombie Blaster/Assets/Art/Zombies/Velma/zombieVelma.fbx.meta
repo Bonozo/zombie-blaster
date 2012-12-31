@@ -1,24 +1,78 @@
 fileFormatVersion: 2
 guid: 64541fa67bfd599489dcf983010fe626
 ModelImporter:
+  serializedVersion: 15
   fileIDToRecycleName:
+    100000: bn_l_necka01
+    100002: bn_l_spinea01
+    100004: bn_r_anklee01
+    100006: //RootNode
+    100008: bn_l_hand01
+    100010: bn_l_should01
+    100012: bn_r_knee01
+    100014: bn_l_wrist01
+    100016: bn_r_elbow01
+    100018: bn_l_elbow01
+    100020: bn_r_ball01
+    100022: velma_body
+    100024: bn_l_spineb01
+    100026: bn_l_knee01
+    100028: bn_r_wrist01
+    100030: bn_l_ball01
+    100032: bn_r_hip01
+    100034: bn_r_should01
+    100036: bn_l_hip01
+    100038: bn_l_hata01
+    100040: jnt01
+    100042: root
+    100044: bn_l_chest01
+    100046: bn_l_head01
+    100048: bn_l_anklee01
+    100050: bn_r_hand01
+    400000: bn_l_necka01
+    400002: bn_l_spinea01
+    400004: bn_r_anklee01
+    400006: //RootNode
+    400008: bn_l_hand01
+    400010: bn_l_should01
+    400012: bn_r_knee01
+    400014: bn_l_wrist01
+    400016: bn_r_elbow01
+    400018: bn_l_elbow01
+    400020: bn_r_ball01
+    400022: velma_body
+    400024: bn_l_spineb01
+    400026: bn_l_knee01
+    400028: bn_r_wrist01
+    400030: bn_l_ball01
+    400032: bn_r_hip01
+    400034: bn_r_should01
+    400036: bn_l_hip01
+    400038: bn_l_hata01
+    400040: jnt01
+    400042: root
+    400044: bn_l_chest01
+    400046: bn_l_head01
+    400048: bn_l_anklee01
+    400050: bn_r_hand01
     4300000: velma_body
-    7400000: Take 001 //// zombieVelma
-  serializedVersion: 10
+    7400000: Take 001
+    11100000: //RootNode
+    13700000: velma_body
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:
-    generateAnimations: 3
+    legacyGenerateAnimations: 3
     bakeSimulation: 0
-    splitAnimations: 1
     animationCompression: 1
     animationRotationError: .5
     animationPositionError: .5
     animationScaleError: .5
     animationWrapMode: 0
     clipAnimations: []
+    isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: .00999999978
@@ -27,7 +81,7 @@ ModelImporter:
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMesh: 0
+    optimizeMeshForGPU: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
@@ -37,192 +91,21 @@ ModelImporter:
     splitTangentsAcrossUV: 1
     normalImportMode: 0
     tangentImportMode: 1
-  textMetaNamesToFileIDs:
-    //RootNode:
-      data:
-        first: 1
-        second: a6860100
-      data:
-        first: 4
-        second: 861a0600
-      data:
-        first: 111
-        second: 605fa900
-    bn_l_anklee01:
-      data:
-        first: 1
-        second: d0860100
-      data:
-        first: 4
-        second: b01a0600
-    bn_l_ball01:
-      data:
-        first: 1
-        second: be860100
-      data:
-        first: 4
-        second: 9e1a0600
-    bn_l_chest01:
-      data:
-        first: 1
-        second: cc860100
-      data:
-        first: 4
-        second: ac1a0600
-    bn_l_elbow01:
-      data:
-        first: 1
-        second: b2860100
-      data:
-        first: 4
-        second: 921a0600
-    bn_l_hand01:
-      data:
-        first: 1
-        second: a8860100
-      data:
-        first: 4
-        second: 881a0600
-    bn_l_hata01:
-      data:
-        first: 1
-        second: c6860100
-      data:
-        first: 4
-        second: a61a0600
-    bn_l_head01:
-      data:
-        first: 1
-        second: ce860100
-      data:
-        first: 4
-        second: ae1a0600
-    bn_l_hip01:
-      data:
-        first: 1
-        second: c4860100
-      data:
-        first: 4
-        second: a41a0600
-    bn_l_knee01:
-      data:
-        first: 1
-        second: ba860100
-      data:
-        first: 4
-        second: 9a1a0600
-    bn_l_necka01:
-      data:
-        first: 1
-        second: a0860100
-      data:
-        first: 4
-        second: 801a0600
-    bn_l_should01:
-      data:
-        first: 1
-        second: aa860100
-      data:
-        first: 4
-        second: 8a1a0600
-    bn_l_spinea01:
-      data:
-        first: 1
-        second: a2860100
-      data:
-        first: 4
-        second: 821a0600
-    bn_l_spineb01:
-      data:
-        first: 1
-        second: b8860100
-      data:
-        first: 4
-        second: 981a0600
-    bn_l_wrist01:
-      data:
-        first: 1
-        second: ae860100
-      data:
-        first: 4
-        second: 8e1a0600
-    bn_r_anklee01:
-      data:
-        first: 1
-        second: a4860100
-      data:
-        first: 4
-        second: 841a0600
-    bn_r_ball01:
-      data:
-        first: 1
-        second: b4860100
-      data:
-        first: 4
-        second: 941a0600
-    bn_r_elbow01:
-      data:
-        first: 1
-        second: b0860100
-      data:
-        first: 4
-        second: 901a0600
-    bn_r_hand01:
-      data:
-        first: 1
-        second: d2860100
-      data:
-        first: 4
-        second: b21a0600
-    bn_r_hip01:
-      data:
-        first: 1
-        second: c0860100
-      data:
-        first: 4
-        second: a01a0600
-    bn_r_knee01:
-      data:
-        first: 1
-        second: ac860100
-      data:
-        first: 4
-        second: 8c1a0600
-    bn_r_should01:
-      data:
-        first: 1
-        second: c2860100
-      data:
-        first: 4
-        second: a21a0600
-    bn_r_wrist01:
-      data:
-        first: 1
-        second: bc860100
-      data:
-        first: 4
-        second: 9c1a0600
-    jnt01:
-      data:
-        first: 1
-        second: c8860100
-      data:
-        first: 4
-        second: a81a0600
-    root:
-      data:
-        first: 1
-        second: ca860100
-      data:
-        first: 4
-        second: aa1a0600
-    velma_body:
-      data:
-        first: 1
-        second: b6860100
-      data:
-        first: 4
-        second: 961a0600
-      data:
-        first: 137
-        second: a00bd100
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    handles: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  additionalBone: 1
+  animationType: 1
+  userData: 

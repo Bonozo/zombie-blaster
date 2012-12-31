@@ -111,7 +111,7 @@ public class GunBase : MonoBehaviour {
 			ammoTimeIncrease -= Time.deltaTime;
 			if( ammoTimeIncrease <= 0.0f )
 			{
-				AmmoStore--;
+				if(!GameEnvironment.storeGun[index].unlimitedclips) AmmoStore--;
 				Ammo++;
 				if( Ammo == PacketSize )
 					reloading = false;
@@ -124,6 +124,7 @@ public class GunBase : MonoBehaviour {
 	
 	public string AmmoInformation { get {
 		if( GameEnvironment.storeGun[index].unlimited ) return "Unlimited";	
+		if(GameEnvironment.storeGun[index].unlimitedclips) return "" + Ammo + "/#";
 		return "" + Ammo + "/" + AmmoStore;	
 	}}
 	

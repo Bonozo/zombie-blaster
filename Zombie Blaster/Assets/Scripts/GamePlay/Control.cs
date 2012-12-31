@@ -399,8 +399,10 @@ public class Control : MonoBehaviour {
 		UpdateHealthBar();
 	}
 	
+	public bool allowShowGUI = true;
 	void OnGUI()
 	{
+		if( !allowShowGUI) return;
 		switch(state)
 		{
 		case GameState.Lose:
@@ -434,7 +436,7 @@ public class Control : MonoBehaviour {
 				GUI.Label(new Rect(0.3f*Screen.width,0.28f*Screen.height,0.5f*Screen.width,0.2f*Screen.height),"YOU ARE DEAD.",myGUIStyle);
 				//Debug.Log("R");
 				#region Post, Get Best Score
-				if( (GUI.Button(new Rect(0.27f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "Get Top Score")) && (isScoreDisplayed == false) )
+				/*if( (GUI.Button(new Rect(0.27f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "Get Top Score")) && (isScoreDisplayed == false) )
 				{	
 		        	string url = "http://crustdesigns.com/demo/game/gettopscore.php?top=10&format=xml";
 		        	WWW www = new WWW(url);
@@ -444,8 +446,8 @@ public class Control : MonoBehaviour {
 					isGet = true;
 					
 					isScoreDisplayed = true;	
-				}
-				if( GUI.Button(new Rect(0.425f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "Post Score") )
+				}*/
+				if( GUI.Button(new Rect(0.3f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "Post Score") )
 				{			
 					isGet = false;
 					isPost = true;
@@ -522,7 +524,8 @@ public class Control : MonoBehaviour {
 				{
 					isLeaderBoard = false;
 					//Debug.Log("RR");					
-					Application.LoadLevel("mainmenu");
+					GameObject.Find("Store").GetComponent<Store>().GoMainMenuFromGamePlay();
+					//Application.LoadLevel("mainmenu");
 				}
 				 
 				/*if( GUI.Button(new Rect(0.35f*Screen.width,0.5f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "MENU") )
@@ -727,6 +730,9 @@ public class Control : MonoBehaviour {
 	
 	public void PrepareAndCreateNewWave()
 	{
+		DestroyAllRemainedWithTag("Zombie");
+		DestroyAllRemainedWithTag("ZombieRagdoll");
+		
 		LevelInfo.Audio.audioSourceZombies.Stop();
 		state = GameState.Play;
 		MoveTo(VantagePoints[currentWave%VantagePoints.Length]);
@@ -739,10 +745,7 @@ public class Control : MonoBehaviour {
 	}
 	
 	public void CreateNewZombieWave()
-	{	
-		DestroyAllRemainedWithTag("Zombie");
-		DestroyAllRemainedWithTag("ZombieRagdoll");
-		
+	{			
 		currentWave++;
 
 		LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.State.zombiesCountFactor*currentWave);

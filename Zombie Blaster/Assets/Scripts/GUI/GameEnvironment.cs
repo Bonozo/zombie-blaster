@@ -5,7 +5,7 @@ public class GameEnvironment : MonoBehaviour {
 	
 	#region Static Local
 	
-	public static int StartLevel = 0;
+	public static int StartLevel = 4;
 	public static int StartWave = 0;
 	
 	
@@ -263,6 +263,7 @@ public class GameEnvironment : MonoBehaviour {
 		public float speed;
 		public float reloadTime;
 		public bool unlimited;
+		public bool unlimitedclips;
 		public StoreGun(string name,bool enabled,int pocketsize,int price,float speed,float reloadTime)
 		{
 			this.name = name;
@@ -272,6 +273,7 @@ public class GameEnvironment : MonoBehaviour {
 			this.speed = speed;
 			this.reloadTime = reloadTime;
 			this.unlimited = false;
+			this.unlimitedclips = enabled;
 			
 			this.current = this.store = 0;
 			if( enabled )
@@ -315,6 +317,7 @@ public class GameEnvironment : MonoBehaviour {
 			get
 			{	
 				if(unlimited) return "Unlimited";
+				if(unlimitedclips) return "" + current + "/#";
 				return "" + current + "/" + store;
 			}
 		}
@@ -324,6 +327,7 @@ public class GameEnvironment : MonoBehaviour {
 			get
 			{
 				if(unlimited) return "Unlimited";
+				if(unlimitedclips) return "" + current + "/#";
 				return "" + pocketsize + "/" + (5*pocketsize);
 			}			
 		}

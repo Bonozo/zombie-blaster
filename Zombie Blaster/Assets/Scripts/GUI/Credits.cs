@@ -42,6 +42,7 @@ public class Credits : MonoBehaviour {
 	{
 		foreach(Touch touch in Input.touches)
 				currentHeight += 0.25f*touch.deltaPosition.y/Screen.height;
+		if( currentHeight < -1 ) currentHeight = -1;
 		
 		float index = -currentHeight;
 		
