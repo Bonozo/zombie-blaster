@@ -57,6 +57,7 @@ public class HeadHit : MonoBehaviour {
 	
 	private void DiePrepare()
 	{
+		LevelInfo.Environments.control.currentHeadshotsInWave++;
 		InstantiateMessage();
 		if( HeadContainer.NearPlayer() )
 			LevelInfo.Environments.goo.Show();

@@ -197,6 +197,7 @@ public class Store : MonoBehaviour {
 	public AudioClip clipBuy;
 	public AudioClip clipBack;
 	public AudioClip clipShowStore;
+	public AudioClip clipQuitPlayGame;
 	
 	public Texture2D[] textureWeapons;
 	public Texture2D textureWeaponUnknown;
@@ -219,12 +220,14 @@ public class Store : MonoBehaviour {
 	public GUIText ShopWeaponName;
 	public GUIText ShopWeaponBuyText;
 	public ButtonBase shotItemBuy;
+	public ButtonBase shopInfoButton;
 	private int currentshopitem = -2;
 	public GUITexture shopItemTexture;
 	
 	public GUIText StashWeaponName;
 	public GUIText StashWeaponBuyText;
 	public ButtonBase StashItemBuy;
+	public ButtonBase StashInfoButton;
 	private int currentStashitem = -2;
 	public GUITexture stashItemTexture;
 	
@@ -377,7 +380,8 @@ public class Store : MonoBehaviour {
 		bool enableshowshopitems = currentshopitem != -1 && shopitemslidecount==0;
 		
 		ShopWeaponName.enabled = enableshowshopitems;
-		ShopWeaponBuyText.enabled = enableshowshopitems&&showWeapon[currentshopitem];
+		ShopWeaponBuyText.enabled = false;//enableshowshopitems&&showWeapon[currentshopitem];
+		shopInfoButton.gameObject.SetActive(enableshowshopitems&&showWeapon[currentshopitem]);
 		shotItemBuy.gameObject.SetActive(enableshowshopitems&&showWeapon[currentshopitem]);
 		shotItemBuy.enabled = enableshowshopitems&&showWeapon[currentshopitem]&&wooi==-1;
 		shopItemTexture.enabled = enableshowshopitems;
@@ -423,12 +427,19 @@ public class Store : MonoBehaviour {
 			ShopWeaponName.font = showWeapon[currentshopitem]?blackFont:redFont;
 			
 			//ShopWeaponBuyText.text = "" + GameEnvironment.storeGun[currentshopitem].price;
-			ShopWeaponBuyText.text = 
+			/*ShopWeaponBuyText.text = 
 				"Dmg: " + GameEnvironment.storeGun[currentshopitem].AmmoInformationFormal +
 				"\nAmmo: " + GameEnvironment.storeGun[currentshopitem].pocketsize + 
 				"\nReload: " + GameEnvironment.storeGun[currentshopitem].reloadTime + 
 				"\nSpeed: " + GameEnvironment.storeGun[currentshopitem].speed + 
 				"\nPrice: " + GameEnvironment.storeGun[currentshopitem].price;
+			*/
+			
+			if( shopInfoButton.PressedUp )
+			{
+				wooi = currentshopitem;
+				weapondescription = true;
+			}
 			
 			if( shotItemBuy.PressedUp )
 			{
@@ -474,7 +485,8 @@ public class Store : MonoBehaviour {
 		bool enableshowstashitems = currentStashitem != -1 && stashitemslidecount==0;
 		
 		StashWeaponName.enabled = enableshowstashitems;
-		StashWeaponBuyText.enabled = enableshowstashitems;
+		StashWeaponBuyText.enabled = false;//enableshowstashitems;
+		StashInfoButton.gameObject.SetActive(enableshowstashitems);
 		StashItemBuy.gameObject.SetActive(enableshowstashitems&&IsLevelGamePlay&&showFillIn[currentStashitem]);
 		StashItemBuy.enabled = enableshowstashitems&&wooi==-1&&IsLevelGamePlay&&showFillIn[currentStashitem];
 		stashItemTexture.enabled = enableshowstashitems;
@@ -496,19 +508,17 @@ public class Store : MonoBehaviour {
 			
 			StashWeaponName.text = GameEnvironment.storeGun[currentStashitem].name;
 			
-			//StashWeaponBuyText.text = GameEnvironment.storeGun[currentStashitem].AmmoInformation;
-			/*if( showFillIn[currentStashitem] && IsLevelGamePlay)
-				StashWeaponBuyText.text = 
-				"Dmg: " + GameEnvironment.storeGun[currentStashitem].AmmoInformation +
-				"\nAmmo: " + GameEnvironment.storeGun[currentStashitem].pocketsize + 
-				"\nReload: " + GameEnvironment.storeGun[currentStashitem].reloadTime + 
-				"\nSpeed: " + GameEnvironment.storeGun[currentStashitem].speed;
-			else*/
-				StashWeaponBuyText.text = 
+
+			/*StashWeaponBuyText.text = 
 				"Dmg: " + GameEnvironment.storeGun[currentStashitem].AmmoInformationFormal +
 				"\nAmmo: " + GameEnvironment.storeGun[currentStashitem].pocketsize + 
 				"\nReload: " + GameEnvironment.storeGun[currentStashitem].reloadTime + 
-				"\nSpeed: " + GameEnvironment.storeGun[currentStashitem].speed;			
+				"\nSpeed: " + GameEnvironment.storeGun[currentStashitem].speed;	*/		
+			if( StashInfoButton.PressedUp )
+			{
+				wooi = currentStashitem;
+				weapondescription = true;
+			}
 			
 			if( StashItemBuy.enabled && StashItemBuy.PressedUp )
 			{
@@ -622,6 +632,7 @@ public class Store : MonoBehaviour {
 	
 	private int wooi = -1;
 	private bool fillin = false;
+	private bool weapondescription = false;
 	
 	int FirstWeapon(bool unlocked)
 	{
@@ -665,6 +676,7 @@ public class Store : MonoBehaviour {
 		LevelInfo.Environments.control.allowShowGUI = false;
 		showStore = false;
 		LevelInfo.Audio.StopAll();
+		audio.PlayOneShot(clipQuitPlayGame);
 		Destroy(GameObject.Find("Audio Wind Loop"));
 		LoadingGUI.SetActive(true);
 		guiFullscreen.texture = screen[Random.Range(0,screen.Length)];
@@ -757,6 +769,8 @@ public class Store : MonoBehaviour {
 		{
 			if(fillin)
 				ShowFillInDialog();
+			else if(weapondescription)
+				ShowWeaponDescription();
 			else
 				ShowWeaponBuyDialog();
 		}
@@ -845,6 +859,38 @@ public class Store : MonoBehaviour {
 		}
 		
 
+	}
+	
+	private void ShowWeaponDescription()
+	{
+		GUI.DrawTexture(new Rect(0.2f*Screen.width,0.15f*Screen.height,0.6f*Screen.width,0.6f*Screen.height),popupTexture);
+
+		GUI.Label(new Rect(0.4f*Screen.width,0.28f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Weapon Description",myStyle);
+		
+		string s = 	
+			"Clip Size:    " + GameEnvironment.storeGun[wooi].pocketsize +
+		  "\nMax Ammo:     " + (5*GameEnvironment.storeGun[wooi].pocketsize) + 
+		  "\nSpeed: 	   " + GameEnvironment.storeGun[wooi].speed +
+		  "\nReload Delay: " + GameEnvironment.storeGun[wooi].reloadTime;
+		
+		GUI.Label(new Rect(0.35f*Screen.width,0.35f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),s,myStyle);
+		
+		if( GUI.Button(new Rect(0.45f*Screen.width,0.55f*Screen.height,0.1f*Screen.width,0.05f*Screen.height), "OK" ) )
+		{
+			audio.PlayOneShot(clipBack);
+			wooi = -1; 
+			weapondescription = false;
+			spwchannel = true;
+		}
+		/*else
+		{
+			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.3f*Screen.height),"You have not enough heads to buy this item.",myStyle);
+			if( GUI.Button(new Rect(0.42f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Back") )
+			{
+				wooi = -1;
+				spwchannel = true;
+			}
+		}*/
 	}
 	
 	private bool ExistGunInCurrentLevel(Weapon w)

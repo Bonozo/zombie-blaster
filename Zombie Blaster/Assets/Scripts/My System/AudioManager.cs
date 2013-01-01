@@ -90,11 +90,16 @@ public class AudioManager : MonoBehaviour {
 	
 	#region Control
 	
-	public AudioClip AudioGetHit;
+	public AudioClip[] AudioGetHit;
 	public void PlayPlayerGetHit()
 	{
-		audioSourcePlayer.PlayOneShot(AudioGetHit);
+		gethits.Enqueue(Time.time + 0.175f);
+		//audioSourcePlayer.PlayOneShot(AudioGetHit[Random.Range(0,AudioGetHit.Length)]);
+		//audioSourcePlayer.PlayOneShot(AudioGetHit2[Random.Range(0,AudioGetHit2.Length)]);
 	}
+	
+	public AudioClip[] AudioGetHit2;
+
 	
 	public AudioClip AudioZombieHeadshot;
 	public void PlayZombieHeadShot()
@@ -148,6 +153,24 @@ public class AudioManager : MonoBehaviour {
 			audioSourcePlayer.PlayOneShot(audioPickUpXtraLife);
 			break;	
 		}		
+	}
+	
+	#endregion
+	
+	#region Update
+	
+	private System.Collections.Generic.Queue<float> gethits = new System.Collections.Generic.Queue<float>();
+	
+	void Update()
+	{
+		// PlayPlayerGetHit
+		if( gethits.Count > 0 &&  Time.time > gethits.Peek() )
+		{
+			audioSourcePlayer.PlayOneShot(AudioGetHit[Random.Range(0,AudioGetHit.Length)]);
+			audioSourcePlayer.PlayOneShot(AudioGetHit2[Random.Range(0,AudioGetHit2.Length)]);
+			gethits.Dequeue();
+		}
+		
 	}
 	
 	#endregion

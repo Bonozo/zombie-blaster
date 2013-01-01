@@ -161,7 +161,7 @@ public class Generator : MonoBehaviour {
 		if( LevelInfo.Environments.control.currentLevel!=0 || LevelInfo.Environments.control.currentWave >= 3 )
 		{
 			civilianRate -= Time.deltaTime;
-			if( civilianRate <= 0f )
+			if( civilianRate <= 0f && LevelInfo.Environments.control.IsInWave)
 			{
 				if( GameObject.FindObjectOfType(typeof(civilian)) == null )
 					Instantiate(civilianPrefabs[Random.Range(0,civilianPrefabs.Length)],RandomPosition(),Quaternion.identity);

@@ -246,9 +246,13 @@ public class Leaderboard : MonoBehaviour {
 				
 				//GUI.Label(new Rect(0.50f*Screen.width,0.32f*Screen.height,0.15f*Screen.width,0.03f*Screen.height), "" + "SCORE",postGUIStyle);					
 				
+				//GUI.BeginGroup(new Rect(0.04f*Screen.width,0.14f*Screen.height,0.92f*Screen.width,0.56f*Screen.height));
+
+				
 				for(int i = 0; i < 10; i++)
 				{	
-					GUI.Label(new Rect(0.05f*Screen.width, (0.15f + yPosition*i)*Screen.height, 0.15f*Screen.width,0.03f*Screen.height), "" + nameArray[i].ToString(),postGUIStyle);
+					string nmb = (i+1).ToString() + (i<9?".  ":". ");
+					GUI.Label(new Rect(0.05f*Screen.width, (0.15f + yPosition*i)*Screen.height, 0.15f*Screen.width,0.03f*Screen.height), nmb + nameArray[i].ToString(),postGUIStyle);
 				}	
 					//GUI.Label(new Rect(400,40, 200, 70), "" + scoreArray[i].ToString());
 					
@@ -257,6 +261,8 @@ public class Leaderboard : MonoBehaviour {
 				{			
 					GUI.Label(new Rect(0.25f*Screen.width, (0.15f + yPosition*i)*Screen.height, 0.15f*Screen.width,0.03f*Screen.height), "" + scoreArray[i].ToString(),postGUIStyle);
 				}
+				
+				// GUI.EndGroup();
 			}
 			else
 			{

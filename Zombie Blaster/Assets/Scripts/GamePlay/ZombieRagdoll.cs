@@ -101,7 +101,7 @@ public class ZombieRagdoll : MonoBehaviour {
 		{
 			if( throwedout )
 			{
-				if( iscivilian ) LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()+1);
+				//if( iscivilian ) LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()+1);
 				GameObject zomb = (GameObject)Instantiate(Zombie,head.transform.position,Quaternion.identity);
 				zomb.SendMessage("DontSpawn");
 				zomb.SendMessage("SetFireSize",Fire.particleEmitter.maxSize);

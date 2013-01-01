@@ -63,9 +63,12 @@ public class Control : MonoBehaviour {
 	
 	#region Variables
 	
+	private int currentZombiesInWave = 0;
+	public int currentHeadshotsInWave = 0;
+	
 	private float health = 1f;
 	private float healthshow = 1f;
-	private float showWaveCompleteTime = 3f;
+	private float showWaveCompleteTime = 4f;
 	private float waitfornewwave = 0f;
 	
 	private bool restartLevel = false;
@@ -556,7 +559,13 @@ public class Control : MonoBehaviour {
 					// Write To PlayerPrefs
 					Store.SetHighestWaveCompleted(currentLevel,currentWave);
 					
-					LevelInfo.Environments.waveInfo.ShowWaveComplete(bonusForWaveComplete);
+					float headshotsinwave = (float)currentHeadshotsInWave/(float)currentZombiesInWave;
+					int stars = 0;
+					if( headshotsinwave >= 0.9f ) stars = 3;
+					else if( headshotsinwave >= 0.75f ) stars = 2;
+					else stars = 1;
+					LevelInfo.Environments.waveInfo.ShowWaveComplete(bonusForWaveComplete,stars,0.3f,0.2f,0.2f);
+					
 					bonusForWaveComplete = 1000;
 				}
 			}
@@ -581,7 +590,7 @@ public class Control : MonoBehaviour {
 			// c.y > angleY
 			if( c.y - angleY <= 180.0f ) c.y -= MovingRotateSpeed*Time.deltaTime;
 			else c.y += MovingRotateSpeed*Time.deltaTime;
-			if( Mathf.Abs(c.y - angleY) <= 1f )	{ c.y = angleY; angling = false;  waitfornewwave = Time.time + 3f; }
+			if( Mathf.Abs(c.y - angleY) <= 1f )	{ c.y = angleY; angling = false;  waitfornewwave = Time.time + showWaveCompleteTime; }
 			transform.rotation = Quaternion.Euler(c);
 			return;
 		}
@@ -678,6 +687,9 @@ public class Control : MonoBehaviour {
 	
 	public int ZombiesLeft { get { return LevelInfo.Environments.hubZombiesLeft.GetNumber(); } }
 	
+	private bool isInWave = false;
+	public bool IsInWave { get { return isInWave; }}
+	
 	#endregion
 
 	#region Other Methods
@@ -717,6 +729,9 @@ public class Control : MonoBehaviour {
 	private int bonusForWaveComplete = -1;
 	public IEnumerator WaveComplete()
 	{
+		DestroyAllRemainedWithTag("Zombie");
+		isInWave = false;
+		
 		float time = Time.time + 6f;
 		while( Time.time < time )
 			yield return new WaitForEndOfFrame();
@@ -724,14 +739,13 @@ public class Control : MonoBehaviour {
 		LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.AudioWaveComplete);
 		bonusForWaveComplete = UnityEngine.Random.Range(0,2);
 		state = GameState.WaveCompleted;
-		waitfornewwave = Time.realtimeSinceStartup + showWaveCompleteTime;
 		PrepareAndCreateNewWave();
 	}
 	
 	public void PrepareAndCreateNewWave()
 	{
-		DestroyAllRemainedWithTag("Zombie");
-		DestroyAllRemainedWithTag("ZombieRagdoll");
+		//DestroyAllRemainedWithTag("Zombie");
+		//DestroyAllRemainedWithTag("ZombieRagdoll");
 		
 		LevelInfo.Audio.audioSourceZombies.Stop();
 		state = GameState.Play;
@@ -746,9 +760,13 @@ public class Control : MonoBehaviour {
 	
 	public void CreateNewZombieWave()
 	{			
+		isInWave = true;
 		currentWave++;
+		
+		currentZombiesInWave = LevelInfo.State.zombiesCountFactor*currentWave;
+		currentHeadshotsInWave = 0;
 
-		LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.State.zombiesCountFactor*currentWave);
+		LevelInfo.Environments.hubZombiesLeft.SetNumber(currentZombiesInWave);
 		LevelInfo.Environments.generator.StartNewWave(LevelInfo.Environments.hubZombiesLeft.GetNumber());
 		
 		LevelInfo.Environments.waveInfo.ShowWave(currentWave,LevelInfo.Environments.hubZombiesLeft.GetNumber());

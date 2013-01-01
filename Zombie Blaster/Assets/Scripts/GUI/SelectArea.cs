@@ -179,6 +179,7 @@ public class SelectArea : MonoBehaviour {
 	
 			if( GUI.Button(new Rect(0.52f*Screen.width,0.55f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "CANCEL" ) )
 			{
+				audioLocked.Stop();
 				audioBack.Play();
 				unlock_index = -1;
 				for(int i=0;i<levelButton.Length;i++)
@@ -222,6 +223,7 @@ public class SelectArea : MonoBehaviour {
 			
 			if( GUI.Button(new Rect(0.52f*Screen.width,0.55f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "BACK" ) )
 			{
+				audioUnlocked.Stop();
 				audioBack.Play();
 				play_index = -1;
 				GameEnvironment.StartWave = 0;

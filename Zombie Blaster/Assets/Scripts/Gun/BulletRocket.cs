@@ -42,7 +42,7 @@ public class BulletRocket : MonoBehaviour {
 				zombi.SendMessage("DieWithFireAndSmoke");
 		}
 		
-		GameObject[] barr = GameObject.FindGameObjectsWithTag("Barrel");
+		GameObject[] barr = GameObject.FindGameObjectsWithTag("Explosible");
 		foreach( GameObject zombi in barr )
 		{
 			if( GameEnvironment.DistXZ(zombi.transform.position,transform.position ) <= ExplosionRadius )
