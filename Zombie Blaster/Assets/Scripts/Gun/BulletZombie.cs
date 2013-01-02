@@ -9,6 +9,7 @@ public class BulletZombie : MonoBehaviour {
 		Throw
 	}
 	
+	public GameObject sparks;
 	public float DestroyTime = 3f;
 	public FireType fireType;
 	public float Speed = 5f;
@@ -28,6 +29,7 @@ public class BulletZombie : MonoBehaviour {
 			rigidbody.AddForce(dir*Speed);
 		}
 		
+		Instantiate(sparks,transform.position,transform.rotation);
 		Destroy(this.gameObject,DestroyTime);
 	}
 	

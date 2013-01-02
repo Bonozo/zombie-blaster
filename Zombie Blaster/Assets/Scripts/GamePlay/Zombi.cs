@@ -41,6 +41,7 @@ public class Zombi : MonoBehaviour {
 	public GameObject shootBullet;
 	public float shootTime;
 	public AudioClip shootAudio;
+	public GameObject materialGameObject;
 	
 	
 	#endregion
@@ -138,9 +139,19 @@ public class Zombi : MonoBehaviour {
 		{
 			if( animation["shoot"].time >= shootTime )
 			{
+				float alltime = animation["shoot"].length-shootTime;
+				float curtime = animation["shoot"].length-animation["shoot"].time;
+				alltime*=0.5f; curtime -= alltime; if(curtime<0) curtime = 0;
+				float cp = 0.5f+0.5f*curtime/alltime;
+				
 				shotDeltaTime -= Time.deltaTime;
+				
+				if( shotDeltaTime>0)
+					materialGameObject.renderer.material.color = new Color(cp,cp,cp,1f);
+				
 				if( shotDeltaTime <= 0 )
 				{
+					if( shootAudio != null ) LevelInfo.Audio.audioSourceZombies.PlayOneShot(shootAudio);
 					Instantiate(shootBullet,shootTransform.position,Quaternion.identity);
 					shotDeltaTime = animation["shoot"].length-animation["shoot"].time+0.05f;
 				}
@@ -176,10 +187,9 @@ public class Zombi : MonoBehaviour {
 		else
 		{
 			/// Shoot
-			if( runningTime <= 0f &&  canShoot && Random.Range(0,300)==1)
+			if( runningTime <= 0f &&  canShoot && Random.Range(0,300)<1000 )
 			{
 				animation.Play("shoot");
-				if( shootAudio != null ) LevelInfo.Audio.audioSourceZombies.PlayOneShot(shootAudio);
 				return;
 			}
 			// Jump
