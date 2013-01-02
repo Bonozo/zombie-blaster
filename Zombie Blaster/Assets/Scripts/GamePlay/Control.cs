@@ -669,10 +669,16 @@ public class Control : MonoBehaviour {
 	{
 		var v = LevelInfo.Environments.healthbarHealth.transform.localScale;
 		v.x = 146.4f*Mathf.Clamp01(healthshow);
+		v.y = health!=healthshow&&healthshow<=1?21:18;
+				LevelInfo.Environments.healthbarHealth.color = 
+			health!=healthshow&&healthshow<=1?new Color(1f,1f,1f,0.6f):Color.white;
 		LevelInfo.Environments.healthbarHealth.transform.localScale = v;
 		
 		v = LevelInfo.Environments.healthbarArmor.transform.localScale;
 		v.x = 79f*Mathf.Clamp01(healthshow-1);
+		v.y = health!=healthshow?10:8;
+		LevelInfo.Environments.healthbarArmor.color = 
+			health!=healthshow&&healthshow<=1?new Color(1f,1f,1f,0.6f):Color.white;
 		LevelInfo.Environments.healthbarArmor.transform.localScale = v;
 	}
 	

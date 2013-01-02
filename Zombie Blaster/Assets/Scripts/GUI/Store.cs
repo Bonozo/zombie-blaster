@@ -485,7 +485,7 @@ public class Store : MonoBehaviour {
 		bool enableshowstashitems = currentStashitem != -1 && stashitemslidecount==0;
 		
 		StashWeaponName.enabled = enableshowstashitems;
-		StashWeaponBuyText.enabled = false;//enableshowstashitems;
+		StashWeaponBuyText.enabled = enableshowstashitems&&IsLevelGamePlay&&showFillIn[currentStashitem];
 		StashInfoButton.gameObject.SetActive(enableshowstashitems);
 		StashItemBuy.gameObject.SetActive(enableshowstashitems&&IsLevelGamePlay&&showFillIn[currentStashitem]);
 		StashItemBuy.enabled = enableshowstashitems&&wooi==-1&&IsLevelGamePlay&&showFillIn[currentStashitem];
@@ -508,7 +508,8 @@ public class Store : MonoBehaviour {
 			
 			StashWeaponName.text = GameEnvironment.storeGun[currentStashitem].name;
 			
-
+			if( StashWeaponBuyText.enabled )
+				StashWeaponBuyText.text = LevelInfo.Environments.guns.gun[currentStashitem].AmmoInformation;
 			/*StashWeaponBuyText.text = 
 				"Dmg: " + GameEnvironment.storeGun[currentStashitem].AmmoInformationFormal +
 				"\nAmmo: " + GameEnvironment.storeGun[currentStashitem].pocketsize + 
@@ -868,14 +869,27 @@ public class Store : MonoBehaviour {
 		GUI.Label(new Rect(0.4f*Screen.width,0.28f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Weapon Description",myStyle);
 		
 		string s = 	
-			"Clip Size:    " + GameEnvironment.storeGun[wooi].pocketsize +
-		  "\nMax Ammo:     " + (5*GameEnvironment.storeGun[wooi].pocketsize) + 
-		  "\nSpeed: 	   " + GameEnvironment.storeGun[wooi].speed +
-		  "\nReload Delay: " + GameEnvironment.storeGun[wooi].reloadTime;
+			"Power:" +
+			"\nAccuracy:" + 
+		    "\nClip Size:" +
+			"\nMax Ammo:" +
+			"\nSpeed:" +
+			"\nReload Delay:";
+		GUI.Label(new Rect(0.35f*Screen.width,0.34f*Screen.height,0.3f*Screen.width,0.25f*Screen.height),s,myStyle);
 		
-		GUI.Label(new Rect(0.35f*Screen.width,0.35f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),s,myStyle);
+		float accuracy = 0;
+		if( wooi == 0 ) /*Airsoft*/ accuracy = Option.Peturb;
+		s = 	
+			"" + GameEnvironment.storeGun[wooi].damage +
+			"\n" + accuracy +
+			"\n" + GameEnvironment.storeGun[wooi].pocketsize +
+			"\n" + (5*GameEnvironment.storeGun[wooi].pocketsize) + 
+			"\n" + GameEnvironment.storeGun[wooi].speed + " m/s" +
+			"\n" + GameEnvironment.storeGun[wooi].reloadTime + " sec";
 		
-		if( GUI.Button(new Rect(0.45f*Screen.width,0.55f*Screen.height,0.1f*Screen.width,0.05f*Screen.height), "OK" ) )
+		GUI.Label(new Rect(0.5f*Screen.width,0.34f*Screen.height,0.3f*Screen.width,0.25f*Screen.height),s,myStyle);
+		
+		if( GUI.Button(new Rect(0.58f*Screen.width,0.56f*Screen.height,0.1f*Screen.width,0.05f*Screen.height), "OK" ) )
 		{
 			audio.PlayOneShot(clipBack);
 			wooi = -1; 

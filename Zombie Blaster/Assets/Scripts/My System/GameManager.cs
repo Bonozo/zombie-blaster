@@ -33,8 +33,8 @@ public class GameManager : MonoBehaviour {
 	//public UILabel uiZombiesLeft;
 	//public UILabel uiLives;
 	
-	public GameObject healthbarHealth;
-	public GameObject healthbarArmor;
+	public UISprite healthbarHealth;
+	public UISprite healthbarArmor;
 	
 	public Texture ProgressBarZombieEmpty;
 	public Texture ProgressBarZombieFull;

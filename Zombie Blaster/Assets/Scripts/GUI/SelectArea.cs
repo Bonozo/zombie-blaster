@@ -57,10 +57,10 @@ public class SelectArea : MonoBehaviour {
 	private Store store;
 	private Weapon[][] newWeapos = new Weapon[][]
 	{
-		new Weapon[] {Weapon.Flamethrower,Weapon.Crossbow},
-		new Weapon[] {Weapon.Flamethrower,Weapon.Crossbow,Weapon.Grenade},
+		new Weapon[] {Weapon.BB,Weapon.Flamethrower,Weapon.Crossbow},
+		new Weapon[] {Weapon.Grenade},
 		new Weapon[] {Weapon.Football,Weapon.MachineGun},
-		new Weapon[] {Weapon.Grenade,Weapon.Rocket},
+		new Weapon[] {Weapon.Rocket},
 		new Weapon[] {Weapon.PulseShotGun,Weapon.Revolver}
 	};
 	

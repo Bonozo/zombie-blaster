@@ -23,12 +23,15 @@ public class Generator : MonoBehaviour {
 		// special for Farm Level
 		if( LevelInfo.Environments.control.currentLevel == 0 )
 		{
+			// ...
+			// 5 cowboys
+			// 1 sheriff
 			if( LevelInfo.Environments.control.currentWave >=4 && Random.Range(0,6) == 1 )//16% Sheriff
 				z = level.standardZombie[level.standardZombie.Length-1];
 			else if( LevelInfo.Environments.control.currentWave >=2 && Random.Range(0,6) == 1)//16% Cowboy
-				z = level.standardZombie[level.standardZombie.Length-2];
+				z = level.standardZombie[Random.Range(level.standardZombie.Length-6,level.standardZombie.Length-1)];
 			else
-				z = level.standardZombie[Random.Range(0,level.standardZombie.Length-2)];
+				z = level.standardZombie[Random.Range(0,level.standardZombie.Length-6)];
 		}
 		else
 		{
