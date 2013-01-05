@@ -41,6 +41,7 @@ public class Zombi : MonoBehaviour {
 	public GameObject shootBullet;
 	public float shootTime;
 	public AudioClip shootAudio;
+	public bool sparkWhenShot;
 	public GameObject materialGameObject;
 	
 	
@@ -61,6 +62,7 @@ public class Zombi : MonoBehaviour {
 	
 	private HealthBar healthBar;
 	private float aliveTime = 0.0f;
+	private bool toattack = false;
 	
 	#endregion
 	
@@ -142,14 +144,14 @@ public class Zombi : MonoBehaviour {
 				float alltime = animation["shoot"].length-shootTime;
 				float curtime = animation["shoot"].length-animation["shoot"].time;
 				alltime*=0.5f; curtime -= alltime; if(curtime<0) curtime = 0;
-				float cp = 0.5f+0.5f*curtime/alltime;
+				float cp = 0.75f+0.25f*curtime/alltime;
 				
 				shotDeltaTime -= Time.deltaTime;
 				
-				if( shotDeltaTime>0)
+				if( sparkWhenShot && animation["shoot"].time >= shootTime+0.1f )
 					materialGameObject.renderer.material.color = new Color(cp,cp,cp,1f);
 				
-				if( shotDeltaTime <= 0 )
+				if( shotDeltaTime<=0 )
 				{
 					if( shootAudio != null ) LevelInfo.Audio.audioSourceZombies.PlayOneShot(shootAudio);
 					Instantiate(shootBullet,shootTransform.position,Quaternion.identity);
@@ -176,10 +178,19 @@ public class Zombi : MonoBehaviour {
 			if( !animation.IsPlaying("attack01") && !animation.IsPlaying("attack02") )
 			{
 				animation.Play(Random.Range(1,3)==1?"attack01":"attack02");
-				if( flaming <= 0.75f )
+				toattack = true;
+				/*if( flaming <= 0.75f )
 					LevelInfo.Environments.control.GetBite(2*BitePoint);
 				else
-					LevelInfo.Environments.control.GetBite(BitePoint);
+					LevelInfo.Environments.control.GetBite(BitePoint);*/
+			}
+			else 
+			{
+				if(toattack && (animation["attack01"].time >=0.3f || animation["attack02"].time >= 0.3f) )
+				{
+					LevelInfo.Environments.control.GetBite(BitePoint*(flaming<=0.75f?2:1));
+					toattack = false;
+				}
 			}
 			
 		}
@@ -187,7 +198,7 @@ public class Zombi : MonoBehaviour {
 		else
 		{
 			/// Shoot
-			if( runningTime <= 0f &&  canShoot && Random.Range(0,300)<1000 )
+			if( runningTime <= 0f &&  canShoot && Random.Range(0,300)==1 )
 			{
 				animation.Play("shoot");
 				return;
@@ -310,7 +321,7 @@ public class Zombi : MonoBehaviour {
 		if( healthBar == null ) return;
 		aliveTime += Time.deltaTime;
 		bool show = false;
-		if( Time.timeScale > 0.0f ) 
+		if( LevelInfo.Environments.control.state != GameState.Store ) 
 		{
 			Vector3 head = headHit.transform.position; head.y += 0.5f;
 			Vector3 pos = LevelInfo.Environments.mainCamera.WorldToScreenPoint(head);
@@ -361,6 +372,34 @@ public class Zombi : MonoBehaviour {
 	#endregion
 	
 	#region Zombie Get Hit Setup
+	
+	void OnTriggerEnter(Collider col)
+	{		
+		// Zapper Attack
+		if( HitWithName(col.gameObject.name,"Zapper") )
+		{
+			smoking -= Time.deltaTime;
+			ZombieSmoke.particleEmitter.minSize = ZombieSmoke.particleEmitter.maxSize = (1-smoking)*1f;
+			animation.Play("zap");
+			if( smoking <= 0 )
+			{
+				DieNormal();
+				return;
+			}
+		}
+		
+		// Flame Attack
+		if( HitWithName(col.gameObject.name,"Flame") )
+		{
+			flaming -= Time.deltaTime;
+			ZombieFire.particleEmitter.minSize = ZombieFire.particleEmitter.maxSize = (1-flaming)*1f;
+			if( flaming <= 0 )
+			{
+				DieNormal();
+				return;
+			}
+		}	
+	}
 	
 	void OnTriggerStay(Collider col)
 	{	

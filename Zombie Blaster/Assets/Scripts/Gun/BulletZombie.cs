@@ -9,6 +9,7 @@ public class BulletZombie : MonoBehaviour {
 		Throw
 	}
 	
+	public bool haveSpark=false;
 	public GameObject sparks;
 	public float DestroyTime = 3f;
 	public FireType fireType;
@@ -29,7 +30,8 @@ public class BulletZombie : MonoBehaviour {
 			rigidbody.AddForce(dir*Speed);
 		}
 		
-		Instantiate(sparks,transform.position,transform.rotation);
+		if(haveSpark)
+			Instantiate(sparks,transform.position,transform.rotation);
 		Destroy(this.gameObject,DestroyTime);
 	}
 	
@@ -41,9 +43,9 @@ public class BulletZombie : MonoBehaviour {
 			transform.Translate(Time.deltaTime*Speed*Vector3.forward);
 		}
 
-		Vector3 v = LevelInfo.Environments.transform.position-LevelInfo.Environments.control.transform.position;
+		Vector3 v = transform.position-LevelInfo.Environments.control.transform.position;
 		v.y = 0;
-		if( v.magnitude <= 0.5f )
+		if( v.magnitude <= 1f )
 		{
 			LevelInfo.Environments.control.GetHealth(-0.01f);
 			Destroy(this.gameObject);

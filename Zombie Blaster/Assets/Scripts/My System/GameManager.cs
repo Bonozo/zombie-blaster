@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour {
 	public Generator generator;
 	public HealthPack healthPack;
 	public Guns guns;
+	public ScreenBlood screenBlood;
+	public Shield shield;
 	
 	public Transform nGUITopLeftTransform;
 
@@ -35,6 +37,8 @@ public class GameManager : MonoBehaviour {
 	
 	public UISprite healthbarHealth;
 	public UISprite healthbarArmor;
+	public FlashIcon healthbarTombstone;
+	public FlashIcon healthbarBoxes;
 	
 	public Texture ProgressBarZombieEmpty;
 	public Texture ProgressBarZombieFull;

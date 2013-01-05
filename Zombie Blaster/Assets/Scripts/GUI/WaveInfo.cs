@@ -31,8 +31,8 @@ public class WaveInfo : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if( waitfor > 0f ) waitfor -= Time.deltaTime;
-		root.SetActive(waitfor>0&&Time.timeScale>0);
-		rootWaveComplete.SetActive(showWaveComplete&&Time.timeScale>0);
+		root.SetActive(waitfor>0&&LevelInfo.Environments.control.state != GameState.Store);
+		rootWaveComplete.SetActive(showWaveComplete&&LevelInfo.Environments.control.state != GameState.Store);
 		
 		if( showWaveComplete )
 		{

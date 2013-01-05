@@ -3,24 +3,27 @@ using System.Collections;
 
 public class ButtonPause : MonoBehaviour {
 	
+	private GameState lastState;
 	
-	
-	void Update()
+	void OnPress(bool isDown)
 	{
-		if( LevelInfo.Environments.control.state == GameState.Play )
-		{
-			foreach(Touch touch in Input.touches)
-				if( touch.phase == TouchPhase.Ended && guiTexture.HitTest(touch.position) )
-				{
-					GameEnvironment.IgnoreButtons();
-					LevelInfo.Environments.control.state = GameState.Paused;
-				}
+		if(isDown)
+		{	
+			if( LevelInfo.Environments.control.state == GameState.Lose )
+				return;
 			
-			if( Input.GetMouseButtonUp(0) && this.guiTexture.HitTest(Input.mousePosition) )
+			if( LevelInfo.Environments.control.state == GameState.Play || LevelInfo.Environments.control.state == GameState.WaveCompleted)
 			{
 				GameEnvironment.IgnoreButtons();
+				lastState = LevelInfo.Environments.control.state;
 				LevelInfo.Environments.control.state = GameState.Paused;		
 			}
+			
+			else if( LevelInfo.Environments.control.state == GameState.Paused)
+			{
+				LevelInfo.Environments.control.state = lastState;
+			}
+
 		}
 	}
 }

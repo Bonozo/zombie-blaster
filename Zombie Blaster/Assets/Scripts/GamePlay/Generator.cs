@@ -191,4 +191,68 @@ public class Generator : MonoBehaviour {
 		g.GetComponent<ShowMessage>().ShowMessageText2D(text,up,time);
 	}	
 	#endregion
+	
+	#region HealthPack
+	
+	public HealthPack[] powerups;
+	
+	private bool firstvelmaforL1W3 = false;
+	
+	private HealthPackType WhatPowerupToSpawn(bool scooby)
+	{
+		HealthPackType packType = HealthPackType.Ammo;
+		
+		if( scooby )
+		{
+			int r = Random.Range(0,3);
+			
+			// some complicated code
+			if( LevelInfo.Environments.control.currentLevel==0&&LevelInfo.Environments.control.currentWave==3
+				&& !firstvelmaforL1W3 )
+			{
+				r = 0;
+				firstvelmaforL1W3 = true;
+			}
+			
+			switch(r)
+			{
+			case 0: packType = HealthPackType.Weapon; break;
+			case 1: packType = HealthPackType.XtraLife; break;
+			case 2: packType = HealthPackType.DamageMultiplier; break;
+			}
+		}
+		else
+		{
+			int r = Random.Range(0,6);
+			
+			// some complicated code
+			if( LevelInfo.Environments.control.currentLevel==0&&LevelInfo.Environments.control.currentWave<4
+				&& r==5)
+			{
+				r = Random.Range(0,5);
+				
+			}
+			
+			switch(r)
+			{
+			case 0: packType = HealthPackType.Ammo; break;
+			case 1: packType = HealthPackType.Armor; break;
+			case 2: packType = HealthPackType.BonusHeads; break;
+			case 3: packType = HealthPackType.Health; break;
+			case 4: packType = HealthPackType.Shield; break;
+			case 5: packType = HealthPackType.SuperAmmo; break;
+			}		
+		}		
+		
+		return packType;
+	}
+	
+	public void InstantiatePowerup(Vector3 position,Quaternion rotation,bool scooby)
+	{
+		int ind = (int)WhatPowerupToSpawn(scooby);
+		HealthPack er = (HealthPack)Instantiate(powerups[ind],position,rotation);
+		er.scooby = scooby;
+	}
+	
+	#endregion
 }

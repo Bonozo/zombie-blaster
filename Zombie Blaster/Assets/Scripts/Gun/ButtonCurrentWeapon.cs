@@ -9,6 +9,9 @@ public class ButtonCurrentWeapon : MonoBehaviour {
 	
 	void OnPress(bool isDown)
 	{
+		if(LevelInfo.Environments.control.state == GameState.Paused || LevelInfo.Environments.control.state == GameState.Lose)
+			return;
+		
 		if(isDown)
 		{
 			GameEnvironment.IgnoreButtons();

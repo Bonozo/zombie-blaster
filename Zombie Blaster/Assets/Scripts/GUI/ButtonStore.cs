@@ -1,18 +1,25 @@
 using UnityEngine;
 using System.Collections;
 
-public class ButtonStore : ButtonBase {
+public class ButtonStore : MonoBehaviour {
 	
-	void Start()
+	private GameState lastState;
+	
+	void OnPress(bool isDown)
 	{
-	}
+		if(isDown)
+		{
+			if( LevelInfo.Environments.control.state == GameState.Lose )
+				return;
+			
+			if( LevelInfo.Environments.control.state == GameState.Play || LevelInfo.Environments.control.state == GameState.WaveCompleted || LevelInfo.Environments.control.state == GameState.Paused)
+			{
+				GameEnvironment.IgnoreButtons();
+				lastState = LevelInfo.Environments.control.state;
+				LevelInfo.Environments.control.state = GameState.Store;
+			}
 
-	protected override void Update()
-	{
-		base.Update();
-		
-		if( base.PressedUp )
-				Time.timeScale = 0.0f;
-		
+		}
 	}
+	
 }

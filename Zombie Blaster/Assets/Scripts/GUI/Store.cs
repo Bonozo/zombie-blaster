@@ -202,6 +202,7 @@ public class Store : MonoBehaviour {
 	public Texture2D[] textureWeapons;
 	public Texture2D textureWeaponUnknown;
 	public GameObject[] objectWeapons;
+	public AudioClip[] clipWeaponInfo;
 	//public GameObject objectsWeaponsUnknown1,objectsWeaponsUnknown2;
 	
 	public Font blackFont,redFont;
@@ -322,8 +323,7 @@ public class Store : MonoBehaviour {
 	void Update()
 	{
 		if(!_showStore) return;
-		if( wantToExit ) return;
-		
+
 		int cco=0;
 		for(int i=0;i<countWeapons;i++)
 				if( WeaponUnlocked(i) ) cco++;
@@ -339,6 +339,8 @@ public class Store : MonoBehaviour {
 				c.transform.position = v;
 			}
 		}
+		
+		if( wantToExit ) return;
 		
 		UpdateZombieHeads();
 		
@@ -435,10 +437,11 @@ public class Store : MonoBehaviour {
 				"\nPrice: " + GameEnvironment.storeGun[currentshopitem].price;
 			*/
 			
-			if( shopInfoButton.PressedUp )
+			if( shopInfoButton.PressedDown )
 			{
 				wooi = currentshopitem;
 				weapondescription = true;
+				audio.PlayOneShot(clipWeaponInfo[wooi]);
 			}
 			
 			if( shotItemBuy.PressedUp )
@@ -515,10 +518,11 @@ public class Store : MonoBehaviour {
 				"\nAmmo: " + GameEnvironment.storeGun[currentStashitem].pocketsize + 
 				"\nReload: " + GameEnvironment.storeGun[currentStashitem].reloadTime + 
 				"\nSpeed: " + GameEnvironment.storeGun[currentStashitem].speed;	*/		
-			if( StashInfoButton.PressedUp )
+			if( StashInfoButton.PressedDown )
 			{
 				wooi = currentStashitem;
 				weapondescription = true;
+				audio.PlayOneShot(clipWeaponInfo[wooi]);
 			}
 			
 			if( StashItemBuy.enabled && StashItemBuy.PressedUp )
@@ -877,11 +881,12 @@ public class Store : MonoBehaviour {
 			"\nReload Delay:";
 		GUI.Label(new Rect(0.35f*Screen.width,0.34f*Screen.height,0.3f*Screen.width,0.25f*Screen.height),s,myStyle);
 		
-		float accuracy = 0;
-		if( wooi == 0 ) /*Airsoft*/ accuracy = Option.Peturb;
+		float accuracy = 100;
+		if( wooi == 0 ) /*Airsoft*/ accuracy -= Option.Peturb;
+		accuracy = Mathf.Round(accuracy*10f)/10f;
 		s = 	
 			"" + GameEnvironment.storeGun[wooi].damage +
-			"\n" + accuracy +
+			"\n" + accuracy + "%" +
 			"\n" + GameEnvironment.storeGun[wooi].pocketsize +
 			"\n" + (5*GameEnvironment.storeGun[wooi].pocketsize) + 
 			"\n" + GameEnvironment.storeGun[wooi].speed + " m/s" +
@@ -891,6 +896,7 @@ public class Store : MonoBehaviour {
 		
 		if( GUI.Button(new Rect(0.58f*Screen.width,0.56f*Screen.height,0.1f*Screen.width,0.05f*Screen.height), "OK" ) )
 		{
+			audio.Stop();
 			audio.PlayOneShot(clipBack);
 			wooi = -1; 
 			weapondescription = false;

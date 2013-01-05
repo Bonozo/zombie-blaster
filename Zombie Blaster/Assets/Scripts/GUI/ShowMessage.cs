@@ -13,7 +13,7 @@ public class ShowMessage : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		guiText.enabled = Time.timeScale>0;
+		guiText.enabled = LevelInfo.Environments.control.state != GameState.Store;
 		if(up)
 			transform.Translate(0f,UpSpeed*Time.deltaTime,0f);
 		ShowTime -= Time.deltaTime;

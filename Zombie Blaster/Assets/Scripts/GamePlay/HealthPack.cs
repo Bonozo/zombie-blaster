@@ -16,6 +16,8 @@ public enum HealthPackType
 
 public class HealthPack : MonoBehaviour {
 	
+	public HealthPackType packType;
+	
 	public float Health = 0.1f;
 	public float DeadTime = 20f;
 	
@@ -26,60 +28,14 @@ public class HealthPack : MonoBehaviour {
 	
 	private bool picked = false;
 	
-	private HealthPackType packType;
 	private Weapon gunindexifweapon = 0;
 	
 	public bool scooby = false;
 	
-	private bool firstvelmaforL1W3 = false;
-	
 	// Use this for initialization
 	void Start () {
 
-		
 		transform.Translate(0,StartHeight-transform.position.y,0);
-		
-		if( scooby )
-		{
-			int r = Random.Range(0,3);
-			
-			// some complicated code
-			if( LevelInfo.Environments.control.currentLevel==0&&LevelInfo.Environments.control.currentWave==3
-				&& !firstvelmaforL1W3 )
-			{
-				r = 0;
-				firstvelmaforL1W3 = true;
-			}
-			
-			switch(r)
-			{
-			case 0: packType = HealthPackType.Weapon; break;
-			case 1: packType = HealthPackType.XtraLife; break;
-			case 2: packType = HealthPackType.DamageMultiplier; break;
-			}
-		}
-		else
-		{
-			int r = Random.Range(0,6);
-			
-			// some complicated code
-			if( LevelInfo.Environments.control.currentLevel==0&&LevelInfo.Environments.control.currentWave<4
-				&& r==5)
-			{
-				r = Random.Range(0,5);
-				
-			}
-			
-			switch(r)
-			{
-			case 0: packType = HealthPackType.Ammo; break;
-			case 1: packType = HealthPackType.Armor; break;
-			case 2: packType = HealthPackType.BonusHeads; break;
-			case 3: packType = HealthPackType.Health; break;
-			case 4: packType = HealthPackType.Shield; break;
-			case 5: packType = HealthPackType.SuperAmmo; break;
-			}		
-		}
 		
 		var level = LevelInfo.State.level[LevelInfo.Environments.control.currentLevel];
 		
@@ -96,9 +52,9 @@ public class HealthPack : MonoBehaviour {
 		case HealthPackType.Armor:
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpArmor;
 			break;
-		case HealthPackType.BonusHeads:
+		/*case HealthPackType.BonusHeads:
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpBonusHeads;
-			break;
+			break;*/
 		case HealthPackType.DamageMultiplier:
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpDamageMultiplier;
 			break;
@@ -146,6 +102,7 @@ public class HealthPack : MonoBehaviour {
 	void Update()
 	{
 		if( picked ) return;
+		if( LevelInfo.Environments.control.state == GameState.Paused ) return;
 		if( (DeadTime -= Time.deltaTime) <= 0 ) Destroy(this.gameObject);
 
 		
@@ -210,7 +167,7 @@ public class HealthPack : MonoBehaviour {
 			break;
 			
 		case HealthPackType.Shield:
-			LevelInfo.Environments.control.Health = LevelInfo.State.playerMaxHealth;
+			LevelInfo.Environments.control.Shield();
 			pickupname = "Shield";
 			break;
 			

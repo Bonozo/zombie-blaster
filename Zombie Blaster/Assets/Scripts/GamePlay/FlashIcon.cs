@@ -4,9 +4,12 @@ using System.Collections;
 public class FlashIcon : MonoBehaviour {
 
 	private UISprite sprite = null;
+	public Color flashColor;
+	public float flashTime;
 	private Color beginColor;
 	private Vector3 beginpos,beginsc;
 	private int threads = 0;
+	public float extrapixel = 60f;
 	
 	void Awake()
 	{
@@ -16,13 +19,20 @@ public class FlashIcon : MonoBehaviour {
 		beginsc = transform.localScale;
 	}
 	
-	IEnumerator StartFlush(Color flashColor,float flashTime)
+	void OnEnable()
+	{
+		sprite.color = beginColor;
+		transform.localPosition = beginpos;
+		transform.localScale = beginsc;
+		threads=0;	
+	}
+	
+	IEnumerator StartFlush()
 	{
 		if( threads == 0 ){
-		threads++;
+		threads=1;
 		
 		float time2 = Time.time + 0.5f*flashTime;
-		float extrapixel = 60f;
 		Vector3 v;
 	
 		Color colmin = sprite.color, colmax = flashColor;
@@ -41,8 +51,18 @@ public class FlashIcon : MonoBehaviour {
 			
 			yield return new WaitForEndOfFrame();
 		}
-		
-		time2 = Time.time + 0.5f*flashTime;
+			threads=2;
+		}
+	}
+	
+	IEnumerator EndFlush()
+	{
+		if( threads==2 ){
+		threads=1;
+		Vector3 v;
+		Color colmin = sprite.color, colmax = flashColor;
+		float time2 = Time.time + 0.5f*flashTime;
+			
 		while( Time.time < time2 )
 		{
 			float percent = 2f*(time2-Time.time)/flashTime;
@@ -61,18 +81,27 @@ public class FlashIcon : MonoBehaviour {
 		sprite.color = beginColor;
 		transform.localPosition = beginpos;
 		transform.localScale = beginsc;
-		threads--;
+		threads=0;
 		}
 	}
 	
-	public void Flash(Color flashColor,float flashTime)
+	
+	public void StartFlash()
 	{
-		StartCoroutine(StartFlush(flashColor,flashTime));
+		if( threads==0 )
+			StartCoroutine(StartFlush());
+	}
+	public void EndFlash()
+	{
+		if( threads==2 )
+			StartCoroutine(EndFlush());
 	}
 	
-	/*void Update()
+	void Update()
 	{
-		if( Input.GetKeyUp(KeyCode.L) )
-			Flash(Color.green,0.25f);
-	}*/
+		if( Input.GetKeyUp(KeyCode.B) )
+			StartFlash();
+		if( Input.GetKeyUp(KeyCode.N) )
+			EndFlash();
+	}
 }

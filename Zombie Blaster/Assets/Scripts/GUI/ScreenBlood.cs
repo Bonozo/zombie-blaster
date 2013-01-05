@@ -6,16 +6,22 @@ public class ScreenBlood : MonoBehaviour {
 	private float dangerhealth = 0.5f;
 	private float alpamax = 128f;
 	private float chagefactor = 80f;
-	private float deltamin = 0f, deltamax = 80f;
+	private float deltamin = 0f, deltamax = 50f;
 	private bool deltaincrease = true;
 	//private float lasthealth;
 	private float delta = 0;
+	private float pulse = 0;
 	private UISprite sprite;
 	
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		sprite = this.GetComponent<UISprite>();
 		//lasthealth = control.Health;
+	}
+	
+	void OnEnable()
+	{
+		Update();
 	}
 	
 	// Update is called once per frame
@@ -24,7 +30,8 @@ public class ScreenBlood : MonoBehaviour {
 		if( LevelInfo.Environments.control.Health >= dangerhealth )
 		{
 			//lasthealth = control.Health;
-			sprite.color = new Color(1f,1f,1f,0f);
+			if(pulse>0) pulse = Mathf.Clamp(pulse,0,pulse-Time.deltaTime*chagefactor*0.5f);
+			sprite.color = new Color(1f,1f,1f,pulse/256f);
 			audio.Stop();
 			return;
 		}
@@ -50,6 +57,15 @@ public class ScreenBlood : MonoBehaviour {
 		audio.volume = 1-LevelInfo.Environments.control.Health/dangerhealth;
 		
 		//lasthealth = control.Health;
+	}
+	
+	public void Pulse()
+	{
+		if(LevelInfo.Environments.control.Health >= dangerhealth)
+			pulse = 50;
+		else
+			delta = deltamax+50;
+		
 	}
 	
 	private float formula()

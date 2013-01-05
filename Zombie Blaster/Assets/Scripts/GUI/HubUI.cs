@@ -35,6 +35,25 @@ public class HubUI : MonoBehaviour {
 		labelbeginsc = label.transform.localScale;
 	}
 	
+	void OnEnable()
+	{
+		if( threads > 0 )
+		{
+			label.color = textBeginColor;
+			label.transform.localPosition = labelbeginpos;
+			label.transform.localScale = labelbeginsc;		
+			threads = 0;
+		}
+		
+		if( threads1 > 0 )
+		{
+			sprite.color = beginColor;
+			transform.localPosition = beginpos;
+			transform.localScale = beginsc;
+			threads1 = 0;
+		}
+	}
+	
 	public void SetNumberWithFlash(int newnumber)
 	{
 		if( number != newnumber)

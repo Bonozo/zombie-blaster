@@ -93,9 +93,9 @@ public class AudioManager : MonoBehaviour {
 	public AudioClip[] AudioGetHit;
 	public void PlayPlayerGetHit()
 	{
-		gethits.Enqueue(Time.time + 0.175f);
-		//audioSourcePlayer.PlayOneShot(AudioGetHit[Random.Range(0,AudioGetHit.Length)]);
-		//audioSourcePlayer.PlayOneShot(AudioGetHit2[Random.Range(0,AudioGetHit2.Length)]);
+		//gethits.Enqueue(Time.time + 0.175f);
+		audioSourcePlayer.PlayOneShot(AudioGetHit[Random.Range(0,AudioGetHit.Length)]);
+		audioSourcePlayer.PlayOneShot(AudioGetHit2[Random.Range(0,AudioGetHit2.Length)]);
 	}
 	
 	public AudioClip[] AudioGetHit2;
@@ -157,9 +157,24 @@ public class AudioManager : MonoBehaviour {
 	
 	#endregion
 	
+	#region Powerups
+	
+	public AudioClip clipShieldUp;
+	public AudioClip clipShieldDown;
+	
+	public void PlayShield(bool up)
+	{
+		if(up)
+			audioSourcePlayer.PlayOneShot(clipShieldUp);
+		else
+			audioSourcePlayer.PlayOneShot(clipShieldDown);
+	}
+	
+	#endregion
+	
 	#region Update
 	
-	private System.Collections.Generic.Queue<float> gethits = new System.Collections.Generic.Queue<float>();
+	/*private System.Collections.Generic.Queue<float> gethits = new System.Collections.Generic.Queue<float>();
 	
 	void Update()
 	{
@@ -171,7 +186,7 @@ public class AudioManager : MonoBehaviour {
 			gethits.Dequeue();
 		}
 		
-	}
+	}*/
 	
 	#endregion
 

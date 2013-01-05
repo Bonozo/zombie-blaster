@@ -92,8 +92,9 @@ public class ZombieRagdoll : MonoBehaviour {
 			healthpackok = true;
 			if(scooby || Random.Range(0,2)==1)
 			{
-				HealthPack er = (HealthPack)Instantiate(LevelInfo.Environments.healthPack,transform.position,transform.rotation);
-				er.scooby = scooby;
+				LevelInfo.Environments.generator.InstantiatePowerup(transform.position,transform.rotation,scooby);
+				//HealthPack er = (HealthPack)Instantiate(LevelInfo.Environments.healthPack,transform.position,transform.rotation);
+				//er.scooby = scooby;
 			}
 		}
 		

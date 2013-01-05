@@ -57,21 +57,14 @@ public class Guns : MonoBehaviour {
 				GameEnvironment.storeGun[i].SetAsUnlimited();
 	}
 	
-	
-	/*void OnEnable()
-	{
-		currentButton.ButtonDownEvent += HandleCurrentButtonButtonDownEvent;
-	}
-
-	void OnDisable()
-	{
-		currentButton.ButtonDownEvent -= HandleCurrentButtonButtonDownEvent;
-	}*/
-	
 	// Update is called once per frame
-	void Update () {
+	public void Update () {
 		
-		if( Time.timeScale == 0.0f ) return;
+		if( Time.timeScale == 0.0f ) 
+		{
+			foreach( GunBase g in gun ) g.ManualUpdate(Weapon.None);
+			return;
+		}
 		foreach( GunBase g in gun ) g.ManualUpdate((Weapon)current );
 		
 		int cweapon = 0;

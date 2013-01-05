@@ -56,9 +56,6 @@ public class Control : MonoBehaviour {
 	
 	public Vector3[] VantagePoints;
 	
-	public bool DamageMultiplied = false;
-	private float damageMultiplieTime = 0f;
-	
 	#endregion
 	
 	#region Variables
@@ -89,8 +86,12 @@ public class Control : MonoBehaviour {
 			if( _state == GameState.Paused && value != GameState.Paused)
 			{
 				LevelInfo.Audio.PlayAudioPause(false);
-				guiPlayGame.SetActiveRecursively(true);
 			}
+			
+			if( _state == GameState.Store && value != GameState.Store)
+			{
+				guiPlayGame.SetActiveRecursively(true);
+			}	
 			
 			_state = value;
 			
@@ -102,13 +103,17 @@ public class Control : MonoBehaviour {
 				break;
 			case GameState.Play:
 				Time.timeScale = 1f;
+				LevelInfo.Environments.guns.Update();
 				break;
 			case GameState.Paused:
 				LevelInfo.Audio.StopEffects();
-				guiPlayGame.SetActiveRecursively(false);
-				//LevelInfo.Audio.PlayAudioPause(true);
 				Time.timeScale = 0f;
-				GameObject.Find("Store").GetComponent<Store>().showStore = true;
+				LevelInfo.Audio.PlayAudioPause(true);
+				break;
+			case GameState.Store:
+				Time.timeScale = 0f;
+				guiPlayGame.SetActiveRecursively(false);
+				GameObject.Find("Store").GetComponent<Store>().showStore = true;	
 				break;
 			case GameState.WaveCompleted:
 				//Time.timeScale = 0;
@@ -336,9 +341,15 @@ public class Control : MonoBehaviour {
 		}	
     }	
 	
+
 	// Update is called once per frame
 	void Update () 
 	{
+		if(Input.GetKeyUp(KeyCode.PageUp))
+			DamageMultiply();
+		if(Input.GetKeyUp(KeyCode.PageDown))
+			Shield();
+		
 		//??//
 		if( Input.GetKeyUp(KeyCode.H) )
 			health -= 0.1f;
@@ -353,13 +364,16 @@ public class Control : MonoBehaviour {
 		if( state != GameState.Play) return;//expect
 		if(Input.GetKey(KeyCode.Escape) )
 		{
-			LevelInfo.Environments.control.state = GameState.Paused;
+			//LevelInfo.Environments.control.state = GameState.Paused;
 			return;
 		}
 		////
 		
 		if( Option.UnlimitedHealth ) health = 1.0f;
 		
+		
+		// Health 
+		UpdateHealthBar();
 		if( healthshow != health )
 		{
 			if( healthshow < health ) healthshow += Mathf.Min(Time.deltaTime*1f,health-healthshow);
@@ -398,8 +412,6 @@ public class Control : MonoBehaviour {
 		
 			transform.rotation = Quaternion.Euler(rot);
 		}
-		
-		UpdateHealthBar();
 	}
 	
 	public bool allowShowGUI = true;
@@ -680,6 +692,21 @@ public class Control : MonoBehaviour {
 		LevelInfo.Environments.healthbarArmor.color = 
 			health!=healthshow&&healthshow<=1?new Color(1f,1f,1f,0.6f):Color.white;
 		LevelInfo.Environments.healthbarArmor.transform.localScale = v;
+		
+		// flash/pulse healthbar icons
+		if( health!=healthshow )
+		{
+			LevelInfo.Environments.healthbarTombstone.StartFlash();
+			LevelInfo.Environments.healthbarBoxes.StartFlash();
+		}
+		else
+		{
+			LevelInfo.Environments.healthbarTombstone.EndFlash();
+			LevelInfo.Environments.healthbarBoxes.EndFlash();	
+		}
+		
+		
+		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActive(DamageMultiplied||Shielded);
 	}
 	
 	
@@ -718,10 +745,13 @@ public class Control : MonoBehaviour {
 	public void GetHealth(float h)
 	{
 		if( Option.UnlimitedHealth ) return;
+		if( Shielded ) return;
 		#if UNITY_ANDROID || UNITY_IPHONE
 		if( h<0f && Option.Vibration)
 				Handheld.Vibrate();
 		#endif
+		if( h<0f)
+			LevelInfo.Environments.screenBlood.Pulse();
 		
 		health += h;
 		if( health > LevelInfo.State.playerMaxHealth ) health = LevelInfo.State.playerMaxHealth;
@@ -805,28 +835,75 @@ public class Control : MonoBehaviour {
 		Time.timeScale = 0.0f;	
 	}
 	
+	#endregion
+	
+	#region Powerups
+	
+	public bool DamageMultiplied = false;
+	private float damageMultiplieTime = 0f;
+	public bool Shielded = false;
+	private float shieldTime = 0f;
+	
 	private IEnumerator DamageMultiplyThread()
 	{
-		DamageMultiplied = true;
-		
-		
-		
 		damageMultiplieTime = Time.time + 30f;
-		while( Time.time < damageMultiplieTime )
-		{
-			LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActive(true);
-			LevelInfo.Environments.guiDamageMultiplier.text = "" + (int)(damageMultiplieTime-Time.time+1);
-			yield return new WaitForEndOfFrame();
-		}
 		
-		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActive(false);
-		DamageMultiplied = false;
+		if( !DamageMultiplied )
+		{
+			DamageMultiplied = true;
+		
+			while( Time.time < damageMultiplieTime )
+			{
+				LevelInfo.Environments.guiDamageMultiplier.text = "4x damage " + (int)(damageMultiplieTime-Time.time+1);
+				yield return new WaitForEndOfFrame();
+			}
+			DamageMultiplied = false;
+		}
+	}
+	
+	private IEnumerator ShieldThread()
+	{
+		LevelInfo.Audio.PlayShield(true);
+		shieldTime = Time.time + 15f;
+		
+		if( !Shielded )
+		{
+			LevelInfo.Environments.shield.Show();
+			
+			Shielded = true;
+		
+			while( Time.time < shieldTime )
+			{
+				LevelInfo.Environments.shield.SetActive(true);
+				LevelInfo.Environments.guiDamageMultiplier.text = "shield " + (int)(shieldTime-Time.time+1);
+				yield return new WaitForEndOfFrame();
+			}
+			Shielded = false;
+			
+			if(shieldTime==0f)
+			{
+				LevelInfo.Environments.shield.HideImmediately();
+			}
+			else
+			{
+				LevelInfo.Environments.shield.Hide();
+				LevelInfo.Audio.PlayShield(false);
+			}
+		}
 	}
 	
 	public void DamageMultiply()
 	{
-		if( DamageMultiplied ) damageMultiplieTime = Time.time + 30;
-		else StartCoroutine(DamageMultiplyThread());
+		//if( DamageMultiplied ) damageMultiplieTime = Time.time + 30;
+		shieldTime=0f;
+		StartCoroutine(DamageMultiplyThread());
+	}
+	
+	public void Shield()
+	{
+		damageMultiplieTime=0f;
+		StartCoroutine(ShieldThread());
+		
 	}
 	
 	#endregion

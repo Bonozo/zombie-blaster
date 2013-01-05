@@ -175,6 +175,7 @@
      <None Include="Assets\Plugins\Android\res\drawable\gree_status_notification_badge_right_selector.xml" />
      <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Header.txt" />
      <None Include="Assets\NGUI\Examples\Shaders\Refractive.shader" />
+     <None Include="Assets\Art\Shaders\Bumped Color Specular.shader" />
      <None Include="Assets\Plugins\Android\res\anim\gree_notification_board_close.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_status_bar_translate_out_left.xml" />
      <None Include="Assets\Plugins\Android\res\values\gree_strings.xml" />
