@@ -8,6 +8,7 @@ public class AudioManager : MonoBehaviour {
 	public AudioSource audioSourceBackground;
 	public AudioSource audioSourcePlayer;
 	public AudioSource audioSourceZombies;
+	public AudioSource audioSourceWindLoop;
 	
 
 		
@@ -21,6 +22,22 @@ public class AudioManager : MonoBehaviour {
 	{
 		audioSourceBackground.Stop();
 		StopEffects();
+	}
+	
+	public void PauseAll()
+	{
+		audioSourceBackground.Pause();
+		audioSourceWindLoop.Pause();
+		StopEffects();
+	}
+	
+	public void UnPauseAll()
+	{
+		audioSourceBackground.Play();
+		audioSourceWindLoop.Play();
+		audioSourcePlayer.Play();
+		audioSourceZombies.Play();
+		
 	}
 	
 	#endregion
@@ -190,5 +207,9 @@ public class AudioManager : MonoBehaviour {
 	
 	#endregion
 
-
+	#region Wave Complete
+	
+	public AudioClip clipUIStar;
+	
+	#endregion
 }

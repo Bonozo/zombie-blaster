@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
+[AddComponentMenu("GamePlay/Zombie Ragdoll")]
 public class ZombieRagdoll : MonoBehaviour {
 	
 	public bool scooby = false;

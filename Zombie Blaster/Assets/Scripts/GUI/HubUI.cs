@@ -167,7 +167,7 @@ public class HubUI : MonoBehaviour {
 		}
 	}
 	
-	void Update()
+	/*void Update()
 	{
 		if( Input.GetKeyUp(KeyCode.E) )
 		{
@@ -175,5 +175,5 @@ public class HubUI : MonoBehaviour {
 			SetNumberWithFlash(GetNumber()+1);
 			
 		}
-	}
+	}*/
 }

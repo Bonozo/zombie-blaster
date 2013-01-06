@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
+[AddComponentMenu("GamePlay/HeadHit")]
 public class HeadHit : MonoBehaviour {
 
 	public Zombi HeadContainer;

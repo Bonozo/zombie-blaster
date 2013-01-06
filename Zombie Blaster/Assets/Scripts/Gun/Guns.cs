@@ -135,6 +135,7 @@ public class Guns : MonoBehaviour {
 			// Get Pocket and fast Reload
 			gun[gunnumber].EnabledGun = true;
 			gun[gunnumber].Ammo += gun[gunnumber].PacketSize;
+			LevelInfo.Environments.control.WeaponsAvailableInfoUpdate();
 		}
 		
 		gun[gunnumber].GetAmmoStorePacketWithMaxAmmo();

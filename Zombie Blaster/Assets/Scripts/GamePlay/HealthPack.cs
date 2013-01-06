@@ -14,6 +14,7 @@ public enum HealthPackType
 	XtraLife,//pink
 }
 
+[AddComponentMenu("GamePlay/Pickup")]
 public class HealthPack : MonoBehaviour {
 	
 	public HealthPackType packType;
@@ -36,19 +37,20 @@ public class HealthPack : MonoBehaviour {
 	void Start () {
 
 		transform.Translate(0,StartHeight-transform.position.y,0);
+		transform.LookAt(LevelInfo.Environments.control.transform.position,Vector3.up);
 		
 		var level = LevelInfo.State.level[LevelInfo.Environments.control.currentLevel];
 		
 		switch(packType)
 		{
-		case HealthPackType.Ammo:
+		/*case HealthPackType.Ammo:
 			int t = Random.Range(0,LevelInfo.Environments.guns.gun.Length);
 			while( !LevelInfo.Environments.guns.gun[t].EnabledGun ) t--;
 			gunindexifweapon = (Weapon)t;
 				
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.guns.gun[(int)gunindexifweapon].texture;
 			gameObject.renderer.material.color = Color.yellow;
-			break;
+			break;*/
 		case HealthPackType.Armor:
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpArmor;
 			break;
@@ -58,9 +60,9 @@ public class HealthPack : MonoBehaviour {
 		case HealthPackType.DamageMultiplier:
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpDamageMultiplier;
 			break;
-		case HealthPackType.Health:
+		/*case HealthPackType.Health:
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpHealth;
-			break;
+			break;*/
 		case HealthPackType.Shield:
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpShields;
 			break;
@@ -142,7 +144,7 @@ public class HealthPack : MonoBehaviour {
 		switch(packType)
 		{
 		case HealthPackType.Ammo:
-			LevelInfo.Environments.guns.GetAmmoWithMax(gunindexifweapon);
+			LevelInfo.Environments.guns.GetAmmoWithMax((Weapon)LevelInfo.Environments.guns.CurrentWeaponIndex);
 			pickupname = "Ammo";
 			break;
 			
@@ -163,12 +165,12 @@ public class HealthPack : MonoBehaviour {
 			
 		case HealthPackType.Health:
 			LevelInfo.Environments.control.GetHealth(Health);
-			pickupname = "Health";
+			pickupname = "First Aid";
 			break;
 			
 		case HealthPackType.Shield:
 			LevelInfo.Environments.control.Shield();
-			pickupname = "Shield";
+			pickupname = "Invincibility";
 			break;
 			
 		case HealthPackType.SuperAmmo:
@@ -195,7 +197,5 @@ public class HealthPack : MonoBehaviour {
 		LevelInfo.Environments.hubScore.SetNumberWithFlash(LevelInfo.Environments.hubScore.GetNumber() + LevelInfo.State.scoreForPickUp);
 		
 		Destroy(this.gameObject);
-
-			
 	}
 }

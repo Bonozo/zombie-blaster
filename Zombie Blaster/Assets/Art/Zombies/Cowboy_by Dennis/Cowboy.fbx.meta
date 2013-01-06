@@ -49,6 +49,8 @@ ModelImporter:
     100086: pPlane2
     100088: pPlane3
     100090: tiezombie_mesh
+    100092: polySurface1
+    100094: polySurface2
     400000: //RootNode
     400002: farmer_back1_joint
     400004: farmer_back2_joint
@@ -95,19 +97,27 @@ ModelImporter:
     400086: pPlane2
     400088: pPlane3
     400090: tiezombie_mesh
+    400092: polySurface1
+    400094: polySurface2
     2300000: pCylinder1
     2300002: pPlane1
     2300004: pPlane2
     2300006: pPlane3
+    2300008: polySurface1
+    2300010: polySurface2
     3300000: pCylinder1
     3300002: pPlane1
     3300004: pPlane2
     3300006: pPlane3
+    3300008: polySurface1
+    3300010: polySurface2
     4300000: tiezombie_mesh
     4300002: pCylinder1
     4300004: pPlane3
     4300006: pPlane1
     4300008: pPlane2
+    4300010: polySurface1
+    4300012: polySurface2
     9500000: //RootNode
     13700000: tiezombie_mesh
   materials:

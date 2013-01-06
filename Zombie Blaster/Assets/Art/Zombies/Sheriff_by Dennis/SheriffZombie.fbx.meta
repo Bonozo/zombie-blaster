@@ -61,6 +61,11 @@ ModelImporter:
     100110: pPlane1
     100112: pPlane2
     100114: tiezombie_mesh
+    100116: pasted__pPlane1
+    100118: polySurface1
+    100120: polySurface2
+    100122: polySurface3
+    100124: polySurface4
     400000: farmer_L_hand_joint
     400002: farmer_L_wrist_joint
     400004: farmer_L_elbow2_joint
@@ -119,6 +124,11 @@ ModelImporter:
     400110: pPlane1
     400112: pPlane2
     400114: tiezombie_mesh
+    400116: pasted__pPlane1
+    400118: polySurface1
+    400120: polySurface2
+    400122: polySurface3
+    400124: polySurface4
     2300000: pasted__pasted__pCylinder1
     2300002: pasted__pasted__pCube1
     2300004: pasted__pasted__pPlane2
@@ -127,6 +137,9 @@ ModelImporter:
     2300010: pCylinder1
     2300012: pPlane1
     2300014: pPlane2
+    2300016: polySurface2
+    2300018: polySurface3
+    2300020: polySurface4
     3300000: pasted__pasted__pCylinder1
     3300002: pasted__pasted__pCube1
     3300004: pasted__pasted__pPlane2
@@ -135,6 +148,9 @@ ModelImporter:
     3300010: pCylinder1
     3300012: pPlane1
     3300014: pPlane2
+    3300016: polySurface2
+    3300018: polySurface3
+    3300020: polySurface4
     4300000: farmer:Mesh
     4300002: pasted__pasted__pCylinder1
     4300004: pasted__pasted__pPlane1
@@ -146,10 +162,16 @@ ModelImporter:
     4300016: pCube1
     4300018: pPlane2
     4300020: necktie
+    4300022: polySurface3
+    4300024: polySurface4
+    4300026: polySurface2
+    4300028: pasted__pPlane1
     11100000: //RootNode
     13700000: farmer_root_joint
     13700002: necktie
     13700004: tiezombie_mesh
+    13700006: farmer:Mesh
+    13700008: pasted__pPlane1
   materials:
     importMaterials: 1
     materialName: 0

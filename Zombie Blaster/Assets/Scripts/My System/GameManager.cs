@@ -12,8 +12,10 @@ public class GameManager : MonoBehaviour {
 	public Guns guns;
 	public ScreenBlood screenBlood;
 	public Shield shield;
+	public GameObject guiPaused;
 	
 	public Transform nGUITopLeftTransform;
+	public UILabel labelWeaponsAvailableInfo;
 
 	
 	public GameObject messageText;

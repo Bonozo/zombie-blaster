@@ -31,8 +31,8 @@ public class WaveInfo : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if( waitfor > 0f ) waitfor -= Time.deltaTime;
-		root.SetActive(waitfor>0&&LevelInfo.Environments.control.state != GameState.Store);
-		rootWaveComplete.SetActive(showWaveComplete&&LevelInfo.Environments.control.state != GameState.Store);
+		root.SetActive(waitfor>0&&Time.deltaTime>0);
+		rootWaveComplete.SetActive(showWaveComplete&&Time.deltaTime>0);
 		
 		if( showWaveComplete )
 		{
@@ -40,6 +40,8 @@ public class WaveInfo : MonoBehaviour {
 			{
 				if( startime[i] > 0f )
 				{
+					if(i==0)
+						LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.clipUIStar);
 					startime[i] -= Time.deltaTime;
 					if( startime[i] < 0 )
 						spriteStar[i].spriteName = stars>=i+1?"star full":"star empty";

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
+[AddComponentMenu("GamePlay/Zombie")]
 public class Zombi : MonoBehaviour {
 	
 	#region Parameters
@@ -116,6 +117,7 @@ public class Zombi : MonoBehaviour {
 		if( audioAttackwalk == null )
 			audioAttackwalk = LevelInfo.Audio.AudioZombieAttackWalk;
 		
+		NormalizeHeight();
 	}
 	
 	private float shotDeltaTime=0.0f;
@@ -206,7 +208,7 @@ public class Zombi : MonoBehaviour {
 			// Jump
 			if( runningTime <= 0f && canJump && Random.Range(0,300)==1)
 			{
-				if( jumpAudio != null ) LevelInfo.Audio.audioSourceZombies.PlayOneShot(jumpAudio);
+				if( jumpAudio != null ) LevelInfo.Audio.audioSourceZombies.PlayOneShot(jumpAudio,0.5f);
 				animation.Play("jump");
 				return;
 			}

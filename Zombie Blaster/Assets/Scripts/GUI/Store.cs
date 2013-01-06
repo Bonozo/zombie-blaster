@@ -94,6 +94,11 @@ public class Store : MonoBehaviour {
 		}
 	}
 	
+	public static bool CanBuyWeapon(int weapon)
+	{
+		return !WeaponUnlocked(weapon)&&GameEnvironment.storeGun[weapon].price<=zombieHeads;
+	}
+	
 	public void RestorePlayerPrefs()
 	{
 		// heads
@@ -799,8 +804,9 @@ public class Store : MonoBehaviour {
 				Store.zombieHeads -= GameEnvironment.storeGun[wooi].price;
 				if( IsLevelGamePlay && ExistGunInCurrentLevel((Weapon)wooi))
 				{
-					GameEnvironment.storeGun[wooi].store += 5*GameEnvironment.storeGun[wooi].pocketsize;
-					GameEnvironment.storeGun[wooi].enabled = true;
+					//GameEnvironment.storeGun[wooi].store += 5*GameEnvironment.storeGun[wooi].pocketsize;
+					//GameEnvironment.storeGun[wooi].enabled = true;
+					LevelInfo.Environments.guns.GetWeaponWithMAX((Weapon)wooi);
 				}
 				wooi = -1;
 				spwchannel = true;
@@ -879,6 +885,10 @@ public class Store : MonoBehaviour {
 			"\nMax Ammo:" +
 			"\nSpeed:" +
 			"\nReload Delay:";
+		
+		if( !WeaponUnlocked(wooi) )
+			s += "\nPrice:";
+		
 		GUI.Label(new Rect(0.35f*Screen.width,0.34f*Screen.height,0.3f*Screen.width,0.25f*Screen.height),s,myStyle);
 		
 		float accuracy = 100;
@@ -891,6 +901,9 @@ public class Store : MonoBehaviour {
 			"\n" + (5*GameEnvironment.storeGun[wooi].pocketsize) + 
 			"\n" + GameEnvironment.storeGun[wooi].speed + " m/s" +
 			"\n" + GameEnvironment.storeGun[wooi].reloadTime + " sec";
+		
+		if( !WeaponUnlocked(wooi) )
+			s += "\n" + GameEnvironment.storeGun[wooi].price;
 		
 		GUI.Label(new Rect(0.5f*Screen.width,0.34f*Screen.height,0.3f*Screen.width,0.25f*Screen.height),s,myStyle);
 		

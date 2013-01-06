@@ -3,6 +3,7 @@ using System.Collections;
 using System.Xml;
 using System;
 
+[AddComponentMenu("GamePlay/Control")]
 public class Control : MonoBehaviour {
 
 	#region LeaderBoardDemo
@@ -69,6 +70,8 @@ public class Control : MonoBehaviour {
 	private float waitfornewwave = 0f;
 	
 	private bool restartLevel = false;
+	private int lastZombieHeads;
+	private bool[] allowedWeapons;
 	
 	#endregion
 	
@@ -85,6 +88,7 @@ public class Control : MonoBehaviour {
 		{
 			if( _state == GameState.Paused && value != GameState.Paused)
 			{
+				LevelInfo.Audio.UnPauseAll();
 				LevelInfo.Audio.PlayAudioPause(false);
 			}
 			
@@ -106,11 +110,12 @@ public class Control : MonoBehaviour {
 				LevelInfo.Environments.guns.Update();
 				break;
 			case GameState.Paused:
-				LevelInfo.Audio.StopEffects();
 				Time.timeScale = 0f;
+				LevelInfo.Audio.PauseAll();
 				LevelInfo.Audio.PlayAudioPause(true);
 				break;
 			case GameState.Store:
+				LevelInfo.Audio.StopEffects();
 				Time.timeScale = 0f;
 				guiPlayGame.SetActiveRecursively(false);
 				GameObject.Find("Store").GetComponent<Store>().showStore = true;	
@@ -191,7 +196,12 @@ public class Control : MonoBehaviour {
 		
 		LevelInfo.Environments.fpsGUI.SetActive(Option.ShowFPS);
 		
+		lastZombieHeads = -1;
 		LevelInfo.Environments.hubZombieHeads.SetNumber(Store.zombieHeads);
+		
+		allowedWeapons = new bool[Store.countWeapons];
+		for(int i=0;i<LevelInfo.State.level[currentLevel].allowedGun.Length;i++)
+			allowedWeapons[(int)LevelInfo.State.level[currentLevel].allowedGun[i]]=true;
 	}
 	
 	public IEnumerator ShowTip(string message,float wait)
@@ -341,7 +351,19 @@ public class Control : MonoBehaviour {
 		}	
     }	
 	
-
+	public void WeaponsAvailableInfoUpdate()
+	{
+		LevelInfo.Environments.labelWeaponsAvailableInfo.text = "";
+		for(int i=0;i<Store.countWeapons;i++)
+			if( Store.CanBuyWeapon(i) && !LevelInfo.Environments.guns.gun[i].EnabledGun
+				&& allowedWeapons[i])
+			{
+				LevelInfo.Environments.labelWeaponsAvailableInfo.text += 
+				(LevelInfo.Environments.labelWeaponsAvailableInfo.text.Length==0?"":"\n") +
+					"! " + GameEnvironment.storeGun[i].name;		
+			}
+	}
+	
 	// Update is called once per frame
 	void Update () 
 	{
@@ -358,6 +380,11 @@ public class Control : MonoBehaviour {
 	
 		// Update Zombie Heads Number On Screen
 		LevelInfo.Environments.hubZombieHeads.SetNumberWithFlash(Store.zombieHeads);
+		LevelInfo.Environments.guiPaused.SetActive(state == GameState.Paused);
+		if(lastZombieHeads != Store.zombieHeads)	
+			WeaponsAvailableInfoUpdate();
+		LevelInfo.Environments.labelWeaponsAvailableInfo.gameObject.SetActive(state != GameState.Store && LevelInfo.Environments.labelWeaponsAvailableInfo.text.Length > 0);
+		lastZombieHeads = Store.zombieHeads;
 		
 		ShakeUpdates();
 		
@@ -875,7 +902,7 @@ public class Control : MonoBehaviour {
 			while( Time.time < shieldTime )
 			{
 				LevelInfo.Environments.shield.SetActive(true);
-				LevelInfo.Environments.guiDamageMultiplier.text = "shield " + (int)(shieldTime-Time.time+1);
+				LevelInfo.Environments.guiDamageMultiplier.text = "Invincibility " + (int)(shieldTime-Time.time+1);
 				yield return new WaitForEndOfFrame();
 			}
 			Shielded = false;

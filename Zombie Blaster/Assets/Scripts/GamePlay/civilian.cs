@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
+[AddComponentMenu("GamePlay/Civilian")]
 public class civilian : MonoBehaviour {
 	
 	public GameObject ZombieRagdoll;
@@ -26,6 +27,8 @@ public class civilian : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		
+		if(Time.deltaTime==0) return;
 		
 		DestroyTime -= Time.deltaTime;
 		if( DestroyTime <= 0f )
