@@ -51,21 +51,21 @@ public class HealthPack : MonoBehaviour {
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.guns.gun[(int)gunindexifweapon].texture;
 			gameObject.renderer.material.color = Color.yellow;
 			break;*/
-		case HealthPackType.Armor:
+		/*case HealthPackType.Armor:
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpArmor;
-			break;
+			break;*/
 		/*case HealthPackType.BonusHeads:
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpBonusHeads;
 			break;*/
-		case HealthPackType.DamageMultiplier:
+		/*case HealthPackType.DamageMultiplier:
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpDamageMultiplier;
-			break;
+			break;*/
 		/*case HealthPackType.Health:
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpHealth;
 			break;*/
-		case HealthPackType.Shield:
+		/*case HealthPackType.Shield:
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpShields;
-			break;
+			break;*/
 		case HealthPackType.SuperAmmo:
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpSuperAmmo;
 			break;
@@ -95,9 +95,9 @@ public class HealthPack : MonoBehaviour {
 				gameObject.renderer.material.mainTexture = LevelInfo.Environments.guns.gun[(int)gunindexifweapon].texture;
 			//gameObject.renderer.material.color = Color.red;
 			break;
-		case HealthPackType.XtraLife:
+		/*case HealthPackType.XtraLife:
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpXtraLife;
-			break;
+			break;*/
 		}		
 	}
 	
@@ -150,7 +150,7 @@ public class HealthPack : MonoBehaviour {
 			
 		case HealthPackType.Armor:
 			LevelInfo.Environments.control.Health = Mathf.Max(LevelInfo.Environments.control.Health,1f);
-			pickupname = "Armor";
+			pickupname = "Protection";
 			break;
 			
 		case HealthPackType.BonusHeads:

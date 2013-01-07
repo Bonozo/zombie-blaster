@@ -51,6 +51,10 @@ ModelImporter:
     100090: pCube7
     100092: visor
     100094: visor1
+    100096: janitor
+    100098: polySurface1
+    100100: polySurface2
+    100102: polySurface3
     400000: farmer:Mesh
     400002: farmer_back1_joint
     400004: farmer_back2_joint
@@ -99,18 +103,28 @@ ModelImporter:
     400090: pCube7
     400092: visor
     400094: visor1
+    400096: janitor
+    400098: polySurface1
+    400100: polySurface2
+    400102: polySurface3
     2300000: pCube4
     2300002: pCube5
     2300004: pCube6
     2300006: pCube7
     2300008: visor
     2300010: visor1
+    2300012: polySurface1
+    2300014: polySurface2
+    2300016: polySurface3
     3300000: pCube4
     3300002: pCube5
     3300004: pCube6
     3300006: pCube7
     3300008: visor
     3300010: visor1
+    3300012: polySurface1
+    3300014: polySurface2
+    3300016: polySurface3
     4300000: farmer:Mesh
     4300002: visor
     4300004: visor1
@@ -118,8 +132,13 @@ ModelImporter:
     4300008: pCube7
     4300010: pCube5
     4300012: pCube4
+    4300014: janitor
+    4300016: polySurface1
+    4300018: polySurface2
+    4300020: polySurface3
     9500000: //RootNode
     13700000: farmer:Mesh
+    13700002: janitor
   materials:
     importMaterials: 1
     materialName: 0

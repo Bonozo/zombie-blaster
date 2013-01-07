@@ -387,7 +387,7 @@ public class Store : MonoBehaviour {
 		bool enableshowshopitems = currentshopitem != -1 && shopitemslidecount==0;
 		
 		ShopWeaponName.enabled = enableshowshopitems;
-		ShopWeaponBuyText.enabled = false;//enableshowshopitems&&showWeapon[currentshopitem];
+		ShopWeaponBuyText.enabled = enableshowshopitems;
 		shopInfoButton.gameObject.SetActive(enableshowshopitems&&showWeapon[currentshopitem]);
 		shotItemBuy.gameObject.SetActive(enableshowshopitems&&showWeapon[currentshopitem]);
 		shotItemBuy.enabled = enableshowshopitems&&showWeapon[currentshopitem]&&wooi==-1;
@@ -433,14 +433,7 @@ public class Store : MonoBehaviour {
 			
 			ShopWeaponName.font = showWeapon[currentshopitem]?blackFont:redFont;
 			
-			//ShopWeaponBuyText.text = "" + GameEnvironment.storeGun[currentshopitem].price;
-			/*ShopWeaponBuyText.text = 
-				"Dmg: " + GameEnvironment.storeGun[currentshopitem].AmmoInformationFormal +
-				"\nAmmo: " + GameEnvironment.storeGun[currentshopitem].pocketsize + 
-				"\nReload: " + GameEnvironment.storeGun[currentshopitem].reloadTime + 
-				"\nSpeed: " + GameEnvironment.storeGun[currentshopitem].speed + 
-				"\nPrice: " + GameEnvironment.storeGun[currentshopitem].price;
-			*/
+			ShopWeaponBuyText.text = "" + GameEnvironment.storeGun[currentshopitem].price + " heads";
 			
 			if( shopInfoButton.PressedDown )
 			{
