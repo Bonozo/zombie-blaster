@@ -9,6 +9,7 @@ public enum GameState
 	Paused,
 	Lose,
 	Store,
+	Map,
 	WaveCompleted
 }
 	

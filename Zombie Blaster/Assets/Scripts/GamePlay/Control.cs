@@ -44,176 +44,6 @@ public class Control : MonoBehaviour {
 	string scoreLB;
 	string nameLB;
 	
-	#endregion
-	
-	#region Parameters
-	
-	public GameObject guiPlayGame;
-	public GUIStyle myGUIStyle; 	
-	public GUIStyle postGUIStyle;
-	public Texture texturePopup;
-	
-	public float Speed = 3f;
-	
-	public Vector3[] VantagePoints;
-	
-	#endregion
-	
-	#region Variables
-	
-	private int currentZombiesInWave = 0;
-	public int currentHeadshotsInWave = 0;
-	
-	private float health = 1f;
-	private float healthshow = 1f;
-	private float showWaveCompleteTime = 4f;
-	private float waitfornewwave = 0f;
-	
-	private bool restartLevel = false;
-	private int lastZombieHeads;
-	private bool[] allowedWeapons;
-	
-	#endregion
-	
-	#region State
-	
-	public GameState _state = GameState.Play;
-	public GameState state
-	{
-		get 
-		{
-			return _state;
-		}
-		set
-		{
-			if( _state == GameState.Paused && value != GameState.Paused)
-			{
-				LevelInfo.Audio.UnPauseAll();
-				LevelInfo.Audio.PlayAudioPause(false);
-			}
-			
-			if( _state == GameState.Store && value != GameState.Store)
-			{
-				guiPlayGame.SetActiveRecursively(true);
-			}	
-			
-			_state = value;
-			
-			switch(_state)
-			{
-			case GameState.Lose:
-				Time.timeScale = 0f;
-				LevelInfo.Environments.hubLives.SetNumberWithFlash(LevelInfo.Environments.hubLives.GetNumber()-1);
-				break;
-			case GameState.Play:
-				Time.timeScale = 1f;
-				LevelInfo.Environments.guns.Update();
-				break;
-			case GameState.Paused:
-				Time.timeScale = 0f;
-				LevelInfo.Audio.PauseAll();
-				LevelInfo.Audio.PlayAudioPause(true);
-				break;
-			case GameState.Store:
-				LevelInfo.Audio.StopEffects();
-				Time.timeScale = 0f;
-				guiPlayGame.SetActiveRecursively(false);
-				GameObject.Find("Store").GetComponent<Store>().showStore = true;	
-				break;
-			case GameState.WaveCompleted:
-				//Time.timeScale = 0;
-				//waitfornewwave = Time.realtimeSinceStartup + 3f;
-				break;
-			}
-		}
-	}
-	
-	public int currentLevel = 0;
-	
-	public int currentWave = 0;
-		
-	private static int startScore = 0;
-	private static int startLives = 1;	
-	
-	public void ForceLevel(int levelnumber,int currentwave)
-	{
-		currentLevel = levelnumber;
-		currentWave = currentwave;
-		foreach(var c in LevelInfo.State.level)
-			c.hierarchyPlace.SetActiveRecursively(false);
-		LevelInfo.State.level[currentLevel].hierarchyPlace.SetActiveRecursively(true);
-	}
-	
-	#endregion
-	
-	#region Start, Update
-	
-	// Use this for initialization
-	void Start ()
-	{
-		#region LeaderBoardDemo
-		Time.timeScale = 1;
-		noOfTimesScoreDisplay = 0;
-		
-		isGet = false;
-		isPost = false;
-		isScoreDisplayed = false;
-		isName = false;
-		isConnectionError1 = false;
-		isLeaderBoard = false;
-		
-		getScoreResponse = "";
-		postScoreResponse = "";
-		
-		nameLB = "";
-		scoreLB = "";
-		
-		#endregion
-		
-		health = Option.Health;
-	
-		int vi = GameEnvironment.StartWave % VantagePoints.Length;
-		transform.position = new Vector3(VantagePoints[vi].x,transform.position.y,VantagePoints[vi].z);
-		
-		ForceLevel(GameEnvironment.StartLevel,GameEnvironment.StartWave);
-		
-		CreateNewZombieWave();
-		
-		LevelInfo.Environments.hubLives.SetNumber(startLives);
-		LevelInfo.Environments.hubScore.SetNumber(startScore);
-		
-		LevelInfo.Environments.lightSpot.SetActive(Option.SpotLight);
-		LevelInfo.Environments.lightDirectional.SetActive(!Option.SpotLight);
-		LevelInfo.Environments.lightSpot.GetComponent<Light>().spotAngle = Option.SpotLightAngle;
-		
-		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActive(false);
-		
-		RenderSettings.fog = Option.Fog;
-		RenderSettings.ambientLight = new Color(Option.BackgroundAmbient/256f,Option.BackgroundAmbient/256f,Option.BackgroundAmbient/256f);
-		
-		//if( !restartLevel )
-		//	StartCoroutine(ShowHints());
-		
-		LevelInfo.Environments.fpsGUI.SetActive(Option.ShowFPS);
-		
-		lastZombieHeads = -1;
-		LevelInfo.Environments.hubZombieHeads.SetNumber(Store.zombieHeads);
-		
-		allowedWeapons = new bool[Store.countWeapons];
-		for(int i=0;i<LevelInfo.State.level[currentLevel].allowedGun.Length;i++)
-			allowedWeapons[(int)LevelInfo.State.level[currentLevel].allowedGun[i]]=true;
-	}
-	
-	public IEnumerator ShowTip(string message,float wait)
-	{
-		while(wait > 0 )
-		{
-			wait -= Time.deltaTime;
-			yield return new WaitForEndOfFrame();
-		}
-		LevelInfo.Environments.generator.GenerateMessageText(new Vector3(0.5f,0.2f,10),message,false,4f);
-	}
-
     IEnumerator WaitForRequest(WWW www)
     //void ResponseData()
 	{
@@ -351,53 +181,218 @@ public class Control : MonoBehaviour {
 		}	
     }	
 	
-	public void WeaponsAvailableInfoUpdate()
+	
+	#endregion
+	
+	#region Parameters
+	
+	public GameObject guiPlayGame;
+	public GameObject guiMap;
+	public GUIStyle myGUIStyle; 	
+	public GUIStyle postGUIStyle;
+	public Texture texturePopup;
+	
+	public float Speed = 3f;
+	
+	public Vector3[] VantagePoints;
+	
+	#endregion
+	
+	#region Variables
+	
+	private int currentZombiesInWave = 0;
+	public int currentHeadshotsInWave = 0;
+	
+	private float health = 1f;
+	private float healthshow = 1f;
+	private float showWaveCompleteTime = 4f;
+	private float waitfornewwave = 0f;
+	
+	private bool restartLevel = false;
+	private int lastZombieHeads;
+	private bool[] allowedWeapons;
+	
+	#endregion
+	
+	#region State
+	
+	public GameState _state = GameState.Play;
+	public GameState state
 	{
-		LevelInfo.Environments.labelWeaponsAvailableInfo.text = "";
-		for(int i=0;i<Store.countWeapons;i++)
-			if( Store.CanBuyWeapon(i) && !LevelInfo.Environments.guns.gun[i].EnabledGun
-				&& allowedWeapons[i])
+		get 
+		{
+			return _state;
+		}
+		set
+		{
+			if( _state == GameState.Paused && value != GameState.Paused)
 			{
-				LevelInfo.Environments.labelWeaponsAvailableInfo.text += 
-				(LevelInfo.Environments.labelWeaponsAvailableInfo.text.Length==0?"":"\n") +
-					"! " + GameEnvironment.storeGun[i].name;		
+				LevelInfo.Audio.UnPauseAll();
+				LevelInfo.Audio.PlayAudioPause(false);
 			}
+			
+			if( _state == GameState.Store && value != GameState.Store)
+			{
+				guiPlayGame.SetActiveRecursively(true);
+			}	
+			
+			if( _state == GameState.Map && value != GameState.Map)
+			{
+				guiPlayGame.SetActiveRecursively(true);
+				guiMap.SetActive(false);
+			}	
+			
+			_state = value;
+			
+			switch(_state)
+			{
+			case GameState.Lose:
+				Time.timeScale = 0f;
+				LevelInfo.Environments.hubLives.SetNumberWithFlash(LevelInfo.Environments.hubLives.GetNumber()-1);
+				break;
+			case GameState.Play:
+				Time.timeScale = 1f;
+				LevelInfo.Environments.guns.Update();
+				break;
+			case GameState.Paused:
+				Time.timeScale = 0f;
+				LevelInfo.Audio.PauseAll();
+				LevelInfo.Audio.PlayAudioPause(true);
+				break;
+			case GameState.Store:
+				LevelInfo.Audio.StopEffects();
+				Time.timeScale = 0f;
+				guiPlayGame.SetActiveRecursively(false);
+				GameObject.Find("Store").GetComponent<Store>().showStore = true;	
+				break;
+			case GameState.Map:
+				LevelInfo.Audio.StopEffects();
+				Time.timeScale = 0f;
+				guiPlayGame.SetActiveRecursively(false);
+				guiMap.SetActive(true);
+				break;
+			case GameState.WaveCompleted:
+				//Time.timeScale = 0;
+				//waitfornewwave = Time.realtimeSinceStartup + 3f;
+				break;
+			}
+		}
 	}
 	
-	// Update is called once per frame
+	public int currentLevel = 0;
+	
+	public int currentWave = 0;
+		
+	private static int startScore = 0;
+	private static int startLives = 1;	
+	
+	public void ForceLevel(int levelnumber,int currentwave)
+	{
+		currentLevel = levelnumber;
+		currentWave = currentwave;
+		foreach(var c in LevelInfo.State.level)
+			c.hierarchyPlace.SetActiveRecursively(false);
+		LevelInfo.State.level[currentLevel].hierarchyPlace.SetActiveRecursively(true);
+	}
+	
+	#endregion
+	
+	#region Start , Update
+	
+	// Use this for initialization
+	void Start ()
+	{
+		#region LeaderBoardDemo
+		Time.timeScale = 1;
+		noOfTimesScoreDisplay = 0;
+		
+		isGet = false;
+		isPost = false;
+		isScoreDisplayed = false;
+		isName = false;
+		isConnectionError1 = false;
+		isLeaderBoard = false;
+		
+		getScoreResponse = "";
+		postScoreResponse = "";
+		
+		nameLB = "";
+		scoreLB = "";
+		
+		#endregion
+		
+		health = Option.Health;
+	
+		int vi = GameEnvironment.StartWave % VantagePoints.Length;
+		transform.position = new Vector3(VantagePoints[vi].x,transform.position.y,VantagePoints[vi].z);
+		
+		ForceLevel(GameEnvironment.StartLevel,GameEnvironment.StartWave);
+		
+		CreateNewZombieWave();
+		
+		LevelInfo.Environments.hubLives.SetNumber(startLives);
+		LevelInfo.Environments.hubScore.SetNumber(startScore);
+		
+		LevelInfo.Environments.lightSpot.SetActive(Option.SpotLight);
+		LevelInfo.Environments.lightDirectional.SetActive(!Option.SpotLight);
+		LevelInfo.Environments.lightSpot.GetComponent<Light>().spotAngle = Option.SpotLightAngle;
+		
+		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActive(false);
+		
+		RenderSettings.fog = Option.Fog;
+		RenderSettings.ambientLight = new Color(Option.BackgroundAmbient/256f,Option.BackgroundAmbient/256f,Option.BackgroundAmbient/256f);
+		
+		//if( !restartLevel )
+		//	StartCoroutine(ShowHints());
+		
+		LevelInfo.Environments.fpsGUI.SetActive(Option.ShowFPS);
+		
+		lastZombieHeads = -1;
+		LevelInfo.Environments.hubZombieHeads.SetNumber(Store.zombieHeads);
+		
+		allowedWeapons = new bool[Store.countWeapons];
+		for(int i=0;i<LevelInfo.State.level[currentLevel].allowedGun.Length;i++)
+			allowedWeapons[(int)LevelInfo.State.level[currentLevel].allowedGun[i]]=true;
+	}
+
+		// Update is called once per frame
 	void Update () 
 	{
+		// Testing
 		if(Input.GetKeyUp(KeyCode.PageUp))
 			DamageMultiply();
 		if(Input.GetKeyUp(KeyCode.PageDown))
 			Shield();
-		
-		//??//
+
 		if( Input.GetKeyUp(KeyCode.H) )
 			health -= 0.1f;
 		if( Input.GetKeyUp(KeyCode.J) )
 			health += 0.1f;
-	
+		/////////////////////////////////
+		
 		// Update Zombie Heads Number On Screen
 		LevelInfo.Environments.hubZombieHeads.SetNumberWithFlash(Store.zombieHeads);
 		LevelInfo.Environments.guiPaused.SetActive(state == GameState.Paused);
 		if(lastZombieHeads != Store.zombieHeads)	
-			WeaponsAvailableInfoUpdate();
-		LevelInfo.Environments.labelWeaponsAvailableInfo.gameObject.SetActive(state != GameState.Store && LevelInfo.Environments.labelWeaponsAvailableInfo.text.Length > 0);
+		{
+			ShowStoreNotifiaction();
+			ShowMapNotification();
+		}
+		
+		LevelInfo.Environments.notificationStore.gameObject.SetActive(Time.time<storeNotificationTime&&Time.timeScale>0f);
+		LevelInfo.Environments.notificationMap.gameObject.SetActive(Time.time<mapNotificationTime&&Time.timeScale>0f);
 		lastZombieHeads = Store.zombieHeads;
 		
 		ShakeUpdates();
 		
-		if( state != GameState.Play) return;//expect
-		if(Input.GetKey(KeyCode.Escape) )
+		if( state != GameState.Play) return;
+		/*if(Input.GetKey(KeyCode.Escape) )
 		{
 			//LevelInfo.Environments.control.state = GameState.Paused;
 			return;
-		}
-		////
+		}*/
 		
 		if( Option.UnlimitedHealth ) health = 1.0f;
-		
 		
 		// Health 
 		UpdateHealthBar();
@@ -408,11 +403,15 @@ public class Control : MonoBehaviour {
 			if( healthshow <= 0 ) { ToLose(); return; }
 		}
 		
-		if (Moving )
+		
+		float swipe = GameEnvironment.Swipe;
+		if (Moving ) // Moving to next vantage point
 		{
 			MovingUpdate();
 			return;
 		}
+		
+		if( AutoTargeting ) return;
 		
 		if( GameEnvironment.AbsoluteSwipe.y >= 0.3f )
 		{
@@ -427,19 +426,91 @@ public class Control : MonoBehaviour {
 			}
 		}
 		
-		
+		// Auto Targeting Updates
+		if( Option.AutoTargeting )
+		{
+			bool targetted = false;
+			
+			if( swipe < 0 )
+			{
+				if(LeftAttackingZombie != null )
+				{
+					targetted = true;
+					AutoTargetToPoint(LeftAttackingZombie.transform.position,false);
+				}
+				LeftAttackingZombie = RightAttackingZombie = null;
+				if(targetted) return;
+			}
+			
+			if( swipe > 0 )
+			{
+				if(RightAttackingZombie != null )
+				{
+					targetted = true;
+					AutoTargetToPoint(RightAttackingZombie.transform.position,true);
+				}
+				LeftAttackingZombie = RightAttackingZombie = null;
+				if(targetted) return;
+			}
+			
+			if(leftAutoTargetTime<0f) LeftAttackingZombie = null;
+			else leftAutoTargetTime-=Time.deltaTime;
+			if(rightAutoTargetTime<0f) RightAttackingZombie = null;
+			else rightAutoTargetTime-=Time.deltaTime;
+		}
 		// Rotate Updates
 		if( !(currentLevel==0&&currentWave==1) )
 		{
 			Vector3 rot = transform.rotation.eulerAngles;
 			if(rot.y >= 180.0f ) rot.y -= 360f;
 		
-			rot.y += Speed*Time.deltaTime*GameEnvironment.Swipe;
+			rot.y += Speed*Time.deltaTime*swipe;
 			rot.y += Speed*Time.deltaTime*Input.GetAxis("Horizontal"); // for PC version test.
 		
 			transform.rotation = Quaternion.Euler(rot);
 		}
 	}
+	
+	#endregion
+
+	#region Notifications
+	
+	private static bool[] notweaponshowed = new bool[Store.countWeapons];
+	private static bool[] notlevelshowed = new bool[Store.countLevel];
+	
+	public void ShowStoreNotifiaction()
+	{
+		//LevelInfo.Environments.nofiticationStore.text = "";
+		for(int i=0;i<Store.countWeapons;i++)
+			if( !notweaponshowed[i] && Store.CanBuyWeapon(i) && !LevelInfo.Environments.guns.gun[i].EnabledGun
+				&& allowedWeapons[i])
+			{
+				notweaponshowed[i]=true;
+				storeNotificationTime=Time.time+5f;
+				LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.clipUIStar);
+				/*LevelInfo.Environments.nofiticationStore.text += 
+				(LevelInfo.Environments.nofiticationStore.text.Length==0?"":"\n") +
+					"! " + GameEnvironment.storeGun[i].name;		*/
+			}
+	}
+	
+	public void ShowMapNotification()
+	{
+		for(int i=0;i<Store.countLevel;i++)
+			if( !notlevelshowed[i] && !Store.LevelUnlocked(i) && Store.zombieHeads >= GameEnvironment.levelPrice[i] )
+			{
+				notlevelshowed[i] = true;
+				mapNotificationTime=Time.time+5f;
+				LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.clipUIStar);
+			}
+	}
+	
+	private float storeNotificationTime=0f;
+	private float mapNotificationTime=0f;
+	
+	#endregion
+
+	#region GUI
 	
 	public bool allowShowGUI = true;
 	void OnGUI()
@@ -620,32 +691,80 @@ public class Control : MonoBehaviour {
 		}
 	}
 	
-	private void MovingUpdate()
+	#endregion
+	
+	#region AutoTargeting
+	
+	public Zombi LeftAttackingZombie;
+	public Zombi RightAttackingZombie;
+	
+	
+	public float AutoTargetingSpeed = 1f;
+	private bool AutoTargeting = false;
+	
+	private float leftAutoTargetTime=0f;
+	private float rightAutoTargetTime=0f;
+	
+	private bool autoTargetTurnDirectionRight;
+	
+	public void ZombieStartsAttacking(Zombi zombie)
 	{
-		if( angling )
+		if( !Option.AutoTargeting || AutoTargeting) return;
+		Vector3 scp = LevelInfo.Environments.mainCamera.WorldToScreenPoint(zombie.transform.position);
+		if(scp.z > 0 && scp.x>=0 && scp.x <= Screen.width) return;
+		if(scp.z<0) scp.x = -scp.x;
+		if(scp.x < -Screen.width*0.5f && scp.z<0 || scp.x<0f && scp.z>=0)
 		{
-			Vector3 c = transform.rotation.eulerAngles;
-			if( c.y < angleY ) c.y += 360f;
-			// c.y > angleY
-			if( c.y - angleY <= 180.0f ) c.y -= MovingRotateSpeed*Time.deltaTime;
-			else c.y += MovingRotateSpeed*Time.deltaTime;
-			if( Mathf.Abs(c.y - angleY) <= 1f )	{ c.y = angleY; angling = false;  waitfornewwave = Time.time + showWaveCompleteTime; }
-			transform.rotation = Quaternion.Euler(c);
-			return;
+			LeftAttackingZombie=zombie;
+			leftAutoTargetTime=3f;
 		}
-		
-		Vector3 dir = destination-GameEnvironment.ProjectionXZ(transform.position); dir.Normalize();
-		if( GameEnvironment.DistXZ(transform.position,destination) <= 0.5f )
-		{
-			if( Time.time > waitfornewwave )
-			{
-				LevelInfo.Environments.waveInfo.HideWaveComplete();
-				Moving = false;
-				CreateNewZombieWave();
-			}
-		}		
 		else
-			transform.Translate(dir*MovingSpeed*Time.deltaTime,Space.World);
+		{
+			RightAttackingZombie=zombie;
+			rightAutoTargetTime=3f;
+		}
+	}
+	
+	private IEnumerator AutoTargetingUpdate()
+	{
+		while( AutoTargeting )
+		{	
+			Vector3 c = transform.rotation.eulerAngles;
+			bool ok=false;
+			
+			if( autoTargetTurnDirectionRight )
+			{
+				if(c.y > angleY ) c.y -= 360f;
+				c.y += AutoTargetingSpeed*Time.deltaTime;
+				if( c.y >= angleY ) ok=true;
+			}
+			else
+			{
+				if(c.y < angleY ) c.y += 360f;
+				c.y -= AutoTargetingSpeed*Time.deltaTime;
+				if( c.y <= angleY ) ok=true;				
+			}
+
+			if(ok)
+			{ 
+				c.y = angleY;
+				angling = false;
+				AutoTargeting = false;
+			}
+			transform.rotation = Quaternion.Euler(c);
+			yield return new WaitForEndOfFrame();
+		}		
+	}
+	
+	public void AutoTargetToPoint(Vector3 dest,bool right)
+	{
+		if(!AutoTargeting)
+		{
+			autoTargetTurnDirectionRight = right;
+			AutoTargeting = true;
+			angleY = Quaternion.LookRotation(dest-transform.position,Vector3.up).eulerAngles.y;
+			StartCoroutine(AutoTargetingUpdate());
+		}
 	}
 	
 	#endregion
@@ -678,7 +797,7 @@ public class Control : MonoBehaviour {
 	
 	#endregion
 	
-	#region Moving
+	#region Moving to Vantage Point
 	
 	public float MovingSpeed = 1f;
 	public float MovingRotateSpeed = 10f;
@@ -698,6 +817,34 @@ public class Control : MonoBehaviour {
 		angling = true;
 		destination = dest;
 		angleY = Quaternion.LookRotation(destination-transform.position,Vector3.up).eulerAngles.y;
+	}
+
+	private void MovingUpdate()
+	{
+		if( angling )
+		{
+			Vector3 c = transform.rotation.eulerAngles;
+			if( c.y < angleY ) c.y += 360f;
+			// c.y > angleY
+			if( c.y - angleY <= 180.0f ) c.y -= MovingRotateSpeed*Time.deltaTime;
+			else c.y += MovingRotateSpeed*Time.deltaTime;
+			if( Mathf.Abs(c.y - angleY) <= 1f )	{ c.y = angleY; angling = false;  waitfornewwave = Time.time + showWaveCompleteTime; }
+			transform.rotation = Quaternion.Euler(c);
+			return;
+		}
+		
+		Vector3 dir = destination-GameEnvironment.ProjectionXZ(transform.position); dir.Normalize();
+		if( GameEnvironment.DistXZ(transform.position,destination) <= 0.5f )
+		{
+			if( Time.time > waitfornewwave )
+			{
+				LevelInfo.Environments.waveInfo.HideWaveComplete();
+				Moving = false;
+				CreateNewZombieWave();
+			}
+		}		
+		else
+			transform.Translate(dir*MovingSpeed*Time.deltaTime,Space.World);
 	}
 	
 	#endregion
@@ -753,6 +900,16 @@ public class Control : MonoBehaviour {
 	#endregion
 
 	#region Other Methods
+	
+	public IEnumerator ShowTip(string message,float wait)
+	{
+		while(wait > 0 )
+		{
+			wait -= Time.deltaTime;
+			yield return new WaitForEndOfFrame();
+		}
+		LevelInfo.Environments.generator.GenerateMessageText(new Vector3(0.5f,0.2f,-1),message,false,4f);
+	}
 	
 	public void GetBite(float lostHealth)
 	{

@@ -26,8 +26,6 @@ public class GunAirgun : GunBase {
 		lastinputnext.x /= Screen.width;
 		lastinputnext.y /= Screen.height;
 		
-
-		
 		if( GameEnvironment.TouchedScreen )
 		{
 			scopeTarget.transform.position = lastinputnext;

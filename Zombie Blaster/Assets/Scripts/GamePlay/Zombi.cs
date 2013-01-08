@@ -50,7 +50,6 @@ public class Zombi : MonoBehaviour {
 	
 	#region Variables
 
-	private SwipeUpCaution swipeUpcaution;
 	
 	private float flaming = 1f;
 	private float smoking = 1f;
@@ -64,6 +63,7 @@ public class Zombi : MonoBehaviour {
 	private HealthBar healthBar;
 	private float aliveTime = 0.0f;
 	private bool toattack = false;
+	private bool startedAttacking = false;
 	
 	#endregion
 	
@@ -72,7 +72,6 @@ public class Zombi : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		gameObject.AddComponent<AudioSource>();
-		swipeUpcaution = (SwipeUpCaution)GameObject.FindObjectOfType(typeof(SwipeUpCaution));
 		
 		headHit.tag = "ZombieHead";
 		headHit.HeadContainer = this;
@@ -174,8 +173,9 @@ public class Zombi : MonoBehaviour {
 		// If Near Updates
 		if( NearPlayer() )
 		{
-			swipeUpcaution.Activate(LevelInfo.Environments.mainCamera.WorldToScreenPoint(transform.position));
+			LevelInfo.Environments.swipeUpCaution.Activate(transform.position);
 				
+			if(!startedAttacking) { LevelInfo.Environments.control.ZombieStartsAttacking(this); startedAttacking=true; }
 			
 			if( !animation.IsPlaying("attack01") && !animation.IsPlaying("attack02") )
 			{
@@ -570,7 +570,7 @@ public class Zombi : MonoBehaviour {
 	
 	public void ThrowOut()
 	{
-		swipeUpcaution.Deactivate();
+		LevelInfo.Environments.swipeUpCaution.Deactivate();
 		
 		GameObject ragdoll = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
 		ragdoll.SendMessage("SetFireSize",ZombieFire.particleEmitter.maxSize);

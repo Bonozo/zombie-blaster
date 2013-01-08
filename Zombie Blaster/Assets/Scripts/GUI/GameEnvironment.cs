@@ -28,10 +28,10 @@ public class GameEnvironment : MonoBehaviour {
 	}
 	
 	#if UNITY_ANDROID || UNITY_IPHONE
-	private static float startTime;
+	private static Vector2 beginPos;
 	private static Vector2 startPos;
 	private static bool couldBeSwipe;
-	public static bool moved = false;
+	//public static bool moved = false;
 	public static float Swipe { get {
 		float res = 0.0f;
 		if (Input.touchCount > 0) 
@@ -39,20 +39,22 @@ public class GameEnvironment : MonoBehaviour {
         	var touch = Input.touches[0];
 			switch (touch.phase)
 				{
-			case TouchPhase.Began:
-				moved = false;
-                startPos = touch.position;
-                break;
-            case TouchPhase.Moved:
-				moved = true;
-				IgnoreButtons();
-				res = startPos.x -touch.position.x;
-				startPos = touch.position;
-                break;
-            case TouchPhase.Stationary:
-                break;
-            case TouchPhase.Ended:
-                break;
+				case TouchPhase.Began:
+					//moved = false;
+	                startPos = touch.position;
+					beginPos = touch.position;
+	                break;
+	            case TouchPhase.Moved:
+					//moved = true;
+					if(Mathf.Abs(touch.position.x-beginPos.x) > Screen.width*Option.Sensitivity ) IgnoreButtons();
+					res = ignore?startPos.x -touch.position.x:0;
+					startPos = touch.position;
+	                break;
+	            case TouchPhase.Stationary:
+	                break;
+	            case TouchPhase.Ended:
+					ignore=false;
+	                break;
 				}
 		}
 		return res*0.05f;
@@ -70,7 +72,7 @@ public class GameEnvironment : MonoBehaviour {
 	public static bool FireButton { get {
 			bool ans = false;
 			
-			if( (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended && !moved) && !ignore)
+			if( Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended && !ignore)
 			{
 				lastInput = Input.touches[0].position;
 				ans = true;
@@ -80,10 +82,28 @@ public class GameEnvironment : MonoBehaviour {
 			
 			return ans;
 		}}
+	
+	private static int flameframes;
 	public static bool FlameButton { get {
+			/*bool ans = false;
+			
+			if( Input.GetMouseButtonDown(0) )
+				flameframes = Option.FlameWaitingFrames;
+			if( Input.GetMouseButton(0) && !ignore && flameframes==0)
+			{
+				lastInput = Input.mousePosition;
+				ans = true;
+			}
+			if( Input.GetMouseButtonUp(0) )
+				ignore = false;
+			if(flameframes>0) flameframes--;
+			return ans;*/
 			bool ans = false;
 			
-			if (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Stationary && !ignore)
+			if (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began )
+				flameframes = Option.FlameWaitingFrames;
+			
+			if (Input.touchCount > 0 && (Input.touches[0].phase == TouchPhase.Stationary || Input.touches[0].phase == TouchPhase.Moved) && !ignore && flameframes==0)
 			{
 				lastInput = Input.touches[0].position;
 				ans = true;	
@@ -92,6 +112,7 @@ public class GameEnvironment : MonoBehaviour {
 			if (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended )
 				ignore = false;
 			
+			if(flameframes>0) flameframes--;
 			return ans;
 		}}
 	
@@ -152,22 +173,26 @@ public class GameEnvironment : MonoBehaviour {
 		return dir;
 	}}
 	#else
+	private static float llastx;
 	private static float lastx;
 	private static bool lastpressed = false;
 	public static float Swipe { get {
-		float mouseposx = Input.mousePosition.x/Screen.width;
-		float res = 0.0f;
-		
-		if( lastpressed )
-		{
-			if( lastx != mouseposx ) IgnoreButtons();
-			res = lastx-mouseposx;
-		}
-		lastpressed = Input.GetMouseButton(0);
-		if( lastpressed )
-			lastx = mouseposx;
-				
-		return 30.0f*res;
+			float mouseposx = Input.mousePosition.x/Screen.width;
+			float res = 0.0f;
+			
+			if( lastpressed )
+			{
+				if( Mathf.Abs(llastx - mouseposx) > Option.Sensitivity ) IgnoreButtons();
+				res = ignore?lastx-mouseposx:0;
+			}
+			lastpressed = Input.GetMouseButton(0);
+			if( lastpressed )
+				lastx = mouseposx;
+			if( Input.GetMouseButtonDown(0) )
+				llastx = mouseposx;
+			if( Input.GetMouseButtonUp(0) )
+				ignore = false;
+			return 30.0f*res;
 	}}
 	
 	public static Vector2 lastInput = Vector2.zero;
@@ -189,15 +214,21 @@ public class GameEnvironment : MonoBehaviour {
 				ignore = false;
 			return ans;
 		}}
+	
+	private static int flameframes;
 	public static bool FlameButton { get {
 			bool ans = false;
-			if( Input.GetMouseButton(0) && !ignore)
+			
+			if( Input.GetMouseButtonDown(0) )
+				flameframes = Option.FlameWaitingFrames;
+			if( Input.GetMouseButton(0) && !ignore && flameframes==0)
 			{
 				lastInput = Input.mousePosition;
 				ans = true;
 			}
 			if( Input.GetMouseButtonUp(0) )
 				ignore = false;
+			if(flameframes>0) flameframes--;
 			return ans;
 		}}
 	
@@ -352,6 +383,9 @@ public class GameEnvironment : MonoBehaviour {
 		
 		//new StoreGun("Sniper",false,12)		//9
 	};
+	
+	
+	public static int[] levelPrice = new int [5] {0,500,1000,1500,2000};
 	
 	#endregion
 	

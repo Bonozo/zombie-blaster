@@ -16,11 +16,12 @@ public class SwipeUpCaution : MonoBehaviour {
 	
 	public void Activate(Vector3 scp)
 	{	
-		
+		Vector3 org = scp;
+		scp = LevelInfo.Environments.mainCamera.WorldToScreenPoint(scp);
 		// swipe up
-		if(Option.ShoveHelper && scp.z > 0 && scp.x>=0 && scp.x <= Screen.width )
+		if(scp.z > 0 && scp.x>=0 && scp.x <= Screen.width )
 		{
-			if( !isactive )
+			if( Option.ShoveHelper && !isactive )
 			{
 				beginpos = new Vector3(0,-50,0);
 				deltay = 0f;
@@ -30,17 +31,21 @@ public class SwipeUpCaution : MonoBehaviour {
 			return;
 		}
 		
-		if(scp.z<0) scp.x = -scp.x;
+		if(scp.z<0) { scp.x = -scp.x; }
 		
-		if(scp.x < 0 )
+		if(scp.x < -Screen.width*0.5f && scp.z<0 || scp.x<0f && scp.z>=0)
 		{
 			if( ! leftactive )
+			{
 				leftactive = leftactiveincrease = true;
+			}
 		}
 		else 
 		{
 			if( !rightactive )
+			{
 				rightactive = rightactiveincrease = true;
+			}
 		}
 	}
 	
@@ -108,4 +113,7 @@ public class SwipeUpCaution : MonoBehaviour {
 			knockright.color = c;
 		}
 	}
+	
+	public bool ThereAreLeftZombie { get { return leftactive; } }
+	public bool ThereAreRightZombie { get { return rightactive; } }
 }

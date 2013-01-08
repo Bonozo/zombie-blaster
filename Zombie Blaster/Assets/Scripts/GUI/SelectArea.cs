@@ -14,6 +14,7 @@ public class SelectArea : MonoBehaviour {
 	public GUIText helpMessage;
 	
 	public ButtonBase storeButton;
+	public ButtonBase backToGameForGamePlay;
 	
 	public AudioSource audioUnlocked;
 	public AudioSource audioLocked;
@@ -28,7 +29,6 @@ public class SelectArea : MonoBehaviour {
 	public GUIText guiTip;
 	
 	private bool[] unlocked = new bool[5];
-	private int[] unlock_heads = new int [5] {0,500,1000,1500,2000};
 	private int unlock_index = -1;
 	private int play_index = -1;
 	private int countUnlocked=0;
@@ -45,11 +45,11 @@ public class SelectArea : MonoBehaviour {
 		{
 			lockIcon[i].enabled = !unlocked[i];
 			lockIcon[i].gameObject.GetComponent<ColorPlay>().colmax = 
-				(unlock_heads[i] <= Store.zombieHeads?Color.green:Color.white);		
+				(GameEnvironment.levelPrice[i] <= Store.zombieHeads?Color.green:Color.white);		
 			lockIcon[i].gameObject.GetComponent<ColorPlay>().speed = 
-				(unlock_heads[i] <= Store.zombieHeads?2:1);
+				(GameEnvironment.levelPrice[i] <= Store.zombieHeads?2:1);
 			lockIcon[i].gameObject.GetComponent<ColorPlay>().pause = 
-				(unlock_heads[i] <= Store.zombieHeads?0:2);
+				(GameEnvironment.levelPrice[i] <= Store.zombieHeads?0:2);
 			levelButton[i].audioPressed = unlocked[i]?audioUnlocked:audioLocked;
 		}
 	}
@@ -74,7 +74,7 @@ public class SelectArea : MonoBehaviour {
 		for(int i=0;i<5;i++)
 		{
 			lockIcon[i].gameObject.GetComponent<ColorPlay>().pauseInStart = 
-				(unlock_heads[i] <= Store.zombieHeads?false:true);
+				(GameEnvironment.levelPrice[i] <= Store.zombieHeads?false:true);
 		}
 	}
 	
@@ -109,9 +109,23 @@ public class SelectArea : MonoBehaviour {
 		
 		if( storeButton.PressedUp )
 		{
-			MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
-			mainmenu.mapToStore = true;
-			mainmenu.GoState(MainMenu.MenuState.Store);
+			if( store.IsLevelOption )
+			{
+				MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
+				mainmenu.mapToStore = true;
+				mainmenu.GoState(MainMenu.MenuState.Store);
+			}
+			
+			if( store.IsLevelGamePlay )
+			{
+				LevelInfo.Environments.control.state = GameState.Store;
+			}
+			return;
+		}
+		
+		if( backToGameForGamePlay!=null && backToGameForGamePlay.PressedUp )
+		{
+			LevelInfo.Environments.control.state = GameState.Play;
 			return;
 		}
 		
@@ -129,6 +143,7 @@ public class SelectArea : MonoBehaviour {
 			if( unlocked[i] && levelButton[i].PressedUp )
 			{
 				play_index = i;	
+				GameEnvironment.StartWave = Store.HighestWaveCompleted(i);
 			}
 	}
 	
@@ -138,10 +153,10 @@ public class SelectArea : MonoBehaviour {
 		popupTexture.enabled = unlock_index != -1 || play_index != -1;
 		if( unlock_index != -1 )
 		{
-			bool can_bay = Store.zombieHeads >= unlock_heads[unlock_index];
+			bool can_bay = Store.zombieHeads >= GameEnvironment.levelPrice[unlock_index];
 
 			//GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"");
-			GUI.Label(new Rect(0.45f*Screen.width,0.305f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),"" + unlock_heads[unlock_index],myStyle);
+			GUI.Label(new Rect(0.45f*Screen.width,0.305f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),"" + GameEnvironment.levelPrice[unlock_index],myStyle);
 			GUI.DrawTexture(new Rect(0.5f*Screen.width,0.29f*Screen.height,0.08f*Screen.width,0.08f*Screen.height),headSack);
 			
 			int cc = 0;
@@ -164,7 +179,7 @@ public class SelectArea : MonoBehaviour {
 					unlocked[unlock_index] = true;
 					countUnlocked++;
 					UpdateSelectAreaScreen();
-					Store.zombieHeads = Store.zombieHeads - unlock_heads[unlock_index];
+					Store.zombieHeads = Store.zombieHeads - GameEnvironment.levelPrice[unlock_index];
 					levelButton[unlock_index].canPressed = unlocked[unlock_index];
 					audioUnlockLevel.Play();
 					levelButton[unlock_index].standartTexture = levelButton[unlock_index].pressedTexture;

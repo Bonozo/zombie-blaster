@@ -16,6 +16,9 @@ public class Option : MonoBehaviour {
 	public static bool ShowFPS = false;
 	public static bool ShoveHelper = true;
 	public static float Peturb = 1f;
+	public static bool AutoTargeting = true;
+	public static float Sensitivity = 0.01f;
+	public static int FlameWaitingFrames=10;
 	//public static int Quality = QualitySettings.GetQualityLevel();
 	
 	bool showdebug = true;
@@ -91,6 +94,9 @@ public class Option : MonoBehaviour {
 		
 		GUI.Label(textRect(8),"Airsoft Peturb (" + ( ((float)((int)(100f*Peturb)))/100f/*:)*/ )+ "%)",myStyle1);
 		Peturb = GUI.HorizontalSlider(buttonRect(8),Peturb,0f,10f);
+	
+		GUI.Label(textRect(9),"FT wait frames (" + FlameWaitingFrames + ")",myStyle1);
+		FlameWaitingFrames = Mathf.RoundToInt(GUI.HorizontalSlider(buttonRect(9),(float)FlameWaitingFrames,0f,60f));
 			
 		if( GUI.Button( new Rect(Screen.width-100,Screen.height-60,80,40),"Options",myStyle2))
 		{
@@ -132,6 +138,13 @@ public class Option : MonoBehaviour {
 		GUI.Label(textRect(6),"Shove Helper",myStyle1);
 		if( GUI.Button(buttonRect(6),ShoveHelper?"ON":"OFF",myStyle2 ) )
 			ShoveHelper = !ShoveHelper;
+		
+		GUI.Label(textRect(8),"Auto Targeting",myStyle1);
+		if( GUI.Button(buttonRect(8),AutoTargeting?"ON":"OFF" ,myStyle2) )
+			AutoTargeting = !AutoTargeting;
+			
+		GUI.Label(textRect(9),"Sensitivity(" + Mathf.Round(10000*Sensitivity)/100f + "%)",myStyle1);
+		Sensitivity = GUI.HorizontalSlider(buttonRect(9),(float)Sensitivity,0f,0.2f);
 			
 		if(showdebug && GUI.Button( new Rect(Screen.width-200,Screen.height-60,80,40),"Debug",myStyle2))
 		{

@@ -92,7 +92,7 @@ public class Store : MonoBehaviour {
 			_playerprefs_highestwavecompleted[level] = newscore;
 			PlayerPrefs.SetInt("highestwavecompleted"+level,_playerprefs_highestwavecompleted[level]);
 		}
-	}
+	}	
 	
 	public static bool CanBuyWeapon(int weapon)
 	{
@@ -300,8 +300,8 @@ public class Store : MonoBehaviour {
 		}
 	}
 	
-	private bool IsLevelGamePlay { get { return Application.loadedLevelName == "playgame"; } }
-	private bool IsLevelOption { get { return Application.loadedLevelName == "mainmenu"; } }
+	public bool IsLevelGamePlay { get { return Application.loadedLevelName == "playgame"; } }
+	public bool IsLevelOption { get { return Application.loadedLevelName == "mainmenu"; } }
 	
 	private void UpdateZombieHeads()
 	{
