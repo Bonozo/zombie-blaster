@@ -271,10 +271,6 @@ public class Control : MonoBehaviour {
 				guiPlayGame.SetActiveRecursively(false);
 				guiMap.SetActive(true);
 				break;
-			case GameState.WaveCompleted:
-				//Time.timeScale = 0;
-				//waitfornewwave = Time.realtimeSinceStartup + 3f;
-				break;
 			}
 		}
 	}
@@ -475,8 +471,8 @@ public class Control : MonoBehaviour {
 
 	#region Notifications
 	
-	private static bool[] notweaponshowed = new bool[Store.countWeapons];
-	private static bool[] notlevelshowed = new bool[Store.countLevel];
+	private bool[] notweaponshowed = new bool[Store.countWeapons];
+	private bool[] notlevelshowed = new bool[Store.countLevel];
 	
 	public void ShowStoreNotifiaction()
 	{
@@ -888,6 +884,14 @@ public class Control : MonoBehaviour {
 	
 	#region Properties
 	
+	public bool GamePaused 
+	{
+		get
+		{
+			return state != GameState.Play;
+		}
+	}
+	
 	public bool Died { get { return healthshow <= 0; }}
 	
 	public float Health { get { return healthshow; } set { health = value; } }
@@ -958,7 +962,7 @@ public class Control : MonoBehaviour {
 		
 		LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.AudioWaveComplete);
 		bonusForWaveComplete = UnityEngine.Random.Range(0,2);
-		state = GameState.WaveCompleted;
+		//state = GameState.WaveCompleted;
 		PrepareAndCreateNewWave();
 	}
 	

@@ -124,7 +124,7 @@ public class Zombi : MonoBehaviour {
 	void Update () {
 		UpdateHealthBar();
 		
-		if( LevelInfo.Environments.control.state == GameState.Paused ) return;
+		if( Time.timeScale==0f ) return;
 		
 		// look to player.
 		Vector3 np = LevelInfo.Environments.control.transform.position-transform.position; np.y = 0;
@@ -257,11 +257,6 @@ public class Zombi : MonoBehaviour {
 		RaycastHit hit;    
 		
 		Vector3 pos = transform.position;
-		// ?? // 
-		if( HitWithName(gameObject.name,"Fatkid") ||
-			HitWithName(gameObject.name,"Ballerina") || HitWithName(gameObject.name,"FootballPlayer"))
-			pos.y += 0.4f;
-		
 		pos.y += 1f;
 		
 		/*if(Physics.Raycast(pos, -transform.up, out hit, CollisionToDownLenght+0.01f+1f) && 
@@ -321,12 +316,14 @@ public class Zombi : MonoBehaviour {
 	void UpdateHealthBar()
 	{
 		if( healthBar == null ) return;
+		Vector3 headpos = head!=null?head.transform.position:headHit.transform.position;
+		
 		aliveTime += Time.deltaTime;
 		bool show = false;
 		if( LevelInfo.Environments.control.state != GameState.Store ) 
 		{
-			Vector3 head = headHit.transform.position; head.y += 0.5f;
-			Vector3 pos = LevelInfo.Environments.mainCamera.WorldToScreenPoint(head);
+			headpos.y += 0.5f;
+			Vector3 pos = LevelInfo.Environments.mainCamera.WorldToScreenPoint(headpos);
 			//Debug.Log(pos);
 			if( pos.z > 0 )
 			{

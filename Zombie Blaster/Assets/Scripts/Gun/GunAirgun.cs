@@ -18,7 +18,8 @@ public class GunAirgun : GunBase {
 		if( weapon != Weapon.BB) return Ammo;
 		
 		Vector3 lastinputnext = GameEnvironment.lastInput;
-		float phb = Mathf.Min(Screen.width,Screen.height)*Option.Peturb*0.01f;
+		float peturb = (100f-GameEnvironment.storeGun[0].accuracy)/20f;
+		float phb = Mathf.Min(Screen.width,Screen.height)*peturb*0.01f;
 		lastinputnext += new Vector3( Random.Range(-phb,phb) , Random.Range(-phb,phb),0f);
 		Ray ray = LevelInfo.Environments.mainCamera.ScreenPointToRay (lastinputnext);	
 		

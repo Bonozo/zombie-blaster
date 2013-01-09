@@ -104,6 +104,9 @@ public class HealthPack : MonoBehaviour {
 	void Update()
 	{
 		if( picked ) return;
+		var v = transform.rotation.eulerAngles;
+		v.x=v.z=0;
+		transform.rotation = Quaternion.Euler(v);
 		if( LevelInfo.Environments.control.state == GameState.Paused ) return;
 		if( (DeadTime -= Time.deltaTime) <= 0 ) Destroy(this.gameObject);
 
@@ -192,7 +195,7 @@ public class HealthPack : MonoBehaviour {
 			
 		}
 		
-		LevelInfo.Environments.generator.GenerateMessageText(transform.position+ new Vector3(0,0.75f,-3),pickupname);
+		LevelInfo.Environments.generator.GenerateMessageText(transform.position + new Vector3(0,0.75f,0),pickupname);
 		
 		LevelInfo.Environments.hubScore.SetNumberWithFlash(LevelInfo.Environments.hubScore.GetNumber() + LevelInfo.State.scoreForPickUp);
 		

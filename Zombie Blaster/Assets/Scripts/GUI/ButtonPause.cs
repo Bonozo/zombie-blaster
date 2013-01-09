@@ -12,7 +12,7 @@ public class ButtonPause : MonoBehaviour {
 			if( LevelInfo.Environments.control.state == GameState.Lose )
 				return;
 			
-			if( LevelInfo.Environments.control.state == GameState.Play || LevelInfo.Environments.control.state == GameState.WaveCompleted)
+			if( LevelInfo.Environments.control.state == GameState.Play )
 			{
 				//GameEnvironment.IgnoreButtons();
 				lastState = LevelInfo.Environments.control.state;

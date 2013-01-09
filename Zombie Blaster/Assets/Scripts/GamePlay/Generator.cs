@@ -9,6 +9,8 @@ public class Generator : MonoBehaviour {
 	
 	public float GenerationRateMin = 2f, GenerationRateMax=4f;
 	
+	public GameObject EmoKidZombie;
+	
 	private float zombieRate = 3f;
 	private int zombiesLeft = 0;
 	private int scoobyZombieCount = 10;
@@ -37,6 +39,9 @@ public class Generator : MonoBehaviour {
 		{
 			z = level.standardZombie[Random.Range(0,level.standardZombie.Length)];
 		}
+		
+		if( LevelInfo.Environments.control.currentWave >= 5 && Random.Range(0,12)==1 )
+			z = EmoKidZombie;
 		
 		if(LevelInfo.Environments.control.currentWave > 1)
 		{
@@ -181,6 +186,7 @@ public class Generator : MonoBehaviour {
 		Vector3 pos = LevelInfo.Environments.mainCamera.WorldToScreenPoint(worldPosition);
 		pos.x /= Screen.width;
 		pos.y /= Screen.height;
+		pos.z=-3;
 		GameObject g = (GameObject)Instantiate(LevelInfo.Environments.messageText,pos,Quaternion.identity);
 		g.SendMessage("ChangeMessage",text);
 	}

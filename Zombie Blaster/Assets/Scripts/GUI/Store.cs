@@ -210,7 +210,7 @@ public class Store : MonoBehaviour {
 	public AudioClip[] clipWeaponInfo;
 	//public GameObject objectsWeaponsUnknown1,objectsWeaponsUnknown2;
 	
-	public Font blackFont,redFont;
+	public Font blackFont,redFont,greenFont;
 	
 	public GameObject StoreGUI;
 	public GameObject LoadingGUI;
@@ -434,6 +434,7 @@ public class Store : MonoBehaviour {
 			ShopWeaponName.font = showWeapon[currentshopitem]?blackFont:redFont;
 			
 			ShopWeaponBuyText.text = "" + GameEnvironment.storeGun[currentshopitem].price + " heads";
+			ShopWeaponBuyText.font = zombieHeads>=GameEnvironment.storeGun[currentshopitem].price?greenFont:blackFont;
 			
 			if( shopInfoButton.PressedDown )
 			{
@@ -884,12 +885,9 @@ public class Store : MonoBehaviour {
 		
 		GUI.Label(new Rect(0.35f*Screen.width,0.34f*Screen.height,0.3f*Screen.width,0.25f*Screen.height),s,myStyle);
 		
-		float accuracy = 100;
-		if( wooi == 0 ) /*Airsoft*/ accuracy -= Option.Peturb;
-		accuracy = Mathf.Round(accuracy*10f)/10f;
 		s = 	
 			"" + GameEnvironment.storeGun[wooi].damage +
-			"\n" + accuracy + "%" +
+			"\n" + GameEnvironment.storeGun[wooi].accuracy + "%" +
 			"\n" + GameEnvironment.storeGun[wooi].pocketsize +
 			"\n" + (5*GameEnvironment.storeGun[wooi].pocketsize) + 
 			"\n" + GameEnvironment.storeGun[wooi].speed + " m/s" +

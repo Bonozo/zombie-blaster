@@ -15,10 +15,9 @@ public class Option : MonoBehaviour {
 	public static float BackgroundAmbient = 101f;
 	public static bool ShowFPS = false;
 	public static bool ShoveHelper = true;
-	public static float Peturb = 1f;
 	public static bool AutoTargeting = true;
 	public static float Sensitivity = 0.01f;
-	public static int FlameWaitingFrames=10;
+	public static int FlameWaitingFrames=5;
 	//public static int Quality = QualitySettings.GetQualityLevel();
 	
 	bool showdebug = true;
@@ -44,22 +43,22 @@ public class Option : MonoBehaviour {
 		Update();
 	}
 	
-	private Vector2 textSize = new Vector2(Screen.width*0.2f,30);
-	private Vector2 buttonSize = new Vector2(Screen.width*0.2f,30);
+	private Vector2 textSize = new Vector2(Screen.width*0.3f,20);
+	private Vector2 buttonSize = new Vector2(Screen.width*0.3f,20);
 
 	private Rect textRect(float index)
 	{
-		index++; if(index>8) index++;
+		index++; if(index>10) index++;
 		float w = 0f;
-		if( index > 8 ) { w = Screen.width*0.5f; index-=8; }
-		return new Rect(w + Screen.width*0.05f,index*40f,textSize.x,textSize.y);
+		if( index > 10 ) { w = Screen.width*0.5f; index-=10; }
+		return new Rect(w + Screen.width*0.05f,index*30f,textSize.x,textSize.y);
 	}
 	private Rect buttonRect(float index)
 	{
-		index++; if(index>8) index++;
+		index++; if(index>10) index++;
 		float w = 0f;
-		if( index > 8 ) { w = Screen.width*0.5f; index-=8; }
-		return new Rect(w+Screen.width*0.1f+textSize.x,index*40f,buttonSize.x,buttonSize.y);
+		if( index > 10 ) { w = Screen.width*0.5f; index-=10; }
+		return new Rect(w+Screen.width*0.1f+textSize.x,index*30f,buttonSize.x,buttonSize.y);
 	}
 	
 	void OnGUI()
@@ -92,8 +91,8 @@ public class Option : MonoBehaviour {
 		if( GUI.Button(buttonRect(7),ShowFPS?"ON":"OFF" ,myStyle2) )
 			ShowFPS = !ShowFPS;
 		
-		GUI.Label(textRect(8),"Airsoft Peturb (" + ( ((float)((int)(100f*Peturb)))/100f/*:)*/ )+ "%)",myStyle1);
-		Peturb = GUI.HorizontalSlider(buttonRect(8),Peturb,0f,10f);
+		GUI.Label(textRect(8),"Airsoft Accuracy(" + GameEnvironment.storeGun[0].accuracy + "%)",myStyle1);
+		GameEnvironment.storeGun[0].accuracy = Mathf.RoundToInt(GUI.HorizontalSlider(buttonRect(8),GameEnvironment.storeGun[0].accuracy,0f,100f));
 	
 		GUI.Label(textRect(9),"FT wait frames (" + FlameWaitingFrames + ")",myStyle1);
 		FlameWaitingFrames = Mathf.RoundToInt(GUI.HorizontalSlider(buttonRect(9),(float)FlameWaitingFrames,0f,60f));
@@ -139,12 +138,12 @@ public class Option : MonoBehaviour {
 		if( GUI.Button(buttonRect(6),ShoveHelper?"ON":"OFF",myStyle2 ) )
 			ShoveHelper = !ShoveHelper;
 		
-		GUI.Label(textRect(8),"Auto Targeting",myStyle1);
-		if( GUI.Button(buttonRect(8),AutoTargeting?"ON":"OFF" ,myStyle2) )
+		GUI.Label(textRect(7),"Auto Targeting",myStyle1);
+		if( GUI.Button(buttonRect(7),AutoTargeting?"ON":"OFF" ,myStyle2) )
 			AutoTargeting = !AutoTargeting;
 			
-		GUI.Label(textRect(9),"Sensitivity(" + Mathf.Round(10000*Sensitivity)/100f + "%)",myStyle1);
-		Sensitivity = GUI.HorizontalSlider(buttonRect(9),(float)Sensitivity,0f,0.2f);
+		GUI.Label(textRect(8),"Sensitivity(" + Mathf.Round(10000*Sensitivity)/100f + "%)",myStyle1);
+		Sensitivity = GUI.HorizontalSlider(buttonRect(8),(float)Sensitivity,0f,0.2f);
 			
 		if(showdebug && GUI.Button( new Rect(Screen.width-200,Screen.height-60,80,40),"Debug",myStyle2))
 		{

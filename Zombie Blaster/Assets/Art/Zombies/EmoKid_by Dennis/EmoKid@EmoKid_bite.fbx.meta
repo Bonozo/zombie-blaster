@@ -1,0 +1,132 @@
+fileFormatVersion: 2
+guid: 9aa4817342b689c4fb414513bc9a5a49
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: back1_JT
+    100002: back2_JT
+    100004: back3_JT
+    100006: chin_JT
+    100008: //RootNode
+    100010: head_JT
+    100012: hip_JT
+    100014: jaw2_JT
+    100016: jaw_JT
+    100018: Left_ankle_JT
+    100020: Left_ball_JT
+    100022: Left_elbow_JT
+    100024: Left_hair_JT
+    100026: Left_hand_JT
+    100028: Left_hip_JT
+    100030: Left_knee1_JT
+    100032: Left_knee2_JT
+    100034: Left_shoulder_JT
+    100036: Left_toe_JT
+    100038: Left_wrist_JT
+    100040: neck_base
+    100042: neck_JT
+    100044: Right_ankle_JT
+    100046: Right_ball_JT
+    100048: Right_elbow_JT
+    100050: Right_hair_JT
+    100052: Right_hand_JT
+    100054: Right_hip_JT
+    100056: Right_knee1_JT
+    100058: Right_knee2_JT
+    100060: Right_shoulder_JT
+    100062: Right_toe_JT
+    100064: Right_wrist_JT
+    100066: Root_JT
+    100068: teddy_body_JT
+    100070: teddy_hips_JT
+    100072: teddy_root_JT
+    400000: back1_JT
+    400002: back2_JT
+    400004: back3_JT
+    400006: chin_JT
+    400008: //RootNode
+    400010: head_JT
+    400012: hip_JT
+    400014: jaw2_JT
+    400016: jaw_JT
+    400018: Left_ankle_JT
+    400020: Left_ball_JT
+    400022: Left_elbow_JT
+    400024: Left_hair_JT
+    400026: Left_hand_JT
+    400028: Left_hip_JT
+    400030: Left_knee1_JT
+    400032: Left_knee2_JT
+    400034: Left_shoulder_JT
+    400036: Left_toe_JT
+    400038: Left_wrist_JT
+    400040: neck_base
+    400042: neck_JT
+    400044: Right_ankle_JT
+    400046: Right_ball_JT
+    400048: Right_elbow_JT
+    400050: Right_hair_JT
+    400052: Right_hand_JT
+    400054: Right_hip_JT
+    400056: Right_knee1_JT
+    400058: Right_knee2_JT
+    400060: Right_shoulder_JT
+    400062: Right_toe_JT
+    400064: Right_wrist_JT
+    400066: Root_JT
+    400068: teddy_body_JT
+    400070: teddy_hips_JT
+    400072: teddy_root_JT
+    7400000: Take 001
+    9500000: //RootNode
+    11100000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    handles: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  additionalBone: 1
+  animationType: 1
+  userData: 

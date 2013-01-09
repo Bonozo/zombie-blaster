@@ -27,7 +27,13 @@ public class GunMachineGun : GunBase {
 		AmmoLost();
 		
 		// Institate Bullet
-		Ray ray = LevelInfo.Environments.mainCamera.ScreenPointToRay (GameEnvironment.lastInput);	
+		
+		Vector3 lastinputnext = GameEnvironment.lastInput;
+		float peturb = (100f-GameEnvironment.storeGun[(int)Weapon.MachineGun].accuracy)/20f;
+		float phb = Mathf.Min(Screen.width,Screen.height)*peturb*0.01f;
+		lastinputnext += new Vector3( Random.Range(-phb,phb) , Random.Range(-phb,phb),0f);
+		
+		Ray ray = LevelInfo.Environments.mainCamera.ScreenPointToRay (lastinputnext);	
 		RaycastHit hit;
 		Physics.Raycast(ray.origin,ray.direction,out hit);
 		GameObject g = (GameObject)Instantiate(BulletPrefab,transform.position,Quaternion.identity);

@@ -5,8 +5,8 @@ public class GameEnvironment : MonoBehaviour {
 	
 	#region Static Local
 	
-	public static int StartLevel = 0;
-	public static int StartWave = 0;
+	public static int StartLevel = 4;
+	public static int StartWave = 5;
 	
 	
 	public static string loadingLevel = "error";
@@ -296,7 +296,8 @@ public class GameEnvironment : MonoBehaviour {
 		public bool unlimited;
 		public bool unlimitedclips;
 		public int damage;
-		public StoreGun(string name,bool enabled,int pocketsize,int price,float speed,float reloadTime,int damage)
+		public float accuracy;
+		public StoreGun(string name,bool enabled,int pocketsize,int price,float speed,float reloadTime,int damage,float accuracy)
 		{
 			this.name = name;
 			this.enabled = enabled;
@@ -307,6 +308,7 @@ public class GameEnvironment : MonoBehaviour {
 			this.unlimited = false;
 			this.unlimitedclips = enabled;
 			this.damage = damage;
+			this.accuracy = accuracy;
 			
 			this.current = this.store = 0;
 			if( enabled )
@@ -369,15 +371,15 @@ public class GameEnvironment : MonoBehaviour {
 	public static StoreGun[] storeGun = new StoreGun[9]
 	{
 		
-		new StoreGun("Airsoft",true,20,0,9,1,20),				//0
-		new StoreGun("Crossbow",false,12,30,25,3,40),			//1
-		new StoreGun("Shotgun",false,5,75,15,1,100),			//2
-		new StoreGun("Flamethrower",false,100,100,30,12,10),	//3
-		new StoreGun("Football",false,5,100,50,3,100),			//4
-		new StoreGun("Machine Gun",false,100,150,9,12,20),		//5
-		new StoreGun("Grenades",false,5,150,50,3,100),			//6
-		new StoreGun("Revolver",false,6,300,25,1,100),			//7
-		new StoreGun("Rocket Launcher",false,5,300,10,3,100) 	//8
+		new StoreGun("Airsoft",true,20,0,9,1,20,80),				//0
+		new StoreGun("Crossbow",false,12,30,25,3,40,100),			//1
+		new StoreGun("Shotgun",false,5,75,15,1,100,100),			//2
+		new StoreGun("Flamethrower",false,100,100,30,12,10,100),	//3
+		new StoreGun("Football",false,5,100,50,3,100,100),			//4
+		new StoreGun("Machine Gun",false,100,150,9,12,20,60),		//5
+		new StoreGun("Grenades",false,5,150,50,3,100,0),			//6
+		new StoreGun("Revolver",false,6,300,25,1,100,100),			//7
+		new StoreGun("Rocket Launcher",false,5,300,10,3,100,100) 	//8
 		
 		
 		
