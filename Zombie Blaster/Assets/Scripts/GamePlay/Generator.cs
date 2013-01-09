@@ -250,6 +250,9 @@ public class Generator : MonoBehaviour {
 			}		
 		}		
 		
+		if(packType == HealthPackType.Weapon && AllWeaponsOwned() )
+			packType = Random.Range(0,2)==0?HealthPackType.XtraLife:HealthPackType.DamageMultiplier;
+		
 		return packType;
 	}
 	
@@ -258,6 +261,15 @@ public class Generator : MonoBehaviour {
 		int ind = (int)WhatPowerupToSpawn(scooby);
 		HealthPack er = (HealthPack)Instantiate(powerups[ind],position,rotation);
 		er.scooby = scooby;
+	}
+	
+	private bool AllWeaponsOwned()
+	{
+		var level = LevelInfo.State.level[LevelInfo.Environments.control.currentLevel];
+		for(int i=0;i<level.allowedGun.Length;i++) 
+			if(!LevelInfo.Environments.guns.gun[(int)level.allowedGun[i]].EnabledGun)
+				return false;
+		return true;
 	}
 	
 	#endregion

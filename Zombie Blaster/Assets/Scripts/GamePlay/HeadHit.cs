@@ -5,19 +5,25 @@ using System.Collections;
 public class HeadHit : MonoBehaviour {
 
 	public Zombi HeadContainer;
-	private BoxCollider boxCollider;
 	private Vector3 beginsize;
 	
 	void Start()
 	{
-		boxCollider = (BoxCollider)transform.collider;
-		beginsize = boxCollider.size;
+		//boxCollider = (BoxCollider)transform.collider;
+		BoxCollider c = (BoxCollider)transform.collider;
+		Destroy(this.collider);
+		SphereCollider sphere = gameObject.AddComponent<SphereCollider>();
+		
+		sphere.center = c.center;
+		sphere.radius = c.size.x*0.7f;
+		//sph.radius = rad;
+		//beginsize = boxCollider.size;
 		//Destroy(this.collider);
 	}
 	
 	void Update()
 	{
-		boxCollider.size = beginsize*(0.05f*HeadContainer.XZDistFromPlayer()+0.925f);
+		//boxCollider.size = beginsize*(0.05f*HeadContainer.XZDistFromPlayer()+0.925f);
 	}
 	
 	public void DieDamaged()

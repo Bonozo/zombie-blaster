@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ButtonMap : MonoBehaviour {
 	
-	private GameState lastState;
+	//private GameState lastState;
 	
 	void OnPress(bool isDown)
 	{
@@ -15,7 +15,7 @@ public class ButtonMap : MonoBehaviour {
 			if( LevelInfo.Environments.control.state == GameState.Play  || LevelInfo.Environments.control.state == GameState.Paused)
 			{
 				//GameEnvironment.IgnoreButtons();
-				lastState = LevelInfo.Environments.control.state;
+				//lastState = LevelInfo.Environments.control.state;
 				LevelInfo.Environments.control.state = GameState.Map;
 			}
 

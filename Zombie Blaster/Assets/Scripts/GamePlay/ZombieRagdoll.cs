@@ -13,7 +13,7 @@ public class ZombieRagdoll : MonoBehaviour {
 	private float DestroyTime = 8f;
 	private bool healthpackok = false;
 	private bool throwedout = false;
-	private bool iscivilian = false;
+	//private bool iscivilian = false;
 	
 	private bool rd = false;
 	//private float rootbeginposy;
@@ -139,7 +139,7 @@ public class ZombieRagdoll : MonoBehaviour {
 	{
 		//DestroyTime = 50;
 		throwedout = true;
-		iscivilian = true;
+		//iscivilian = true;
 		scooby = false;
 	}
 }

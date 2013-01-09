@@ -5,7 +5,7 @@ public class GameEnvironment : MonoBehaviour {
 	
 	#region Static Local
 	
-	public static int StartLevel = 4;
+	public static int StartLevel = 0;
 	public static int StartWave = 5;
 	
 	
@@ -85,25 +85,12 @@ public class GameEnvironment : MonoBehaviour {
 	
 	private static int flameframes;
 	public static bool FlameButton { get {
-			/*bool ans = false;
-			
-			if( Input.GetMouseButtonDown(0) )
-				flameframes = Option.FlameWaitingFrames;
-			if( Input.GetMouseButton(0) && !ignore && flameframes==0)
-			{
-				lastInput = Input.mousePosition;
-				ans = true;
-			}
-			if( Input.GetMouseButtonUp(0) )
-				ignore = false;
-			if(flameframes>0) flameframes--;
-			return ans;*/
 			bool ans = false;
 			
 			if (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began )
 				flameframes = Option.FlameWaitingFrames;
 			
-			if (Input.touchCount > 0 && (Input.touches[0].phase == TouchPhase.Stationary || Input.touches[0].phase == TouchPhase.Moved) && !ignore && flameframes==0)
+			if (Input.touchCount > 0 && (Input.touches[0].phase == TouchPhase.Stationary || Input.touches[0].phase == TouchPhase.Moved) && /*!ignore &&*/ flameframes==0)
 			{
 				lastInput = Input.touches[0].position;
 				ans = true;	
@@ -221,7 +208,7 @@ public class GameEnvironment : MonoBehaviour {
 			
 			if( Input.GetMouseButtonDown(0) )
 				flameframes = Option.FlameWaitingFrames;
-			if( Input.GetMouseButton(0) && !ignore && flameframes==0)
+			if( Input.GetMouseButton(0) /*&& !ignore */&& flameframes==0)
 			{
 				lastInput = Input.mousePosition;
 				ans = true;

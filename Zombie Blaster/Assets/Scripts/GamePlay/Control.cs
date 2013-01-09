@@ -375,8 +375,8 @@ public class Control : MonoBehaviour {
 			ShowMapNotification();
 		}
 		
-		LevelInfo.Environments.notificationStore.gameObject.SetActive(Time.time<storeNotificationTime&&Time.timeScale>0f);
-		LevelInfo.Environments.notificationMap.gameObject.SetActive(Time.time<mapNotificationTime&&Time.timeScale>0f);
+		LevelInfo.Environments.notificationStore.gameObject.SetActive(storeNotificationTime&&Time.timeScale>0f);
+		LevelInfo.Environments.notificationMap.gameObject.SetActive(mapNotificationTime&&Time.timeScale>0f);
 		lastZombieHeads = Store.zombieHeads;
 		
 		ShakeUpdates();
@@ -471,38 +471,31 @@ public class Control : MonoBehaviour {
 
 	#region Notifications
 	
-	private bool[] notweaponshowed = new bool[Store.countWeapons];
-	private bool[] notlevelshowed = new bool[Store.countLevel];
-	
 	public void ShowStoreNotifiaction()
 	{
-		//LevelInfo.Environments.nofiticationStore.text = "";
+		bool old = storeNotificationTime;
+		storeNotificationTime=false;
 		for(int i=0;i<Store.countWeapons;i++)
-			if( !notweaponshowed[i] && Store.CanBuyWeapon(i) && !LevelInfo.Environments.guns.gun[i].EnabledGun
-				&& allowedWeapons[i])
-			{
-				notweaponshowed[i]=true;
-				storeNotificationTime=Time.time+5f;
-				LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.clipUIStar);
-				/*LevelInfo.Environments.nofiticationStore.text += 
-				(LevelInfo.Environments.nofiticationStore.text.Length==0?"":"\n") +
-					"! " + GameEnvironment.storeGun[i].name;		*/
-			}
+			if(  Store.CanBuyWeapon(i) && !LevelInfo.Environments.guns.gun[i].EnabledGun && allowedWeapons[i])
+				storeNotificationTime=true;
+		if(!old&&storeNotificationTime)
+			LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.clipUIStar);
 	}
 	
 	public void ShowMapNotification()
 	{
+		bool old = mapNotificationTime;
+		mapNotificationTime=false;
 		for(int i=0;i<Store.countLevel;i++)
-			if( !notlevelshowed[i] && !Store.LevelUnlocked(i) && Store.zombieHeads >= GameEnvironment.levelPrice[i] )
-			{
-				notlevelshowed[i] = true;
-				mapNotificationTime=Time.time+5f;
-				LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.clipUIStar);
-			}
+			if( !Store.LevelUnlocked(i) && Store.zombieHeads >= GameEnvironment.levelPrice[i] )
+				mapNotificationTime=true;
+
+		if(!old&&mapNotificationTime) 
+			LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.clipUIStar);
 	}
 	
-	private float storeNotificationTime=0f;
-	private float mapNotificationTime=0f;
+	private bool storeNotificationTime=false;
+	private bool mapNotificationTime=false;
 	
 	#endregion
 

@@ -30,6 +30,8 @@ public class HealthPack : MonoBehaviour {
 	private bool picked = false;
 	
 	private Weapon gunindexifweapon = 0;
+	private float autopickuptime = 0.1f;
+	private bool rgb = true;
 	
 	public bool scooby = false;
 	
@@ -78,21 +80,8 @@ public class HealthPack : MonoBehaviour {
 					gunindexifweapon = level.allowedGun[(ind+i)%level.allowedGun.Length];
 					break;
 				}
-			if( gunindexifweapon == Weapon.None )
-			{
-				if( Random.Range(0,2)==0 )
-				{
-					packType = HealthPackType.DamageMultiplier;
-					gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpDamageMultiplier;
-				}
-				else
-				{
-					packType = HealthPackType.XtraLife;
-					gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpXtraLife;
-				}
-			}
-			else
-				gameObject.renderer.material.mainTexture = LevelInfo.Environments.guns.gun[(int)gunindexifweapon].texture;
+			if( gunindexifweapon == Weapon.None ) Debug.LogError("ZB: All Weapons Owned, but Generator says to generate Weapon Powerup");
+			gameObject.renderer.material.mainTexture = LevelInfo.Environments.guns.gun[(int)gunindexifweapon].texture;
 			//gameObject.renderer.material.color = Color.red;
 			break;
 		/*case HealthPackType.XtraLife:
@@ -106,6 +95,16 @@ public class HealthPack : MonoBehaviour {
 		if( picked ) return;
 		var v = transform.rotation.eulerAngles;
 		v.x=v.z=0;
+		
+
+		autopickuptime -= Time.deltaTime;
+		if( autopickuptime <= 0f && GameEnvironment.DistXZ(transform.position,LevelInfo.Environments.control.transform.position) < 2.8f )
+		{
+			rgb = false;
+			StartCoroutine(PickedUp());
+			return;
+		}
+		
 		transform.rotation = Quaternion.Euler(v);
 		if( LevelInfo.Environments.control.state == GameState.Paused ) return;
 		if( (DeadTime -= Time.deltaTime) <= 0 ) Destroy(this.gameObject);
@@ -132,7 +131,7 @@ public class HealthPack : MonoBehaviour {
 	
 	private IEnumerator PickedUp()
 	{
-		rigidbody.AddForce(0,200,0);
+		if(rgb) rigidbody.AddForce(0,200,0);
 		GameEnvironment.IgnoreButtons();
 		picked = true;
 		
