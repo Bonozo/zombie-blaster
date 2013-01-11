@@ -50,8 +50,9 @@ public class Guns : MonoBehaviour {
 		
 		Weapon[] w = LevelInfo.State.level[GameEnvironment.StartLevel].allowedGun;
 		for(int i=0;i<w.Length;i++)
+		{
 			GameEnvironment.storeGun[(int)w[i]].SetEnabled(Store.WeaponUnlocked((int)w[i]));
-		
+		}
 		if( Option.UnlimitedAmmo )
 			for(int i=0;i<GameEnvironment.storeGun.Length;i++)
 				GameEnvironment.storeGun[i].SetAsUnlimited();
@@ -76,6 +77,12 @@ public class Guns : MonoBehaviour {
 					cweapon++;
 				}
 		for(;cweapon<weaponsUI.Length;cweapon++) weaponsUI[cweapon].gameObject.SetActive(false);
+		
+		//if( GameEnvironment.storeGun[9].enabled )
+		//	Debug.Log("OK 2");
+		//for(int i=0;i<gun.Length;i++)
+		//	if( gun[i].EnabledGun )
+		//		Debug.Log("Enabled " + i);
 	}
 		
 	bool pressed(GUITexture button)

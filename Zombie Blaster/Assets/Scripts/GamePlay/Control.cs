@@ -189,7 +189,7 @@ public class Control : MonoBehaviour {
 	public GameObject guiPlayGame;
 	public GameObject guiMap;
 	public GUIStyle myGUIStyle; 	
-	public GUIStyle postGUIStyle;
+	public GUIStyle buttonGUIStyle;
 	public Texture texturePopup;
 	
 	public float Speed = 3f;
@@ -297,7 +297,7 @@ public class Control : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start ()
-	{
+	{	
 		#region LeaderBoardDemo
 		Time.timeScale = 1;
 		noOfTimesScoreDisplay = 0;
@@ -513,7 +513,7 @@ public class Control : MonoBehaviour {
 			{
 				//GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"CONTINUE?");
 				GUI.Label(new Rect(0.3f*Screen.width,0.28f*Screen.height,0.5f*Screen.width,0.2f*Screen.height),"CONTINUE?",myGUIStyle);
-				if( GUI.Button(new Rect(0.27f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "YES" ) )	
+				if( GUI.Button(new Rect(0.27f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "YES", buttonGUIStyle ) )	
 				{
 					isLeaderBoard = false;
 					GameEnvironment.StartWave = currentWave-1;
@@ -525,7 +525,7 @@ public class Control : MonoBehaviour {
 					Time.timeScale = 1.0f;
 					Application.LoadLevel(Application.loadedLevel);
 				}
-				if( GUI.Button(new Rect(0.58f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "NO") )
+				if( GUI.Button(new Rect(0.58f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "NO", buttonGUIStyle) )
 				{
 					isLeaderBoard = true;
 					//Time.timeScale = 1.0f;
@@ -549,7 +549,7 @@ public class Control : MonoBehaviour {
 					
 					isScoreDisplayed = true;	
 				}*/
-				if( GUI.Button(new Rect(0.3f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "Post Score") )
+				if( GUI.Button(new Rect(0.3f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "Post Score", buttonGUIStyle ) )
 				{			
 					isGet = false;
 					isPost = true;
@@ -566,25 +566,25 @@ public class Control : MonoBehaviour {
 					
 					if(nameArray[0] != null && isConnectionError1 == false )
 					{	
-						GUI.Label(new Rect(0.38f*Screen.width,0.32f*Screen.height,0.15f*Screen.width,0.03f*Screen.height), "" + "NAME",postGUIStyle);				
+						GUI.Label(new Rect(0.38f*Screen.width,0.32f*Screen.height,0.15f*Screen.width,0.03f*Screen.height), "" + "NAME",myGUIStyle);				
 						
-						GUI.Label(new Rect(0.50f*Screen.width,0.32f*Screen.height,0.15f*Screen.width,0.03f*Screen.height), "" + "SCORE",postGUIStyle);					
+						GUI.Label(new Rect(0.50f*Screen.width,0.32f*Screen.height,0.15f*Screen.width,0.03f*Screen.height), "" + "SCORE",myGUIStyle);					
 						
 						for(int i = 0; i < 10; i++)
 						{	
-							GUI.Label(new Rect(0.38f*Screen.width, (0.35f + yPosition*i)*Screen.height, 0.15f*Screen.width,0.03f*Screen.height), "" + nameArray[i].ToString(),postGUIStyle);
+							GUI.Label(new Rect(0.38f*Screen.width, (0.35f + yPosition*i)*Screen.height, 0.15f*Screen.width,0.03f*Screen.height), "" + nameArray[i].ToString(),myGUIStyle);
 						}	
 							//GUI.Label(new Rect(400,40, 200, 70), "" + scoreArray[i].ToString());
 							
 							//GUI.Label(new Rect(200,40 + yPosition*(i+1), 200, 70), "" + nameArray[i].ToString());
 						for(int i = 0; i < 10; i++)
 						{			
-							GUI.Label(new Rect(0.50f*Screen.width, (0.35f + yPosition*i)*Screen.height, 0.15f*Screen.width,0.03f*Screen.height), "" + scoreArray[i].ToString(),postGUIStyle);
+							GUI.Label(new Rect(0.50f*Screen.width, (0.35f + yPosition*i)*Screen.height, 0.15f*Screen.width,0.03f*Screen.height), "" + scoreArray[i].ToString(),myGUIStyle);
 						}
 					}
 					else
 					{
-						GUI.Label(new Rect(0.35f*Screen.width,0.35f*Screen.height,0.30f*Screen.width,0.032f*Screen.height), getScoreResponse.ToString(),postGUIStyle);
+						GUI.Label(new Rect(0.35f*Screen.width,0.35f*Screen.height,0.30f*Screen.width,0.032f*Screen.height), getScoreResponse.ToString(),myGUIStyle);
 					}
 					
 					//isGet = false;				
@@ -593,15 +593,15 @@ public class Control : MonoBehaviour {
 				if(isPost)
 				{
 					//GUI.Label(new Rect(100, 60, 200, 70), getScoreResponse.ToString());
-					GUI.Label(new Rect(0.35f*Screen.width,0.355f*Screen.height, 0.1f*Screen.width,0.05f*Screen.height), "NAME: ",postGUIStyle);
-					GUI.Label(new Rect(0.35f*Screen.width,0.42f*Screen.height, 0.1f*Screen.width,0.05f*Screen.height), "SCORE: ",postGUIStyle);
+					GUI.Label(new Rect(0.35f*Screen.width,0.355f*Screen.height, 0.1f*Screen.width,0.05f*Screen.height), "NAME: ",myGUIStyle);
+					GUI.Label(new Rect(0.35f*Screen.width,0.42f*Screen.height, 0.1f*Screen.width,0.05f*Screen.height), "SCORE: ",myGUIStyle);
 					
-					nameLB = GUI.TextField(new Rect(0.48f*Screen.width,0.35f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), nameLB,12,postGUIStyle);
-					GUI.Label(new Rect(0.48f*Screen.width,0.42f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), (LevelInfo.Environments.hubScore.GetNumber()).ToString(),postGUIStyle);
+					nameLB = GUI.TextField(new Rect(0.48f*Screen.width,0.35f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), nameLB,12,myGUIStyle);
+					GUI.Label(new Rect(0.48f*Screen.width,0.42f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), (LevelInfo.Environments.hubScore.GetNumber()).ToString(),myGUIStyle);
 					
 					//scoreLB = GUI.TextField(new Rect(0.45f*Screen.width,0.40f*Screen.height, 0.15f*Screen.width,0.035f*Screen.height), scoreLB);
 
-					if( GUI.Button(new Rect(0.45f*Screen.width,0.5f*Screen.height, 0.10f*Screen.width,0.035f*Screen.height), "Post") )
+					if( GUI.Button(new Rect(0.45f*Screen.width,0.5f*Screen.height, 0.10f*Screen.width,0.05f*Screen.height), "Post", buttonGUIStyle) )
 					{
 						if(nameLB.Trim().Equals(""))	
 						{
@@ -618,11 +618,11 @@ public class Control : MonoBehaviour {
 					}
 					
 					if(!isName || (isPost == true))
-						GUI.Label(new Rect(0.38f*Screen.width,0.57f*Screen.height,0.30f*Screen.width,0.032f*Screen.height), postScoreResponse.ToString(),postGUIStyle);					
+						GUI.Label(new Rect(0.38f*Screen.width,0.57f*Screen.height,0.30f*Screen.width,0.032f*Screen.height), postScoreResponse.ToString(),myGUIStyle);					
 				}
 				#endregion
 	
-				if( GUI.Button(new Rect(0.58f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "MENU") )
+				if( GUI.Button(new Rect(0.58f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "MENU", buttonGUIStyle) )
 				{
 					isLeaderBoard = false;
 					//Debug.Log("RR");					
@@ -652,9 +652,6 @@ public class Control : MonoBehaviour {
 				else if(bonusForWaveComplete<1000 && Time.time > waitfornewwave-showWaveCompleteTime+0.5f)
 				{
 					// Writing Wave Complete
-					//Give reward to the player
-					if( bonusForWaveComplete==0) LevelInfo.Environments.hubLives.SetNumberWithFlash(LevelInfo.Environments.hubLives.GetNumber()+1);
-					else Store.zombieHeads= Store.zombieHeads + 100;
 					// Write To PlayerPrefs
 					Store.SetHighestWaveCompleted(currentLevel,currentWave);
 					
@@ -829,6 +826,11 @@ public class Control : MonoBehaviour {
 			{
 				LevelInfo.Environments.waveInfo.HideWaveComplete();
 				Moving = false;
+				
+				//Give reward to the player
+				if( bonusForWaveComplete==0) LevelInfo.Environments.hubLives.SetNumberWithFlash(LevelInfo.Environments.hubLives.GetNumber()+1);
+				else Store.zombieHeads= Store.zombieHeads + 100;
+				
 				CreateNewZombieWave();
 			}
 		}		

@@ -14,7 +14,8 @@ public class HeadHit : MonoBehaviour {
 		Destroy(this.collider);
 		SphereCollider sphere = gameObject.AddComponent<SphereCollider>();
 		
-		sphere.center = c.center;
+		var cc = c.center;// cc.z += 0.02f;
+		sphere.center = cc;
 		sphere.radius = c.size.x*0.7f;
 		//sph.radius = rad;
 		//beginsize = boxCollider.size;

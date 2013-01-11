@@ -10,8 +10,6 @@ public class AudioManager : MonoBehaviour {
 	public AudioSource audioSourceZombies;
 	public AudioSource audioSourceWindLoop;
 	
-
-		
 	public void StopEffects()
 	{
 		audioSourcePlayer.Stop();
@@ -39,6 +37,8 @@ public class AudioManager : MonoBehaviour {
 		audioSourceZombies.Play();
 		
 	}
+	
+	public AudioDistortionFilter filter;
 	
 	#endregion
 	

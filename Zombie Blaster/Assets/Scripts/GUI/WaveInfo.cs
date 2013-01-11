@@ -11,6 +11,7 @@ public class WaveInfo : MonoBehaviour {
 	//public UISprite spriteWaveCompleteReward;
 	public GameObject modelHeads,modelXtraLife;
 	public UISprite[] spriteStar;
+	public GameObject rewardSprite;
 	
 	public float Wait = 5.0f;
 	private float waitfor = 0f;
@@ -18,6 +19,7 @@ public class WaveInfo : MonoBehaviour {
 	private float[] startime = new float[3];
 	private int stars = 0;
 	private int reward;
+	private float waitforreward=0f;
 	
 	// Use this for initialization
 	void Awake () {
@@ -36,19 +38,11 @@ public class WaveInfo : MonoBehaviour {
 		root.SetActive(waitfor>0&&Time.deltaTime>0);
 		
 		rootWaveComplete.SetActive(showWaveComplete&&Time.deltaTime>0);
-		if(showWaveComplete&&Time.deltaTime>0)
-		{
-			modelHeads.SetActive(reward==1);
-			modelXtraLife.SetActive(reward==0);
-		}
-		else
-		{
-			modelHeads.SetActive(false);
-			modelXtraLife.SetActive(false);
-		}
 		
 		if( showWaveComplete )
 		{
+			waitforreward-=Time.deltaTime;
+			
 			for(int i=0;i<3;i++)
 			{
 				if( startime[i] > 0f )
@@ -61,6 +55,19 @@ public class WaveInfo : MonoBehaviour {
 					break;
 				}
 			}
+		}
+		
+		if(showWaveComplete&&Time.deltaTime>0&&waitforreward<=0f)
+		{
+			modelHeads.SetActive(reward==1);
+			modelXtraLife.SetActive(reward==0);
+			rewardSprite.SetActive(true);
+		}
+		else
+		{
+			modelHeads.SetActive(false);
+			modelXtraLife.SetActive(false);
+			rewardSprite.SetActive(false);
 		}
 	}
 	
@@ -76,8 +83,6 @@ public class WaveInfo : MonoBehaviour {
 		this.reward = reward;
 		// 0 - LevelInfo.Environments.texturePickUpXtraLife
 		// 1 - LevelInfo.Environments.texturePickUpBonusHeads
-		modelHeads.SetActive(reward==1);
-		modelXtraLife.SetActive(reward==0);
 		/*if(reward == 0 )
 			spriteWaveCompleteReward.spriteName = "Lives_box";
 		else
@@ -85,10 +90,12 @@ public class WaveInfo : MonoBehaviour {
 		showWaveComplete = true;
 		
 		for(int i=0;i<3;i++) spriteStar[i].spriteName = "star empty";
-		startime[0]=time1;
-		startime[1]=time2;
-		startime[2]=time3;
+		startime[0]=stars>=1?time1:0;
+		startime[1]=stars>=2?time2:0;
+		startime[2]=stars>=3?time3:0;
 		this.stars = stars;
+		
+		waitforreward = startime[0]+startime[1]+startime[2]+0.5f;
 	}
 	
 	public void HideWaveComplete()

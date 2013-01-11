@@ -22,6 +22,7 @@ public enum Weapon
 	Grenade,
 	Revolver,
 	Rocket,
+	AlienBlaster,
 	Sniper,
 	Zapper,
 	Microwave,
@@ -31,15 +32,23 @@ public enum Weapon
 public class Store : MonoBehaviour {
 	
 	public static int countLevel = 5;
-	public static int countWeapons = 9;
+	public static int countWeapons = 10;
 	
-	public static Weapon[][] weaponsForLevel = new Weapon[][]
+	/*public static Weapon[][] weaponsForLevel = new Weapon[][]
 	{
 		new Weapon[] {Weapon.BB,Weapon.Flamethrower,Weapon.Crossbow},
 		new Weapon[] {Weapon.BB,Weapon.Flamethrower,Weapon.Crossbow,Weapon.Grenade},
 		new Weapon[] {Weapon.BB,Weapon.Flamethrower,Weapon.Crossbow,Weapon.Football,Weapon.MachineGun},
 		new Weapon[] {Weapon.BB,Weapon.Flamethrower,Weapon.Crossbow,Weapon.Grenade,Weapon.MachineGun,Weapon.Rocket},
 		new Weapon[] {Weapon.BB,Weapon.Flamethrower,Weapon.Crossbow,Weapon.Grenade,Weapon.MachineGun,Weapon.Rocket,Weapon.Football,Weapon.PulseShotGun,Weapon.Revolver}
+	};*/
+	public static Weapon[][] weaponsForLevel = new Weapon[][]
+	{
+		new Weapon[] {Weapon.Flamethrower,Weapon.Crossbow,Weapon.AlienBlaster},
+		new Weapon[] {Weapon.Grenade},
+		new Weapon[] {Weapon.Football,Weapon.MachineGun},
+		new Weapon[] {Weapon.Rocket},
+		new Weapon[] {Weapon.PulseShotGun,Weapon.Revolver}
 	};
 	
 	public Texture2D[] weaponIcon;
@@ -175,7 +184,7 @@ public class Store : MonoBehaviour {
 		IABAndroid.init( storePublicKey );
 		TapjoyAndroid.init( "6f8b509b-f292-4dd3-b440-eab33f211089", "7TYeZbZ6GTqRncoALV3W", false );//old
 		//TapjoyAndroid.init( "b1f6ad92-1ff9-47ca-a962-a4b7ecddebd2", "wNZUPjewwCeVRkgpCCZQ", false );//new
-		#endif
+		#endif 
 		
 		// Clear Prefabs
 		//PlayerPrefs.SetInt("zombieHeads",10000);
@@ -266,11 +275,7 @@ public class Store : MonoBehaviour {
 			{
 				audio.PlayOneShot(clipShowStore);
 				
-				for(int i=0;i<countWeapons;i++) showWeapon[i]=false;
-				for(int i=0;i<countLevel;i++)
-					if( LevelUnlocked(i) )
-						for(int j=0;j<weaponsForLevel[i].Length;j++)
-							showWeapon[(int)weaponsForLevel[i][j]]=true;
+				UpdateWeaponAvailable();
 				
 				for(int i=0;i<countWeapons;i++) showFillIn[i]=false;
 				if( IsLevelGamePlay )
@@ -298,6 +303,19 @@ public class Store : MonoBehaviour {
 				audio.Stop();
 			}
 		}
+	}
+	
+	public void UpdateWeaponAvailable()// Show Weapon
+	{
+		for(int i=0;i<countWeapons;i++) showWeapon[i]=false;
+		bool alllevelsunlocked=true;
+		for(int i=0;i<countLevel;i++)
+			if( LevelUnlocked(i) )
+				for(int j=0;j<weaponsForLevel[i].Length;j++)
+					showWeapon[(int)weaponsForLevel[i][j]]=true;
+			else
+				alllevelsunlocked = false;
+		showWeapon[(int)Weapon.AlienBlaster]=alllevelsunlocked;
 	}
 	
 	public bool IsLevelGamePlay { get { return Application.loadedLevelName == "playgame"; } }
@@ -596,6 +614,7 @@ public class Store : MonoBehaviour {
 	
 	
 	public GUIStyle myStyle;
+	public GUIStyle buttonStyle;
 	
 	//private readonly Rect shopRect = new Rect(0.01f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
 	//private readonly Rect stashRect = new Rect(0.51f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
@@ -698,11 +717,11 @@ public class Store : MonoBehaviour {
 			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Leave Game?",myStyle);
 			//GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"Leave Game?");
 			
-			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Quit" ) )	
+			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Quit", buttonStyle ) )	
 			{
 				GoMainMenuFromGamePlay();
 			}
-			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Back" ) )
+			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Back", buttonStyle ) )
 			{
 				audio.PlayOneShot(clipBack);
 				wantToExit = false;
@@ -789,7 +808,7 @@ public class Store : MonoBehaviour {
 			
 			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Do you want to buy this item?",myStyle);
 			
-			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Buy" ) )	
+			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Buy", buttonStyle ) )	
 			{
 				Store.UnlockWeapon(wooi);
 				showWeapon[wooi] = true;
@@ -806,7 +825,7 @@ public class Store : MonoBehaviour {
 				spwchannel = true;
 				currentshopitem = NextWeapon(currentshopitem,false);
 			}
-			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Back" ) )
+			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Back", buttonStyle ) )
 			{
 				audio.PlayOneShot(clipBack);
 				wooi = -1; 
@@ -816,7 +835,7 @@ public class Store : MonoBehaviour {
 		else
 		{
 			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.3f*Screen.height),"You have not enough heads to buy this item.",myStyle);
-			if( GUI.Button(new Rect(0.42f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Back") )
+			if( GUI.Button(new Rect(0.42f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Back", buttonStyle) )
 			{
 				wooi = -1;
 				spwchannel = true;
@@ -893,12 +912,12 @@ public class Store : MonoBehaviour {
 			"\n" + GameEnvironment.storeGun[wooi].speed + " m/s" +
 			"\n" + GameEnvironment.storeGun[wooi].reloadTime + " sec";
 		
-		if( !WeaponUnlocked(wooi) )
+		if( !WeaponUnlocked(wooi) ) 
 			s += "\n" + GameEnvironment.storeGun[wooi].price;
 		
 		GUI.Label(new Rect(0.5f*Screen.width,0.34f*Screen.height,0.3f*Screen.width,0.25f*Screen.height),s,myStyle);
 		
-		if( GUI.Button(new Rect(0.58f*Screen.width,0.56f*Screen.height,0.1f*Screen.width,0.05f*Screen.height), "OK" ) )
+		if( GUI.Button(new Rect(0.58f*Screen.width,0.5f*Screen.height,0.1f*Screen.width,0.1f*Screen.height), "OK", buttonStyle ) )
 		{
 			audio.Stop();
 			audio.PlayOneShot(clipBack);

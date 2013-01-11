@@ -11,6 +11,11 @@ public class Shield : MonoBehaviour {
 	private bool up;
 	private bool down;
 	
+	void Awake()
+	{
+		LevelInfo.Audio.filter.enabled = false;
+	}
+	
 	void OnEnable()
 	{
 		gui.SetActive(false);
@@ -27,18 +32,21 @@ public class Shield : MonoBehaviour {
 		up=true;
 		down=false;
 		setalphato(.0f);
+		LevelInfo.Audio.filter.enabled = true;
 	}
 	
 	public void Hide()
 	{
 		down=true;
 		up=false;
+		LevelInfo.Audio.filter.enabled = false;
 	}
 	
 	public void HideImmediately()
 	{
 		up=down=false;
 		gui.SetActive(false);
+		LevelInfo.Audio.filter.enabled = false;
 	}
 	
 	public void ShowImmediately()
@@ -46,6 +54,7 @@ public class Shield : MonoBehaviour {
 		up=down=false;
 		gui.SetActive(true);
 		setalphato(1f);
+		LevelInfo.Audio.filter.enabled = true;
 	}
 	
 	private void setalphato(float a)
