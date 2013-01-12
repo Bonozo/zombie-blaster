@@ -248,6 +248,9 @@ public class Control : MonoBehaviour {
 			{
 			case GameState.Lose:
 				Time.timeScale = 0f;
+				LevelInfo.Audio.StopAll();
+				LevelInfo.Audio.PlayGameOver();
+				audio.Stop();
 				LevelInfo.Environments.hubLives.SetNumberWithFlash(LevelInfo.Environments.hubLives.GetNumber()-1);
 				break;
 			case GameState.Play:
@@ -263,7 +266,7 @@ public class Control : MonoBehaviour {
 				LevelInfo.Audio.StopEffects();
 				Time.timeScale = 0f;
 				guiPlayGame.SetActiveRecursively(false);
-				GameObject.Find("Store").GetComponent<Store>().showStore = true;	
+				LevelInfo.Environments.store.GetComponent<Store>().showStore = true;	
 				break;
 			case GameState.Map:
 				LevelInfo.Audio.StopEffects();
@@ -294,6 +297,17 @@ public class Control : MonoBehaviour {
 	#endregion
 	
 	#region Start , Update
+	
+	void Awake()
+	{
+		if( Store.FirstTimePlay )
+		{
+			LevelInfo.Environments.buttonMap.isEnabled=false;
+			LevelInfo.Environments.buttonStore.isEnabled=false;
+			LevelInfo.Environments.buttonPauseStore.isEnabled=false;
+			LevelInfo.Environments.buttonPauseMap.isEnabled=false;
+		}
+	}
 	
 	// Use this for initialization
 	void Start ()
@@ -375,8 +389,8 @@ public class Control : MonoBehaviour {
 			ShowMapNotification();
 		}
 		
-		LevelInfo.Environments.notificationStore.gameObject.SetActive(storeNotificationTime&&Time.timeScale>0f);
-		LevelInfo.Environments.notificationMap.gameObject.SetActive(mapNotificationTime&&Time.timeScale>0f);
+		LevelInfo.Environments.notificationStore.gameObject.SetActive(storeNotificationTime&&ScreenShowed&&!Store.FirstTimePlay);
+		LevelInfo.Environments.notificationMap.gameObject.SetActive(mapNotificationTime&&ScreenShowed&&!Store.FirstTimePlay);
 		lastZombieHeads = Store.zombieHeads;
 		
 		ShakeUpdates();
@@ -396,7 +410,16 @@ public class Control : MonoBehaviour {
 		{
 			if( healthshow < health ) healthshow += Mathf.Min(Time.deltaTime*1f,health-healthshow);
 			if( healthshow > health ) healthshow -= Mathf.Min(Time.deltaTime*1f,healthshow-health);
-			if( healthshow <= 0 ) { ToLose(); return; }
+			if( healthshow <= 0 )
+			{
+				if( Store.FirstTimePlay )
+				{
+					if(!prologuecomplete) StartCoroutine(PrologueComplete());
+				}
+				else
+					state = GameState.Lose; 
+				return;
+			}
 		}
 		
 		
@@ -475,8 +498,9 @@ public class Control : MonoBehaviour {
 	{
 		bool old = storeNotificationTime;
 		storeNotificationTime=false;
+		LevelInfo.Environments.store.UpdateWeaponAvailable();
 		for(int i=0;i<Store.countWeapons;i++)
-			if(  Store.CanBuyWeapon(i) && !LevelInfo.Environments.guns.gun[i].EnabledGun && allowedWeapons[i])
+			if(LevelInfo.Environments.store.WeaponAvailable(i) && Store.CanBuyWeapon(i) && !LevelInfo.Environments.guns.gun[i].EnabledGun && allowedWeapons[i])
 				storeNotificationTime=true;
 		if(!old&&storeNotificationTime)
 			LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.clipUIStar);
@@ -626,7 +650,7 @@ public class Control : MonoBehaviour {
 				{
 					isLeaderBoard = false;
 					//Debug.Log("RR");					
-					GameObject.Find("Store").GetComponent<Store>().GoMainMenuFromGamePlay();
+					LevelInfo.Environments.store.GoMainMenuFromGamePlay();
 					//Application.LoadLevel("mainmenu");
 				}
 				 
@@ -879,15 +903,22 @@ public class Control : MonoBehaviour {
 	
 	#region Properties
 	
-	public bool GamePaused 
-	{
+	public bool GamePaused {
 		get
 		{
 			return state != GameState.Play;
 		}
 	}
 	
-	public bool Died { get { return healthshow <= 0; }}
+	public bool ScreenShowed
+	{
+		get
+		{
+			return state == GameState.Play || state == GameState.Paused || state == GameState.Lose;
+		}
+	}
+	
+	public bool Died { get { return state == GameState.Lose; }}
 	
 	public float Health { get { return healthshow; } set { health = value; } }
 	
@@ -895,6 +926,15 @@ public class Control : MonoBehaviour {
 	
 	private bool isInWave = false;
 	public bool IsInWave { get { return isInWave; }}
+	
+	public bool ExistGunInCurrentLevel(Weapon w)
+	{
+		var level = LevelInfo.State.level[LevelInfo.Environments.control.currentLevel];
+		for(int i=0;i<level.allowedGun.Length;i++) 
+			if( level.allowedGun[i] == w)
+				return true;
+		return false;
+	}
 	
 	#endregion
 
@@ -922,7 +962,11 @@ public class Control : MonoBehaviour {
 		//zombiesLeftForThisWave--;
 		LevelInfo.Environments.hubZombiesLeft.SetNumberWithFlash(LevelInfo.Environments.hubZombiesLeft.GetNumber()-1);
 		if( LevelInfo.Environments.hubZombiesLeft.GetNumber() <= 0 && GameObject.FindGameObjectsWithTag("ZombieHead").Length == 1)
+		{
 			StartCoroutine(WaveComplete());
+			if( Store.FirstTimePlay )
+				StartCoroutine(PrologueComplete());
+		}
 	}
 	
 	public void GetHealth(float h)
@@ -1007,15 +1051,28 @@ public class Control : MonoBehaviour {
 				break;
 			}
 		}
+		if( Store.FirstTimePlay )
+			StartCoroutine(ShowTip("TIP: SWIPE LEFT OR RIGHT TO TURN",4f));
 	}
 	
-	public void ToLose()
+	private bool prologuecomplete = false;
+	private IEnumerator PrologueComplete()
 	{
-		LevelInfo.Audio.StopAll();
-		LevelInfo.Audio.PlayGameOver();
-		audio.Stop();
-		state = GameState.Lose;
-		Time.timeScale = 0.0f;	
+		prologuecomplete=true;
+		LevelInfo.Environments.buttonPause.isEnabled=false;
+		LevelInfo.Environments.fadeLabel.gameObject.SetActive(true);
+		LevelInfo.Environments.fadeLabel.alpha=0f;
+		float waittime = 5f;
+		while(waittime > 0f )
+		{
+			waittime -= Time.deltaTime;
+			LevelInfo.Environments.fadeLabel.alpha = (5f-waittime)/5f;
+			yield return new WaitForEndOfFrame();
+		}
+		Store.FirstTimePlay=false;
+		GameEnvironment.firstTimePlayed = true;
+		LevelInfo.Environments.store.GoMainMenuFromGamePlay();
+		StopAllCoroutines();
 	}
 	
 	#endregion

@@ -16,6 +16,8 @@ public class GameEnvironment : MonoBehaviour {
 		Application.LoadLevel("loading");
 	}
 	
+	public static bool firstTimePlayed = false;
+	
 	#endregion
 	
 	#region Swipe Input 

@@ -105,7 +105,7 @@ public class Option : MonoBehaviour {
 			GUI.Label(textRect(9),"FT wait frames (" + FlameWaitingFrames + ")",myStyle1);
 			FlameWaitingFrames = Mathf.RoundToInt(GUI.HorizontalSlider(buttonRect(9),(float)FlameWaitingFrames,0f,60f));
 				
-			if( GUI.Button( new Rect(Screen.width-100,Screen.height-60,80,40),"Options",myStyle2))
+			if( GUI.Button( new Rect(Screen.width-200,Screen.height-60,80,40),"Options",myStyle2))
 			{
 				debugScreen = false;
 				title.text = "Options";

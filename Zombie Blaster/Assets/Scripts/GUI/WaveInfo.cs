@@ -73,8 +73,17 @@ public class WaveInfo : MonoBehaviour {
 	
 	public void ShowWave(int i,int zombieCount)
 	{
-		numberWave.text = "Wave " + i;
-		countZombies.text = "" + zombieCount + " zombies";
+		
+		if( Store.FirstTimePlay )
+		{
+			numberWave.text = "PROLOGUE";
+			countZombies.text = "";
+		}
+		else
+		{
+			numberWave.text = "Wave " + i;
+			countZombies.text = "" + zombieCount + " zombies";
+		}
 		waitfor = Wait;
 	}
 	

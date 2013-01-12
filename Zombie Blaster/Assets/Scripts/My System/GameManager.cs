@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour {
 	
 	public Camera mainCamera;
 	public Control control;
+	public Store store;
 	public Generator generator;
 	public HealthPack healthPack;
 	public Guns guns;
@@ -85,6 +86,24 @@ public class GameManager : MonoBehaviour {
 	public HubUI hubScore;
 	public HubUI hubLives;
 	
+	public UIButton buttonMap;
+	public UIButton buttonStore;
+	public UIButton buttonPause;
+	public UIButton buttonPauseMap;
+	public UIButton buttonPauseStore;
+	public UIButton buttonPauseMainMenu;
+	public UIButton buttonPauseResume;
+	
+	public UILabel fadeLabel;
+	
+	#endregion
+	
+	#region Initialzie
+	
+	void Awake()
+	{
+		store = (Store)GameObject.FindObjectOfType(typeof(Store));
+	}
 	
 	#endregion
 }

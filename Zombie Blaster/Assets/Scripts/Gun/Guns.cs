@@ -40,6 +40,11 @@ public class Guns : MonoBehaviour {
 	private int current = 0;
 	//private bool showotherbuttons = false;
 	
+	void Awake()
+	{
+		GameEnvironment.IgnoreButtons();
+	}
+	
 	
 	// Use this for initialization
 	void Start () {	
@@ -48,11 +53,21 @@ public class Guns : MonoBehaviour {
 		for(int i=0;i<GameEnvironment.storeGun.Length;i++)
 			GameEnvironment.storeGun[i].SetEnabled(false);
 		
-		Weapon[] w = LevelInfo.State.level[GameEnvironment.StartLevel].allowedGun;
-		for(int i=0;i<w.Length;i++)
+		if( Store.FirstTimePlay )
 		{
-			GameEnvironment.storeGun[(int)w[i]].SetEnabled(Store.WeaponUnlocked((int)w[i]));
+			GameEnvironment.storeGun[(int)Weapon.BB].SetEnabled(true);
+			GameEnvironment.storeGun[(int)Weapon.AlienBlaster].SetEnabled(true);
+			current = (int)Weapon.AlienBlaster;
 		}
+		else
+		{
+			Weapon[] w = LevelInfo.State.level[GameEnvironment.StartLevel].allowedGun;
+			for(int i=0;i<w.Length;i++)
+			{
+				GameEnvironment.storeGun[(int)w[i]].SetEnabled(Store.WeaponUnlocked((int)w[i]));
+			}
+		}
+		
 		if( Option.UnlimitedAmmo )
 			for(int i=0;i<GameEnvironment.storeGun.Length;i++)
 				GameEnvironment.storeGun[i].SetAsUnlimited();

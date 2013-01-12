@@ -75,11 +75,14 @@ public class HealthPack : MonoBehaviour {
 			gunindexifweapon = Weapon.None;
 			int ind = Random.Range(0,level.allowedGun.Length);
 			for(int i=0;i<level.allowedGun.Length;i++) 
-				if(!LevelInfo.Environments.guns.gun[(int)level.allowedGun[(ind+i)%level.allowedGun.Length]].EnabledGun)
+			{
+				int index = (int)level.allowedGun[(ind+i)%level.allowedGun.Length];
+				if(!LevelInfo.Environments.guns.gun[index].EnabledGun && LevelInfo.Environments.store.WeaponAvailable(index) )
 				{
 					gunindexifweapon = level.allowedGun[(ind+i)%level.allowedGun.Length];
 					break;
 				}
+			}
 			if( gunindexifweapon == Weapon.None ) Debug.LogError("ZB: All Weapons Owned, but Generator says to generate Weapon Powerup");
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.guns.gun[(int)gunindexifweapon].texture;
 			//gameObject.renderer.material.color = Color.red;
@@ -152,7 +155,7 @@ public class HealthPack : MonoBehaviour {
 			
 		case HealthPackType.Armor:
 			LevelInfo.Environments.control.Health = Mathf.Max(LevelInfo.Environments.control.Health,1f);
-			pickupname = "Protection";
+			pickupname = "Leathers";
 			break;
 			
 		case HealthPackType.BonusHeads:

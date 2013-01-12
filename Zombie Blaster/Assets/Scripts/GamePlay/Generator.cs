@@ -267,8 +267,11 @@ public class Generator : MonoBehaviour {
 	{
 		var level = LevelInfo.State.level[LevelInfo.Environments.control.currentLevel];
 		for(int i=0;i<level.allowedGun.Length;i++) 
-			if(!LevelInfo.Environments.guns.gun[(int)level.allowedGun[i]].EnabledGun)
+		{
+			int index = (int)level.allowedGun[i];
+			if(!LevelInfo.Environments.guns.gun[index].EnabledGun && LevelInfo.Environments.store.WeaponAvailable(index))
 				return false;
+		}
 		return true;
 	}
 	

@@ -66,6 +66,12 @@ public class SelectArea : MonoBehaviour {
 	
 	void OnEnable()
 	{
+		if( store.IsLevelOption && Store.FirstTimePlay )
+		{
+			StartGame(4,0);
+			return;
+		}
+		
 		play_index = unlock_index = -1;
 		GameEnvironment.StartWave = 0;
 		
@@ -78,9 +84,8 @@ public class SelectArea : MonoBehaviour {
 		}
 	}
 	
-	// Use this for initialization
-	void Start () {
-		
+	void Awake()
+	{
 		store = (Store)GameObject.FindObjectOfType(typeof(Store));
 		GameEnvironment.StartWave = 0;
 		
@@ -100,7 +105,7 @@ public class SelectArea : MonoBehaviour {
 
 		
 		for(int i=0;i<levelButton.Length;i++)
-			levelButton[i].canPressed = unlocked[i];
+			levelButton[i].canPressed = unlocked[i];	
 	}
 	
 	void Update()
@@ -145,6 +150,21 @@ public class SelectArea : MonoBehaviour {
 				play_index = i;	
 				GameEnvironment.StartWave = Store.HighestWaveCompleted(i);
 			}
+	}
+	
+	public void StartGame(int level,int wave)
+	{
+		audioUnlocked.Play();
+		GameEnvironment.StartLevel = level;
+		GameEnvironment.StartWave = wave;
+			
+		Destroy(GameObject.Find("Sound Background"));
+		Destroy(GameObject.Find("Sound Wind"));
+		guiLoading.SetActive(true);
+		guiFullscreen.texture = screen[Random.Range(0,screen.Length)];
+		guiTip.text = tip[Random.Range(0,tip.Length)];
+		play_index = -1;
+		Application.LoadLevel("playgame");			
 	}
 	
 	public GUIStyle myStyle;
@@ -218,7 +238,7 @@ public class SelectArea : MonoBehaviour {
 			GUI.Label(new Rect(0.35f*Screen.width,0.33f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),"Highest Wave Completed " + Store.HighestWaveCompleted(play_index),myStyle);
 			if(GUI.Button(new Rect(0.33f*Screen.width,0.55f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "PLAY", buttonStyle) )
 			{
-				audioUnlocked.Play();
+				/*audioUnlocked.Play();
 				GameEnvironment.StartLevel = play_index;
 				
 				Destroy(GameObject.Find("Sound Background"));
@@ -227,7 +247,8 @@ public class SelectArea : MonoBehaviour {
 				guiFullscreen.texture = screen[Random.Range(0,screen.Length)];
 				guiTip.text = tip[Random.Range(0,tip.Length)];
 				play_index = -1;
-				Application.LoadLevel("playgame");	
+				Application.LoadLevel("playgame");	*/
+				StartGame(play_index,GameEnvironment.StartWave);
 				return;
 			}
 			

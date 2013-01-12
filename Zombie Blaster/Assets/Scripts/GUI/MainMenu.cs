@@ -90,14 +90,18 @@ public class MainMenu : MonoBehaviour {
 		Time.timeScale = 1f;
 		GameObject.Find("Store").GetComponent<Store>().showStore = false;
 		GameObject.Find("Store").GetComponent<Store>().LoadingGUI.SetActive(false);
-		
-		Application.targetFrameRate = 60;
 	}
 	
 	// Use this for initialization
 	void Start ()
 	{
 		State = MenuState.MainMenu;
+		
+		if( GameEnvironment.firstTimePlayed )
+		{
+			GameEnvironment.firstTimePlayed = false;
+			State = MenuState.AreaMap;
+		}
 	}
 	
 	// Update is called once per frame

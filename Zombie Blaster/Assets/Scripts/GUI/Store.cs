@@ -55,7 +55,7 @@ public class Store : MonoBehaviour {
 	
 	#region Player Prefs
 	
-	public static int _playerprefs_zombieHeads=0;
+	private static int _playerprefs_zombieHeads=0;
 	public static int zombieHeads{
 		get
 		{
@@ -67,6 +67,21 @@ public class Store : MonoBehaviour {
 			PlayerPrefs.SetInt("zombieHeads",_playerprefs_zombieHeads);
 		}
 	}
+	
+	private static int _firsttimeplay=0;
+	public static bool FirstTimePlay
+	{
+		get
+		{
+			return _firsttimeplay==0;
+		}
+		set
+		{
+			_firsttimeplay = value?0:1;
+			PlayerPrefs.SetInt("zbfirsttimeplay",_firsttimeplay);		
+		}
+	}
+	
 	
 	private static int[] _playerprefs_unlockweapon = new int[countWeapons];
 	private static int[] _playerprefs_unlocklevel = new int[countLevel];
@@ -112,6 +127,9 @@ public class Store : MonoBehaviour {
 	{
 		// heads
 		_playerprefs_zombieHeads = PlayerPrefs.GetInt("zombieHeads",0);
+		
+		// forst time play
+		_firsttimeplay = PlayerPrefs.GetInt("zbfirsttimeplay",0);
 		
 		// weapons
 		Store._playerprefs_unlockweapon[0] = 1;
@@ -192,6 +210,7 @@ public class Store : MonoBehaviour {
 		//	PlayerPrefs.SetInt("weapon"+i,0);
 		//for(int i=0;i<_playerprefs_unlocklevel.Length;i++)
 		//	PlayerPrefs.SetInt("level"+i,0);
+		//PlayerPrefs.SetInt("zbfirsttimeplay",0);		
 	}
 	
 	public void OnApplicationQuit()
@@ -316,6 +335,20 @@ public class Store : MonoBehaviour {
 			else
 				alllevelsunlocked = false;
 		showWeapon[(int)Weapon.AlienBlaster]=alllevelsunlocked;
+	}
+	
+	/// <summary>
+	/// Weapon available for buy in store (caution: call UpdateWeaponAvailable() before this
+	/// </summary>
+	/// <returns>
+	/// availablity
+	/// </returns>
+	/// <param name='index'>
+	/// index of the weapon
+	/// </param>
+	public bool WeaponAvailable(int index)
+	{
+		return showWeapon[index];
 	}
 	
 	public bool IsLevelGamePlay { get { return Application.loadedLevelName == "playgame"; } }
@@ -815,7 +848,7 @@ public class Store : MonoBehaviour {
 				currentStashitem = wooi;
 				audio.Play();
 				Store.zombieHeads -= GameEnvironment.storeGun[wooi].price;
-				if( IsLevelGamePlay && ExistGunInCurrentLevel((Weapon)wooi))
+				if( IsLevelGamePlay && LevelInfo.Environments.control.ExistGunInCurrentLevel((Weapon)wooi))
 				{
 					//GameEnvironment.storeGun[wooi].store += 5*GameEnvironment.storeGun[wooi].pocketsize;
 					//GameEnvironment.storeGun[wooi].enabled = true;
@@ -934,15 +967,6 @@ public class Store : MonoBehaviour {
 				spwchannel = true;
 			}
 		}*/
-	}
-	
-	private bool ExistGunInCurrentLevel(Weapon w)
-	{
-		if( !IsLevelGamePlay ) return false;
-			foreach(Weapon c in weaponsForLevel[GameEnvironment.StartLevel] )
-				if( c == w )
-				return true;
-		return false;
 	}
 	
 	private bool RectContainPoint(Rect rect,Vector2 pos)

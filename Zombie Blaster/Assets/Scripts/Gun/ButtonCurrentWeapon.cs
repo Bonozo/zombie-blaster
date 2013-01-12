@@ -7,6 +7,8 @@ public class ButtonCurrentWeapon : MonoBehaviour {
 	public UISprite weaponSprite;
 	public UIFilledSprite percentSprite;
 	
+	private Color reloadColor = new Color(0.5f,0.5f,0.5f,1f);
+	
 	void OnPress(bool isDown)
 	{
 		if(LevelInfo.Environments.control.state == GameState.Paused || LevelInfo.Environments.control.state == GameState.Lose)
@@ -28,7 +30,7 @@ public class ButtonCurrentWeapon : MonoBehaviour {
 		// Icon and Colors
 		percentSprite.spriteName = weaponSprite.spriteName = "weapon_" + GameEnvironment.storeGun[LevelInfo.Environments.guns.CurrentWeaponIndex].name;
 		
-		percentSprite.color = LevelInfo.Environments.guns.CurrentWeapon.reloading?Color.green:Color.red;
+		percentSprite.color = LevelInfo.Environments.guns.CurrentWeapon.reloading?reloadColor:Color.red;
 		/*if(LevelInfo.Environments.guns.CurrentWeapon.reloading)
 			percentSprite.color = new Color(p,1f,p,1f);
 		else
