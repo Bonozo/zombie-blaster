@@ -7,6 +7,7 @@ public class ButtonMainMenu : MonoBehaviour {
 	
 	void OnPress(bool isDown)
 	{
+		if(Fade.InProcess) return;
 		if(!isDown)
 		{
 			GameObject.Find("Store").GetComponent<Store>().GoMainMenuFromGamePlay();

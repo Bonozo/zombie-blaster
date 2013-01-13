@@ -95,6 +95,7 @@ public class HealthPack : MonoBehaviour {
 	
 	void Update()
 	{
+		if(Fade.InProcess) return;
 		if( picked ) return;
 		var v = transform.rotation.eulerAngles;
 		v.x=v.z=0;
@@ -115,7 +116,6 @@ public class HealthPack : MonoBehaviour {
 		
 		foreach(Touch touch in Input.touches)
 		{
-        	
 	        if(touch.phase == TouchPhase.Began)
 			{
 				ray = LevelInfo.Environments.mainCamera.ScreenPointToRay(touch.position);

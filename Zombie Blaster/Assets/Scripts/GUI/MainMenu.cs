@@ -19,6 +19,9 @@ public class MainMenu : MonoBehaviour {
 	
 	#region Parameters
 	
+	public Fade fade;
+	public SelectArea map;
+	
 	public AudioSource audioCredits;
 	public AudioSource audioPressed;
 	public ButtonBase buttonOption,buttonPlay,buttonStore,buttonStats;
@@ -102,18 +105,28 @@ public class MainMenu : MonoBehaviour {
 			GameEnvironment.firstTimePlayed = false;
 			State = MenuState.AreaMap;
 		}
+		
+		fade.Hide();
 	}
 	
 	// Update is called once per frame
 	void Update()
 	{
+		if(oktogothmapforfirstgameplay) {fade.Disable(); State = MenuState.AreaMap; }
+		if(Fade.InProcess) return;
+		
 		switch(State)
 		{
 		case MenuState.MainMenu:
 			if( buttonOption.PressedUp )
 				State = MenuState.Option;
 			if( buttonPlay.PressedUp )
-				State = MenuState.AreaMap;
+			{
+				if( Store.FirstTimePlay )
+					StartCoroutine(FirstTimePlayThread());
+				else
+					State = MenuState.AreaMap;
+			}
 			if( buttonStats.PressedUp )
 				State = MenuState.Leaderboard;
 			if( buttonStore.PressedUp )
@@ -134,23 +147,19 @@ public class MainMenu : MonoBehaviour {
 		}
 	}
 	
-	void OnGUI()
+	private bool oktogothmapforfirstgameplay=false; // (:
+	public IEnumerator FirstTimePlayThread()
 	{
-		switch(State)
+		Fade.InProcess = true;
+		fade.Show();
+		while( !fade.Finished )
 		{
-		case MenuState.MainMenu:
-			break;
-		case MenuState.Option:
-			break;
-		case MenuState.Credits:
-			break;
-		case MenuState.AreaMap:
-			break;
-		case MenuState.Leaderboard:
-			break;
+			yield return new WaitForEndOfFrame();
 		}
-		
+		//fade.Disable();
+		yield return new WaitForEndOfFrame();
+		Fade.InProcess=false;
+		oktogothmapforfirstgameplay=true;
 	}
-	
 	#endregion
 }

@@ -378,6 +378,7 @@ public class Store : MonoBehaviour {
 	
 	void Update()
 	{
+		if(Fade.InProcess) return;
 		if(!_showStore) return;
 
 		int cco=0;
@@ -725,9 +726,33 @@ public class Store : MonoBehaviour {
 	public GUITexture guiFullscreen;
 	public GUIText guiTip;
 	
+	private IEnumerator GoMainMenuThread()
+	{
+		Fade.InProcess = true;
+		LevelInfo.Environments.fade.Show();
+		while( !LevelInfo.Environments.fade.Finished )
+		{
+			yield return new WaitForEndOfFrame();
+		}
+		
+		LevelInfo.Environments.control.guiPlayGame.SetActive(false);
+		LevelInfo.Environments.control.allowShowGUI = false;
+		showStore = false;
+		LevelInfo.Audio.StopAll();
+		Destroy(GameObject.Find("Audio Wind Loop"));
+		LoadingGUI.SetActive(true);
+		guiFullscreen.texture = screen[Random.Range(0,screen.Length)];
+		guiTip.text = tip[Random.Range(0,tip.Length)];
+		LevelInfo.Environments.fade.Disable();
+		yield return new WaitForEndOfFrame();
+		Fade.InProcess = false;
+		Application.LoadLevel("mainmenu");		
+		
+	}
+	
 	public void GoMainMenuFromGamePlay()
 	{
-		if(!IsLevelGamePlay) Debug.LogError("Error at Store->GoMainMenuFromGamePlay()");
+		/*if(!IsLevelGamePlay) Debug.LogError("Error at Store->GoMainMenuFromGamePlay()");
 		LevelInfo.Environments.control.guiPlayGame.SetActive(false);
 		LevelInfo.Environments.control.allowShowGUI = false;
 		showStore = false;
@@ -737,11 +762,16 @@ public class Store : MonoBehaviour {
 		LoadingGUI.SetActive(true);
 		guiFullscreen.texture = screen[Random.Range(0,screen.Length)];
 		guiTip.text = tip[Random.Range(0,tip.Length)];
-		Application.LoadLevel("mainmenu");		
+		LevelInfo.Environments.fade.Disable();
+		Application.LoadLevel("mainmenu");		*/
+		StartCoroutine(GoMainMenuThread());
+		
 	}
 	
 	void OnGUI()
 	{
+		if(Fade.InProcess) return;
+		
 		if(!_showStore) return;
 		
 		if( wantToExit ) // Only game play event
@@ -752,6 +782,7 @@ public class Store : MonoBehaviour {
 			
 			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Quit", buttonStyle ) )	
 			{
+				audio.PlayOneShot(clipQuitPlayGame);
 				GoMainMenuFromGamePlay();
 			}
 			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Back", buttonStyle ) )

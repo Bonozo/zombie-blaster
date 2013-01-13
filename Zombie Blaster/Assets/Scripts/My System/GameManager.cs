@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour {
 	public Control control;
 	public Store store;
 	public Generator generator;
+	public Fade fade;
 	public HealthPack healthPack;
 	public Guns guns;
 	public ScreenBlood screenBlood;
@@ -93,8 +94,6 @@ public class GameManager : MonoBehaviour {
 	public UIButton buttonPauseStore;
 	public UIButton buttonPauseMainMenu;
 	public UIButton buttonPauseResume;
-	
-	public UILabel fadeLabel;
 	
 	#endregion
 	

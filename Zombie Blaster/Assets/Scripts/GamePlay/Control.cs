@@ -250,7 +250,6 @@ public class Control : MonoBehaviour {
 				Time.timeScale = 0f;
 				LevelInfo.Audio.StopAll();
 				LevelInfo.Audio.PlayGameOver();
-				audio.Stop();
 				LevelInfo.Environments.hubLives.SetNumberWithFlash(LevelInfo.Environments.hubLives.GetNumber()-1);
 				break;
 			case GameState.Play:
@@ -363,6 +362,8 @@ public class Control : MonoBehaviour {
 		allowedWeapons = new bool[Store.countWeapons];
 		for(int i=0;i<LevelInfo.State.level[currentLevel].allowedGun.Length;i++)
 			allowedWeapons[(int)LevelInfo.State.level[currentLevel].allowedGun[i]]=true;
+		
+		LevelInfo.Environments.fade.Hide();
 	}
 
 		// Update is called once per frame
@@ -380,17 +381,19 @@ public class Control : MonoBehaviour {
 			health += 0.1f;
 		/////////////////////////////////
 		
+		if( Fade.InProcess ) return;
+		
 		// Update Zombie Heads Number On Screen
 		LevelInfo.Environments.hubZombieHeads.SetNumberWithFlash(Store.zombieHeads);
 		LevelInfo.Environments.guiPaused.SetActive(state == GameState.Paused);
-		if(lastZombieHeads != Store.zombieHeads)	
+		if(lastZombieHeads != Store.zombieHeads && !Store.FirstTimePlay)	
 		{
 			ShowStoreNotifiaction();
 			ShowMapNotification();
 		}
 		
-		LevelInfo.Environments.notificationStore.gameObject.SetActive(storeNotificationTime&&ScreenShowed&&!Store.FirstTimePlay);
-		LevelInfo.Environments.notificationMap.gameObject.SetActive(mapNotificationTime&&ScreenShowed&&!Store.FirstTimePlay);
+		LevelInfo.Environments.notificationStore.gameObject.SetActive(storeNotificationTime&&ScreenShowed);
+		LevelInfo.Environments.notificationMap.gameObject.SetActive(mapNotificationTime&&ScreenShowed);
 		lastZombieHeads = Store.zombieHeads;
 		
 		ShakeUpdates();
@@ -414,7 +417,7 @@ public class Control : MonoBehaviour {
 			{
 				if( Store.FirstTimePlay )
 				{
-					if(!prologuecomplete) StartCoroutine(PrologueComplete());
+					if(!prologuecomplete) PrologueComplete();
 				}
 				else
 					state = GameState.Lose; 
@@ -528,6 +531,7 @@ public class Control : MonoBehaviour {
 	public bool allowShowGUI = true;
 	void OnGUI()
 	{
+		if( Fade.InProcess) return;
 		if( !allowShowGUI) return;
 		switch(state)
 		{
@@ -965,7 +969,7 @@ public class Control : MonoBehaviour {
 		{
 			StartCoroutine(WaveComplete());
 			if( Store.FirstTimePlay )
-				StartCoroutine(PrologueComplete());
+				PrologueComplete();
 		}
 	}
 	
@@ -1056,23 +1060,13 @@ public class Control : MonoBehaviour {
 	}
 	
 	private bool prologuecomplete = false;
-	private IEnumerator PrologueComplete()
+	private void PrologueComplete()
 	{
 		prologuecomplete=true;
 		LevelInfo.Environments.buttonPause.isEnabled=false;
-		LevelInfo.Environments.fadeLabel.gameObject.SetActive(true);
-		LevelInfo.Environments.fadeLabel.alpha=0f;
-		float waittime = 5f;
-		while(waittime > 0f )
-		{
-			waittime -= Time.deltaTime;
-			LevelInfo.Environments.fadeLabel.alpha = (5f-waittime)/5f;
-			yield return new WaitForEndOfFrame();
-		}
 		Store.FirstTimePlay=false;
 		GameEnvironment.firstTimePlayed = true;
 		LevelInfo.Environments.store.GoMainMenuFromGamePlay();
-		StopAllCoroutines();
 	}
 	
 	#endregion

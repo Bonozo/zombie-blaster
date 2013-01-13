@@ -3,6 +3,8 @@ using System.Collections;
 
 public class SelectArea : MonoBehaviour {
 	
+	public Fade fade;
+	
 	public ButtonBase[] levelButton;
 	public GUITexture[] lockIcon;
 	public Texture headSack;
@@ -68,7 +70,15 @@ public class SelectArea : MonoBehaviour {
 	{
 		if( store.IsLevelOption && Store.FirstTimePlay )
 		{
-			StartGame(4,0);
+			// same code
+			GameEnvironment.StartLevel = 4; // Cemetary
+			GameEnvironment.StartWave = 0;
+			Destroy(GameObject.Find("Sound Background"));
+			Destroy(GameObject.Find("Sound Wind"));
+			guiLoading.SetActive(true);
+			guiFullscreen.texture = screen[Random.Range(0,screen.Length)];
+			guiTip.text = tip[Random.Range(0,tip.Length)];
+			Application.LoadLevel("playgame");
 			return;
 		}
 		
@@ -110,6 +120,8 @@ public class SelectArea : MonoBehaviour {
 	
 	void Update()
 	{
+		if(Fade.InProcess) return;
+		
 		headsText.text = "" + Store.zombieHeads;
 		
 		if( storeButton.PressedUp )
@@ -152,25 +164,42 @@ public class SelectArea : MonoBehaviour {
 			}
 	}
 	
-	public void StartGame(int level,int wave)
+	public IEnumerator StartGameThread()
 	{
-		audioUnlocked.Play();
-		GameEnvironment.StartLevel = level;
-		GameEnvironment.StartWave = wave;
-			
+		Fade.InProcess = true;
+		fade.Show();
+		while( !fade.Finished )
+		{
+			yield return new WaitForEndOfFrame();
+		}
+		
 		Destroy(GameObject.Find("Sound Background"));
 		Destroy(GameObject.Find("Sound Wind"));
 		guiLoading.SetActive(true);
 		guiFullscreen.texture = screen[Random.Range(0,screen.Length)];
 		guiTip.text = tip[Random.Range(0,tip.Length)];
 		play_index = -1;
-		Application.LoadLevel("playgame");			
+		fade.Disable();
+		yield return new WaitForEndOfFrame();
+		Fade.InProcess=false;
+		Application.LoadLevel("playgame");
+	}
+	
+	public void StartGame(int level,int wave)
+	{
+		audioUnlocked.Play();
+		GameEnvironment.StartLevel = level;
+		GameEnvironment.StartWave = wave;
+		popupTexture.enabled = false;
+		StartCoroutine(StartGameThread());
 	}
 	
 	public GUIStyle myStyle;
 	public GUIStyle buttonStyle;
 	void OnGUI ()
 	{ 
+		if(Fade.InProcess) return;
+		
 		popupTexture.enabled = unlock_index != -1 || play_index != -1;
 		if( unlock_index != -1 )
 		{
@@ -236,7 +265,7 @@ public class SelectArea : MonoBehaviour {
 		if( play_index != -1 )
 		{
 			GUI.Label(new Rect(0.35f*Screen.width,0.33f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),"Highest Wave Completed " + Store.HighestWaveCompleted(play_index),myStyle);
-			if(GUI.Button(new Rect(0.33f*Screen.width,0.55f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "PLAY", buttonStyle) )
+			if(GUI.Button(new Rect(0.33f*Screen.width,0.55f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "PLAY", buttonStyle))
 			{
 				/*audioUnlocked.Play();
 				GameEnvironment.StartLevel = play_index;
@@ -268,7 +297,7 @@ public class SelectArea : MonoBehaviour {
 			
 			
 			
-			if( GUI.Button(new Rect(0.52f*Screen.width,0.55f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "BACK", buttonStyle ) )
+			if( GUI.Button(new Rect(0.52f*Screen.width,0.55f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "BACK", buttonStyle ))
 			{
 				audioUnlocked.Stop();
 				audioBack.Play();

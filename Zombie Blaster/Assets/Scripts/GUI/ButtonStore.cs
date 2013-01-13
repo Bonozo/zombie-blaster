@@ -7,6 +7,7 @@ public class ButtonStore : MonoBehaviour {
 	
 	void OnPress(bool isDown)
 	{
+		if(Fade.InProcess) return;
 		if(!isDown)
 		{
 			if( LevelInfo.Environments.control.state == GameState.Lose )
