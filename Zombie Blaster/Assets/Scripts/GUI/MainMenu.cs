@@ -24,7 +24,7 @@ public class MainMenu : MonoBehaviour {
 	
 	public AudioSource audioCredits;
 	public AudioSource audioPressed;
-	public ButtonBase buttonOption,buttonPlay,buttonStore,buttonStats;
+	public ButtonBase buttonOption,buttonPlay,buttonStore,buttonStats,buttonQuit;
 	public GameObject objMenu,objOption,objCreadits,objAreaMap,objLeaderboard;
 	public AudioSource SoundBackground,SoundWind;
 	public ButtonBase backButton;
@@ -71,23 +71,6 @@ public class MainMenu : MonoBehaviour {
 	
 	#region Methods
 	
-	private bool ButtonPressed(GUITexture button)
-	{
-		foreach(Touch touch in Input.touches)
-			if( button.HitTest(touch.position) && touch.phase == TouchPhase.Ended)
-			{
-				//if( audioPressed != null ) audioPressed.Play();
-				return true;
-			}
-		if( Input.GetMouseButtonUp(0) && button.HitTest(Input.mousePosition) )
-		{
-			//if( audioPressed != null ) audioPressed.Play();
-			return true;
-		}
-		
-		return false;
-	}
-	
 	void Awake()
 	{
 		Time.timeScale = 1f;
@@ -133,6 +116,13 @@ public class MainMenu : MonoBehaviour {
 			{
 				State = MenuState.Store;
 			}
+			
+			if( buttonQuit.PressedUp )
+			{
+				buttonQuit.DisableButtonForUse();
+				Application.Quit();
+			}
+			
 			break;
 		
 		case MenuState.Credits:

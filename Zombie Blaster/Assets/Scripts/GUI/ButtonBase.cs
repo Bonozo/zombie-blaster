@@ -7,6 +7,7 @@ public class ButtonBase : MonoBehaviour {
 	public Texture standartTexture;
 	public Texture pressedTexture;
 	public bool canPressed = true;
+	public GUITexture workingGUI;
 	
 	/*private bool st = false;
 	
@@ -54,11 +55,16 @@ public class ButtonBase : MonoBehaviour {
 	
 	public void Ignore() { down=up=false; }
 	
+	virtual protected void Start()
+	{
+		if(workingGUI==null) workingGUI=this.guiTexture;
+	}
+	
 	virtual protected void Update()
 	{
 		foreach(Touch touch in Input.touches)
 		{
-			if( this.guiTexture.HitTest(touch.position ) )
+			if( workingGUI.HitTest(touch.position ) )
 			{
 				if(!aspressed) guiTexture.texture = (touch.phase!=TouchPhase.Ended && canPressed)?pressedTexture:standartTexture;
 				if( touch.phase == TouchPhase.Began ) down = true;
@@ -67,7 +73,7 @@ public class ButtonBase : MonoBehaviour {
 			}
 		}
 		
-		if( this.guiTexture.HitTest(Input.mousePosition) )
+		if( workingGUI.HitTest(Input.mousePosition) )
 		{
 			if( Input.GetMouseButtonDown(0) ) down=true;
 			if( Input.GetMouseButtonUp(0) && down) up=true;
@@ -84,5 +90,11 @@ public class ButtonBase : MonoBehaviour {
 	{
 		aspressed = true;
 		guiTexture.texture = pressedTexture;
+	}
+	
+	public void DisableButtonForUse()
+	{
+		canPressed = false;
+		guiTexture.texture = standartTexture;
 	}
 }

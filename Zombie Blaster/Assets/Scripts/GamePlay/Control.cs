@@ -435,17 +435,20 @@ public class Control : MonoBehaviour {
 		
 		if( AutoTargeting ) return;
 		
-		if( GameEnvironment.AbsoluteSwipe.y >= 0.3f )
+		Vector3 abswipe = GameEnvironment.AbsoluteSwipe;
+		if( abswipe.y>Mathf.Abs(abswipe.x) && abswipe.y>=0.1f )
 		{
 			GameObject[] zombies = GameObject.FindGameObjectsWithTag("Zombie");
+			bool nearzombie = false;
+			
 			foreach(var z in zombies )
-			{
-				if( GameEnvironment.DistXZ(z.transform.position,transform.position) <= 1.5f &&
-					camera.WorldToScreenPoint(z.transform.position).z > 0 )
+				if( GameEnvironment.DistXZ(z.transform.position,transform.position) <= 1.5f && camera.WorldToScreenPoint(z.transform.position).z > 0 )
 				{
 					z.SendMessage("ThrowOut");
+					nearzombie = true;
 				}
-			}
+			if(nearzombie) 
+				LevelInfo.Audio.PlayPlayerShove();
 		}
 		
 		// Auto Targeting Updates

@@ -124,6 +124,12 @@ public class AudioManager : MonoBehaviour {
 		audioSourcePlayer.PlayOneShot(AudioZombieHeadshot);
 	}
 	
+	public AudioClip clipShove;
+	public void PlayPlayerShove()
+	{
+		audioSourcePlayer.PlayOneShot(clipShove);
+	}
+	
 	#endregion
 	
 	#region PickUps

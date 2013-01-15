@@ -22,6 +22,7 @@ public class HealthPack : MonoBehaviour {
 	public float Health = 0.1f;
 	public float DeadTime = 20f;
 	
+	private float rotateSpeed = 150f;
 	private float StartHeight = 2.5f;
 	
 	private RaycastHit hit;
@@ -97,10 +98,7 @@ public class HealthPack : MonoBehaviour {
 	{
 		if(Fade.InProcess) return;
 		if( picked ) return;
-		var v = transform.rotation.eulerAngles;
-		v.x=v.z=0;
 		
-
 		autopickuptime -= Time.deltaTime;
 		if( autopickuptime <= 0f && GameEnvironment.DistXZ(transform.position,LevelInfo.Environments.control.transform.position) < 2.8f )
 		{
@@ -109,7 +107,13 @@ public class HealthPack : MonoBehaviour {
 			return;
 		}
 		
+		var v = transform.rotation.eulerAngles;
+		v.x=v.z=0;
 		transform.rotation = Quaternion.Euler(v);
+		if(rigbd) transform.Rotate(0,rotateSpeed*Time.deltaTime,0);
+		
+		
+		
 		if( LevelInfo.Environments.control.state == GameState.Paused ) return;
 		if( (DeadTime -= Time.deltaTime) <= 0 ) Destroy(this.gameObject);
 
@@ -132,8 +136,19 @@ public class HealthPack : MonoBehaviour {
 				StartCoroutine(PickedUp());
 	}
 	
+	bool rigbd=false;
+	void OnCollisionEnter()
+	{
+		if(!rigbd)
+		{
+			Destroy(this.rigidbody);
+			rigbd=true;
+		}
+	}
+	
 	private IEnumerator PickedUp()
 	{
+		gameObject.AddComponent("Rigidbody");
 		if(rgb) rigidbody.AddForce(0,200,0);
 		GameEnvironment.IgnoreButtons();
 		picked = true;
