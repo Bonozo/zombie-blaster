@@ -288,9 +288,13 @@ public class Control : MonoBehaviour {
 	{
 		currentLevel = levelnumber;
 		currentWave = currentwave;
-		foreach(var c in LevelInfo.State.level)
-			c.hierarchyPlace.SetActiveRecursively(false);
-		LevelInfo.State.level[currentLevel].hierarchyPlace.SetActiveRecursively(true);
+		
+		GameObject level = (GameObject)Instantiate(LevelInfo.State.level[currentLevel].hierarchyPlace);
+		level.SetActive(true);
+		level.transform.parent = GameObject.Find("Environments").transform;
+		//foreach(var c in LevelInfo.State.level)
+		//	c.hierarchyPlace.SetActiveRecursively(false);
+		//LevelInfo.State.level[currentLevel].hierarchyPlace.SetActiveRecursively(true);
 	}
 	
 	#endregion
