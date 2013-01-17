@@ -439,7 +439,7 @@ public class Store : MonoBehaviour {
 		bool enableshowshopitems = currentshopitem != -1 && shopitemslidecount==0;
 		
 		ShopWeaponName.enabled = enableshowshopitems;
-		ShopWeaponBuyText.enabled = enableshowshopitems;
+		ShopWeaponBuyText.enabled = enableshowshopitems&&showWeapon[currentshopitem];;
 		shopInfoButton.gameObject.SetActive(enableshowshopitems&&showWeapon[currentshopitem]);
 		shotItemBuy.gameObject.SetActive(enableshowshopitems&&showWeapon[currentshopitem]);
 		shotItemBuy.enabled = enableshowshopitems&&showWeapon[currentshopitem]&&wooi==-1;
@@ -609,6 +609,20 @@ public class Store : MonoBehaviour {
 		}
 	}
 	
+	public void DisableStoreButtons()
+	{
+		buttonMainMenu.DisableButtonForUse();
+		buttonGet1000Heads.DisableButtonForUse();
+		buttonGAME.DisableButtonForUse();
+	}
+	
+	public void EnableStoreButtons()
+	{
+		buttonMainMenu.EnableButtonForUse();
+		buttonGet1000Heads.EnableButtonForUse();
+		buttonGAME.EnableButtonForUse();
+	}
+	
 	private int shopitemslidecount=0;
 	private IEnumerator ShopItemsSlide(GameObject obj,float y1,float y2)
 	{
@@ -728,8 +742,9 @@ public class Store : MonoBehaviour {
 	
 	private IEnumerator GoMainMenuThread()
 	{
+		DisableStoreButtons();
 		Fade.InProcess = true;
-		LevelInfo.Environments.fade.Show();
+		LevelInfo.Environments.fade.Show(3f);
 		while( !LevelInfo.Environments.fade.Finished )
 		{
 			yield return new WaitForEndOfFrame();
@@ -745,6 +760,7 @@ public class Store : MonoBehaviour {
 		guiTip.text = tip[Random.Range(0,tip.Length)];
 		LevelInfo.Environments.fade.Disable();
 		yield return new WaitForEndOfFrame();
+		EnableStoreButtons();
 		Fade.InProcess = false;
 		Application.LoadLevel("mainmenu");		
 		

@@ -62,6 +62,8 @@ public class ButtonBase : MonoBehaviour {
 	
 	virtual protected void Update()
 	{
+		if(dsbl) return;
+		
 		foreach(Touch touch in Input.touches)
 		{
 			if( workingGUI.HitTest(touch.position ) )
@@ -92,9 +94,15 @@ public class ButtonBase : MonoBehaviour {
 		guiTexture.texture = pressedTexture;
 	}
 	
+	private bool dsbl = false;
 	public void DisableButtonForUse()
 	{
-		canPressed = false;
+		dsbl = true;
 		guiTexture.texture = standartTexture;
+	}
+	
+	public void EnableButtonForUse()
+	{
+		dsbl = false;
 	}
 }

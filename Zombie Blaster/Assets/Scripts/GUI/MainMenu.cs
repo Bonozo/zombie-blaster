@@ -27,7 +27,7 @@ public class MainMenu : MonoBehaviour {
 	public ButtonBase buttonOption,buttonPlay,buttonStore,buttonStats,buttonQuit;
 	public GameObject objMenu,objOption,objCreadits,objAreaMap,objLeaderboard;
 	public AudioSource SoundBackground,SoundWind;
-	public ButtonBase backButton;
+	public ButtonBase buttonBack,buttonFacebook,buttonTwitter;
 	
 	private MenuState _state;
 	private MenuState State{
@@ -48,7 +48,7 @@ public class MainMenu : MonoBehaviour {
 			objAreaMap.SetActiveRecursively(_state == MenuState.AreaMap);
 			objLeaderboard.SetActiveRecursively(_state == MenuState.Leaderboard);
 			
-			backButton.gameObject.SetActive(_state == MenuState.AreaMap || _state == MenuState.Leaderboard || _state == MenuState.Option || _state == MenuState.Credits );
+			buttonBack.gameObject.SetActive(_state == MenuState.AreaMap || _state == MenuState.Leaderboard || _state == MenuState.Option || _state == MenuState.Credits );
 			
 			if( _state == MenuState.AreaMap )
 				SoundBackground.Stop();
@@ -89,7 +89,7 @@ public class MainMenu : MonoBehaviour {
 			State = MenuState.AreaMap;
 		}
 		
-		fade.Hide();
+		fade.Hide(1.5f);
 	}
 	
 	// Update is called once per frame
@@ -126,13 +126,13 @@ public class MainMenu : MonoBehaviour {
 			break;
 		
 		case MenuState.Credits:
-			if( backButton.PressedUp ) State = MenuState.Option;
+			if( buttonBack.PressedUp ) State = MenuState.Option;
 			break;
 		case MenuState.AreaMap:
 		case MenuState.Leaderboard:
 		case MenuState.Option:
 			//if( Input.GetKeyUp(KeyCode.Escape) ) State = MenuState.MainMenu;
-			if( backButton.PressedUp  ) State = MenuState.MainMenu;
+			if( buttonBack.PressedUp  ) State = MenuState.MainMenu;
 			break;
 		}
 	}
@@ -140,8 +140,9 @@ public class MainMenu : MonoBehaviour {
 	private bool oktogothmapforfirstgameplay=false; // (:
 	public IEnumerator FirstTimePlayThread()
 	{
+		DisableMenuButtons();
 		Fade.InProcess = true;
-		fade.Show();
+		fade.Show(1.5f);
 		while( !fade.Finished )
 		{
 			yield return new WaitForEndOfFrame();
@@ -151,5 +152,22 @@ public class MainMenu : MonoBehaviour {
 		Fade.InProcess=false;
 		oktogothmapforfirstgameplay=true;
 	}
+	#endregion
+	
+	#region Methods
+	
+	public void DisableMenuButtons()
+	{
+		buttonOption.DisableButtonForUse();
+		buttonPlay.DisableButtonForUse();
+		buttonStore.DisableButtonForUse();
+		buttonStats.DisableButtonForUse();
+		buttonQuit.DisableButtonForUse();
+		buttonBack.DisableButtonForUse();
+		buttonFacebook.DisableButtonForUse();
+		buttonTwitter.DisableButtonForUse();
+	
+	}
+	
 	#endregion
 }

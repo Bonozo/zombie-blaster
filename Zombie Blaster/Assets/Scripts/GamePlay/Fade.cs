@@ -35,16 +35,18 @@ public class Fade : MonoBehaviour {
 		if(down && setalphadelta(-downSpeed*deltaTime)==-1) {down=false; gui.SetActive(false); }
 	}
 	
-	public void Show()
+	public void Show(float speed)
 	{
+		this.upSpeed = 0.5f/speed;
 		gui.SetActive(true);
 		if(!down) setalphato(.0f);
 		up=true;
 		down=false;
 	}
 	
-	public void Hide()
+	public void Hide(float speed)
 	{
+		this.downSpeed = 0.5f/speed;
 		gui.SetActive(true);
 		if(!up) setalphato(.5f);
 		down=true;
@@ -56,6 +58,7 @@ public class Fade : MonoBehaviour {
 	/// </summary>
 	public void Disable()
 	{
+		up = down = false;
 		gui.SetActive(false);
 	}
 	

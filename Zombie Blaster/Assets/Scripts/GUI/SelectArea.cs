@@ -34,7 +34,10 @@ public class SelectArea : MonoBehaviour {
 	private int unlock_index = -1;
 	private int play_index = -1;
 	private int countUnlocked=0;
-
+	
+	private Color colorGreen = new Color(0f,1f,0f,0.5f);
+	private Color colorWhite = new Color(1f,1f,1f,0.5f);
+	
 	private void UpdateSelectAreaScreen()
 	{
 		foreach(var g in bloods )
@@ -47,7 +50,7 @@ public class SelectArea : MonoBehaviour {
 		{
 			lockIcon[i].enabled = !unlocked[i];
 			lockIcon[i].gameObject.GetComponent<ColorPlay>().colmax = 
-				(GameEnvironment.levelPrice[i] <= Store.zombieHeads?Color.green:Color.white);		
+				(GameEnvironment.levelPrice[i] <= Store.zombieHeads?colorGreen:colorWhite);		
 			lockIcon[i].gameObject.GetComponent<ColorPlay>().speed = 
 				(GameEnvironment.levelPrice[i] <= Store.zombieHeads?2:1);
 			lockIcon[i].gameObject.GetComponent<ColorPlay>().pause = 
@@ -167,7 +170,14 @@ public class SelectArea : MonoBehaviour {
 	public IEnumerator StartGameThread()
 	{
 		Fade.InProcess = true;
-		fade.Show();
+		if( store.IsLevelOption )
+		{
+			MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
+			mainmenu.DisableMenuButtons();
+		}
+		else
+			backToGameForGamePlay.DisableButtonForUse();
+		fade.Show(1.5f);
 		while( !fade.Finished )
 		{
 			yield return new WaitForEndOfFrame();

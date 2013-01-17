@@ -176,7 +176,6 @@ public class Generator : MonoBehaviour {
 				civilianRate = Random.Range(5f,10f);
 			}
 		}
-
 	}
 
 	#region Message text
