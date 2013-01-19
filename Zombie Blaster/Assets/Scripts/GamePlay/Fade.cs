@@ -23,12 +23,6 @@ public class Fade : MonoBehaviour {
 	private bool up;
 	private bool down;
 	
-	void Start()
-	{
-		upSpeed = 0.5f/upSpeed;
-		downSpeed = 0.5f/downSpeed;
-	}
-	
 	void Update()
 	{
 		if(up && setalphadelta(upSpeed*deltaTime)==1 ) { up=false; }

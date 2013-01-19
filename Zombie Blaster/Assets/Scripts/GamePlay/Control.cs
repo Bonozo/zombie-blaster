@@ -284,25 +284,30 @@ public class Control : MonoBehaviour {
 	private static int startScore = 0;
 	private static int startLives = 1;	
 	
-	public void ForceLevel(int levelnumber,int currentwave)
+	public IEnumerator ForceLevel(int levelnumber,int currentwave)
 	{
 		currentLevel = levelnumber;
 		currentWave = currentwave;
 		
+		Instantiate((GameObject)Resources.Load("Environments/"+LevelInfo.State.level[currentLevel].name));
+		yield return new WaitForEndOfFrame();
+		/*??*/Resources.UnloadUnusedAssets();//First Time call
+		
 		//GameObject level = (GameObject)Instantiate(LevelInfo.State.level[currentLevel].hierarchyPlace);
 		//level.SetActive(true);
 		//level.transform.parent = GameObject.Find("Environments").transform;
-		foreach(var c in LevelInfo.State.level)
+		
+		/*foreach(var c in LevelInfo.State.level)
 			c.hierarchyPlace.SetActiveRecursively(false);
-		LevelInfo.State.level[currentLevel].hierarchyPlace.SetActiveRecursively(true);
+		LevelInfo.State.level[currentLevel].hierarchyPlace.SetActiveRecursively(true);*/
 	}
 	
 	#endregion
 	
-	#region Start , Update
+	#region Awake, Start , Update
 	
 	void Awake()
-	{
+	{	
 		if( Store.FirstTimePlay )
 		{
 			LevelInfo.Environments.buttonMap.isEnabled=false;
@@ -339,7 +344,7 @@ public class Control : MonoBehaviour {
 		int vi = GameEnvironment.StartWave % VantagePoints.Length;
 		transform.position = new Vector3(VantagePoints[vi].x,transform.position.y,VantagePoints[vi].z);
 		
-		ForceLevel(GameEnvironment.StartLevel,GameEnvironment.StartWave);
+		StartCoroutine(ForceLevel(GameEnvironment.StartLevel,GameEnvironment.StartWave));
 		
 		CreateNewZombieWave();
 		
@@ -374,6 +379,7 @@ public class Control : MonoBehaviour {
 	void Update () 
 	{
 		// Testing
+		
 		if(Input.GetKeyUp(KeyCode.PageUp))
 			DamageMultiply();
 		if(Input.GetKeyUp(KeyCode.PageDown))

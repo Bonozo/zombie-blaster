@@ -742,6 +742,8 @@ public class Store : MonoBehaviour {
 	
 	private IEnumerator GoMainMenuThread()
 	{
+		/*??*/Resources.UnloadUnusedAssets();//2rd time call
+		
 		DisableStoreButtons();
 		Fade.InProcess = true;
 		LevelInfo.Environments.fade.Show(3f);
