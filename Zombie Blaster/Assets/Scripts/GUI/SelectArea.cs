@@ -192,6 +192,7 @@ public class SelectArea : MonoBehaviour {
 		fade.Disable();
 		yield return new WaitForEndOfFrame();
 		Fade.InProcess=false;
+		
 		Application.LoadLevel("playgame");
 	}
 	

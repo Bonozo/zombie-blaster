@@ -376,8 +376,17 @@ public class Store : MonoBehaviour {
 		#endif
 	}
 	
+	private bool exitVerified = false;
+	
 	void Update()
 	{
+		if(exitVerified)
+		{
+			exitVerified=false;
+			Application.LoadLevel("mainmenu");
+			return;
+		}
+		
 		if(Fade.InProcess) return;
 		if(!_showStore) return;
 
@@ -742,8 +751,6 @@ public class Store : MonoBehaviour {
 	
 	private IEnumerator GoMainMenuThread()
 	{
-		/*??*/Resources.UnloadUnusedAssets();//2rd time call
-		
 		DisableStoreButtons();
 		Fade.InProcess = true;
 		LevelInfo.Environments.fade.Show(3f);
@@ -764,7 +771,20 @@ public class Store : MonoBehaviour {
 		yield return new WaitForEndOfFrame();
 		EnableStoreButtons();
 		Fade.InProcess = false;
-		Application.LoadLevel("mainmenu");		
+		
+		GameObject[] z;
+		z = GameObject.FindGameObjectsWithTag("Zombie");
+		foreach(var g in z) Destroy(g);	
+		z = GameObject.FindGameObjectsWithTag("ZombieRagdoll");
+		foreach(var g in z) Destroy(g);	
+		Destroy(LevelInfo.Environments.generator.objLevel);
+		LevelInfo.Environments.generator.zombiestospawn = null;
+		yield return null;
+		
+		AsyncOperation unload = Resources.UnloadUnusedAssets();
+		while(unload.isDone) yield return null;
+		
+		exitVerified = true;		
 		
 	}
 	

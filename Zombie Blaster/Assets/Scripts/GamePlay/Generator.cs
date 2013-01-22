@@ -3,6 +3,70 @@ using System.Collections;
 
 public class Generator : MonoBehaviour {
 	
+	#region Zombies As Resourses Test
+	[System.Serializable]
+	public class LevelZombie
+	{
+		public string name;
+		public int count;
+		public int fromwave;
+	}
+	
+	[System.Serializable]
+	public class LevelZombies
+	{
+		public string name;
+		public LevelZombie[] zombie;
+		public LevelZombie[] scoobyZombies;
+	}
+	
+	public LevelZombies[] levelZombies;
+	public GameObject[] zombiestospawn;
+	public GameObject objLevel;
+
+	#endregion
+	
+	private string GetZombieResourcePath(LevelZombie z,int cur)
+	{
+		string path = "Zombies/" + z.name + "(" + 
+			z.count + ")/" + z.name + cur + 
+				"/" + z.name + cur;	;
+		return path;
+	}
+	
+	IEnumerator Start()
+	{
+		AsyncOperation unload = Resources.UnloadUnusedAssets();
+		while(unload.isDone) yield return null;
+		
+		int lev = GameEnvironment.StartLevel;
+		
+		objLevel = (GameObject)Instantiate(Resources.Load("Environments/"+LevelInfo.State.level[GameEnvironment.StartLevel].name));
+		objLevel.SetActive(true);
+		objLevel.transform.parent = GameObject.Find("Environments").transform;
+		
+		int n=0;
+		for(int i=0;i<levelZombies[lev].zombie.Length;i++)
+			for(int j=1;j<=levelZombies[lev].zombie[i].count;j++)
+				n++;
+		
+		zombiestospawn = new GameObject[n];
+		
+		n=0;
+		for(int i=0;i<levelZombies[lev].zombie.Length;i++)
+			for(int j=1;j<=levelZombies[lev].zombie[i].count;j++)
+			{
+				zombiestospawn[n++] = (GameObject)Resources.Load(GetZombieResourcePath(levelZombies[lev].zombie[i],j));
+			}
+	}
+	
+	/*public void OnGUI()
+	{
+		//GUI.Label(new Rect(100,100,100,100),"len = " + zombiestospawn.Length);
+		//if( zombiestospawn.Length>0 && zombiestospawn[0] == null )
+		//	GUI.Label(new Rect(100,150,100,100),"first emelemt is null");
+	}*/
+	
 	#region Zombies
 	
 	public bool generateZombies = false;
@@ -11,16 +75,28 @@ public class Generator : MonoBehaviour {
 	
 	public GameObject EmoKidZombie;
 	
-	private float zombieRate = 3f;
+	private float zombieRate = 0;
 	private int zombiesLeft = 0;
 	private int scoobyZombieCount = 10;
 	
 	private GameObject WhatZombieToSpawn()
-	{
-		GameObject z;
+	{	
+		GameObject zombie = (GameObject)Instantiate(zombiestospawn[Random.Range(0,zombiestospawn.Length)]
+			,RandomPosition(),Quaternion.Euler(0,180,0));
+		return zombie;
+		
+		/*int index = Random.Range(0,levelZombies.Length);
+		int cur = Random.Range(1,levelZombies[index].count+1);
+		string path = "Zombies/" + levelZombies[index].name + "(" + 
+			levelZombies[index].count + ")/" + levelZombies[index].name + cur + 
+				"/" + levelZombies[index].name + cur;
+		//Debug.Log(path);
+		GameObject zombie = (GameObject)Instantiate(Resources.Load(path,typeof(GameObject)),RandomPosition(),Quaternion.Euler(0,180,0));
+		return zombie;*/
+		
+		
+		/*GameObject z;
 		var level = LevelInfo.State.level[LevelInfo.Environments.control.currentLevel];
-		
-		
 		
 		// special for Farm Level
 		if( LevelInfo.Environments.control.currentLevel == 0 )
@@ -52,7 +128,7 @@ public class Generator : MonoBehaviour {
 			}
 			scoobyZombieCount--;
 		}
-		return (GameObject)Instantiate(z,RandomPosition(),Quaternion.Euler(0,180,0) );
+		return (GameObject)Instantiate(z,RandomPosition(),Quaternion.Euler(0,180,0) );*/
 	}
 	
 	// Where to spawn
@@ -114,7 +190,7 @@ public class Generator : MonoBehaviour {
 	{
 		zombiesLeft = numberzombies;
 		generateZombies = true;
-		zombieRate = 3f;
+		zombieRate = zombieRate = Random.Range(GenerationRateMin,GenerationRateMax);
 	}
 	
 	#endregion
@@ -138,10 +214,6 @@ public class Generator : MonoBehaviour {
 	
 	#endregion
 	
-	// Use this for initialization
-	void Start () {
-	}
-	
 	// Update is called once per frame
 	void Update () {
 		
@@ -154,7 +226,9 @@ public class Generator : MonoBehaviour {
 				zombieRate = Random.Range(GenerationRateMin,GenerationRateMax);
 				
 				GameObject newzombie = WhatZombieToSpawn();
-				if( NearAtZombie(newzombie) ) 
+				if(newzombie == null ) 
+					Debug.Log("New generated zombie is null");
+				else if( NearAtZombie(newzombie) ) 
 				{
 					Destroy(newzombie);
 					return;

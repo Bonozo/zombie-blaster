@@ -284,18 +284,18 @@ public class Control : MonoBehaviour {
 	private static int startScore = 0;
 	private static int startLives = 1;	
 	
-	public IEnumerator ForceLevel(int levelnumber,int currentwave)
+	public void ForceLevel(int levelnumber,int currentwave)
 	{
 		currentLevel = levelnumber;
 		currentWave = currentwave;
 		
-		Instantiate((GameObject)Resources.Load("Environments/"+LevelInfo.State.level[currentLevel].name));
-		yield return new WaitForEndOfFrame();
-		/*??*/Resources.UnloadUnusedAssets();//First Time call
+		/*Instantiate((GameObject)Resources.Load("Environments/"+LevelInfo.State.level[currentLevel].name));
+		yield return new WaitForSeconds(0.5f);
+		Resources.UnloadUnusedAssets();*/
 		
-		//GameObject level = (GameObject)Instantiate(LevelInfo.State.level[currentLevel].hierarchyPlace);
-		//level.SetActive(true);
-		//level.transform.parent = GameObject.Find("Environments").transform;
+		/*GameObject level = (GameObject)Instantiate(LevelInfo.State.level[currentLevel].hierarchyPlace);
+		level.SetActive(true);
+		level.transform.parent = GameObject.Find("Environments").transform;*/
 		
 		/*foreach(var c in LevelInfo.State.level)
 			c.hierarchyPlace.SetActiveRecursively(false);
@@ -307,7 +307,7 @@ public class Control : MonoBehaviour {
 	#region Awake, Start , Update
 	
 	void Awake()
-	{	
+	{			
 		if( Store.FirstTimePlay )
 		{
 			LevelInfo.Environments.buttonMap.isEnabled=false;
@@ -344,7 +344,7 @@ public class Control : MonoBehaviour {
 		int vi = GameEnvironment.StartWave % VantagePoints.Length;
 		transform.position = new Vector3(VantagePoints[vi].x,transform.position.y,VantagePoints[vi].z);
 		
-		StartCoroutine(ForceLevel(GameEnvironment.StartLevel,GameEnvironment.StartWave));
+		ForceLevel(GameEnvironment.StartLevel,GameEnvironment.StartWave);
 		
 		CreateNewZombieWave();
 		
@@ -374,8 +374,8 @@ public class Control : MonoBehaviour {
 		
 		LevelInfo.Environments.fade.Hide(3f);
 	}
-
-		// Update is called once per frame
+	
+	// Update is called once per frame
 	void Update () 
 	{
 		// Testing
