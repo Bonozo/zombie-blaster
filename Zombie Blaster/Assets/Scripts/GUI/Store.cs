@@ -378,18 +378,8 @@ public class Store : MonoBehaviour {
 	
 	private bool exitVerified = false;
 	
-	void Update()
+	private void ScrollingUpdate()
 	{
-		if(exitVerified)
-		{
-			exitVerified=false;
-			Application.LoadLevel("mainmenu");
-			return;
-		}
-		
-		if(Fade.InProcess) return;
-		if(!_showStore) return;
-
 		int cco=0;
 		for(int i=0;i<countWeapons;i++)
 				if( WeaponUnlocked(i) ) cco++;
@@ -404,8 +394,23 @@ public class Store : MonoBehaviour {
 				v.y = 0.5f + 0.1f*Mathf.Sin(2*scrollingTime);
 				c.transform.position = v;
 			}
+		}		
+	}
+	
+	void Update()
+	{
+		if(exitVerified)
+		{
+			exitVerified=false;
+			Application.LoadLevel("mainmenu");
+			return;
 		}
 		
+		if(!_showStore) return;
+
+		ScrollingUpdate();
+		
+		if(Fade.InProcess) return;
 		if( wantToExit ) return;
 		
 		UpdateZombieHeads();
@@ -777,8 +782,14 @@ public class Store : MonoBehaviour {
 		foreach(var g in z) Destroy(g);	
 		z = GameObject.FindGameObjectsWithTag("ZombieRagdoll");
 		foreach(var g in z) Destroy(g);	
+		
+		int lev = LevelInfo.Environments.control.currentLevel;
+		for(int i=0;i<LevelInfo.Environments.generator.levelZombies[lev].zombie.Length;i++)
+			for(int j=1;j<=LevelInfo.Environments.generator.levelZombies[lev].zombie[i].count;j++)
+				LevelInfo.Environments.generator.levelZombies[lev].zombie[i].obj = null;
+		for(int i=0;i<LevelInfo.Environments.generator.levelZombies[lev].scoobyZombies.Length;i++)
+			LevelInfo.Environments.generator.levelZombies[lev].scoobyZombies[i].obj = null;
 		Destroy(LevelInfo.Environments.generator.objLevel);
-		LevelInfo.Environments.generator.zombiestospawn = null;
 		yield return null;
 		
 		AsyncOperation unload = Resources.UnloadUnusedAssets();

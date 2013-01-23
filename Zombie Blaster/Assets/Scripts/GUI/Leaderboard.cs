@@ -247,9 +247,8 @@ public class Leaderboard : MonoBehaviour {
 				//GUI.Label(new Rect(0.50f*Screen.width,0.32f*Screen.height,0.15f*Screen.width,0.03f*Screen.height), "" + "SCORE",postGUIStyle);					
 				
 				//GUI.BeginGroup(new Rect(0.04f*Screen.width,0.14f*Screen.height,0.92f*Screen.width,0.56f*Screen.height));
-
 				
-				for(int i = 0; i < 10; i++)
+				for(int i = 0; i < 10 && nameArray[i] != null/*by Aharon*/; i++)
 				{	
 					string nmb = (i+1).ToString() + (i<9?".  ":". ");
 					GUI.Label(new Rect(0.05f*Screen.width, (0.15f + yPosition*i)*Screen.height, 0.15f*Screen.width,0.03f*Screen.height), nmb + nameArray[i].ToString(),postGUIStyle);
@@ -257,7 +256,7 @@ public class Leaderboard : MonoBehaviour {
 					//GUI.Label(new Rect(400,40, 200, 70), "" + scoreArray[i].ToString());
 					
 					//GUI.Label(new Rect(200,40 + yPosition*(i+1), 200, 70), "" + nameArray[i].ToString());
-				for(int i = 0; i < 10; i++)
+				for(int i = 0; i < 10 && nameArray[i] != null/*by Aharon*/; i++)
 				{			
 					GUI.Label(new Rect(0.25f*Screen.width, (0.15f + yPosition*i)*Screen.height, 0.15f*Screen.width,0.03f*Screen.height), "" + scoreArray[i].ToString(),postGUIStyle);
 				}

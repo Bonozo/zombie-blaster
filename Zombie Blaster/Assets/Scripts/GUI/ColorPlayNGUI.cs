@@ -35,4 +35,16 @@ public class ColorPlayNGUI : MonoBehaviour {
 		if(sprite!=null) sprite.color = new Color(colmin.r + percent*(colmax.r-colmin.r),colmin.g + percent*(colmax.g-colmin.g),colmin.b + percent*(colmax.b-colmin.b),colmin.a + percent*(colmax.a-colmin.a) );
 		if(label!=null) label.color = new Color(colmin.r + percent*(colmax.r-colmin.r),colmin.g + percent*(colmax.g-colmin.g),colmin.b + percent*(colmax.b-colmin.b),colmin.a + percent*(colmax.a-colmin.a) );
 	}
+	
+	public void Reset(Color min,Color max,float speed,float pauseDown,float pauseUp)
+	{
+		up=true;
+		percent=0;
+		this.speed = speed;
+		colmin = min;
+		colmax = max;
+		upPause = pauseUp;
+		pause = pauseDown;
+		Update();
+	}
 }

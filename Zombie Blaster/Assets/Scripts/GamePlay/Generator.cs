@@ -3,13 +3,14 @@ using System.Collections;
 
 public class Generator : MonoBehaviour {
 	
-	#region Zombies As Resourses Test
+	#region Zombies As Resourses
 	[System.Serializable]
 	public class LevelZombie
 	{
 		public string name;
 		public int count;
 		public int fromwave;
+		public GameObject obj=null;
 	}
 	
 	[System.Serializable]
@@ -21,10 +22,7 @@ public class Generator : MonoBehaviour {
 	}
 	
 	public LevelZombies[] levelZombies;
-	public GameObject[] zombiestospawn;
 	public GameObject objLevel;
-
-	#endregion
 	
 	private string GetZombieResourcePath(LevelZombie z,int cur)
 	{
@@ -45,35 +43,20 @@ public class Generator : MonoBehaviour {
 		objLevel.SetActive(true);
 		objLevel.transform.parent = GameObject.Find("Environments").transform;
 		
-		int n=0;
 		for(int i=0;i<levelZombies[lev].zombie.Length;i++)
 			for(int j=1;j<=levelZombies[lev].zombie[i].count;j++)
-				n++;
-		
-		zombiestospawn = new GameObject[n];
-		
-		n=0;
-		for(int i=0;i<levelZombies[lev].zombie.Length;i++)
-			for(int j=1;j<=levelZombies[lev].zombie[i].count;j++)
-			{
-				zombiestospawn[n++] = (GameObject)Resources.Load(GetZombieResourcePath(levelZombies[lev].zombie[i],j));
-			}
+				levelZombies[lev].zombie[i].obj = (GameObject)Resources.Load(GetZombieResourcePath(levelZombies[lev].zombie[i],j));
+		for(int i=0;i<levelZombies[lev].scoobyZombies.Length;i++)
+			levelZombies[lev].scoobyZombies[i].obj = (GameObject)Resources.Load(GetZombieResourcePath(levelZombies[lev].scoobyZombies[i],1));
 	}
 	
-	/*public void OnGUI()
-	{
-		//GUI.Label(new Rect(100,100,100,100),"len = " + zombiestospawn.Length);
-		//if( zombiestospawn.Length>0 && zombiestospawn[0] == null )
-		//	GUI.Label(new Rect(100,150,100,100),"first emelemt is null");
-	}*/
-	
+	#endregion
+		
 	#region Zombies
 	
 	public bool generateZombies = false;
-	
 	public float GenerationRateMin = 2f, GenerationRateMax=4f;
-	
-	public GameObject EmoKidZombie;
+	public float GenerationDistanceMin = 10f, GenerationDistanceMax = 13f;
 	
 	private float zombieRate = 0;
 	private int zombiesLeft = 0;
@@ -81,60 +64,35 @@ public class Generator : MonoBehaviour {
 	
 	private GameObject WhatZombieToSpawn()
 	{	
-		GameObject zombie = (GameObject)Instantiate(zombiestospawn[Random.Range(0,zombiestospawn.Length)]
-			,RandomPosition(),Quaternion.Euler(0,180,0));
-		return zombie;
+		int currentLevel = LevelInfo.Environments.control.currentLevel;
+		int currentWave = LevelInfo.Environments.control.currentWave;
 		
-		/*int index = Random.Range(0,levelZombies.Length);
-		int cur = Random.Range(1,levelZombies[index].count+1);
-		string path = "Zombies/" + levelZombies[index].name + "(" + 
-			levelZombies[index].count + ")/" + levelZombies[index].name + cur + 
-				"/" + levelZombies[index].name + cur;
-		//Debug.Log(path);
-		GameObject zombie = (GameObject)Instantiate(Resources.Load(path,typeof(GameObject)),RandomPosition(),Quaternion.Euler(0,180,0));
-		return zombie;*/
-		
-		
-		/*GameObject z;
-		var level = LevelInfo.State.level[LevelInfo.Environments.control.currentLevel];
-		
-		// special for Farm Level
-		if( LevelInfo.Environments.control.currentLevel == 0 )
+		// Find random zombie used current level to instantiate
+		int index;
+		do
 		{
-			// ...
-			// 5 cowboys
-			// 1 sheriff
-			if( LevelInfo.Environments.control.currentWave >=4 && Random.Range(0,6) == 1 )//16% Sheriff
-				z = level.standardZombie[level.standardZombie.Length-1];
-			else if( LevelInfo.Environments.control.currentWave >=2 && Random.Range(0,6) == 1)//16% Cowboy
-				z = level.standardZombie[Random.Range(level.standardZombie.Length-6,level.standardZombie.Length-1)];
-			else
-				z = level.standardZombie[Random.Range(0,level.standardZombie.Length-6)];
+			index = Random.Range(0,levelZombies[currentLevel].zombie.Length);
 		}
-		else
-		{
-			z = level.standardZombie[Random.Range(0,level.standardZombie.Length)];
-		}
+		while(currentWave < levelZombies[currentLevel].zombie[index].fromwave);
+		GameObject z = levelZombies[currentLevel].zombie[index].obj;
 		
-		if( LevelInfo.Environments.control.currentWave >= 5 && Random.Range(0,12)==1 )
-			z = EmoKidZombie;
-		
+		// Check scooby zombie to spawn
 		if(LevelInfo.Environments.control.currentWave > 1)
 		{
 			if(scoobyZombieCount <= 10 && Random.Range(0,scoobyZombieCount+1) == 0 )
 			{
-				z = level.scoobyZombies[Random.Range(0,level.scoobyZombies.Length)];
+				z = levelZombies[currentLevel].scoobyZombies[Random.Range(0,levelZombies[currentLevel].scoobyZombies.Length)].obj;
 				scoobyZombieCount += 10;
 			}
 			scoobyZombieCount--;
 		}
-		return (GameObject)Instantiate(z,RandomPosition(),Quaternion.Euler(0,180,0) );*/
+		
+		return (GameObject)Instantiate(z,RandomPosition(),Quaternion.Euler(0,180,0) );
 	}
 	
-	// Where to spawn
 	private	Vector3 RandomPosition()
 	{
-		float r = Random.Range(10f,13f);
+		float r = Random.Range(GenerationDistanceMin,GenerationDistanceMax);
 		float alpa = Random.Range(0f,360f);
 		
 		// special for Level1 Wave1
@@ -214,6 +172,8 @@ public class Generator : MonoBehaviour {
 	
 	#endregion
 	
+	#region Update (Zombies, Civilians)
+	
 	// Update is called once per frame
 	void Update () {
 		
@@ -251,8 +211,10 @@ public class Generator : MonoBehaviour {
 			}
 		}
 	}
-
-	#region Message text
+	
+	#endregion
+	
+	#region Generate Message Text
 	
 	public void GenerateMessageText(Vector3 worldPosition,string text)
 	{
@@ -269,9 +231,10 @@ public class Generator : MonoBehaviour {
 		GameObject g = (GameObject)Instantiate(LevelInfo.Environments.messageText2,pos,Quaternion.identity);
 		g.GetComponent<ShowMessage>().ShowMessageText2D(text,up,time);
 	}	
+	
 	#endregion
 	
-	#region HealthPack
+	#region Generate HealthPack
 	
 	public HealthPack[] powerups;
 	
