@@ -10,7 +10,7 @@ public class Generator : MonoBehaviour {
 		public string name;
 		public int count;
 		public int fromwave;
-		public GameObject obj=null;
+		public GameObject[] obj=null;
 	}
 	
 	[System.Serializable]
@@ -44,10 +44,18 @@ public class Generator : MonoBehaviour {
 		objLevel.transform.parent = GameObject.Find("Environments").transform;
 		
 		for(int i=0;i<levelZombies[lev].zombie.Length;i++)
+		{
+			levelZombies[lev].zombie[i].obj = new GameObject[levelZombies[lev].zombie[i].count];
 			for(int j=1;j<=levelZombies[lev].zombie[i].count;j++)
-				levelZombies[lev].zombie[i].obj = (GameObject)Resources.Load(GetZombieResourcePath(levelZombies[lev].zombie[i],j));
+				levelZombies[lev].zombie[i].obj[j-1] = (GameObject)Resources.Load(GetZombieResourcePath(levelZombies[lev].zombie[i],j));
+		}
+		
+		
 		for(int i=0;i<levelZombies[lev].scoobyZombies.Length;i++)
-			levelZombies[lev].scoobyZombies[i].obj = (GameObject)Resources.Load(GetZombieResourcePath(levelZombies[lev].scoobyZombies[i],1));
+		{
+			levelZombies[lev].scoobyZombies[i].obj = new GameObject[1];
+			levelZombies[lev].scoobyZombies[i].obj[0] = (GameObject)Resources.Load(GetZombieResourcePath(levelZombies[lev].scoobyZombies[i],1));
+		}
 	}
 	
 	#endregion
@@ -74,14 +82,14 @@ public class Generator : MonoBehaviour {
 			index = Random.Range(0,levelZombies[currentLevel].zombie.Length);
 		}
 		while(currentWave < levelZombies[currentLevel].zombie[index].fromwave);
-		GameObject z = levelZombies[currentLevel].zombie[index].obj;
+		GameObject z = levelZombies[currentLevel].zombie[index].obj[Random.Range(0,levelZombies[currentLevel].zombie[index].count)];
 		
 		// Check scooby zombie to spawn
 		if(LevelInfo.Environments.control.currentWave > 1)
 		{
 			if(scoobyZombieCount <= 10 && Random.Range(0,scoobyZombieCount+1) == 0 )
 			{
-				z = levelZombies[currentLevel].scoobyZombies[Random.Range(0,levelZombies[currentLevel].scoobyZombies.Length)].obj;
+				z = levelZombies[currentLevel].scoobyZombies[Random.Range(0,levelZombies[currentLevel].scoobyZombies.Length)].obj[0];
 				scoobyZombieCount += 10;
 			}
 			scoobyZombieCount--;
@@ -246,15 +254,15 @@ public class Generator : MonoBehaviour {
 		
 		if( scooby )
 		{
-			int r = Random.Range(0,3);
+			int r = Random.Range(1,3);//change from (0,3) no dropped weapons 
 			
 			// some complicated code
-			if( LevelInfo.Environments.control.currentLevel==0&&LevelInfo.Environments.control.currentWave==3
+			/*if( LevelInfo.Environments.control.currentLevel==0&&LevelInfo.Environments.control.currentWave==3
 				&& !firstvelmaforL1W3 )
 			{
 				r = 0;
 				firstvelmaforL1W3 = true;
-			}
+			}*/
 			
 			switch(r)
 			{
@@ -287,8 +295,9 @@ public class Generator : MonoBehaviour {
 		}		
 		
 		if(packType == HealthPackType.Weapon && AllWeaponsOwned() )
+		{
 			packType = Random.Range(0,2)==0?HealthPackType.XtraLife:HealthPackType.DamageMultiplier;
-		
+		}
 		return packType;
 	}
 	

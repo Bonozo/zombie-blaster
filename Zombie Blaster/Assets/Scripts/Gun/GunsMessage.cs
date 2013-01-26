@@ -34,8 +34,8 @@ public class GunsMessage : MonoBehaviour {
 	{
 		lastgun = LevelInfo.Environments.guns.CurrentWeaponIndex;
 		label.text = GameEnvironment.storeGun[lastgun].name;
-		colorPlay.Reset(new Color(0f,0f,0f,0f), new Color(1f,0f,0f,1f),1.7f,0f,0f);
-		timetoshow=1f;
+		colorPlay.Reset(new Color(0f,0f,0f,0f), new Color(1f,0f,0f,1f),1f,0f,0f);
+		timetoshow=2f;
 	}
 	
 	void Update()

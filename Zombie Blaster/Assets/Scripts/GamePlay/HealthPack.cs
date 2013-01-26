@@ -46,14 +46,12 @@ public class HealthPack : MonoBehaviour {
 		
 		switch(packType)
 		{
-		/*case HealthPackType.Ammo:
-			int t = Random.Range(0,LevelInfo.Environments.guns.gun.Length);
-			while( !LevelInfo.Environments.guns.gun[t].EnabledGun ) t--;
-			gunindexifweapon = (Weapon)t;
-				
-			gameObject.renderer.material.mainTexture = LevelInfo.Environments.guns.gun[(int)gunindexifweapon].texture;
-			gameObject.renderer.material.color = Color.yellow;
-			break;*/
+		case HealthPackType.Ammo:
+			if( !Store.WeaponUnlocked((int)level.allowedGun[level.allowedGun.Length-1]) )
+				gunindexifweapon = level.allowedGun[Random.Range(1,level.allowedGun.Length-1)];
+			else
+				gunindexifweapon = level.allowedGun[Random.Range(1,level.allowedGun.Length)];
+			break;
 		/*case HealthPackType.Armor:
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpArmor;
 			break;*/
@@ -73,6 +71,7 @@ public class HealthPack : MonoBehaviour {
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpSuperAmmo;
 			break;
 		case HealthPackType.Weapon:
+			Debug.LogError("ZB: Weapon PowerUps disabled");
 			gunindexifweapon = Weapon.None;
 			int ind = Random.Range(0,level.allowedGun.Length);
 			for(int i=0;i<level.allowedGun.Length;i++) 
@@ -165,12 +164,13 @@ public class HealthPack : MonoBehaviour {
 		switch(packType)
 		{
 		case HealthPackType.Ammo:
-			LevelInfo.Environments.guns.GetAmmoWithMax((Weapon)LevelInfo.Environments.guns.CurrentWeaponIndex);
-			pickupname = "Ammo";
+			if(LevelInfo.Environments.guns.gun[(int)gunindexifweapon].EnabledGun)
+				LevelInfo.Environments.guns.GetAmmoWithMax(gunindexifweapon);
+			pickupname = GameEnvironment.storeGun[(int)gunindexifweapon].name + " Ammo";
 			break;
 			
 		case HealthPackType.Armor:
-			LevelInfo.Environments.control.Health = Mathf.Max(LevelInfo.Environments.control.Health,1f);
+			LevelInfo.Environments.control.GetArmor(0.25f);
 			pickupname = "Leathers";
 			break;
 			

@@ -205,6 +205,10 @@ public class Control : MonoBehaviour {
 	
 	private float health = 1f;
 	private float healthshow = 1f;
+	private float armor = 0f;
+	private float armorshow = 0f;
+	
+	
 	private float showWaveCompleteTime = 4f;
 	private float waitfornewwave = 0f;
 	
@@ -388,7 +392,13 @@ public class Control : MonoBehaviour {
 		if( Input.GetKeyUp(KeyCode.H) )
 			health -= 0.1f;
 		if( Input.GetKeyUp(KeyCode.J) )
-			health += 0.1f;
+			health += 0.1f;	
+		if( Input.GetKeyUp(KeyCode.N) )
+			armor -= 0.1f;
+		if( Input.GetKeyUp(KeyCode.M) )
+			armor += 0.1f;
+		if( Input.GetKeyUp(KeyCode.L) )
+			GetBite(0.1f);
 		/////////////////////////////////
 		
 		if( Fade.InProcess ) return;
@@ -433,6 +443,12 @@ public class Control : MonoBehaviour {
 					state = GameState.Lose; 
 				return;
 			}
+		}
+		
+		if( armorshow != armor)
+		{
+			if( armorshow < armor ) armorshow += Math.Min(Time.deltaTime*1f,armor-armorshow);
+			if( armorshow > armor ) armorshow -= Math.Min(Time.deltaTime*1f,armorshow-armor);
 		}
 		
 		
@@ -837,9 +853,6 @@ public class Control : MonoBehaviour {
 		
 	private void MoveTo(Vector3 dest)
 	{
-		//GameObject[] g = GameObject.FindGameObjectsWithTag("HealthPack");
-		//foreach(GameObject gg in g) Destroy(gg);
-		
 		Moving = true;
 		angling = true;
 		destination = dest;
@@ -888,15 +901,15 @@ public class Control : MonoBehaviour {
 		var v = LevelInfo.Environments.healthbarHealth.transform.localScale;
 		v.x = 146.4f*Mathf.Clamp01(healthshow);
 		v.y = health!=healthshow&&healthshow<=1?21:18;
-				LevelInfo.Environments.healthbarHealth.color = 
+		LevelInfo.Environments.healthbarHealth.color = 
 			health!=healthshow&&healthshow<=1?new Color(1f,1f,1f,0.6f):Color.white;
 		LevelInfo.Environments.healthbarHealth.transform.localScale = v;
 		
 		v = LevelInfo.Environments.healthbarArmor.transform.localScale;
-		v.x = 79f*Mathf.Clamp01(healthshow-1);
-		v.y = health!=healthshow?10:8;
+		v.x = 146.4f*Mathf.Clamp01(armorshow);
+		v.y = armor!=armorshow?21:18;
 		LevelInfo.Environments.healthbarArmor.color = 
-			health!=healthshow&&healthshow<=1?new Color(1f,1f,1f,0.6f):Color.white;
+			armor!=armorshow&&armorshow<=1?new Color(1f,1f,1f,0.6f):Color.red;
 		LevelInfo.Environments.healthbarArmor.transform.localScale = v;
 		
 		// flash/pulse healthbar icons
@@ -938,6 +951,7 @@ public class Control : MonoBehaviour {
 	public bool Died { get { return state == GameState.Lose; }}
 	
 	public float Health { get { return healthshow; } set { health = value; } }
+	public float Armor { get { return armorshow; } set { armor = value; } }
 	
 	public int ZombiesLeft { get { return LevelInfo.Environments.hubZombiesLeft.GetNumber(); } }
 	
@@ -970,7 +984,14 @@ public class Control : MonoBehaviour {
 	public void GetBite(float lostHealth)
 	{
 		LevelInfo.Audio.PlayPlayerGetHit();
-		GetHealth(-lostHealth);
+		
+		if(armor==0)
+			GetHealth(-lostHealth);
+		else
+		{
+			GetHealth(-lostHealth*0.5f);
+			GetArmor(-lostHealth*0.5f);
+		}
 	}
 	
 	public void GetZombie()
@@ -989,7 +1010,7 @@ public class Control : MonoBehaviour {
 	public void GetHealth(float h)
 	{
 		if( Option.UnlimitedHealth ) return;
-		if( Shielded ) return;
+		if( h<0 && Shielded ) return;
 		#if UNITY_ANDROID || UNITY_IPHONE
 		if( h<0f && Option.Vibration)
 				Handheld.Vibrate();
@@ -997,13 +1018,14 @@ public class Control : MonoBehaviour {
 		if( h<0f)
 			LevelInfo.Environments.screenBlood.Pulse();
 		
-		health += h;
-		if( health > LevelInfo.State.playerMaxHealth ) health = LevelInfo.State.playerMaxHealth;
-		if( health <= 0.0f)
-		{
-			health = 0.0f;
-			//ToLose();
-		}
+		health = Mathf.Clamp01(health+h);
+	}
+	
+	public void GetArmor(float h)
+	{
+		if( Option.UnlimitedHealth ) return;
+		if( h<0 && Shielded ) return;
+		armor = Mathf.Clamp01(armor+h);	
 	}
 	
 	private int bonusForWaveComplete = -1;

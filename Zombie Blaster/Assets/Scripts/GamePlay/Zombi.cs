@@ -84,15 +84,6 @@ public class Zombi : MonoBehaviour {
 		}
 		
 		transform.position = new Vector3(transform.position.x,ZombieHeight,transform.position.z);
-	
-		/*
-		// other logic for cemetary level
-		bool cemetary = LevelInfo.Environments.control.currentLevel == 4;
-		if(!scooby && cemetary ) // Cemetary
-		{
-			scooby = LevelInfo.Environments.control.currentWave > 1;
-			if( scooby && Random.Range(0,2)==0 ) scooby = false;
-		}*/
 		
 		// Institates
 		Destroy(Instantiate(LevelInfo.Environments.control.currentLevel % 2 == 1? LevelInfo.Environments.dirtyClodCityPrefab: LevelInfo.Environments.dirtyClodPrefab,

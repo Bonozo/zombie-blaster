@@ -40,7 +40,5 @@ public class StateManager : MonoBehaviour {
 	public int scoreForZombie = 250;
 	public int scoreForHeadShot = 500;
 	
-	public float playerMaxHealth = 3f;
-	
 	#endregion
 }
