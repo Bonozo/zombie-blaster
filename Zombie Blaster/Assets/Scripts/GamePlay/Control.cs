@@ -286,7 +286,7 @@ public class Control : MonoBehaviour {
 	public int currentWave = 0;
 		
 	private static int startScore = 0;
-	private static int startLives = 1;	
+	private static int startLives = 2;	
 	
 	public void ForceLevel(int levelnumber,int currentwave)
 	{
@@ -401,7 +401,7 @@ public class Control : MonoBehaviour {
 			GetBite(0.1f);
 		/////////////////////////////////
 		
-		if( Fade.InProcess ) return;
+		if( Fade.InProcess || prologuecomplete) return;
 		
 		// Update Zombie Heads Number On Screen
 		LevelInfo.Environments.hubZombieHeads.SetNumberWithFlash(Store.zombieHeads);

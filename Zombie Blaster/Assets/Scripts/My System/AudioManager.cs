@@ -164,7 +164,8 @@ public class AudioManager : MonoBehaviour {
 			audioSourcePlayer.PlayOneShot(audioPickUpHealth);
 			break;
 		case HealthPackType.Shield:
-			audioSourcePlayer.PlayOneShot(audioPickUpShield);
+			// Disabled for double playing
+			//audioSourcePlayer.PlayOneShot(audioPickUpShield);
 			break;
 		case HealthPackType.SuperAmmo:
 			audioSourcePlayer.PlayOneShot(audioPickUpSuperAmmo);

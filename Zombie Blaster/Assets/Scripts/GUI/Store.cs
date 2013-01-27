@@ -499,7 +499,7 @@ public class Store : MonoBehaviour {
 			
 			ShopWeaponName.font = showWeapon[currentshopitem]?blackFont:redFont;
 			
-			ShopWeaponBuyText.text = "" + GameEnvironment.storeGun[currentshopitem].price + " heads";
+			ShopWeaponBuyText.text = "COST: " + GameEnvironment.storeGun[currentshopitem].price;
 			ShopWeaponBuyText.font = zombieHeads>=GameEnvironment.storeGun[currentshopitem].price?greenFont:blackFont;
 			
 			if( shopInfoButton.PressedDown )
@@ -756,6 +756,7 @@ public class Store : MonoBehaviour {
 	
 	private IEnumerator GoMainMenuThread()
 	{
+		audio.PlayOneShot(clipQuitPlayGame);
 		DisableStoreButtons();
 		Fade.InProcess = true;
 		LevelInfo.Environments.fade.Show(3f);
@@ -831,7 +832,6 @@ public class Store : MonoBehaviour {
 			
 			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Quit", buttonStyle ) )	
 			{
-				audio.PlayOneShot(clipQuitPlayGame);
 				GoMainMenuFromGamePlay();
 			}
 			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Back", buttonStyle ) )

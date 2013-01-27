@@ -22,7 +22,7 @@ public class GunsMessage : MonoBehaviour {
 			if( !reloading )
 			{
 				reloading = true;
-				label.text = "Reloading";
+				label.text = "RELOADING";
 				colorPlay.Reset(new Color(1f,1f,1f,1f), new Color(0.5f,1f,0.5f,1f),10f,0f,0f);
 			}
 		}

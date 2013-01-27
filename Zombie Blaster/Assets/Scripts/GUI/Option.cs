@@ -48,6 +48,7 @@ public class Option : MonoBehaviour {
 	{
 		debugScreen = false;
 		showdebug = false;
+		title.text = "Options";
 		Update();
 	}
 	

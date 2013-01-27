@@ -217,8 +217,8 @@ public class SelectArea : MonoBehaviour {
 			bool can_bay = Store.zombieHeads >= GameEnvironment.levelPrice[unlock_index];
 
 			//GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"");
-			GUI.Label(new Rect(0.45f*Screen.width,0.305f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),"" + GameEnvironment.levelPrice[unlock_index],myStyle);
-			GUI.DrawTexture(new Rect(0.5f*Screen.width,0.29f*Screen.height,0.08f*Screen.width,0.08f*Screen.height),headSack);
+			GUI.Label(new Rect(0.425f*Screen.width,0.32f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),"COST: " + GameEnvironment.levelPrice[unlock_index],myStyle);
+			GUI.DrawTexture(new Rect(0.52f*Screen.width,0.29f*Screen.height,0.08f*Screen.width,0.08f*Screen.height),headSack);
 			
 			/*int cc = 0;
 			for(int i=0; i<newWeapos[unlock_index] .Length; i++)
@@ -233,14 +233,20 @@ public class SelectArea : MonoBehaviour {
 				j++;
 			}*/
 			float sz = 0.08f*Screen.height;
+			
 			if(newWeapos[unlock_index].Length==1)
-				GUI.DrawTexture(new Rect( 0.5f*Screen.width-0.5f*sz,0.41f*Screen.height,sz,sz),store.weaponIcon[(int)newWeapos[unlock_index][0]]);
+			{
+				GUI.Label(new Rect(0.42f*Screen.width,0.41f*Screen.height+sz*0.5f-8,0.1f*Screen.width,0.1f*Screen.height),"UNLOCK: ",myStyle);
+				GUI.DrawTexture(new Rect( 0.52f*Screen.width,0.41f*Screen.height,sz,sz),store.weaponIcon[(int)newWeapos[unlock_index][0]]);
+			}
 			else if(newWeapos[unlock_index].Length==2)
 			{
-				GUI.DrawTexture(new Rect( 0.49f*Screen.width-sz,0.41f*Screen.height,sz,sz),store.weaponIcon[(int)newWeapos[unlock_index][0]]);
-				GUI.DrawTexture(new Rect( 0.51f*Screen.width,0.41f*Screen.height,sz,sz),store.weaponIcon[(int)newWeapos[unlock_index][1]]);
-
+				GUI.Label(new Rect(0.4f*Screen.width,0.41f*Screen.height+sz*0.5f-8,0.1f*Screen.width,0.1f*Screen.height),"UNLOCKS: ",myStyle);
+				GUI.DrawTexture(new Rect( 0.5f*Screen.width,0.41f*Screen.height,sz,sz),store.weaponIcon[(int)newWeapos[unlock_index][0]]);
+				GUI.DrawTexture(new Rect( 0.51f*Screen.width+sz,0.41f*Screen.height,sz,sz),store.weaponIcon[(int)newWeapos[unlock_index][1]]);
 			}
+			else
+				Debug.LogError("ZB: Weapons unlocked for level is not implemented for grather that 2");
 			
 			if( can_bay)
 			{
