@@ -286,7 +286,7 @@ public class Control : MonoBehaviour {
 	public int currentWave = 0;
 		
 	private static int startScore = 0;
-	private static int startLives = 2;	
+	private static int startLives = 1;	
 	
 	public void ForceLevel(int levelnumber,int currentwave)
 	{
@@ -679,19 +679,13 @@ public class Control : MonoBehaviour {
 				}
 				#endregion
 	
-				if( GUI.Button(new Rect(0.58f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "MENU", buttonGUIStyle) )
+				if( GUI.Button(new Rect(0.58f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "EXIT", buttonGUIStyle) )
 				{
-					isLeaderBoard = false;
-					//Debug.Log("RR");					
+					isLeaderBoard = false;		
+					GameEnvironment.ToMap = true;
 					LevelInfo.Environments.store.GoMainMenuFromGamePlay();
-					//Application.LoadLevel("mainmenu");
 				}
 				 
-				/*if( GUI.Button(new Rect(0.35f*Screen.width,0.5f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "MENU") )
-				{
-					Time.timeScale = 1.0f;
-					Application.LoadLevel("mainmenu");
-				}*/
 			}
 			break;
 		case GameState.Play:
@@ -1100,7 +1094,7 @@ public class Control : MonoBehaviour {
 		prologuecomplete=true;
 		LevelInfo.Environments.buttonPause.isEnabled=false;
 		Store.FirstTimePlay=false;
-		GameEnvironment.firstTimePlayed = true;
+		GameEnvironment.ToMap = true;
 		LevelInfo.Environments.store.GoMainMenuFromGamePlay();
 	}
 	

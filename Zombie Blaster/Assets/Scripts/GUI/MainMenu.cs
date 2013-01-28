@@ -83,9 +83,9 @@ public class MainMenu : MonoBehaviour {
 	{
 		State = MenuState.MainMenu;
 		
-		if( GameEnvironment.firstTimePlayed )
+		if( GameEnvironment.ToMap )
 		{
-			GameEnvironment.firstTimePlayed = false;
+			GameEnvironment.ToMap = false;
 			State = MenuState.AreaMap;
 		}
 		

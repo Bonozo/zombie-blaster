@@ -363,6 +363,19 @@ public class Zombi : MonoBehaviour {
 	
 	#region Zombie Get Hit Setup
 	
+	public void GetFlame(float delta)
+	{
+		if( LevelInfo.Environments.control.DamageMultiplied ) delta *= 4;
+		flaming -= delta;
+		if( flaming <= 0 ) flaming=0;
+		ZombieFire.particleEmitter.minSize = ZombieFire.particleEmitter.maxSize = (1-flaming)*1f;
+		if( flaming <= 0 )
+		{
+			DieNormal();
+			return;
+		}
+	}
+	
 	void OnTriggerEnter(Collider col)
 	{		
 		// Zapper Attack
@@ -419,8 +432,9 @@ public class Zombi : MonoBehaviour {
 		}	
 	}
 	
-	public void GetHitDamaged(int hitpoints)
+	public bool GetHitDamaged(int hitpoints)
 	{
+		bool b=false;
 		if( LevelInfo.Environments.control.DamageMultiplied ) hitpoints *= 4;
 		damage -= hitpoints;
 		animation.Play("get hit");
@@ -440,8 +454,12 @@ public class Zombi : MonoBehaviour {
 				damage = 10;
 			}
 			else
+			{
 				DieNormal();
+				b=true;
+			}
 		}
+		return b;
 	}
 	
 	public void GetHit()

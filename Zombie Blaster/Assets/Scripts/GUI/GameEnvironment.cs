@@ -16,7 +16,7 @@ public class GameEnvironment : MonoBehaviour {
 		Application.LoadLevel("loading");
 	}
 	
-	public static bool firstTimePlayed = false;
+	public static bool ToMap = false;
 	
 	#endregion
 	
@@ -359,7 +359,7 @@ public class GameEnvironment : MonoBehaviour {
 	
 	public static StoreGun[] storeGun = new StoreGun[10]
 	{	
-		new StoreGun("Airsoft",true,20,0,9,2,20,80),				//0
+		new StoreGun("Airsoft",true,20,0,9,2,10,80),				//0
 		new StoreGun("Crossbow",false,12,30,25,3,40,100),			//1
 		new StoreGun("Shotgun",false,5,75,15,1,100,100),			//2
 		new StoreGun("Flamethrower",false,100,100,30,12,10,100),	//3

@@ -91,29 +91,10 @@ public class civilian : MonoBehaviour {
 		}	
 	}
 	
-	/*void OnCollisionEnter(Collision col)
-	{	
-		//  PulseShotGun Attack
-		if( HitWithName(col.gameObject.name,"BulletPulseShotGun") )
-		{
-			DieWithJump();
-			return;
-		}
-		
-		// Airgun Attack
-		if( HitWithName(col.gameObject.name,"BulletAirgun") )
-		{
-			DieNormal();
-			return;
-		} 
-		
-		// Crossbow Attack
-		if( HitWithName(col.gameObject.name,"BulletCrossbow") )
-		{
-			DieNormal();
-			return;
-		} 
-	}*/
+	public void GetFlame()
+	{
+		DieNormal();
+	}
 	
 	public void GetHit()
 	{

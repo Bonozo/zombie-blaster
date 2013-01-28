@@ -507,12 +507,14 @@ public class Store : MonoBehaviour {
 				wooi = currentshopitem;
 				weapondescription = true;
 				audio.PlayOneShot(clipWeaponInfo[wooi]);
+				spwchannel = true;
 			}
 			
-			if( shotItemBuy.PressedUp )
+			if( shotItemBuy.PressedDown )
 			{
 				audio.PlayOneShot(clipBuy);
 				wooi = currentshopitem;
+				spwchannel = true;
 			}	
 			
 			Rect shopRect = new Rect(0.01f*Screen.width,0.1f*Screen.height,0.487f*Screen.width,0.9f*Screen.height);
@@ -590,7 +592,7 @@ public class Store : MonoBehaviour {
 				audio.PlayOneShot(clipWeaponInfo[wooi]);
 			}
 			
-			if( StashItemBuy.enabled && StashItemBuy.PressedUp )
+			if( StashItemBuy.enabled && StashItemBuy.PressedDown )
 			{
 				audio.PlayOneShot(clipBuy);
 				wooi = currentStashitem;

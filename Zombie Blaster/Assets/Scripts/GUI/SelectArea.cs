@@ -17,6 +17,7 @@ public class SelectArea : MonoBehaviour {
 	
 	public ButtonBase storeButton;
 	public ButtonBase backToGameForGamePlay;
+	public GUITexture notification;
 	
 	public AudioSource audioUnlocked;
 	public AudioSource audioLocked;
@@ -38,12 +39,14 @@ public class SelectArea : MonoBehaviour {
 	private Color colorGreen = new Color(0f,1f,0f,0.5f);
 	private Color colorWhite = new Color(1f,1f,1f,0.5f);
 	
+	private Store store;
+	
 	private void UpdateSelectAreaScreen()
 	{
 		foreach(var g in bloods )
 		{
 			Color c = g.color;
-			c.a = 0.115f*(countUnlocked-1);
+			c.a = 0.09f*(countUnlocked);
 			g.color = c;
 		}
 		for(int i=0;i<5;i++)
@@ -59,7 +62,6 @@ public class SelectArea : MonoBehaviour {
 		}
 	}
 	
-	private Store store;
 	private Weapon[][] newWeapos = new Weapon[][] //??// Same as Store
 	{
 		new Weapon[] {Weapon.Flamethrower,Weapon.Crossbow},
@@ -121,8 +123,22 @@ public class SelectArea : MonoBehaviour {
 			levelButton[i].canPressed = unlocked[i];	
 	}
 	
+	void UpdateNotification()
+	{
+		bool show = false;
+		store.UpdateWeaponAvailable();
+		for(int i=0;i<Store.countWeapons;i++)
+			if( store.WeaponAvailable(i) && Store.CanBuyWeapon(i) )
+			{
+				show = true;
+			}
+		notification.enabled = show;
+	}
+	
 	void Update()
 	{
+		UpdateNotification();
+		
 		if(Fade.InProcess) return;
 		
 		headsText.text = "" + Store.zombieHeads;
@@ -236,7 +252,7 @@ public class SelectArea : MonoBehaviour {
 			
 			if(newWeapos[unlock_index].Length==1)
 			{
-				GUI.Label(new Rect(0.42f*Screen.width,0.41f*Screen.height+sz*0.5f-8,0.1f*Screen.width,0.1f*Screen.height),"UNLOCK: ",myStyle);
+				GUI.Label(new Rect(0.42f*Screen.width,0.41f*Screen.height+sz*0.5f-8,0.1f*Screen.width,0.1f*Screen.height),"UNLOCKS: ",myStyle);
 				GUI.DrawTexture(new Rect( 0.52f*Screen.width,0.41f*Screen.height,sz,sz),store.weaponIcon[(int)newWeapos[unlock_index][0]]);
 			}
 			else if(newWeapos[unlock_index].Length==2)
