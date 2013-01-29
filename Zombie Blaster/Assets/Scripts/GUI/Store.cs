@@ -923,7 +923,7 @@ public class Store : MonoBehaviour {
 			
 			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Do you want to buy this item?",myStyle);
 			
-			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Buy", buttonStyle ) )	
+			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "BUY", buttonStyle ) )	
 			{
 				Store.UnlockWeapon(wooi);
 				showWeapon[wooi] = true;
@@ -940,7 +940,7 @@ public class Store : MonoBehaviour {
 				spwchannel = true;
 				currentshopitem = NextWeapon(currentshopitem,false);
 			}
-			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Back", buttonStyle ) )
+			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "BACK", buttonStyle ) )
 			{
 				audio.PlayOneShot(clipBack);
 				wooi = -1; 
@@ -950,8 +950,15 @@ public class Store : MonoBehaviour {
 		else
 		{
 			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.3f*Screen.height),"You have not enough heads to buy this item.",myStyle);
-			if( GUI.Button(new Rect(0.42f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Back", buttonStyle) )
+			
+			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "MORE HEADS", buttonStyle ) )	
 			{
+				Get1000HeadsEvent();
+			}
+			
+			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "BACK", buttonStyle) )
+			{
+				audio.PlayOneShot(clipBack);
 				wooi = -1;
 				spwchannel = true;
 			}

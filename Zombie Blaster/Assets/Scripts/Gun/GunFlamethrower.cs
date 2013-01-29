@@ -4,7 +4,7 @@ using System.Collections;
 public class GunFlamethrower : GunBase {
 
 	public GameObject FlameThrower;
-	public GunCylinderBase FlameThrowerTarget;
+	//public GunCylinderBase FlameThrowerTarget;
 	public float MaxEffectDistance = 10;
 	
 	
@@ -24,14 +24,14 @@ public class GunFlamethrower : GunBase {
 		{
 			if( Ammo==0 && AmmoStore != 0 && weapon == Weapon.Flamethrower)
 				Reload();
-			FlameThrowerTarget.Disappear();
+			//FlameThrowerTarget.Disappear();
 			return Ammo;
 		}
 		
 		if( !canattack )
 		{
 			if( !reloading ) audio.Stop();
-			FlameThrowerTarget.Disappear();
+			//FlameThrowerTarget.Disappear();
 			return Ammo;
 		}
 		
@@ -39,11 +39,11 @@ public class GunFlamethrower : GunBase {
 		
 		Ray ray = LevelInfo.Environments.mainCamera.ScreenPointToRay (GameEnvironment.lastInput);
 
-		FlameThrowerTarget.ChangeRotation(Quaternion.LookRotation(ray.direction));
+		//FlameThrowerTarget.ChangeRotation(Quaternion.LookRotation(ray.direction));
 		FlameThrower.transform.rotation = Quaternion.LookRotation(ray.direction);
 		FlameThrower.particleEmitter.emit = true;
-		FlameThrowerTarget.Stream(Time.deltaTime);
-		FlameThrowerTarget.Clamp(MaxEffectDistance);
+		//FlameThrowerTarget.Stream(Time.deltaTime);
+		//FlameThrowerTarget.Clamp(MaxEffectDistance);
 		
 		if( !audio.isPlaying) audio.Play();
 		if( Ammo == 0.0f ) Reload();
