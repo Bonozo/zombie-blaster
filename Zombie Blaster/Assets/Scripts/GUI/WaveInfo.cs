@@ -18,7 +18,7 @@ public class WaveInfo : MonoBehaviour {
 	private bool showWaveComplete = false;
 	private float[] startime = new float[3];
 	private int stars = 0;
-	private int reward;
+	private HealthPackType reward;
 	private float waitforreward=0f;
 	
 	// Use this for initialization
@@ -59,8 +59,8 @@ public class WaveInfo : MonoBehaviour {
 		
 		if(showWaveComplete&&Time.deltaTime>0&&waitforreward<=0f)
 		{
-			modelHeads.SetActive(reward==1);
-			modelXtraLife.SetActive(reward==0);
+			modelHeads.SetActive(reward == HealthPackType.BonusHeads);
+			modelXtraLife.SetActive(reward == HealthPackType.XtraLife);
 			rewardSprite.SetActive(true);
 		}
 		else
@@ -87,15 +87,9 @@ public class WaveInfo : MonoBehaviour {
 		waitfor = Wait;
 	}
 	
-	public void ShowWaveComplete(int reward,int stars,float time1,float time2,float time3)
+	public void ShowWaveComplete(HealthPackType reward,int stars,float time1,float time2,float time3)
 	{
 		this.reward = reward;
-		// 0 - LevelInfo.Environments.texturePickUpXtraLife
-		// 1 - LevelInfo.Environments.texturePickUpBonusHeads
-		/*if(reward == 0 )
-			spriteWaveCompleteReward.spriteName = "Lives_box";
-		else
-			spriteWaveCompleteReward.spriteName = "Heads_box";*/
 		showWaveComplete = true;
 		
 		for(int i=0;i<3;i++) spriteStar[i].spriteName = "star empty";

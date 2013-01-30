@@ -712,19 +712,12 @@ public class Control : MonoBehaviour {
 					if( headshotsinwave >= 0.9f ) stars = 3;
 					else if( headshotsinwave >= 0.75f ) stars = 2;
 					else stars = 1;
-					LevelInfo.Environments.waveInfo.ShowWaveComplete(bonusForWaveComplete,stars,0.3f,0.2f,0.2f);
+					rewardforwavecomplete = (UnityEngine.Random.Range(0,2)==0?HealthPackType.BonusHeads:HealthPackType.XtraLife);
+					LevelInfo.Environments.waveInfo.ShowWaveComplete(rewardforwavecomplete,stars,0.3f,0.2f,0.2f);
 					
 					bonusForWaveComplete = 1000;
 				}
 			}
-			/*GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"WAVE COMPLETE.");
-			
-			GUI.Label(new Rect(0.35f*Screen.width,0.5f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "REWARD" ) ;
-
-			GUI.DrawTexture(new Rect(0.5f*Screen.width,0.445f*Screen.height,0.15f*Screen.width,0.15f*Screen.height),(bonusForWaveComplete==0?LevelInfo.Environments.texturePickUpXtraLife:LevelInfo.Environments.texturePickUpBonusHeads),ScaleMode.ScaleToFit );
-			*/
-			//if( Time.realtimeSinceStartup > waitfornewwave )
-			//	PrepareAndCreateNewWave();
 			break;
 		}
 	}
@@ -877,8 +870,9 @@ public class Control : MonoBehaviour {
 				Moving = false;
 				
 				//Give reward to the player
-				if( bonusForWaveComplete==0) LevelInfo.Environments.hubLives.SetNumberWithFlash(LevelInfo.Environments.hubLives.GetNumber()+1);
-				else Store.zombieHeads= Store.zombieHeads + 100;
+				if( rewardforwavecomplete == HealthPackType.XtraLife) LevelInfo.Environments.hubLives.SetNumberWithFlash(LevelInfo.Environments.hubLives.GetNumber()+1);
+				else if(rewardforwavecomplete == HealthPackType.BonusHeads) Store.zombieHeads = Store.zombieHeads + 100;
+				else Debug.LogError("Rewards must be heads or xtralife, but now is " + rewardforwavecomplete); 
 				
 				CreateNewZombieWave();
 			}
@@ -1023,6 +1017,7 @@ public class Control : MonoBehaviour {
 		armor = Mathf.Clamp01(armor+h);	
 	}
 	
+	private HealthPackType rewardforwavecomplete;
 	private int bonusForWaveComplete = -1;
 	public IEnumerator WaveComplete()
 	{

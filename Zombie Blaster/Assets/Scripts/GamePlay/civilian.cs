@@ -49,7 +49,25 @@ public class civilian : MonoBehaviour {
 		animation.Play("running");
 	}
 	
+	private float nhdt = 0f;
 	private void NormalizeHeight()
+	{
+		nhdt -= Time.deltaTime;
+		if( nhdt > 0f ) return;
+		nhdt = 0.291f;
+		RaycastHit hit;    
+		
+		Vector3 pos = transform.position;
+		pos.y += 1f;
+
+		if(Physics.Raycast(pos, -transform.up, out hit, CollisionToDownLenght+10f) && hit.collider.gameObject.name != "Flame" )
+		{
+			transform.Translate(0f,-hit.distance+CollisionToDownLenght+1f,0f);
+		}
+		Debug.DrawRay(pos, -CollisionToDownLenght*transform.up, Color.green);
+	}
+	
+	/*private void NormalizeHeight()
 	{
 		if( Random.Range(0,30) != 1 ) return;
 		
@@ -64,32 +82,13 @@ public class civilian : MonoBehaviour {
 		pos.y += 1f;
 		
 		if(Physics.Raycast(pos, -transform.up, out hit, CollisionToDownLenght+0.01f+1f) /*&& 
-			hit.collider.gameObject.name == "ground" */)
-			transform.Translate(0,0.02f,0);
+			hit.collider.gameObject.name == "ground" *//*)
+		/*	transform.Translate(0,0.02f,0);
 		if( !Physics.Raycast(pos, -transform.up, out hit, CollisionToDownLenght-0.03f+1f) )
 			transform.Translate(0,-0.02f,0);
 		
 		Debug.DrawRay(pos, -CollisionToDownLenght*transform.up, Color.green);
-	}
-	
-	void OnTriggerStay(Collider col)
-	{	
-		// Zapper Attack
-		if( HitWithName(col.gameObject.name,"Zapper") )
-		{
-			//ZombieSmoke.particleEmitter.minSize = ZombieSmoke.particleEmitter.maxSize = 1f;
-			DieNormal();
-			return;
-		}
-		
-		// Flame Attack
-		if( HitWithName(col.gameObject.name,"Flame") )
-		{
-			//ZombieFire.particleEmitter.minSize = ZombieFire.particleEmitter.maxSize = 1f;
-			DieNormal();
-			return;
-		}	
-	}
+	}*/
 	
 	public void GetFlame()
 	{
@@ -106,8 +105,10 @@ public class civilian : MonoBehaviour {
 		DieNormal();
 	}
 	
+	private bool died = false;
 	public void DieNormal()
 	{
+		if(died) return; died=true;
 		control.GetHealth(PlayerScoreForDie);
 		LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()+1);
 		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
@@ -122,6 +123,7 @@ public class civilian : MonoBehaviour {
 	
 	public void DieWithFootball()
 	{
+		if(died) return; died=true;
 		control.GetHealth(PlayerScoreForDie);
 		LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()+1);
 		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
@@ -136,6 +138,7 @@ public class civilian : MonoBehaviour {
 	
 	public void DieWithJump()
 	{
+		if(died) return; died=true;
 		control.GetHealth(PlayerScoreForDie);
 		LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()+1);
 		GameObject ragdoll = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
@@ -148,6 +151,7 @@ public class civilian : MonoBehaviour {
 	
 	public void DieWithFireAndSmoke()
 	{
+		if(died) return; died=true;
 		control.GetHealth(PlayerScoreForDie);
 		LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()+1);
 		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
@@ -160,10 +164,5 @@ public class civilian : MonoBehaviour {
 			child.AddForce(20f*dir);
 		
 		Destroy(this.gameObject);
-	}
-	
-	private bool HitWithName(string name,string comparewith)
-	{
-		return name.Length >= comparewith.Length && name.Substring(0,comparewith.Length) == comparewith;
 	}
 }

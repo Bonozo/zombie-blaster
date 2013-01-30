@@ -5,7 +5,6 @@ public class Option : MonoBehaviour {
 	
 	public static float Health = 1f;
 	public static float hSlideVolume = 1f;
-	//public static bool WeaponsUnlocked = false;
 	public static bool UnlimitedHealth = false;
 	public static bool UnlimitedAmmo = false;
 	public static bool Vibration = true;
@@ -18,7 +17,6 @@ public class Option : MonoBehaviour {
 	public static bool AutoTargeting = true;
 	public static float Sensitivity = 0.01f;
 	public static int FlameWaitingFrames=5;
-	//public static int Quality = QualitySettings.GetQualityLevel();
 	
 	bool showdebug = true;
 	bool debugScreen = false;
@@ -52,28 +50,22 @@ public class Option : MonoBehaviour {
 		Update();
 	}
 	
-	private Vector2 textSize = new Vector2(Screen.width*0.3f,20);
-	private Vector2 buttonSize = new Vector2(Screen.width*0.3f,20);
-
 	private Rect textRect(float index)
 	{
-		index++; if(index>10) index++;
-		float w = 0f;
-		if( index > 10 ) { w = Screen.width*0.5f; index-=10; }
-		return new Rect(w + Screen.width*0.05f,index*30f,textSize.x,textSize.y);
+		index++;
+		return new Rect(Screen.width*0.05f,index*0.085f*Screen.height,Screen.width*0.4f,Screen.height*0.07f);
 	}
 	private Rect buttonRect(float index)
 	{
-		index++; if(index>10) index++;
-		float w = 0f;
-		if( index > 10 ) { w = Screen.width*0.5f; index-=10; }
-		return new Rect(w+Screen.width*0.1f+textSize.x,index*30f,buttonSize.x,buttonSize.y);
+		index++;
+		return new Rect(Screen.width*0.5f,index*0.085f*Screen.height,Screen.width*0.4f,Screen.height*0.07f);
 	}
 	
 	void OnGUI()
 	{
 		if( debugScreen )
 		{
+			
 			GUI.Label(textRect(1),"Unlimited Health",myStyle1);
 			if( GUI.Button(buttonRect(1),UnlimitedHealth?"ON":"OFF" ,myStyle2) )
 				UnlimitedHealth = !UnlimitedHealth;
@@ -82,7 +74,7 @@ public class Option : MonoBehaviour {
 			GUI.Box(buttonRect(2),"" + Store.tapjoyConnected,myStyle2 );
 				
 			GUI.Label(textRect(3),"Health",myStyle1);
-			Health = GUI.HorizontalSlider(buttonRect(3),Health,0.05f,1f);
+			Health = GUI.HorizontalSlider(buttonRect(3),Health,0.05f,1f,myStyle1,myStyle2);
 	
 			GUI.Label(textRect(4),"Ambient (" + (int)BackgroundAmbient + ")",myStyle1);
 			BackgroundAmbient = GUI.HorizontalSlider(buttonRect(4),BackgroundAmbient,0f,255f);

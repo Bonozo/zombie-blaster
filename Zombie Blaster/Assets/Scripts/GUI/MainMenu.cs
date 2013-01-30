@@ -119,8 +119,8 @@ public class MainMenu : MonoBehaviour {
 			
 			if( buttonQuit.PressedUp )
 			{
-				buttonQuit.DisableButtonForUse();
-				Application.Quit();
+				StartCoroutine(QuitGameThread());
+				return;
 			}
 			
 			break;
@@ -152,6 +152,23 @@ public class MainMenu : MonoBehaviour {
 		Fade.InProcess=false;
 		oktogothmapforfirstgameplay=true;
 	}
+	
+	public AudioSource audioQuitGame;
+	public IEnumerator QuitGameThread()
+	{
+		DisableMenuButtons();
+		audioQuitGame.Play();
+		
+		Fade.InProcess = true;
+		fade.Show(1.5f);
+		while( !fade.Finished )
+		{
+			yield return new WaitForEndOfFrame();
+		}
+		Fade.InProcess=false;
+		Application.Quit();
+	}
+	
 	#endregion
 	
 	#region Methods
