@@ -126,12 +126,15 @@ public class SelectArea : MonoBehaviour {
 	void UpdateNotification()
 	{
 		bool show = false;
-		store.UpdateWeaponAvailable();
-		for(int i=0;i<Store.countWeapons;i++)
-			if( store.WeaponAvailable(i) && Store.CanBuyWeapon(i) )
-			{
-				show = true;
-			}
+		if( fade.Finished )
+		{
+			store.UpdateWeaponAvailable();
+			for(int i=0;i<Store.countWeapons;i++)
+				if( store.WeaponAvailable(i) && Store.CanBuyWeapon(i) )
+				{
+					show = true;
+				}
+		}
 		notification.enabled = show;
 	}
 	
@@ -297,7 +300,7 @@ public class SelectArea : MonoBehaviour {
 		
 		if( play_index != -1 )
 		{
-			GUI.Label(new Rect(0.35f*Screen.width,0.33f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),"Highest Wave Completed " + Store.HighestWaveCompleted(play_index),myStyle);
+			GUI.Label(new Rect(0.35f*Screen.width,0.33f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),"HIGHEST WAVE COMPLETED: " + Store.HighestWaveCompleted(play_index),myStyle);
 			if(GUI.Button(new Rect(0.33f*Screen.width,0.55f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "PLAY", buttonStyle))
 			{
 				/*audioUnlocked.Play();

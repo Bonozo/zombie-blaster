@@ -406,15 +406,16 @@ public class Control : MonoBehaviour {
 		// Update Zombie Heads Number On Screen
 		LevelInfo.Environments.hubZombieHeads.SetNumberWithFlash(Store.zombieHeads);
 		LevelInfo.Environments.guiPaused.SetActive(state == GameState.Paused);
-		if(lastZombieHeads != Store.zombieHeads && !Store.FirstTimePlay)	
+		
+		
+		if(lastZombieHeads != Store.zombieHeads && !Store.FirstTimePlay && LevelInfo.Environments.fade.Finished)	
 		{
 			ShowStoreNotifiaction();
 			ShowMapNotification();
+			lastZombieHeads = Store.zombieHeads;
 		}
-		
 		LevelInfo.Environments.notificationStore.gameObject.SetActive(storeNotificationTime&&ScreenShowed);
 		LevelInfo.Environments.notificationMap.gameObject.SetActive(mapNotificationTime&&ScreenShowed);
-		lastZombieHeads = Store.zombieHeads;
 		
 		ShakeUpdates();
 		
