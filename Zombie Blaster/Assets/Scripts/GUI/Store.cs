@@ -233,10 +233,8 @@ public class Store : MonoBehaviour {
 	public AudioClip clipQuitPlayGame;
 	
 	public Texture2D[] textureWeapons;
-	public Texture2D textureWeaponUnknown;
 	public GameObject[] objectWeapons;
 	public AudioClip[] clipWeaponInfo;
-	//public GameObject objectsWeaponsUnknown1,objectsWeaponsUnknown2;
 	
 	public Font blackFont,redFont,greenFont;
 	
@@ -248,6 +246,7 @@ public class Store : MonoBehaviour {
 	public ButtonBase buttonTrash;
 	public GUIText zombieHeadText;
 	public Texture2D popupTexture;
+	public UpDownAnimate getHeadsAnimation;
 	
 	private bool wantToExit = false;
 	
@@ -314,6 +313,7 @@ public class Store : MonoBehaviour {
 				//FirstShopItem();
 				//FirstStashItem();
 				
+				getHeadsAnimation.ResetDown();
 				scrollingTime = 0f;
 				Update ();
 			}
