@@ -30,18 +30,18 @@ public class Control : MonoBehaviour {
 	int k = 0;
 	int l = 0;
 	
-	int noOfTimesScoreDisplay;
+	//*commented for warning*//int noOfTimesScoreDisplay;
 	
 	bool isGet;
 	bool isPost;
-	bool isScoreDisplayed;
+	//*commented for warning*//bool isScoreDisplayed;
 	bool isName;
 	bool isConnectionError1;
 	bool isLeaderBoard;
 	
 	const float yPosition = 0.03f;
 	
-	string scoreLB;
+	//*commented for warning*//string scoreLB;
 	string nameLB;
 	
     IEnumerator WaitForRequest(WWW www)
@@ -326,11 +326,11 @@ public class Control : MonoBehaviour {
 	{	
 		#region LeaderBoardDemo
 		Time.timeScale = 1;
-		noOfTimesScoreDisplay = 0;
+		//*commented for warning*//noOfTimesScoreDisplay = 0;
 		
 		isGet = false;
 		isPost = false;
-		isScoreDisplayed = false;
+		//*commented for warning*//isScoreDisplayed = false;
 		isName = false;
 		isConnectionError1 = false;
 		isLeaderBoard = false;
@@ -339,7 +339,7 @@ public class Control : MonoBehaviour {
 		postScoreResponse = "";
 		
 		nameLB = "";
-		scoreLB = "";
+		//*commented for warning*//scoreLB = "";
 		
 		#endregion
 		
@@ -612,7 +612,7 @@ public class Control : MonoBehaviour {
 					isGet = false;
 					isPost = true;
 										
-					isScoreDisplayed = false;					
+					//*commented for warning*//isScoreDisplayed = false;					
 				}
 				
 				if(isGet)

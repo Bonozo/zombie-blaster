@@ -6,6 +6,11 @@ public class ZombieRagdoll : MonoBehaviour {
 	
 	public bool scooby = false;
 	
+	/// <summary>
+	/// Used for a civilian 
+	/// </summary>
+	public bool enableRespawn = true;
+	
 	public GameObject Fire;
 	public GameObject Smoke;
 	public GameObject Zombie;
@@ -132,11 +137,13 @@ public class ZombieRagdoll : MonoBehaviour {
 	public void ThrowedOut()
 	{
 		//DestroyTime = 50;
+		if(!enableRespawn) return;
 		throwedout = true;
 	}
 
 	public void IsCivilian()
 	{
+		if(!enableRespawn) return;
 		//DestroyTime = 50;
 		throwedout = true;
 		//iscivilian = true;

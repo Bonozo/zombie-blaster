@@ -156,7 +156,7 @@ public class Generator : MonoBehaviour {
 	{
 		zombiesLeft = numberzombies;
 		generateZombies = true;
-		zombieRate = zombieRate = Random.Range(GenerationRateMin,GenerationRateMax);
+		zombieRate = Random.Range(GenerationRateMin,GenerationRateMax);
 	}
 	
 	#endregion
@@ -246,7 +246,7 @@ public class Generator : MonoBehaviour {
 	
 	public HealthPack[] powerups;
 	
-	private bool firstvelmaforL1W3 = false;
+	//private bool firstvelmaforL1W3 = false;
 	
 	private HealthPackType WhatPowerupToSpawn(bool scooby)
 	{

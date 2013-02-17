@@ -110,7 +110,7 @@ public class civilian : MonoBehaviour {
 	{
 		if(died) return; died=true;
 		control.GetHealth(PlayerScoreForDie);
-		LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()+1);
+		//LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()+1);
 		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
 		g.SendMessage("IsCivilian");
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
@@ -125,7 +125,7 @@ public class civilian : MonoBehaviour {
 	{
 		if(died) return; died=true;
 		control.GetHealth(PlayerScoreForDie);
-		LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()+1);
+		//LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()+1);
 		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
 		g.SendMessage("IsCivilian");
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
@@ -140,7 +140,7 @@ public class civilian : MonoBehaviour {
 	{
 		if(died) return; died=true;
 		control.GetHealth(PlayerScoreForDie);
-		LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()+1);
+		//LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()+1);
 		GameObject ragdoll = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
 		ragdoll.SendMessage("IsCivilian");
 		var rigidbodies = ragdoll.GetComponentsInChildren(typeof(Rigidbody));
@@ -153,7 +153,7 @@ public class civilian : MonoBehaviour {
 	{
 		if(died) return; died=true;
 		control.GetHealth(PlayerScoreForDie);
-		LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()+1);
+		//LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()+1);
 		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
 		g.SendMessage("IsCivilian");
 		g.SendMessage("SetFireSize",1f);

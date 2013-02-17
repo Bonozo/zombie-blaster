@@ -38,7 +38,7 @@ public class HeadHit : MonoBehaviour {
 		HeadContainer.GetFlame(2*delta);
 	}
 	
-	private int headshotscountairsoft=0;
+	//private int headshotscountairsoft=0;
 	public void DieWithAirsoft()
 	{
 		if( HeadContainer.GetHitDamaged(5) )

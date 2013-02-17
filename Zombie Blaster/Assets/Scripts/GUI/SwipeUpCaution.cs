@@ -16,7 +16,6 @@ public class SwipeUpCaution : MonoBehaviour {
 	
 	public void Activate(Vector3 scp)
 	{	
-		Vector3 org = scp;
 		scp = LevelInfo.Environments.mainCamera.WorldToScreenPoint(scp);
 		// swipe up
 		if(scp.z > 0 && scp.x>=0 && scp.x <= Screen.width )

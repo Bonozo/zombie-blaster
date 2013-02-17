@@ -36,7 +36,7 @@ public class Leaderboard : MonoBehaviour {
 	
 	bool isGet;
 	bool isPost;
-	bool isScoreDisplayed;
+	//*commented for warning*//bool isScoreDisplayed;
 	bool isName;
 	bool isConnectionError1;
 	bool isLeaderBoard;
@@ -194,7 +194,7 @@ public class Leaderboard : MonoBehaviour {
 		isPost = false;
 		isGet = true;
 	
-		isScoreDisplayed = true;
+		//*commented for warning*//isScoreDisplayed = true;
 	}
 	
 	// Use this for initialization

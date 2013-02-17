@@ -2,9 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class ButtonStore : MonoBehaviour {
-	
-	private GameState lastState;
-	
+
 	void OnPress(bool isDown)
 	{
 		if(Fade.InProcess) return;
@@ -15,8 +13,6 @@ public class ButtonStore : MonoBehaviour {
 			
 			if( LevelInfo.Environments.control.state == GameState.Play || LevelInfo.Environments.control.state == GameState.Paused)
 			{
-				//GameEnvironment.IgnoreButtons();
-				lastState = LevelInfo.Environments.control.state;
 				LevelInfo.Environments.control.state = GameState.Store;
 			}
 
@@ -27,3 +23,4 @@ public class ButtonStore : MonoBehaviour {
 
 	
 }
+ 
