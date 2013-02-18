@@ -103,6 +103,15 @@ public class Option : MonoBehaviour {
 				debugScreen = false;
 				title.text = "Options";
 			}
+			
+			//By Mak Kaloliya on 07022013
+			#if UNITY_IPHONE
+			if( GUI.Button( new Rect(Screen.width-450,Screen.height-60,220,40),"Show TapJoy Offers",myStyle2))
+			{
+				TapjoyBinding.showOffers();
+			}
+			#endif
+			//End
 		}
 		
 		else
