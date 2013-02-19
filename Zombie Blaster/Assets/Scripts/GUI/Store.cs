@@ -213,11 +213,13 @@ public class Store : MonoBehaviour {
 		Store.zombieHeads = Store.zombieHeads + 1000;
 	}
 	
+	#if UNITY_IPHONE
 	void zombieStoreKitPurchaseSuccessful( StoreKitTransaction transaction )
 	{
 		Debug.Log( "purchased product: " + transaction );
 		Store.zombieHeads = Store.zombieHeads + 1000;
 	}
+	#endif
 	
 	void zombieStoreKitPurchaseFailed( string error )
 	{
@@ -251,8 +253,9 @@ public class Store : MonoBehaviour {
 		Debug.Log( "receiveTapPointsFailed" );
 	}
 	//End
+	#if UNITY_IPHONE
 	private List<StoreKitProduct> _products;
-	
+	#endif
 	void Start()
 	{
 		#if UNITY_ANDROID
