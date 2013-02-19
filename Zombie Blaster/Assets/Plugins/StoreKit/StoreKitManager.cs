@@ -7,35 +7,43 @@ using System.Collections.Generic;
 public class StoreKitManager : MonoBehaviour
 {
 #if UNITY_IPHONE
-	// Fired when a product is successfully paid for.  returnValue will hold the productIdentifer and receipt of the purchased product.
-	public static event Action<StoreKitTransaction> purchaseSuccessful;
+	public static bool autoConfirmTransactions = true;
+	
 	
 	// Fired when the product list your required returns.  Automatically serializes the productString into StoreKitProduct's.
-	public static event Action<List<StoreKitProduct>> productListReceived;
+	public static event Action<List<StoreKitProduct>> productListReceivedEvent;
 	
 	// Fired when requesting product data fails
-	public static event Action<string> productListRequestFailed;
+	public static event Action<string> productListRequestFailedEvent;
+	
+	// Fired when a product purchase has returned from Apple's servers and is awaiting completion. By default the plugin will finish transactions for you.
+	// You can change that behaviour by setting autoConfirmTransactions to false which then requires that you call StoreKitBinding.finishPendingTransaction
+	// to complete a purchase.
+	public static event Action<StoreKitTransaction> productPurchaseAwaitingConfirmationEvent;
+	
+	// Fired when a product is successfully paid for.  returnValue will hold the productIdentifer and receipt of the purchased product.
+	public static event Action<StoreKitTransaction> purchaseSuccessfulEvent;
 	
 	// Fired when a product purchase fails
-	public static event Action<string> purchaseFailed;
+	public static event Action<string> purchaseFailedEvent;
 	
 	// Fired when a product purchase is cancelled by the user or system
-	public static event Action<string> purchaseCancelled;
+	public static event Action<string> purchaseCancelledEvent;
 	
 	// Fired when the validateReceipt call fails
-	public static event Action<string> receiptValidationFailed;
+	public static event Action<string> receiptValidationFailedEvent;
 	
 	// Fired when receive validation completes and returns the raw receipt data
-	public static event Action<string> receiptValidationRawResponseReceived;
+	public static event Action<string> receiptValidationRawResponseReceivedEvent;
 	
 	// Fired when the validateReceipt method finishes.  It does not automatically mean success.
-	public static event Action receiptValidationSuccessful;
+	public static event Action receiptValidationSuccessfulEvent;
 	
 	// Fired when an error is encountered while adding transactions from the user's purchase history back to the queue
-	public static event Action<string> restoreTransactionsFailed;
+	public static event Action<string> restoreTransactionsFailedEvent;
 	
 	// Fired when all transactions from the user's purchase history have successfully been added back to the queue
-	public static event Action restoreTransactionsFinished;
+	public static event Action restoreTransactionsFinishedEvent;
 	
 	
     void Awake()
@@ -46,52 +54,62 @@ public class StoreKitManager : MonoBehaviour
     }
 	
 	
+	public void productPurchaseAwaitingConfirmation( string json )
+	{
+		if( productPurchaseAwaitingConfirmationEvent != null )
+			productPurchaseAwaitingConfirmationEvent( StoreKitTransaction.transactionFromJson( json ) );
+		
+		if( autoConfirmTransactions )
+			StoreKitBinding.finishPendingTransaction();
+	}
+
+	
 	public void productPurchased( string json )
 	{
-		if( purchaseSuccessful != null )
-			purchaseSuccessful( StoreKitTransaction.transactionFromJson( json ) );
+		if( purchaseSuccessfulEvent != null )
+			purchaseSuccessfulEvent( StoreKitTransaction.transactionFromJson( json ) );
 	}
 	
 	
 	public void productPurchaseFailed( string error )
 	{
-		if( purchaseFailed != null )
-			purchaseFailed( error );
+		if( purchaseFailedEvent != null )
+			purchaseFailedEvent( error );
 	}
 	
 		
 	public void productPurchaseCancelled( string error )
 	{
-		if( purchaseCancelled != null )
-			purchaseCancelled( error );
+		if( purchaseCancelledEvent != null )
+			purchaseCancelledEvent( error );
 	}
 	
 	
 	public void productsReceived( string json )
 	{
-		if( productListReceived != null )
-			productListReceived( StoreKitProduct.productsFromJson( json ) );
+		if( productListReceivedEvent != null )
+			productListReceivedEvent( StoreKitProduct.productsFromJson( json ) );
 	}
 	
 	
 	public void productsRequestDidFail( string error )
 	{
-		if( productListRequestFailed != null )
-			productListRequestFailed( error );
+		if( productListRequestFailedEvent != null )
+			productListRequestFailedEvent( error );
 	}
 	
 	
 	public void validateReceiptFailed( string error )
 	{
-		if( receiptValidationFailed != null )
-			receiptValidationFailed( error );
+		if( receiptValidationFailedEvent != null )
+			receiptValidationFailedEvent( error );
 	}
 	
 	
 	public void validateReceiptRawResponse( string response )
 	{
-		if( receiptValidationRawResponseReceived != null )
-			receiptValidationRawResponseReceived( response );
+		if( receiptValidationRawResponseReceivedEvent != null )
+			receiptValidationRawResponseReceivedEvent( response );
 	}
 	
 	
@@ -99,29 +117,30 @@ public class StoreKitManager : MonoBehaviour
 	{
 		if( statusCode == "0" )
 		{
-			if( receiptValidationSuccessful != null )
-				receiptValidationSuccessful();
+			if( receiptValidationSuccessfulEvent != null )
+				receiptValidationSuccessfulEvent();
 		}
 		else
 		{
-			if( receiptValidationFailed != null )
-				receiptValidationFailed( "Receipt validation failed with statusCode: " + statusCode );
+			if( receiptValidationFailedEvent != null )
+				receiptValidationFailedEvent( "Receipt validation failed with statusCode: " + statusCode );
 		}
 	}
-	
+
 	
 	public void restoreCompletedTransactionsFailed( string error )
 	{
-		if( restoreTransactionsFailed != null )
-			restoreTransactionsFailed( error );
+		if( restoreTransactionsFailedEvent != null )
+			restoreTransactionsFailedEvent( error );
 	}
 	
 	
 	public void restoreCompletedTransactionsFinished( string empty )
 	{
-		if( restoreTransactionsFinished != null )
-			restoreTransactionsFinished();
+		if( restoreTransactionsFinishedEvent != null )
+			restoreTransactionsFinishedEvent();
 	}
+
 #endif
 }
 
