@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public enum Levels
 {
@@ -175,6 +176,17 @@ public class Store : MonoBehaviour {
 		TapjoyAndroidManager.fullScreenAdDidLoadEvent += fullScreenAdDidLoadEvent;
 		#endif
 		
+		//By Mak Kaloliya on 07022012
+		#if UNITY_IPHONE
+		TapjoyManager.fullscreenAdDidLoadEvent += fullscreenAdDidLoadEventIOS;
+		TapjoyManager.tapPointsReceivedEvent += tapPointsReceived;
+		TapjoyManager.receiveTapPointsFailedEvent += receiveTapPointsFailed;
+		StoreKitManager.purchaseSuccessfulEvent += zombieStoreKitPurchaseSuccessful;
+		StoreKitManager.purchaseCancelledEvent += zombieStoreKitPurchaseCancelled;
+		StoreKitManager.purchaseFailedEvent += zombieStoreKitPurchaseFailed;
+		#endif
+		//End
+		
 	}
 	
 	void OnDisable()
@@ -184,18 +196,63 @@ public class Store : MonoBehaviour {
 		TapjoyAndroidManager.fullScreenAdDidLoadEvent -= fullScreenAdDidLoadEvent;
 		#endif
 		
+		//By Mak Kaloliya on 07022013
+		#if UNITY_IPHONE
+		TapjoyManager.fullscreenAdDidLoadEvent -= fullscreenAdDidLoadEventIOS;
+		TapjoyManager.tapPointsReceivedEvent -= tapPointsReceived;
+		TapjoyManager.receiveTapPointsFailedEvent -= receiveTapPointsFailed;
+		StoreKitManager.purchaseSuccessfulEvent -= zombieStoreKitPurchaseSuccessful;
+		StoreKitManager.purchaseCancelledEvent -= zombieStoreKitPurchaseCancelled;
+		StoreKitManager.purchaseFailedEvent -= zombieStoreKitPurchaseFailed;
+		#endif
+		//End
 	}
 	
 	void HandleIABAndroidManagerpurchaseSucceededEvent (string obj)
 	{
 		Store.zombieHeads = Store.zombieHeads + 1000;
 	}
+	
+	void zombieStoreKitPurchaseSuccessful( StoreKitTransaction transaction )
+	{
+		Debug.Log( "purchased product: " + transaction );
+		Store.zombieHeads = Store.zombieHeads + 1000;
+	}
+	
+	void zombieStoreKitPurchaseFailed( string error )
+	{
+		Debug.Log( "purchase failed with error: " + error );
+	}
+	
+	void zombieStoreKitPurchaseCancelled( string error )
+	{
+		Debug.Log( "purchase cancelled with error: " + error );
+	}
 
 	void fullScreenAdDidLoadEvent( bool didLoad )
 	{
 		tapjoyConnected = didLoad;
 	}
-
+	
+	//By Mak Kaloliya on 07022013
+	void fullscreenAdDidLoadEventIOS()
+	{
+		tapjoyConnected = true;
+	}
+	
+	private void tapPointsReceived( int totalPoints )
+	{
+		Debug.Log( "tapPointsReceived: " + totalPoints );
+	}
+	
+	
+	private void receiveTapPointsFailed()
+	{
+		Debug.Log( "receiveTapPointsFailed" );
+	}
+	//End
+	private List<StoreKitProduct> _products;
+	
 	void Start()
 	{
 		#if UNITY_ANDROID
@@ -203,6 +260,19 @@ public class Store : MonoBehaviour {
 		TapjoyAndroid.init( "6f8b509b-f292-4dd3-b440-eab33f211089", "7TYeZbZ6GTqRncoALV3W", false );//old
 		//TapjoyAndroid.init( "b1f6ad92-1ff9-47ca-a962-a4b7ecddebd2", "wNZUPjewwCeVRkgpCCZQ", false );//new
 		#endif 
+		
+		//By Mak Kaloliya on 07022013
+		#if UNITY_IPHONE
+		TapjoyBinding.init( "b6b895c2-5c52-4eac-b102-4ae2a6bcaf84", "IaaQuo03VctIM6m3Qr5Z", true );
+		StoreKitManager.productListReceivedEvent += allProducts =>
+		{
+			Debug.Log( "received total products: " + allProducts.Count );
+			_products = allProducts;
+		};
+		var productIdentifiers = new string[] {"ZH1000"};
+		StoreKitBinding.requestProductData( productIdentifiers );
+		#endif
+		//End
 		
 		// Clear Prefabs
 		//PlayerPrefs.SetInt("zombieHeads",10000);
@@ -369,6 +439,10 @@ public class Store : MonoBehaviour {
 	{
 		#if UNITY_ANDROID
 		IABAndroid.purchaseProduct("android.test.purchased");
+		#endif
+		
+		#if UNITY_IPHONE
+		StoreKitBinding.purchaseProduct( "ZH1000", 1 );
 		#endif
 			
 		#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX

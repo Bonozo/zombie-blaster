@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Prime31;
 
 
 #if UNITY_IPHONE
@@ -49,7 +50,7 @@ public class StoreKitTransaction
 	
 	public override string ToString()
 	{
-		return string.Format( "<StoreKitTransaction>\nID: {0}\nReceipt: {1}\nQuantity: {2}", productIdentifier, base64EncodedTransactionReceipt, quantity );
+		return string.Format( "<StoreKitTransaction>\nID: {0}\nQuantity: {1}", productIdentifier, quantity );
 	}
 
 }

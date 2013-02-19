@@ -38,6 +38,17 @@ public class StoreKitBinding
         if( Application.platform == RuntimePlatform.IPhonePlayer )
 			_storeKitPurchaseProduct( productIdentifier, quantity );
     }
+	
+	
+    [DllImport("__Internal")]
+    private static extern void _storeKitFinishPendingTransaction();
+
+	// Finishes the pending transaction
+    public static void finishPendingTransaction()
+    {
+        if( Application.platform == RuntimePlatform.IPhonePlayer )
+			_storeKitFinishPendingTransaction();
+    }
 
 
     [DllImport("__Internal")]
