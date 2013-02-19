@@ -184,6 +184,7 @@
      <None Include="Assets\Plugins\Android\res\layout\gree_pull_to_refresh_header.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_palette_out_to_left.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_slide_in_right.xml" />
+     <None Include="Assets\Art\Shaders\Electricity.shader" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_status_user_notification_with_badge_selector.xml" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (HardClip).shader" />
      <None Include="Assets\Plugins\Android\res\drawable\gree_status_notification_badge_left_selector.xml" />

@@ -6,7 +6,7 @@ public class GameEnvironment : MonoBehaviour {
 	#region Static Local
 	
 	public static int StartLevel = 0;
-	public static int StartWave = 2;
+	public static int StartWave = 0;
 	
 	
 	public static string loadingLevel = "error";
@@ -29,7 +29,7 @@ public class GameEnvironment : MonoBehaviour {
 		ignore = true;
 	}
 	
-	#if UNITY_ANDROID || UNITY_IPHONE
+	#if !UNITY_ANDROID || UNITY_IPHONE
 	private static Vector2 beginPos;
 	private static Vector2 startPos;
 	private static bool couldBeSwipe;
