@@ -8,6 +8,7 @@ using Prime31;
 public class StoreKitTransaction
 {
     public string productIdentifier;
+	public string transactionIdentifier;
     public string base64EncodedTransactionReceipt;
     public int quantity;
 	
@@ -17,9 +18,12 @@ public class StoreKitTransaction
 	{
 		var transactionList = new List<StoreKitTransaction>();
 		
-		ArrayList products = json.arrayListFromJson();
-		foreach( Hashtable ht in products )
-			transactionList.Add( transactionFromHashtable( ht ) );
+		var transactions = json.listFromJson();
+		if( transactions == null )
+			return transactionList;
+		
+		foreach( Dictionary<string,object> dict in transactions )
+			transactionList.Add( transactionFromDictionary( dict ) );
 		
 		return transactionList;
 	}
@@ -27,22 +31,30 @@ public class StoreKitTransaction
 
     public static StoreKitTransaction transactionFromJson( string json )
     {
-		return transactionFromHashtable( json.hashtableFromJson() );
+		var dict = json.dictionaryFromJson();
+		
+		if( dict == null )
+			return new StoreKitTransaction();
+		
+		return transactionFromDictionary( json.dictionaryFromJson() );
     }
 	
 	
-    public static StoreKitTransaction transactionFromHashtable( Hashtable ht )
+    public static StoreKitTransaction transactionFromDictionary( Dictionary<string,object> dict )
     {
         var transaction = new StoreKitTransaction();
-  		
-		if( ht.ContainsKey( "productIdentifier" ) )
-        	transaction.productIdentifier = ht["productIdentifier"].ToString();
 		
-		if( ht.ContainsKey( "base64EncodedReceipt" ) )
-        	transaction.base64EncodedTransactionReceipt = ht["base64EncodedReceipt"].ToString();
+		if( dict.ContainsKey( "productIdentifier" ) )
+        	transaction.productIdentifier = dict["productIdentifier"].ToString();
+
+		if( dict.ContainsKey( "transactionIdentifier" ) )
+        	transaction.transactionIdentifier = dict["transactionIdentifier"].ToString();
 		
-		if( ht.ContainsKey( "quantity" ) )
-        	transaction.quantity = int.Parse( ht["quantity"].ToString() );
+		if( dict.ContainsKey( "base64EncodedReceipt" ) )
+        	transaction.base64EncodedTransactionReceipt = dict["base64EncodedReceipt"].ToString();
+		
+		if( dict.ContainsKey( "quantity" ) )
+        	transaction.quantity = int.Parse( dict["quantity"].ToString() );
 
         return transaction;
     }
@@ -50,7 +62,7 @@ public class StoreKitTransaction
 	
 	public override string ToString()
 	{
-		return string.Format( "<StoreKitTransaction>\nID: {0}\nQuantity: {1}", productIdentifier, quantity );
+		return string.Format( "<StoreKitTransaction> ID: {0}, quantity: {1}, transactionIdentifier: {2}", productIdentifier, quantity, transactionIdentifier );
 	}
 
 }

@@ -41,13 +41,24 @@ public class StoreKitBinding
 	
 	
     [DllImport("__Internal")]
-    private static extern void _storeKitFinishPendingTransaction();
+    private static extern void _storeKitFinishPendingTransactions();
 
-	// Finishes the pending transaction
-    public static void finishPendingTransaction()
+	// Finishes any and all pending transactions
+    public static void finishPendingTransactions()
     {
         if( Application.platform == RuntimePlatform.IPhonePlayer )
-			_storeKitFinishPendingTransaction();
+			_storeKitFinishPendingTransactions();
+    }
+	
+	
+    [DllImport("__Internal")]
+    private static extern void _storeKitFinishPendingTransaction( string transactionIdentifier );
+
+	// Finishes the pending transaction identified by the transactionIdentifier
+    public static void finishPendingTransaction( string transactionIdentifier )
+    {
+        if( Application.platform == RuntimePlatform.IPhonePlayer )
+			_storeKitFinishPendingTransaction( transactionIdentifier );
     }
 
 
@@ -66,6 +77,7 @@ public class StoreKitBinding
     [DllImport("__Internal")]
     private static extern void _storeKitValidateReceipt( string base64EncodedTransactionReceipt, bool isTest );
 
+	// Deprecated. Receipt validation should be done on a web server for it to be secure.
 	// Validates the given receipt for non-consumable products.  If you are using the sandbox server (not a live sale) set isTest to true.
     public static void validateReceipt( string base64EncodedTransactionReceipt, bool isTest )
     {
@@ -77,6 +89,7 @@ public class StoreKitBinding
 	[DllImport("__Internal")]
 	private static extern void _storeKitValidateAutoRenewableReceipt( string base64EncodedTransactionReceipt, string secret, bool isTest );
 
+	// Deprecated. Receipt validation should be done on a web server for it to be secure.
 	// Validates a receipt from an auto-renewable product
 	public static void validateAutoRenewableReceipt( string base64EncodedTransactionReceipt, string secret, bool isTest )
 	{

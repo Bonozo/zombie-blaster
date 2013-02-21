@@ -1,12 +1,12 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using Prime31;
 
 
-
-public class StoreKitManager : MonoBehaviour
-{
 #if UNITY_IPHONE
+public class StoreKitManager : AbstractManager
+{
 	public static bool autoConfirmTransactions = true;
 	
 	
@@ -45,12 +45,14 @@ public class StoreKitManager : MonoBehaviour
 	// Fired when all transactions from the user's purchase history have successfully been added back to the queue
 	public static event Action restoreTransactionsFinishedEvent;
 	
+	// Fired when any SKDownload objects are updated by iOS. If using hosted content you should not be confirming the transaction until all downloads are complete.
+	public static event Action<List<StoreKitDownload>> paymentQueueUpdatedDownloadsEvent;
 	
-    void Awake()
+	
+	
+    static StoreKitManager()
     {
-		// Set the GameObject name to the class name for easy access from Obj-C
-		gameObject.name = this.GetType().ToString();
-		DontDestroyOnLoad( this );
+		AbstractManager.initialize( typeof( StoreKitManager ) );
     }
 	
 	
@@ -60,7 +62,7 @@ public class StoreKitManager : MonoBehaviour
 			productPurchaseAwaitingConfirmationEvent( StoreKitTransaction.transactionFromJson( json ) );
 		
 		if( autoConfirmTransactions )
-			StoreKitBinding.finishPendingTransaction();
+			StoreKitBinding.finishPendingTransactions();
 	}
 
 	
@@ -140,7 +142,14 @@ public class StoreKitManager : MonoBehaviour
 		if( restoreTransactionsFinishedEvent != null )
 			restoreTransactionsFinishedEvent();
 	}
+	
+	
+	public void paymentQueueUpdatedDownloads( string json )
+	{
+		if( paymentQueueUpdatedDownloadsEvent != null )
+			paymentQueueUpdatedDownloadsEvent( StoreKitDownload.downloadsFromJson( json ) );
+		
+	}
 
-#endif
 }
-
+#endif
