@@ -13,7 +13,9 @@
 	<key>weakLinkFrameworks</key>
 	<array/>
 	<key>linkerFlags</key>
-	<array/>
+	<array>
+		<string>-ObjC</string>
+	</array>
 	<key>neverShowCompletedMessage</key>
 	<false/>
 </dict>
