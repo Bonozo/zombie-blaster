@@ -445,7 +445,8 @@ public class Store : MonoBehaviour {
 		#endif
 		
 		#if UNITY_IPHONE
-		StoreKitBinding.purchaseProduct( "ZH1000", 1 );
+		if(_products.Count > 0)
+			StoreKitBinding.purchaseProduct( "ZH1000", 1 );
 		#endif
 			
 		#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX
