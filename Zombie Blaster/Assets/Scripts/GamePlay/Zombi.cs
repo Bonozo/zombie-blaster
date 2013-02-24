@@ -80,7 +80,7 @@ public class Zombi : MonoBehaviour {
 		if( HelmetPrefab != null )
 		{
 			haveHelmet = Random.Range(0,2)==1;
-			HelmetPrefab.SetActiveRecursively(haveHelmet);
+			HelmetPrefab.SetActive(haveHelmet);
 		}
 		
 		transform.position = new Vector3(transform.position.x,ZombieHeight,transform.position.z);
@@ -449,7 +449,7 @@ public class Zombi : MonoBehaviour {
 				g.transform.localScale = HelmetPrefab.transform.lossyScale;
 				g.AddComponent<ThrowingOut>();
 				
-				HelmetPrefab.SetActiveRecursively(false);
+				HelmetPrefab.SetActive(false);
 				
 				damage = 10;
 			}
@@ -467,51 +467,6 @@ public class Zombi : MonoBehaviour {
 		animation.Play("get hit");
 		animation["get hit"].time = 0.0f;
 	}
-	
-	/*public void GetHitFinished(Weapon weapon,Vector3 contactpoint,int hitpoints)
-	{
-		bool headhit = contactpoint.y>head.position.y-0.3f;
-		if( animation.IsPlaying("spawn") ) headhit = Mathf.Abs(contactpoint.y-head.position.y) <= 0.3f;
-		
-		if( headhit )
-			LevelInfo.Environments.generator.GenerateMessageText(head.position + new Vector3(0f,0.75f,0),"Headshot");
-		
-		if( LevelInfo.Environments.control.DamageMultiplied ) hitpoints *= 4;
-		damage -= hitpoints;
-		if( headhit && !haveHelmet ) damage = 0;
-		animation.Play("get hit");
-		animation["get hit"].time = 0.0f;
-		
-		if( damage <= 0 )
-		{
-			if(haveHelmet && ( weapon == Weapon.BB || weapon == Weapon.Crossbow || weapon == Weapon.MachineGun ) )
-			{
-				haveHelmet = false;
-				
-				GameObject g = (GameObject)Instantiate(HelmetPrefab,HelmetPrefab.transform.position,HelmetPrefab.transform.rotation);
-				g.transform.localScale = HelmetPrefab.transform.lossyScale;
-				g.AddComponent<ThrowingOut>();
-				
-				HelmetPrefab.SetActiveRecursively(false);
-				
-				damage = 10;		
-			}
-			else
-			{
-				if(NearPlayer()) GameObject.Find("Goo").SendMessage("Show");
-				Store.zombieHeads++;
-				LevelInfo.Environments.control.score += LevelInfo.State.scoreForHeadShot - LevelInfo.State.scoreForZombie;
-				LevelInfo.Audio.PlayZombieHeadShot();
-				switch(weapon)
-				{
-				case Weapon.BB:
-					DieNormal();
-					break;
-				}
-			}
-		}
-
-	}*/
 	
 	#endregion
 	
@@ -620,7 +575,7 @@ public class Zombi : MonoBehaviour {
 		return XZDistFromPlayer() <= WaitDistance;
 	}
 	
-	#endregion
+	#endregion 
 	
 	#region Messages
 	

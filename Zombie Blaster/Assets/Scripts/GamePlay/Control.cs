@@ -28,7 +28,7 @@ public class Control : MonoBehaviour {
 	
 	int j = 0;
 	int k = 0;
-	int l = 0;
+	int l = 0; 
 	
 	//*commented for warning*//int noOfTimesScoreDisplay;
 	
@@ -237,12 +237,12 @@ public class Control : MonoBehaviour {
 			
 			if( _state == GameState.Store && value != GameState.Store)
 			{
-				guiPlayGame.SetActiveRecursively(true);
+				guiPlayGame.SetActive(true);
 			}	
 			
 			if( _state == GameState.Map && value != GameState.Map)
 			{
-				guiPlayGame.SetActiveRecursively(true);
+				guiPlayGame.SetActive(true);
 				guiMap.SetActive(false);
 			}	
 			
@@ -268,13 +268,13 @@ public class Control : MonoBehaviour {
 			case GameState.Store:
 				LevelInfo.Audio.StopEffects();
 				Time.timeScale = 0f;
-				guiPlayGame.SetActiveRecursively(false);
+				guiPlayGame.SetActive(false);
 				LevelInfo.Environments.store.GetComponent<Store>().showStore = true;	
 				break;
 			case GameState.Map:
 				LevelInfo.Audio.StopEffects();
 				Time.timeScale = 0f;
-				guiPlayGame.SetActiveRecursively(false);
+				guiPlayGame.SetActive(false);
 				guiMap.SetActive(true);
 				break;
 			}
@@ -726,7 +726,9 @@ public class Control : MonoBehaviour {
 	
 	#region AutoTargeting
 	
+	[System.NonSerializedAttribute]
 	public Zombi LeftAttackingZombie;
+	[System.NonSerializedAttribute]
 	public Zombi RightAttackingZombie;
 	
 	

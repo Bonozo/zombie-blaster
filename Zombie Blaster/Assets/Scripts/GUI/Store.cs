@@ -360,7 +360,7 @@ public class Store : MonoBehaviour {
 		{
 			_showStore = value;
 			
-			StoreGUI.SetActiveRecursively(_showStore);
+			StoreGUI.SetActive(_showStore);
 			
 			if( _showStore )
 			{
@@ -377,7 +377,7 @@ public class Store : MonoBehaviour {
 				{
 					MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
 					if(!mainmenu.mapToStore)
-						buttonGAME.gameObject.SetActiveRecursively(false);
+						buttonGAME.gameObject.SetActive(false);
 				}
 				showZombieHeads = zombieHeads;
 				

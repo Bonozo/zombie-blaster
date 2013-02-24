@@ -217,9 +217,6 @@
      <None Include="Assets\Plugins\Android\res\layout\gree_screenshot_button.xml" />
      <None Include="Assets\Plugins\Android\res\anim\gree_palette_in_from_left.xml" />
      <None Include="Assets\Plugins\Android\res\values-ja\gree_strings.xml" />
- <Reference Include="P31MenuItem">
- <HintPath>Assets\Editor\Prime31\P31MenuItem.dll</HintPath>
- </Reference>
  <Reference Include="Prime31MenuItem">
  <HintPath>Assets\Editor\Prime31\Prime31MenuItem.dll</HintPath>
  </Reference>
@@ -235,6 +232,8 @@
       <Project>{273D50B4-AAF9-96CA-1923-6CBABDF70880}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
     <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
       <Project>{AD9BD5B6-53B1-E3A8-C01A-B58AD06B7FCC}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
+    <ProjectReference Include="Assembly-CSharp.csproj">
+      <Project>{4D8ADAAF-ED22-D1D1-76D1-136A27FCA8E8}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

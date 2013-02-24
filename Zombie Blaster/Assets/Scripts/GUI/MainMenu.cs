@@ -42,11 +42,11 @@ public class MainMenu : MonoBehaviour {
 			
 			_state = value;
 			
-			objMenu.SetActiveRecursively(_state == MenuState.MainMenu);
-			objOption.SetActiveRecursively(_state == MenuState.Option);
-			objCreadits.SetActiveRecursively(_state == MenuState.Credits);
-			objAreaMap.SetActiveRecursively(_state == MenuState.AreaMap);
-			objLeaderboard.SetActiveRecursively(_state == MenuState.Leaderboard);
+			objMenu.SetActive(_state == MenuState.MainMenu);
+			objOption.SetActive(_state == MenuState.Option);
+			objCreadits.SetActive(_state == MenuState.Credits);
+			objAreaMap.SetActive(_state == MenuState.AreaMap);
+			objLeaderboard.SetActive(_state == MenuState.Leaderboard);
 			
 			buttonBack.gameObject.SetActive(_state == MenuState.AreaMap || _state == MenuState.Leaderboard || _state == MenuState.Option || _state == MenuState.Credits );
 			
@@ -77,7 +77,7 @@ public class MainMenu : MonoBehaviour {
 		GameObject.Find("Store").GetComponent<Store>().showStore = false;
 		GameObject.Find("Store").GetComponent<Store>().LoadingGUI.SetActive(false);
 	}
-	
+	 
 	// Use this for initialization
 	void Start ()
 	{
