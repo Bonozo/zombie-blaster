@@ -83,6 +83,7 @@ public class SelectArea : MonoBehaviour {
 			guiLoading.SetActive(true);
 			guiFullscreen.texture = screen[Random.Range(0,screen.Length)];
 			guiTip.text = tip[Random.Range(0,tip.Length)];
+			System.GC.Collect();
 			Application.LoadLevel("playgame");
 			return;
 		}
@@ -211,7 +212,7 @@ public class SelectArea : MonoBehaviour {
 		fade.Disable();
 		yield return new WaitForEndOfFrame();
 		Fade.InProcess=false;
-		
+		System.GC.Collect();
 		Application.LoadLevel("playgame");
 	}
 	

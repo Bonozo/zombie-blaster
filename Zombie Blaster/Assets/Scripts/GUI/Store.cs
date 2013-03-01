@@ -873,6 +873,7 @@ public class Store : MonoBehaviour {
 		Destroy(LevelInfo.Environments.generator.objLevel);
 		yield return null;
 		
+		System.GC.Collect();
 		AsyncOperation unload = Resources.UnloadUnusedAssets();
 		while(unload.isDone) yield return null;
 		

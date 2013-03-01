@@ -90,6 +90,7 @@ public class MainMenu : MonoBehaviour {
 		}
 		
 		fade.Hide(1.5f);
+		System.GC.Collect();
 	}
 	
 	// Update is called once per frame

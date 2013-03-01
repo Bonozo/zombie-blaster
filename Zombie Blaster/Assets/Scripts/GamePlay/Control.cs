@@ -264,6 +264,7 @@ public class Control : MonoBehaviour {
 				Time.timeScale = 0f;
 				LevelInfo.Audio.PauseAll();
 				LevelInfo.Audio.PlayAudioPause(true);
+				System.GC.Collect();
 				break;
 			case GameState.Store:
 				LevelInfo.Audio.StopEffects();
@@ -377,6 +378,8 @@ public class Control : MonoBehaviour {
 			allowedWeapons[(int)LevelInfo.State.level[currentLevel].allowedGun[i]]=true;
 		
 		LevelInfo.Environments.fade.Hide(3f);
+		
+		System.GC.Collect();
 	}
 	
 	// Update is called once per frame
@@ -399,7 +402,6 @@ public class Control : MonoBehaviour {
 			armor += 0.1f;
 		if( Input.GetKeyUp(KeyCode.L) )
 			GetBite(0.1f);
-		/////////////////////////////////
 		
 		if( Fade.InProcess || prologuecomplete) return;
 		
@@ -1053,7 +1055,9 @@ public class Control : MonoBehaviour {
 	}
 	
 	public void CreateNewZombieWave()
-	{			
+	{		
+		System.GC.Collect();
+		
 		isInWave = true;
 		currentWave++;
 		
@@ -1071,7 +1075,7 @@ public class Control : MonoBehaviour {
 		{
 			switch(currentWave)
 			{
-			case 1:
+			case 1: 
 				StartCoroutine(ShowTip("TIP: TAP TO SHOOT",4f));
 				break;
 			case 2:
