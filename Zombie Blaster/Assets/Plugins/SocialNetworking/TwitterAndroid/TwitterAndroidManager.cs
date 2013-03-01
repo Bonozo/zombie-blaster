@@ -48,7 +48,7 @@ public class TwitterAndroidManager : MonoBehaviour
 	public void requestSucceeded( string response )
 	{
 		if( requestSucceededEvent != null )
-			requestSucceededEvent( Prime31.MiniJSON.jsonDecode( response ) );
+			requestSucceededEvent( Prime31.Json.jsonDecode( response )/*Prime31.MiniJSON.jsonDecode( response )*/ );
 	}
 
 

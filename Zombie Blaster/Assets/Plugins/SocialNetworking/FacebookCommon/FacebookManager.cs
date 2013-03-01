@@ -154,7 +154,7 @@ public class FacebookManager : MonoBehaviour
 	{
 		if( customRequestReceivedEvent != null )
 		{
-			object obj = Prime31.MiniJSON.jsonDecode( result );
+			object obj = Prime31.Json.jsonDecode( result )/*Prime31.MiniJSON.jsonDecode( result )*/;
 			customRequestReceivedEvent( obj );
 		}
 	}
