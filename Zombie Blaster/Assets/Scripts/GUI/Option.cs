@@ -30,7 +30,7 @@ public class Option : MonoBehaviour {
 	void Update () 
 	{
 		AudioListener.volume = hSlideVolume;
-		version.enabled = debugScreen;
+		version.enabled = !debugScreen;
 		
 		if( creditsButton.PressedUp )
 		{
