@@ -519,8 +519,16 @@ public class Control : MonoBehaviour {
 			if(rot.y >= 180.0f ) rot.y -= 360f;
 		
 			rot.y += Speed*Time.deltaTime*swipe;
-			rot.y += Speed*Time.deltaTime*Input.GetAxis("Horizontal"); // for PC version test.
-		
+			if(Option.TiltingMove)
+			{
+				float tilt = GameEnvironment.InputAxis.y;
+				if(Mathf.Abs(tilt)>0.075f) 
+				{
+					if(tilt>0) tilt-=0.075f; else tilt+=0.075f;
+					tilt*=0.5f;
+					rot.y += Speed*Time.deltaTime*tilt;
+				}
+			}
 			transform.rotation = Quaternion.Euler(rot);
 		}
 	}

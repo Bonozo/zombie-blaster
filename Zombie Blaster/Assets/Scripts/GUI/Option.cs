@@ -14,9 +14,10 @@ public class Option : MonoBehaviour {
 	public static float BackgroundAmbient = 101f;
 	public static bool ShowFPS = false;
 	public static bool ShoveHelper = true;
-	public static bool AutoTargeting = true;
+	public static bool AutoTargeting = false;
 	public static float Sensitivity = 0.01f;
 	public static int FlameWaitingFrames=5;
+	public static bool TiltingMove = false;
 	
 	bool showdebug = true;
 	bool debugScreen = false;
@@ -53,12 +54,12 @@ public class Option : MonoBehaviour {
 	private Rect textRect(float index)
 	{
 		index++;
-		return new Rect(Screen.width*0.05f,index*0.085f*Screen.height,Screen.width*0.4f,Screen.height*0.07f);
+		return new Rect(Screen.width*0.05f,index*0.075f*Screen.height,Screen.width*0.4f,Screen.height*0.06f);
 	}
 	private Rect buttonRect(float index)
 	{
 		index++;
-		return new Rect(Screen.width*0.5f,index*0.085f*Screen.height,Screen.width*0.4f,Screen.height*0.07f);
+		return new Rect(Screen.width*0.5f,index*0.075f*Screen.height,Screen.width*0.4f,Screen.height*0.06f);
 	}
 	
 	void OnGUI()
@@ -72,9 +73,10 @@ public class Option : MonoBehaviour {
 			
 			GUI.Label(textRect(2),"Tapjoy Connected",myStyle1);
 			GUI.Box(buttonRect(2),"" + Store.tapjoyConnected,myStyle2 );
-				
-			GUI.Label(textRect(3),"Health",myStyle1);
-			Health = GUI.HorizontalSlider(buttonRect(3),Health,0.05f,1f,myStyle1,myStyle2);
+			
+			GUI.Label(textRect(3),"Auto Targeting",myStyle1);
+			if( GUI.Button(buttonRect(3),AutoTargeting?"ON":"OFF" ,myStyle2) )
+				AutoTargeting = !AutoTargeting;
 	
 			GUI.Label(textRect(4),"Ambient (" + (int)BackgroundAmbient + ")",myStyle1);
 			BackgroundAmbient = GUI.HorizontalSlider(buttonRect(4),BackgroundAmbient,0f,255f);
@@ -98,6 +100,9 @@ public class Option : MonoBehaviour {
 			GUI.Label(textRect(9),"FT wait frames (" + FlameWaitingFrames + ")",myStyle1);
 			FlameWaitingFrames = Mathf.RoundToInt(GUI.HorizontalSlider(buttonRect(9),(float)FlameWaitingFrames,0f,60f));
 				
+			GUI.Label(textRect(10),"Health",myStyle1);
+			Health = GUI.HorizontalSlider(buttonRect(10),Health,0.05f,1f);
+			
 			if( GUI.Button( new Rect(Screen.width-200,Screen.height-60,80,40),"Options",myStyle2))
 			{
 				debugScreen = false;
@@ -144,14 +149,14 @@ public class Option : MonoBehaviour {
 			GUI.Label(textRect(6),"Shove Helper",myStyle1);
 			if( GUI.Button(buttonRect(6),ShoveHelper?"ON":"OFF",myStyle2 ) )
 				ShoveHelper = !ShoveHelper;
+				
+			GUI.Label(textRect(7),"Sensitivity(" + Mathf.Round(10000*Sensitivity)/100f + "%)",myStyle1);
+			Sensitivity = GUI.HorizontalSlider(buttonRect(7),(float)Sensitivity,0f,0.2f);
 			
-			GUI.Label(textRect(7),"Auto Targeting",myStyle1);
-			if( GUI.Button(buttonRect(7),AutoTargeting?"ON":"OFF" ,myStyle2) )
-				AutoTargeting = !AutoTargeting;
-				
-			GUI.Label(textRect(8),"Sensitivity(" + Mathf.Round(10000*Sensitivity)/100f + "%)",myStyle1);
-			Sensitivity = GUI.HorizontalSlider(buttonRect(8),(float)Sensitivity,0f,0.2f);
-				
+			GUI.Label(textRect(8),"Tilt Move",myStyle1);
+			if( GUI.Button(buttonRect(8),TiltingMove?"ON":"OFF",myStyle2 ) )
+				TiltingMove = !TiltingMove;
+			
 			if(showdebug && GUI.Button( new Rect(Screen.width-200,Screen.height-60,80,40),"Debug",myStyle2))
 			{
 				debugScreen = true;
