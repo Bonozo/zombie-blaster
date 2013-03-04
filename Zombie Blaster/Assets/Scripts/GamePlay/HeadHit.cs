@@ -3,7 +3,8 @@ using System.Collections;
 
 [AddComponentMenu("GamePlay/HeadHit")]
 public class HeadHit : MonoBehaviour {
-
+	
+	public bool HeadShotted = false;
 	public Zombi HeadContainer;
 	private Vector3 beginsize;
 	
@@ -77,6 +78,7 @@ public class HeadHit : MonoBehaviour {
 	
 	private void DiePrepare()
 	{
+		HeadShotted = true;
 		LevelInfo.Environments.control.currentHeadshotsInWave++;
 		InstantiateMessage();
 		if( HeadContainer.NearPlayer() )

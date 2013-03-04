@@ -67,7 +67,9 @@ public class Generator : MonoBehaviour {
 	public float GenerationDistanceMin = 10f, GenerationDistanceMax = 13f;
 	
 	private float zombieRate = 0;
-	private int zombiesLeft = 0;
+	
+	[System.NonSerializedAttribute]
+	public int zombiesLeft = 0;
 	private int scoobyZombieCount = 10;
 	
 	private GameObject WhatZombieToSpawn()
@@ -154,6 +156,7 @@ public class Generator : MonoBehaviour {
 	
 	public void StartNewWave(int numberzombies)
 	{
+		GenerationDistanceMin = Mathf.Max(10.5f-0.5f*LevelInfo.Environments.control.currentWave,5f);
 		zombiesLeft = numberzombies;
 		generateZombies = true;
 		zombieRate = Random.Range(GenerationRateMin,GenerationRateMax);
@@ -270,6 +273,11 @@ public class Generator : MonoBehaviour {
 			case 1: packType = HealthPackType.XtraLife; break;
 			case 2: packType = HealthPackType.DamageMultiplier; break;
 			}
+			
+			if(packType == HealthPackType.Weapon && AllWeaponsOwned() )
+			{
+				packType = Random.Range(0,2)==0?HealthPackType.XtraLife:HealthPackType.DamageMultiplier;
+			}
 		}
 		else
 		{
@@ -291,13 +299,25 @@ public class Generator : MonoBehaviour {
 			case 3: packType = HealthPackType.Health; break;
 			case 4: packType = HealthPackType.Shield; break;
 			case 5: packType = HealthPackType.SuperAmmo; break;
-			}		
+			}	
+			
+			// If there are many of alive zombies more probablity to spawn Shield
+			if(LevelInfo.Environments.control.AliveZombieCount > 5)
+			{
+				int prob = Mathf.Max(10-LevelInfo.Environments.control.AliveZombieCount,0)+2;
+				// 2<=prob<=6
+				if(Random.Range(0,prob)==1) packType = HealthPackType.Shield;
+			}
+			
+			// If player has few health more probablity to spawn FirstAid;
+			if(LevelInfo.Environments.control.Health < 0.5f )
+			{
+				int prob = (int)(LevelInfo.Environments.control.Health*10)+2;
+				// 2<=prob<=6
+				if(Random.Range(0,prob)==1) packType = HealthPackType.Health;
+			}
+			
 		}		
-		
-		if(packType == HealthPackType.Weapon && AllWeaponsOwned() )
-		{
-			packType = Random.Range(0,2)==0?HealthPackType.XtraLife:HealthPackType.DamageMultiplier;
-		}
 		return packType;
 	}
 	

@@ -96,7 +96,7 @@ public class ZombieRagdoll : MonoBehaviour {
 		if(  !healthpackok && !throwedout && DestroyTime <= 6 )
 		{
 			healthpackok = true;
-			if(scooby || Random.Range(0,2)==1)
+			if(!dontSpawnHealthpack && (scooby || Random.Range(0,2)==1))
 			{
 				LevelInfo.Environments.generator.InstantiatePowerup(transform.position,transform.rotation,scooby);
 				//HealthPack er = (HealthPack)Instantiate(LevelInfo.Environments.healthPack,transform.position,transform.rotation);
@@ -148,5 +148,12 @@ public class ZombieRagdoll : MonoBehaviour {
 		throwedout = true;
 		//iscivilian = true;
 		scooby = false;
+	}
+	
+	bool dontSpawnHealthpack = false;
+	
+	public void DontSpawnHealthpack()
+	{
+		dontSpawnHealthpack = true;
 	}
 }

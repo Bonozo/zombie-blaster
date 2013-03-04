@@ -7,6 +7,7 @@ public class Leaderboard : MonoBehaviour {
 	
 	public ButtonBase buttonMainMenu;
 	public GUIStyle postGUIStyle;
+	public GUIStyle buttonGUIStyle;
 	
 	#region LeaderBoardDemo
 	
@@ -301,6 +302,28 @@ public class Leaderboard : MonoBehaviour {
 			if(!isName || (isPost == true))
 				GUI.Label(new Rect(0.38f*Screen.width,0.57f*Screen.height,0.30f*Screen.width,0.032f*Screen.height), postScoreResponse.ToString(),postGUIStyle);					
 		}
+		
+		if(wanttoresetgame)
+		{
+			GUI.DrawTexture(new Rect(0.2f*Screen.width,0.15f*Screen.height,0.6f*Screen.width,0.6f*Screen.height),texturePopup);
+			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Are you sure you want to reset game progress?",postGUIStyle);
+			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "YES", buttonGUIStyle ) )	
+			{
+				Store.ClearGameStats();
+				Application.LoadLevel(Application.loadedLevel);
+				return;
+			}
+			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "NO", buttonGUIStyle ) )
+			{
+				wanttoresetgame = false;
+			}	
+		}
+		if( GUI.Button(new Rect(0.76f*Screen.width,0.59f*Screen.height, 0.2f*Screen.width,0.1f*Screen.height), "RESET GAME",buttonGUIStyle) )
+			wanttoresetgame = true;
+
 		#endregion
 	}
+	
+	public Texture2D texturePopup;
+	bool wanttoresetgame = false;
 }

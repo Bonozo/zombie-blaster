@@ -406,7 +406,8 @@ public class Control : MonoBehaviour {
 		if( Fade.InProcess || prologuecomplete) return;
 		
 		// Update Zombie Heads Number On Screen
-		LevelInfo.Environments.hubZombieHeads.SetNumberWithFlash(Store.zombieHeads);
+		if( ScreenShowed )
+			LevelInfo.Environments.hubZombieHeads.SetNumberWithFlash(Store.zombieHeads);
 		LevelInfo.Environments.guiPaused.SetActive(state == GameState.Paused);
 		
 		
@@ -967,6 +968,8 @@ public class Control : MonoBehaviour {
 				return true;
 		return false;
 	}
+	
+	public int AliveZombieCount { get { return ZombiesLeft - LevelInfo.Environments.generator.zombiesLeft; }}
 	
 	#endregion
 

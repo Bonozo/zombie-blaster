@@ -153,6 +153,23 @@ public class Store : MonoBehaviour {
 		
 	}
 	
+	public static void ClearGameStats()
+	{
+		// Clear Prefabs
+		PlayerPrefs.SetInt("zombieHeads",0);
+		for(int i=1;i<_playerprefs_unlockweapon.Length;i++)
+			PlayerPrefs.SetInt("weapon"+i,0);
+		for(int i=0;i<_playerprefs_unlocklevel.Length;i++)
+			PlayerPrefs.SetInt("level"+i,0);
+		for(int i=0;i<_playerprefs_highestwavecompleted.Length;i++)
+			PlayerPrefs.SetInt("highestwavecompleted"+i,0);
+		//PlayerPrefs.SetInt("zbfirsttimeplay",0);	
+		Store instance = GameObject.Find("Store").GetComponent<Store>();
+		instance.RestorePlayerPrefs();
+		instance.currentshopitem = instance.currentStashitem = -2;
+		
+	}
+	
 	void Awake()
 	{
 		DontDestroyOnLoad(this.gameObject);

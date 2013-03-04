@@ -12,6 +12,7 @@ public class WaveInfo : MonoBehaviour {
 	public GameObject modelHeads,modelXtraLife;
 	public UISprite[] spriteStar;
 	public GameObject rewardSprite;
+	public UILabel waveBonus;
 	
 	public float Wait = 5.0f;
 	private float waitfor = 0f;
@@ -41,7 +42,17 @@ public class WaveInfo : MonoBehaviour {
 		
 		if( showWaveComplete )
 		{
-			waitforreward-=Time.deltaTime;
+			if(waitforreward>0)
+			{
+				waitforreward-=Time.deltaTime;
+				if(waitforreward<=0f)
+				{
+					int score = (LevelInfo.Environments.control.currentLevel+1)*
+					LevelInfo.Environments.control.currentWave*stars*1000;
+					LevelInfo.Environments.hubScore.SetNumberWithFlash(LevelInfo.Environments.hubScore.GetNumber()+score);
+					waveBonus.text = "Wave Bonus " + score;		
+				}
+			}
 			
 			for(int i=0;i<3;i++)
 			{
@@ -62,12 +73,14 @@ public class WaveInfo : MonoBehaviour {
 			modelHeads.SetActive(reward == HealthPackType.BonusHeads);
 			modelXtraLife.SetActive(reward == HealthPackType.XtraLife);
 			rewardSprite.SetActive(true);
+			waveBonus.gameObject.SetActive(true);
 		}
 		else
 		{
 			modelHeads.SetActive(false);
 			modelXtraLife.SetActive(false);
 			rewardSprite.SetActive(false);
+			waveBonus.gameObject.SetActive(false);
 		}
 	}
 	

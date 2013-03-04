@@ -71,6 +71,7 @@ public class Zombi : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		
 		gameObject.AddComponent<AudioSource>();
 		
 		headHit.tag = "ZombieHead";
@@ -484,6 +485,7 @@ public class Zombi : MonoBehaviour {
 		ZombieSmoke.particleEmitter.minSize = ZombieSmoke.particleEmitter.maxSize = (1-smoking)*1f;
 		g.SendMessage("SetFireSize",ZombieFire.particleEmitter.maxSize);
 		g.SendMessage("SetSmokeSize",ZombieSmoke.particleEmitter.maxSize);
+		if(scooby && !headHit.HeadShotted) g.SendMessage("DontSpawnHealthpack");
 		
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
 		Vector3 dir = transform.position - LevelInfo.Environments.control.transform.position; dir.Normalize();
@@ -503,6 +505,7 @@ public class Zombi : MonoBehaviour {
 		GameObject ragdoll = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
 		ragdoll.SendMessage("SetFireSize",ZombieFire.particleEmitter.maxSize);
 		ragdoll.SendMessage("SetSmokeSize",ZombieSmoke.particleEmitter.maxSize);
+		if(scooby && !headHit.HeadShotted) ragdoll.SendMessage("DontSpawnHealthpack");
 		var rigidbodies = ragdoll.GetComponentsInChildren(typeof(Rigidbody));
         foreach (Rigidbody child in rigidbodies) 
 			child.AddForce(new Vector3(Random.Range(-160f,160f),160f,Random.Range(-160f,160f)));
@@ -520,6 +523,7 @@ public class Zombi : MonoBehaviour {
 		ZombieSmoke.particleEmitter.minSize = ZombieSmoke.particleEmitter.maxSize = (1-smoking)*1f;
 		g.SendMessage("SetFireSize",ZombieFire.particleEmitter.maxSize);
 		g.SendMessage("SetSmokeSize",ZombieSmoke.particleEmitter.maxSize);
+		if(scooby && !headHit.HeadShotted) g.SendMessage("DontSpawnHealthpack");
 		
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
 		Vector3 dir = transform.position - LevelInfo.Environments.control.transform.position; dir.Normalize(); dir.y =0.5f;
