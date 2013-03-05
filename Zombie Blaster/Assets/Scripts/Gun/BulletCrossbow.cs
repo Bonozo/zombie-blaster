@@ -22,11 +22,17 @@ public class BulletCrossbow : MonoBehaviour {
 	
 	void OnCollisionEnter(Collision col)
 	{
+		bool headhit = false;
 		bool blooded = false;
 		if( col.gameObject.tag == "Zombie" && (col.gameObject.GetComponent<Zombi>() == null || !col.gameObject.GetComponent<Zombi>().haveHelmet) ) blooded = true;
-		if( col.gameObject.tag == "ZombieHead" && !col.gameObject.GetComponent<HeadHit>().HeadContainer.haveHelmet ) blooded = true;
-		Instantiate(blooded?LevelInfo.Environments.particleBlood:LevelInfo.Environments.particleSpark,transform.position,Quaternion.identity);
-		
+		if( col.gameObject.tag == "ZombieHead" && !col.gameObject.GetComponent<HeadHit>().HeadContainer.haveHelmet ) {blooded = true; headhit=true;}
+		if(!blooded)
+			Instantiate(LevelInfo.Environments.particleSpark,transform.position,Quaternion.identity);
+		else
+		{	
+			ParticleSystem p = ((GameObject)Instantiate(LevelInfo.Environments.particleBlood,transform.position,Quaternion.identity)).GetComponent<ParticleSystem>();
+			p.Emit(headhit?100:40);
+		}
 		
 		if( col.gameObject.tag == "Zombie" )
 			col.gameObject.SendMessage("GetHitDamaged",4);

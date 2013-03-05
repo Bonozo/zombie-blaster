@@ -5,13 +5,10 @@ public class ButtonMainMenu : MonoBehaviour {
 	
 	private GameState lastState;
 	
-	void OnPress(bool isDown)
+	void OnClick()
 	{
 		if(Fade.InProcess) return;
-		if(!isDown)
-		{
-			GameObject.Find("Store").GetComponent<Store>().GoMainMenuFromGamePlay();
-		}	
+		GameObject.Find("Store").GetComponent<Store>().GoMainMenuFromGamePlay();	
 	}
 
 	

@@ -9,7 +9,7 @@ public class FlamethrowerFlame : MonoBehaviour
 	{
 		if(other.tag == "Zombie" || other.tag == "ZombieHead")
 		{
-			other.SendMessage("GetFlame",0.01f);
+			other.SendMessage("GetFlame",0.03f);
 		}
 	}
 }

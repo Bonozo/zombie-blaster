@@ -14,7 +14,6 @@ public class civilian : MonoBehaviour {
 	//public GameObject ZombieFire;
 	//public GameObject ZombieSmoke;
 	
-	private float PlayerScoreForDie = -0.1f;
 	private Control control;
 	private Vector3 center;
 	
@@ -109,7 +108,7 @@ public class civilian : MonoBehaviour {
 	public void DieNormal()
 	{
 		if(died) return; died=true;
-		control.GetHealth(PlayerScoreForDie);
+		ActionForDie();
 		//LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()+1);
 		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
 		g.SendMessage("IsCivilian");
@@ -124,7 +123,7 @@ public class civilian : MonoBehaviour {
 	public void DieWithFootball()
 	{
 		if(died) return; died=true;
-		control.GetHealth(PlayerScoreForDie);
+		ActionForDie();
 		//LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()+1);
 		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
 		g.SendMessage("IsCivilian");
@@ -139,7 +138,7 @@ public class civilian : MonoBehaviour {
 	public void DieWithJump()
 	{
 		if(died) return; died=true;
-		control.GetHealth(PlayerScoreForDie);
+		ActionForDie();
 		//LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()+1);
 		GameObject ragdoll = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
 		ragdoll.SendMessage("IsCivilian");
@@ -152,7 +151,7 @@ public class civilian : MonoBehaviour {
 	public void DieWithFireAndSmoke()
 	{
 		if(died) return; died=true;
-		control.GetHealth(PlayerScoreForDie);
+		ActionForDie();
 		//LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()+1);
 		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
 		g.SendMessage("IsCivilian");
@@ -164,5 +163,14 @@ public class civilian : MonoBehaviour {
 			child.AddForce(20f*dir);
 		
 		Destroy(this.gameObject);
+	}
+	
+	private float PlayerScoreForDie = -0.01f;
+	void ActionForDie()
+	{
+		Store.zombieHeads = Mathf.Max(0,Store.zombieHeads-LevelInfo.Environments.control.currentWave);
+		//LevelInfo.Environments.guns.
+
+		control.GetHealth(PlayerScoreForDie);	
 	}
 }

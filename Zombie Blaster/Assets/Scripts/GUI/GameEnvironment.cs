@@ -6,7 +6,7 @@ public class GameEnvironment : MonoBehaviour {
 	#region Static Local
 	
 	public static int StartLevel = 0;
-	public static int StartWave = 0;
+	public static int StartWave = 2;
 	
 	
 	public static string loadingLevel = "error";
@@ -359,16 +359,17 @@ public class GameEnvironment : MonoBehaviour {
 	
 	public static StoreGun[] storeGun = new StoreGun[10]
 	{	
-		new StoreGun("Airsoft",true,20,0,9,2,10,80),				//0
-		new StoreGun("Crossbow",false,12,30,25,3,40,100),			//1
-		new StoreGun("Shotgun",false,5,75,15,1,100,100),			//2
-		new StoreGun("Flamethrower",false,100,100,30,12,10,100),	//3
-		new StoreGun("Football",false,5,100,50,3,100,100),			//4
-		new StoreGun("Machine Gun",false,100,150,9,12,20,60),		//5
-		new StoreGun("Grenades",false,5,150,50,3,100,0),			//6
-		new StoreGun("Revolver",false,6,300,25,1,100,100),			//7
-		new StoreGun("Rocket Launcher",false,5,300,10,3,100,100), 	//8
-		new StoreGun("Alien Blaster",false,10,500,25,10,100,100)	//9
+		//				name			enabled    clip    price   speed   reload  power  accuracy
+		new StoreGun("Airsoft"			,true,		20,		0,		12,		2,		10,		80),	//0
+		new StoreGun("Crossbow"			,false,		12,		30,		20,		5,		40,		100),	//1
+		new StoreGun("Shotgun"			,false,		5,		75,		15,		1,		100,	100),	//2
+		new StoreGun("Flamethrower"		,false,		250,	100,	40,		8,		30,		90),	//3
+		new StoreGun("Football"			,false,		5,		100,	50,		3,		100,	100),	//4
+		new StoreGun("Machine Gun"		,false,		100,	150,	9,		12,		20,		60),	//5
+		new StoreGun("Grenades"			,false,		5,		150,	50,		5,		100,	0),		//6
+		new StoreGun("Revolver"			,false,		6,		300,	25,		1,		100,	100),	//7
+		new StoreGun("Rocket Launcher"	,false,		5,		300,	10,		3,		100,	100), 	//8
+		new StoreGun("Alien Blaster"	,false,		10,		500,	25,		10,		100,	100)	//9
 		
 		
 		

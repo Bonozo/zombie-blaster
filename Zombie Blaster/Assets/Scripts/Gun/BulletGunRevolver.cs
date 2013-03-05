@@ -27,8 +27,15 @@ public class BulletGunRevolver : MonoBehaviour {
 		bool blooded = false;
 		if( col.gameObject.tag == "Zombie" && (col.gameObject.GetComponent<Zombi>() == null || !col.gameObject.GetComponent<Zombi>().haveHelmet) ) blooded = true;
 		if( col.gameObject.tag == "ZombieHead" && !col.gameObject.GetComponent<HeadHit>().HeadContainer.haveHelmet ) blooded = true;
-		Instantiate(blooded?LevelInfo.Environments.particleBlood:LevelInfo.Environments.particleSpark,transform.position,Quaternion.identity);
-		
+
+		if(!blooded)
+			Instantiate(LevelInfo.Environments.particleSpark,transform.position,Quaternion.identity);
+		else
+		{	
+			ParticleSystem p = ((GameObject)Instantiate(LevelInfo.Environments.particleBlood,transform.position,Quaternion.identity)).GetComponent<ParticleSystem>();
+			p.startSpeed = 4f;
+			p.Emit(200);
+		}
 		
 		if( col.gameObject.tag == "Zombie" )
 			col.gameObject.SendMessage("GetHitDamaged",10);

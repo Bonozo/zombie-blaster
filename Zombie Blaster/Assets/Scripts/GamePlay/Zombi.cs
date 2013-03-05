@@ -69,11 +69,15 @@ public class Zombi : MonoBehaviour {
 	
 	#region Start, Update, OnGUI
 	
-	// Use this for initialization
-	void Start () {
-		
+	void Awake()
+	{
+		gameObject.layer = 13;
 		gameObject.AddComponent<AudioSource>();
-		
+	}
+	
+	// Use this for initialization
+	void Start ()
+	{
 		headHit.tag = "ZombieHead";
 		headHit.HeadContainer = this;
 		

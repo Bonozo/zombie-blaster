@@ -172,6 +172,7 @@ public class Control : MonoBehaviour {
 		if(www.error == null && isPost == true)
 		{
 			postScoreResponse = "Score is successfully posted!";
+			LevelInfo.Environments.hubScore.SetNumber(0);
 			//Debug.Log("WWW Ok!: " + www.data);
 		}	
 		else if(www.error != null && isPost == true)
@@ -670,12 +671,16 @@ public class Control : MonoBehaviour {
 					
 					//scoreLB = GUI.TextField(new Rect(0.45f*Screen.width,0.40f*Screen.height, 0.15f*Screen.width,0.035f*Screen.height), scoreLB);
 
-					if( GUI.Button(new Rect(0.45f*Screen.width,0.5f*Screen.height, 0.10f*Screen.width,0.05f*Screen.height), "Post", buttonGUIStyle) )
+					if(GUI.Button(new Rect(0.45f*Screen.width,0.5f*Screen.height, 0.10f*Screen.width,0.05f*Screen.height), "Post", buttonGUIStyle) )
 					{
 						if(nameLB.Trim().Equals(""))	
 						{
 							isName = false;
 							postScoreResponse = "Please Enter Name!";
+						}
+						else if(LevelInfo.Environments.hubScore.GetNumber() == 0 )
+						{
+							postScoreResponse = "0 Score.";
 						}
 						else
 						{	
