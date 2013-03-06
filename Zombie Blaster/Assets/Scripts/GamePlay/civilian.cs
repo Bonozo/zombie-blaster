@@ -10,42 +10,87 @@ public class civilian : MonoBehaviour {
 	
 	public float Speed = 20f;
 	public float DestroyTime = 30f;
-	//public GameObject ZombieRagdoll;
-	//public GameObject ZombieFire;
-	//public GameObject ZombieSmoke;
 	
-	private Control control;
-	private Vector3 center;
+	#region Moving, Life
 	
-	// Use this for initialization
-	void Start () {
-		control = (Control)GameObject.FindObjectOfType(typeof(Control));
+	void Start () 
+	{
+		// setup height and spawn back to the player
 		transform.position = new Vector3(transform.position.x,1.35f,transform.position.z);
-		center = transform.position; center.x += 4f;
+		if(LevelInfo.Environments.mainCamera.WorldToScreenPoint(transform.position).z > 0)
+		{
+			Vector3 v = LevelInfo.Environments.control.transform.position;
+			v.y = transform.position.y;
+			v -= transform.position;
+			transform.position += 2*v;
+		}
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
+	void Update () 
+	{
 		if(Time.deltaTime==0) return;
 		
 		DestroyTime -= Time.deltaTime;
 		if( DestroyTime <= 0f )
 		{
-			Destroy(this.gameObject);
-			return;
+			// civilian disapear in back of the player.
+			if( LevelInfo.Environments.mainCamera.WorldToScreenPoint(transform.position).z > 0 )
+			{
+				DestroyTime = 3f;
+			}
+			else
+			{
+				Destroy(this.gameObject);
+				return;
+			}
 		}
 		
 		NormalizeHeight();
-		
-		Vector3 lastpos = transform.position;
-		Vector3 v = control.transform.position; v.y = transform.position.y;
-		if( Vector3.Distance(transform.position,v ) > 8f )
-			transform.Translate(Time.deltaTime * Speed / 13 * (v - transform.position).normalized,Space.World );
+		if(CanMoveForward())
+			transform.Translate(Time.deltaTime*Speed/13f*Vector3.forward);
 		else
-			transform.RotateAround(v,Vector3.up,Time.deltaTime*Speed);
-		transform.rotation = Quaternion.LookRotation(transform.position-lastpos,Vector3.up);
+		{
+			if(!rotating) StartCoroutine(Rotate(Random.Range(1f,2f)));
+			return;
+		}
+		if(!rotating)
+		{
+
+			if( GameEnvironment.DistXZ(LevelInfo.Environments.control.transform.position,transform.position) > 10f )
+			{
+				if(!destinated)
+				{
+					Vector3 v = LevelInfo.Environments.control.transform.position; v.y = transform.position.y;
+					v.x += Random.Range(-7f,7f);
+					v.z += Random.Range(-7f,7f);
+					transform.rotation = Quaternion.LookRotation(v-transform.position,Vector3.up);
+					destinated = true;
+				}
+			}
+			else 
+			{
+				if(Random.Range(0,200)==1)
+					StartCoroutine(Rotate(Random.Range(1f,2f)));
+				destinated = false;
+			}
+		}
+		
 		animation.Play("running");
+	}
+	
+	bool destinated = false;
+	bool rotating = false;
+	private IEnumerator Rotate(float time)
+	{
+		bool right = Random.Range(0,2)==1;
+		rotating = true;
+		while(time>0f)
+		{
+			time -= Time.deltaTime;
+			transform.Rotate(0f,0.25f*(right?1:-1),0f);
+			yield return new WaitForEndOfFrame();
+		}
+		rotating = false;
 	}
 	
 	private float nhdt = 0f;
@@ -66,28 +111,49 @@ public class civilian : MonoBehaviour {
 		Debug.DrawRay(pos, -CollisionToDownLenght*transform.up, Color.green);
 	}
 	
-	/*private void NormalizeHeight()
+	private float cmftd = 0;
+	private bool _canmoveforward = true;
+	private bool CanMoveForward()
 	{
-		if( Random.Range(0,30) != 1 ) return;
-		
+		cmftd -= Time.deltaTime;
+		if(cmftd > 0 ) return _canmoveforward;
+		cmftd = 1.1f;
+		_canmoveforward = CanMoveForwardHelper();
+		return _canmoveforward;
+	
+	}
+	private bool CanMoveForwardHelper()
+	{
+		float forwarddist = 0.5f;
+		float leftrightdist = 0.3f;
+		float diagonaldist = 0.7f;
 		RaycastHit hit;    
-		
-		Vector3 pos = transform.position;
-		// ?? // 
-		if( HitWithName(gameObject.name,"Fatkid") || HitWithName(gameObject.name,"Farmer2") ||
-			HitWithName(gameObject.name,"Ballerina") || HitWithName(gameObject.name,"FootballPlayer"))
-			pos.y += 0.4f;
-		
-		pos.y += 1f;
-		
-		if(Physics.Raycast(pos, -transform.up, out hit, CollisionToDownLenght+0.01f+1f) /*&& 
-			hit.collider.gameObject.name == "ground" *//*)
-		/*	transform.Translate(0,0.02f,0);
-		if( !Physics.Raycast(pos, -transform.up, out hit, CollisionToDownLenght-0.03f+1f) )
-			transform.Translate(0,-0.02f,0);
-		
-		Debug.DrawRay(pos, -CollisionToDownLenght*transform.up, Color.green);
-	}*/
+		Vector3 pos = transform.position; pos.y += 0.4f;
+		Debug.DrawRay(pos, forwarddist*transform.forward, Color.green);
+		Debug.DrawRay(pos, leftrightdist*transform.right, Color.green);
+		Debug.DrawRay(pos, -leftrightdist*transform.right, Color.green);
+		Debug.DrawRay(pos, diagonaldist*0.5f*(transform.right+transform.forward), Color.green);
+		Debug.DrawRay(pos, diagonaldist*0.5f*(-transform.right+transform.forward), Color.green);
+		if(Physics.Raycast(pos, transform.forward, out hit, forwarddist) && hit.collider.gameObject.tag == "Zombie")
+			return false;
+		if(Physics.Raycast(pos, transform.right, out hit, leftrightdist) && hit.collider.gameObject.tag == "Zombie")
+			if( transform.position.magnitude > hit.collider.gameObject.transform.position.magnitude )
+				return false;
+		if(Physics.Raycast(pos, -transform.right, out hit, leftrightdist) && hit.collider.gameObject.tag == "Zombie")
+			if( transform.position.magnitude > hit.collider.gameObject.transform.position.magnitude )
+				return false;
+		if(Physics.Raycast(pos, 0.5f*(transform.right+transform.forward), out hit, diagonaldist) && hit.collider.gameObject.tag == "Zombie")
+			if( transform.position.magnitude > hit.collider.gameObject.transform.position.magnitude )
+				return false;
+		if(Physics.Raycast(pos, 0.5f*(-transform.right+transform.forward), out hit, diagonaldist) && hit.collider.gameObject.tag == "Zombie")
+			if( transform.position.magnitude > hit.collider.gameObject.transform.position.magnitude )
+				return false;
+		return true;
+	}
+	
+	#endregion
+	
+	#region Die
 	
 	public void GetFlame()
 	{
@@ -113,7 +179,7 @@ public class civilian : MonoBehaviour {
 		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
 		g.SendMessage("IsCivilian");
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
-		Vector3 dir = transform.position - control.transform.position; dir.Normalize();
+		Vector3 dir = transform.position - LevelInfo.Environments.control.transform.position; dir.Normalize();
         foreach (Rigidbody child in rigidbodies) 
 			child.AddForce(160f*dir);
 		
@@ -128,7 +194,7 @@ public class civilian : MonoBehaviour {
 		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
 		g.SendMessage("IsCivilian");
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
-		Vector3 dir = transform.position - control.transform.position; dir.Normalize(); dir.y = 0.5f;
+		Vector3 dir = transform.position - LevelInfo.Environments.control.transform.position; dir.Normalize(); dir.y = 0.5f;
         foreach (Rigidbody child in rigidbodies) 
 			child.AddForce(200f*dir);
 		
@@ -158,7 +224,7 @@ public class civilian : MonoBehaviour {
 		g.SendMessage("SetFireSize",1f);
 		g.SendMessage("SetSmokeSize",1f);
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
-		Vector3 dir = transform.position - control.transform.position; dir.Normalize();
+		Vector3 dir = transform.position - LevelInfo.Environments.control.transform.position; dir.Normalize();
         foreach (Rigidbody child in rigidbodies) 
 			child.AddForce(20f*dir);
 		
@@ -171,6 +237,8 @@ public class civilian : MonoBehaviour {
 		Store.zombieHeads = Mathf.Max(0,Store.zombieHeads-LevelInfo.Environments.control.currentWave);
 		//LevelInfo.Environments.guns.
 
-		control.GetHealth(PlayerScoreForDie);	
+		LevelInfo.Environments.control.GetHealth(PlayerScoreForDie);	
 	}
+	
+	#endregion
 }

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Generator : MonoBehaviour {
 	
-	#region Zombies As Resourses
+	#region Resources Controller
 	[System.Serializable]
 	public class LevelZombie
 	{
@@ -156,7 +156,12 @@ public class Generator : MonoBehaviour {
 	
 	public void StartNewWave(int numberzombies)
 	{
+		// set up minimum and maximum rate and distance for wave
 		GenerationDistanceMin = Mathf.Max(10.5f-0.5f*LevelInfo.Environments.control.currentWave,5f);
+		GenerationRateMin = Mathf.Max(5.5f-0.5f*LevelInfo.Environments.control.currentWave,2f);
+		GenerationRateMax = Mathf.Max(8f-0.5f*LevelInfo.Environments.control.currentWave,4f);
+		
+		
 		zombiesLeft = numberzombies;
 		generateZombies = true;
 		zombieRate = Random.Range(GenerationRateMin,GenerationRateMax);
@@ -269,14 +274,9 @@ public class Generator : MonoBehaviour {
 			
 			switch(r)
 			{
-			case 0: packType = HealthPackType.Weapon; break;
+			case 0: packType = HealthPackType.ScoreMultiplier; break;
 			case 1: packType = HealthPackType.XtraLife; break;
 			case 2: packType = HealthPackType.DamageMultiplier; break;
-			}
-			
-			if(packType == HealthPackType.Weapon && AllWeaponsOwned() )
-			{
-				packType = Random.Range(0,2)==0?HealthPackType.XtraLife:HealthPackType.DamageMultiplier;
 			}
 		}
 		else

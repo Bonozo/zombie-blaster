@@ -21,7 +21,13 @@ public class Ufo : MonoBehaviour {
 	void OnCollisionEnter(Collision col)
 	{
 		if( col.gameObject.tag == "Bullet" )
-			gameObject.AddComponent("Rigidbody");
+		{
+			if(!rigidbody)
+			{
+				gameObject.AddComponent("Rigidbody");
+				LevelInfo.Environments.control.GetScore(LevelInfo.State.scoreForUFO,true);
+			}
+		}
 		else
 		{
 			

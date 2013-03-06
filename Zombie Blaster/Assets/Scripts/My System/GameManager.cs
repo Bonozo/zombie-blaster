@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour {
 	
 	public HubUI hubZombiesLeft;
 	public HubUI hubZombieHeads;
-	public HubUI hubScore;
+	public HubUI hubScores;
 	public HubUI hubLives;
 	
 	public UIButton buttonMap;

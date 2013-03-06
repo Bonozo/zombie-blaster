@@ -31,4 +31,13 @@ public class ButtonPause : MonoBehaviour {
 			LevelInfo.Environments.control.state = lastState;
 		}
 	}
+	
+	void Update()
+	{
+		if(Screen.lockCursor && LevelInfo.Environments.control.state != GameState.Paused)
+		{
+			lastState = LevelInfo.Environments.control.state;
+			LevelInfo.Environments.control.state = GameState.Paused;
+		}
+	}
 }

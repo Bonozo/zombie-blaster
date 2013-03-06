@@ -321,14 +321,14 @@ public class SelectArea : MonoBehaviour {
 			if( Store.HighestWaveCompleted(play_index)>0 )
 			{		
 				GUI.Label(new Rect(0.35f*Screen.width,0.43f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),"Start Wave ",myStyle);
-				if( GUI.Button(new Rect(0.5f*Screen.width,0.42f*Screen.height, 0.05f*Screen.width,0.05f*Screen.height), "-", buttonStyle) && GameEnvironment.StartWave > 0 )
+				if( GUI.Button(new Rect(0.485f*Screen.width,0.405f*Screen.height, 0.08f*Screen.width,0.08f*Screen.height), "-", buttonStyle) && GameEnvironment.StartWave > 0 )
 					GameEnvironment.StartWave--;
 				
 				myStyle.alignment = TextAnchor.MiddleCenter;	
 				GUI.Label(new Rect(0.57f*Screen.width,0.42f*Screen.height, 0.03f*Screen.width,0.05f*Screen.height), (GameEnvironment.StartWave+1).ToString(),myStyle);
 				myStyle.alignment = TextAnchor.UpperLeft;
 				
-				if( GUI.Button(new Rect(0.62f*Screen.width,0.42f*Screen.height, 0.05f*Screen.width,0.05f*Screen.height), "+", buttonStyle) && GameEnvironment.StartWave < Store.HighestWaveCompleted(play_index) )
+				if( GUI.Button(new Rect(0.605f*Screen.width,0.405f*Screen.height, 0.08f*Screen.width,0.08f*Screen.height), "+", buttonStyle) && GameEnvironment.StartWave < Store.HighestWaveCompleted(play_index) )
 					GameEnvironment.StartWave++;	
 			}
 			

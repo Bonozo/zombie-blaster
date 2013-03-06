@@ -36,9 +36,10 @@ public class StateManager : MonoBehaviour {
 	
 	public int zombiesCountFactor = 10;
 	
-	public int scoreForPickUp = 100;
-	public int scoreForZombie = 250;
-	public int scoreForHeadShot = 500;
+	public int scoreForPickUp = 0;
+	public int scoreForZombie = 0;
+	public int scoreForHeadShot = 0;
+	public int scoreForUFO = 0;
 	
 	#endregion
 }

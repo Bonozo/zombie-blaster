@@ -24,7 +24,7 @@ public class MainMenu : MonoBehaviour {
 	
 	public AudioSource audioCredits;
 	public AudioSource audioPressed;
-	public ButtonBase buttonOption,buttonPlay,buttonStore,buttonStats,buttonQuit;
+	public ButtonBase buttonOption,buttonPlay,buttonStore,buttonStats;
 	public GameObject objMenu,objOption,objCreadits,objAreaMap,objLeaderboard;
 	public AudioSource SoundBackground,SoundWind;
 	public ButtonBase buttonBack,buttonFacebook,buttonTwitter;
@@ -118,7 +118,7 @@ public class MainMenu : MonoBehaviour {
 				State = MenuState.Store;
 			}
 			
-			if( buttonQuit.PressedUp )
+			if( Input.GetKeyUp(KeyCode.Escape) )
 			{
 				StartCoroutine(QuitGameThread());
 				return;
@@ -180,7 +180,7 @@ public class MainMenu : MonoBehaviour {
 		buttonPlay.DisableButtonForUse();
 		buttonStore.DisableButtonForUse();
 		buttonStats.DisableButtonForUse();
-		buttonQuit.DisableButtonForUse();
+		//buttonQuit.DisableButtonForUse();
 		buttonBack.DisableButtonForUse();
 		buttonFacebook.DisableButtonForUse();
 		buttonTwitter.DisableButtonForUse();

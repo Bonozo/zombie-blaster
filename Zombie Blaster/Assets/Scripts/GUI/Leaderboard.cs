@@ -279,7 +279,7 @@ public class Leaderboard : MonoBehaviour {
 			GUI.Label(new Rect(0.35f*Screen.width,0.42f*Screen.height, 0.1f*Screen.width,0.05f*Screen.height), "SCORE: ",postGUIStyle);
 			
 			nameLB = GUI.TextField(new Rect(0.48f*Screen.width,0.35f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), nameLB,12,postGUIStyle);
-			GUI.Label(new Rect(0.48f*Screen.width,0.42f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), (LevelInfo.Environments.hubScore.GetNumber()).ToString(),postGUIStyle);
+			GUI.Label(new Rect(0.48f*Screen.width,0.42f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), (LevelInfo.Environments.hubScores.GetNumber()).ToString(),postGUIStyle);
 			
 			//scoreLB = GUI.TextField(new Rect(0.45f*Screen.width,0.40f*Screen.height, 0.15f*Screen.width,0.035f*Screen.height), scoreLB);
 
@@ -293,7 +293,7 @@ public class Leaderboard : MonoBehaviour {
 				else
 				{	
 					isName = true;
-					string url = "http://crustdesigns.com/demo/game/addscoreresp.php?snm=" + nameLB + "&score=" + (LevelInfo.Environments.hubScore.GetNumber()).ToString() + "&format=xml";
+					string url = "http://crustdesigns.com/demo/game/addscoreresp.php?snm=" + nameLB + "&score=" + (LevelInfo.Environments.hubScores.GetNumber()).ToString() + "&format=xml";
 	        		WWW www = new WWW(url);
 	        		StartCoroutine(WaitForRequest(www));
 				}						

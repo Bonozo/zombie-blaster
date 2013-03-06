@@ -437,6 +437,12 @@ public class Zombi : MonoBehaviour {
 		}	
 	}
 	
+	public bool GetHitDamagedTest(int hitpoints)
+	{
+		if( LevelInfo.Environments.control.DamageMultiplied ) hitpoints *= 4;
+		return damage - hitpoints <= 0 && !haveHelmet;		
+	}
+	
 	public bool GetHitDamaged(int hitpoints)
 	{
 		bool b=false;

@@ -3,15 +3,15 @@ using System.Collections;
 
 public enum HealthPackType
 {
-	Ammo,//yellow
-	Armor,//blue increase health to max
-	BonusHeads,//green +10 Heads
-	DamageMultiplier,//purple
-	Health,//white
-	Shield,//gray increase health and armor to max
-	SuperAmmo,//orange
-	Weapon,//red
-	XtraLife,//pink
+	Ammo,
+	Armor,
+	BonusHeads,
+	DamageMultiplier,
+	Health,
+	Shield,
+	SuperAmmo,
+	ScoreMultiplier,
+	XtraLife
 }
 
 [AddComponentMenu("GamePlay/Pickup")]
@@ -31,7 +31,7 @@ public class HealthPack : MonoBehaviour {
 	private bool picked = false;
 	
 	private Weapon gunindexifweapon = 0;
-	private float autopickuptime = 0.1f;
+	private float autopickuptime = 0.0f;
 	private bool rgb = true;
 	
 	public bool scooby = false;
@@ -70,23 +70,8 @@ public class HealthPack : MonoBehaviour {
 		case HealthPackType.SuperAmmo:
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpSuperAmmo;
 			break;
-		case HealthPackType.Weapon:
-			Debug.LogError("ZB: Weapon PowerUps disabled");
-			gunindexifweapon = Weapon.None;
-			int ind = Random.Range(0,level.allowedGun.Length);
-			for(int i=0;i<level.allowedGun.Length;i++) 
-			{
-				int index = (int)level.allowedGun[(ind+i)%level.allowedGun.Length];
-				if(!LevelInfo.Environments.guns.gun[index].EnabledGun && LevelInfo.Environments.store.WeaponAvailable(index) )
-				{
-					gunindexifweapon = level.allowedGun[(ind+i)%level.allowedGun.Length];
-					break;
-				}
-			}
-			if( gunindexifweapon == Weapon.None ) Debug.LogError("ZB: All Weapons Owned, but Generator says to generate Weapon Powerup");
-			gameObject.renderer.material.mainTexture = LevelInfo.Environments.guns.gun[(int)gunindexifweapon].texture;
-			//gameObject.renderer.material.color = Color.red;
-			break;
+		/*case HealthPackType.ScoreMultiplier:
+			break;*/
 		/*case HealthPackType.XtraLife:
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpXtraLife;
 			break;*/
@@ -201,9 +186,9 @@ public class HealthPack : MonoBehaviour {
 			pickupname = "All Ammo";
 			break;
 			
-		case HealthPackType.Weapon:
-			LevelInfo.Environments.guns.GetWeaponWithMAX(gunindexifweapon);
-			pickupname = GameEnvironment.storeGun[(int)gunindexifweapon].name;
+		case HealthPackType.ScoreMultiplier:
+			
+			pickupname = "x2 Score";
 			break;
 			
 		case HealthPackType.XtraLife:
@@ -215,7 +200,7 @@ public class HealthPack : MonoBehaviour {
 		
 		LevelInfo.Environments.generator.GenerateMessageText(transform.position + new Vector3(0,0.75f,0),pickupname);
 		
-		LevelInfo.Environments.hubScore.SetNumberWithFlash(LevelInfo.Environments.hubScore.GetNumber() + LevelInfo.State.scoreForPickUp);
+		LevelInfo.Environments.control.GetScore(LevelInfo.State.scoreForPickUp,true);
 		
 		Destroy(this.gameObject);
 	}

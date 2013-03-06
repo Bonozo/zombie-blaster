@@ -172,7 +172,7 @@ public class Control : MonoBehaviour {
 		if(www.error == null && isPost == true)
 		{
 			postScoreResponse = "Score is successfully posted!";
-			LevelInfo.Environments.hubScore.SetNumber(0);
+			LevelInfo.Environments.hubScores.SetNumber(0);
 			//Debug.Log("WWW Ok!: " + www.data);
 		}	
 		else if(www.error != null && isPost == true)
@@ -355,7 +355,7 @@ public class Control : MonoBehaviour {
 		CreateNewZombieWave();
 		
 		LevelInfo.Environments.hubLives.SetNumber(startLives);
-		LevelInfo.Environments.hubScore.SetNumber(startScore);
+		LevelInfo.Environments.hubScores.SetNumber(startScore);
 		
 		LevelInfo.Environments.lightSpot.SetActive(Option.SpotLight);
 		LevelInfo.Environments.lightDirectional.SetActive(!Option.SpotLight);
@@ -383,7 +383,6 @@ public class Control : MonoBehaviour {
 		System.GC.Collect();
 	}
 	
-	// Update is called once per frame
 	void Update () 
 	{
 		// Testing
@@ -392,6 +391,8 @@ public class Control : MonoBehaviour {
 			DamageMultiply();
 		if(Input.GetKeyUp(KeyCode.PageDown))
 			Shield();
+		if(Input.GetKeyUp(KeyCode.Home))
+			ScoreMultiply();
 
 		if( Input.GetKeyUp(KeyCode.H) )
 			health -= 0.1f;
@@ -403,6 +404,7 @@ public class Control : MonoBehaviour {
 			armor += 0.1f;
 		if( Input.GetKeyUp(KeyCode.L) )
 			GetBite(0.1f);
+		
 		
 		if( Fade.InProcess || prologuecomplete) return;
 		
@@ -588,7 +590,7 @@ public class Control : MonoBehaviour {
 					isLeaderBoard = false;
 					GameEnvironment.StartWave = currentWave-1;
 					startLives = LevelInfo.Environments.hubLives.GetNumber();
-					startScore = LevelInfo.Environments.hubScore.GetNumber();
+					startScore = LevelInfo.Environments.hubScores.GetNumber();
 					
 					restartLevel = true;
 					
@@ -667,7 +669,7 @@ public class Control : MonoBehaviour {
 					GUI.Label(new Rect(0.35f*Screen.width,0.42f*Screen.height, 0.1f*Screen.width,0.05f*Screen.height), "SCORE: ",myGUIStyle);
 					
 					nameLB = GUI.TextField(new Rect(0.48f*Screen.width,0.35f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), nameLB,12,myGUIStyle);
-					GUI.Label(new Rect(0.48f*Screen.width,0.42f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), (LevelInfo.Environments.hubScore.GetNumber()).ToString(),myGUIStyle);
+					GUI.Label(new Rect(0.48f*Screen.width,0.42f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), (LevelInfo.Environments.hubScores.GetNumber()).ToString(),myGUIStyle);
 					
 					//scoreLB = GUI.TextField(new Rect(0.45f*Screen.width,0.40f*Screen.height, 0.15f*Screen.width,0.035f*Screen.height), scoreLB);
 
@@ -678,14 +680,14 @@ public class Control : MonoBehaviour {
 							isName = false;
 							postScoreResponse = "Please Enter Name!";
 						}
-						else if(LevelInfo.Environments.hubScore.GetNumber() == 0 )
+						else if(LevelInfo.Environments.hubScores.GetNumber() == 0 )
 						{
 							postScoreResponse = "0 Score.";
 						}
 						else
 						{	
 							isName = true;
-							string url = "http://crustdesigns.com/demo/game/addscoreresp.php?snm=" + nameLB + "&score=" + (LevelInfo.Environments.hubScore.GetNumber()).ToString() + "&format=xml";
+							string url = "http://crustdesigns.com/demo/game/addscoreresp.php?snm=" + nameLB + "&score=" + (LevelInfo.Environments.hubScores.GetNumber()).ToString() + "&format=xml";
 			        		WWW www = new WWW(url);
 			        		StartCoroutine(WaitForRequest(www));
 						}						
@@ -932,7 +934,7 @@ public class Control : MonoBehaviour {
 		}
 		
 		
-		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActive(DamageMultiplied||Shielded);
+		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActive(DamageMultiplied||Shielded||ScoreMultiplied);
 	}
 	
 	
@@ -1005,7 +1007,7 @@ public class Control : MonoBehaviour {
 	
 	public void GetZombie()
 	{
-		LevelInfo.Environments.hubScore.SetNumberWithFlash(LevelInfo.Environments.hubScore.GetNumber()+LevelInfo.State.scoreForZombie);
+		GetScore(LevelInfo.State.scoreForZombie,true);
 		//zombiesLeftForThisWave--;
 		LevelInfo.Environments.hubZombiesLeft.SetNumberWithFlash(LevelInfo.Environments.hubZombiesLeft.GetNumber()-1);
 		if( LevelInfo.Environments.hubZombiesLeft.GetNumber() <= 0 && GameObject.FindGameObjectsWithTag("ZombieHead").Length == 1)
@@ -1014,6 +1016,11 @@ public class Control : MonoBehaviour {
 			if( Store.FirstTimePlay )
 				PrologueComplete();
 		}
+	}
+	
+	public void GetScore(int scores,bool allowMultiply)
+	{
+		LevelInfo.Environments.hubScores.SetNumberWithFlash(LevelInfo.Environments.hubScores.GetNumber()+scores);
 	}
 	
 	public void GetHealth(float h)
@@ -1124,6 +1131,8 @@ public class Control : MonoBehaviour {
 	private float damageMultiplieTime = 0f;
 	public bool Shielded = false;
 	private float shieldTime = 0f;
+	public bool ScoreMultiplied = false;
+	private float scoreMultiplierTime = 0f;
 	
 	private IEnumerator DamageMultiplyThread()
 	{
@@ -1173,18 +1182,42 @@ public class Control : MonoBehaviour {
 		}
 	}
 	
+	private IEnumerator ScoreMultiplyThread()
+	{
+		scoreMultiplierTime = Time.time + 30f;
+		
+		if( !ScoreMultiplied )
+		{
+			ScoreMultiplied = true;
+		
+			while( Time.time < scoreMultiplierTime )
+			{
+				LevelInfo.Environments.guiDamageMultiplier.text = "2x score " + (int)(scoreMultiplierTime-Time.time+1);
+				yield return new WaitForEndOfFrame();
+			}
+			ScoreMultiplied = false;
+		}
+	}
+	
 	public void DamageMultiply()
 	{
-		//if( DamageMultiplied ) damageMultiplieTime = Time.time + 30;
 		shieldTime=0f;
+		scoreMultiplierTime=0f;
 		StartCoroutine(DamageMultiplyThread());
 	}
 	
 	public void Shield()
 	{
 		damageMultiplieTime=0f;
+		scoreMultiplierTime=0f;
 		StartCoroutine(ShieldThread());
-		
+	}
+	
+	public void ScoreMultiply()
+	{
+		shieldTime=0f;
+		damageMultiplieTime=0f;
+		StartCoroutine(ScoreMultiplyThread());
 	}
 	
 	#endregion

@@ -17,7 +17,7 @@ public class HeadHit : MonoBehaviour {
 		
 		var cc = c.center;// cc.z += 0.02f;
 		sphere.center = cc;
-		sphere.radius = c.size.x*0.7f;
+		sphere.radius = c.size.x*0.5f;
 		//sph.radius = rad;
 		//beginsize = boxCollider.size;
 		//Destroy(this.collider);
@@ -42,9 +42,10 @@ public class HeadHit : MonoBehaviour {
 	//private int headshotscountairsoft=0;
 	public void DieWithAirsoft()
 	{
-		if( HeadContainer.GetHitDamaged(5) )
+		if( HeadContainer.GetHitDamagedTest(5) )
 			DiePrepare();
-
+		HeadContainer.GetHitDamaged(5);	
+		
 	}
 	
 	public void DieNormal()
@@ -84,7 +85,7 @@ public class HeadHit : MonoBehaviour {
 		if( HeadContainer.NearPlayer() )
 			LevelInfo.Environments.goo.Show();
 		Store.zombieHeads++;
-		LevelInfo.Environments.hubScore.SetNumberWithFlash(LevelInfo.Environments.hubScore.GetNumber() + LevelInfo.State.scoreForHeadShot - LevelInfo.State.scoreForZombie);
+		LevelInfo.Environments.control.GetScore(LevelInfo.State.scoreForHeadShot - LevelInfo.State.scoreForZombie,true);
 		LevelInfo.Audio.PlayZombieHeadShot();
 	}
 	

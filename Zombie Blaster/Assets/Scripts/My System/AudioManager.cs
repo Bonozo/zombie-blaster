@@ -170,9 +170,9 @@ public class AudioManager : MonoBehaviour {
 		case HealthPackType.SuperAmmo:
 			audioSourcePlayer.PlayOneShot(audioPickUpSuperAmmo);
 			break;
-		case HealthPackType.Weapon:
+		/*case HealthPackType.ScoreMultiplier:
 			audioSourcePlayer.PlayOneShot(audioPickUpWeapon);
-			break;
+			break;*/
 		case HealthPackType.XtraLife:
 			audioSourcePlayer.PlayOneShot(audioPickUpXtraLife);
 			break;	
