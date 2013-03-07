@@ -29,7 +29,7 @@ public class BulletFootball : MonoBehaviour {
 		if( col.gameObject.tag == "ZombieHead" )
 			col.gameObject.SendMessage("DieWithFootball");
 		
-		
+		Instantiate(LevelInfo.Environments.particleSpark,transform.position,Quaternion.identity);
 		Destroy(this.gameObject);
 	}
 	

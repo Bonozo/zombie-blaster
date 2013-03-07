@@ -10,7 +10,7 @@ public enum HealthPackType
 	Health,
 	Shield,
 	SuperAmmo,
-	ScoreMultiplier,
+	Rampage,
 	XtraLife
 }
 
@@ -42,15 +42,31 @@ public class HealthPack : MonoBehaviour {
 		transform.Translate(0,StartHeight-transform.position.y,0);
 		transform.LookAt(LevelInfo.Environments.control.transform.position,Vector3.up);
 		
-		var level = LevelInfo.State.level[LevelInfo.Environments.control.currentLevel];
-		
 		switch(packType)
 		{
 		case HealthPackType.Ammo:
-			if( !Store.WeaponUnlocked((int)level.allowedGun[level.allowedGun.Length-1]) )
-				gunindexifweapon = level.allowedGun[Random.Range(1,level.allowedGun.Length-1)];
-			else
-				gunindexifweapon = level.allowedGun[Random.Range(1,level.allowedGun.Length)];
+			// calculating active weapons
+			gunindexifweapon = Weapon.None;
+			int count = 0;
+			for(int i=0;i<Store.countWeapons;i++)
+				if(LevelInfo.Environments.guns.gun[i].EnabledGun)
+					count++;
+			int index = Random.Range(0,count)+1;
+			count = 0;
+			for(int i=0;i<Store.countWeapons;i++)
+			{
+				if(LevelInfo.Environments.guns.gun[i].EnabledGun)	
+				{
+					count++;
+					if(count == index)
+					{
+						gunindexifweapon = (Weapon)i;
+						break;
+					}
+				}
+			}
+			if(gunindexifweapon == Weapon.None)
+				Debug.LogError("ZB ERROR: error code statement when determining weapon for ammo powerup."); 
 			break;
 		/*case HealthPackType.Armor:
 			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpArmor;
@@ -106,18 +122,23 @@ public class HealthPack : MonoBehaviour {
 		{
 	        if(touch.phase == TouchPhase.Began)
 			{
-				ray = LevelInfo.Environments.mainCamera.ScreenPointToRay(touch.position);
-				if( Physics.Raycast(ray.origin,ray.direction,out hit) && hit.collider.gameObject == gameObject )
+				if(PickedUp(touch.position))
 				{
 					StartCoroutine(PickedUp());
-					return;
+					return;				
 				}
 			}
         }
-		ray = LevelInfo.Environments.mainCamera.ScreenPointToRay(Input.mousePosition);
-		if(Physics.Raycast(ray.origin,ray.direction,out hit))
-			if(Input.GetMouseButtonDown(0) && hit.collider.gameObject == gameObject )
-				StartCoroutine(PickedUp());
+		if(Input.GetMouseButtonDown(0) && PickedUp(Input.mousePosition))
+			StartCoroutine(PickedUp());
+	}
+	
+	private bool PickedUp(Vector3 touchposition)
+	{
+		Vector3 screenpos = LevelInfo.Environments.mainCamera.WorldToScreenPoint(transform.position);
+		float delta = 0.1f*Screen.width;
+		return screenpos.x-delta <= touchposition.x && touchposition.x <= screenpos.x+delta &&
+			screenpos.y-delta <= touchposition.y && touchposition.y <= screenpos.y+delta;
 	}
 	
 	bool rigbd=false;
@@ -186,9 +207,9 @@ public class HealthPack : MonoBehaviour {
 			pickupname = "All Ammo";
 			break;
 			
-		case HealthPackType.ScoreMultiplier:
-			
-			pickupname = "x2 Score";
+		case HealthPackType.Rampage:
+			LevelInfo.Environments.control.Rampage();
+			pickupname = "Rampage!";
 			break;
 			
 		case HealthPackType.XtraLife:

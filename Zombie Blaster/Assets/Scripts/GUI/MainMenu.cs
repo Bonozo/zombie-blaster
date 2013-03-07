@@ -73,6 +73,7 @@ public class MainMenu : MonoBehaviour {
 	
 	void Awake()
 	{
+		Option.Init();
 		Time.timeScale = 1f;
 		GameObject.Find("Store").GetComponent<Store>().showStore = false;
 		GameObject.Find("Store").GetComponent<Store>().LoadingGUI.SetActive(false);

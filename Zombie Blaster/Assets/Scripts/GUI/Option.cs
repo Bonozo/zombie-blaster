@@ -3,21 +3,151 @@ using System.Collections;
 
 public class Option : MonoBehaviour {
 	
-	public static float Health = 1f;
-	public static float hSlideVolume = 1f;
+	#region Options
+	
+	private static float _hSlideVolume = 1f;
+	public static float hSlideVolume{
+		get{
+			return _hSlideVolume;
+		}
+		set{
+			if(_hSlideVolume != value)
+			{
+				_hSlideVolume = value;
+				PlayerPrefs.SetFloat("options_volume",_hSlideVolume);
+				AudioListener.volume = _hSlideVolume;
+			}
+		}
+	}
+	
+	private static bool _Vibration = true;
+	public static bool Vibration{
+		get{
+			return _Vibration;
+		}
+		set{
+			if(_Vibration != value)
+			{
+				_Vibration = value;
+				PlayerPrefs.SetInt("options_vibration",_Vibration?1:0);
+			}
+		}
+	}
+	
+	private static bool _SpotLight = true;
+	public static bool SpotLight{
+		get{
+			return _SpotLight;
+		}
+		set{
+			if(_SpotLight != value)
+			{
+				_SpotLight = value;
+				PlayerPrefs.SetInt("options_spotlight",_SpotLight?1:0);
+			}
+		}
+	}
+	
+	private static bool _Fog = false;
+	public static bool Fog{
+		get{
+			return _Fog;
+		}
+		set{
+			if(_Fog != value)
+			{
+				_Fog = value;
+				PlayerPrefs.SetInt("options_fog",_Fog?1:0);
+			}
+		}
+	}
+	
+	private static bool _ShoveHelper = true;
+	public static bool ShoveHelper{
+		get{
+			return _ShoveHelper;
+		}
+		set{
+			if(_ShoveHelper != value)
+			{
+				_ShoveHelper = value;
+				PlayerPrefs.SetInt("options_shovehelper",_ShoveHelper?1:0);
+			}
+		}
+	}
+	
+	private static float _Sensitivity = 0.01f;
+	public static float Sensitivity{
+		get{
+			return _Sensitivity;
+		}
+		set{
+			if(_Sensitivity != value)
+			{
+				_Sensitivity = value;
+				PlayerPrefs.SetFloat("options_sensitivity",_Sensitivity);
+			}
+		}
+	}
+	
+	private static bool _TiltingMove = false;
+	public static bool TiltingMove{
+		get{
+			return _TiltingMove;
+		}
+		set{
+			if(_TiltingMove != value)
+			{
+				_TiltingMove = value;
+				PlayerPrefs.SetInt("options_tiltmove",_TiltingMove?1:0);
+			}
+		}
+	}
+	
+	private static bool _XInversion = false;
+	public static bool XInversion{
+		get{
+			return _XInversion;
+		}
+		set{
+			if(_XInversion != value)
+			{
+				_XInversion = value;
+				PlayerPrefs.SetInt("options_xinversion",_XInversion?1:0);
+			}
+		}
+	}
+	#endregion
+	
+	#region Debug
+	public static float Health = 1f;	
 	public static bool UnlimitedHealth = false;
 	public static bool UnlimitedAmmo = false;
-	public static bool Vibration = true;
-	public static bool SpotLight = true;
-	public static bool Fog = false;
 	public static float SpotLightAngle = 65f;
 	public static float BackgroundAmbient = 101f;
 	public static bool ShowFPS = false;
-	public static bool ShoveHelper = true;
 	public static bool AutoTargeting = false;
-	public static float Sensitivity = 0.01f;
 	public static int FlameWaitingFrames=5;
-	public static bool TiltingMove = false;
+	#endregion
+	
+	#region Init
+	
+	public static void Init()
+	{
+		hSlideVolume = PlayerPrefs.GetFloat("options_volume",1f);
+		Vibration = PlayerPrefs.GetInt("options_vibration",1)==1;
+		SpotLight = PlayerPrefs.GetInt("options_spotlight",1)==1;
+		Fog = PlayerPrefs.GetInt("options_fog",0)==1;
+		ShoveHelper = PlayerPrefs.GetInt("options_shovehelper",1)==1;
+		Sensitivity = PlayerPrefs.GetFloat("options_sensitivity",0.01f);
+		TiltingMove = PlayerPrefs.GetInt("options_tiltmove",0)==1;
+		XInversion = PlayerPrefs.GetInt("options_xinversion",0)==1;
+	}
+	
+	#endregion
+
+
+	#region Variables
 	
 	bool showdebug = true;
 	bool debugScreen = false;
@@ -27,10 +157,11 @@ public class Option : MonoBehaviour {
 	public GUIStyle myStyle1;
 	public GUIStyle myStyle2;
 	
+	#endregion
+	
 	// Update is called once per frame
 	void Update () 
 	{
-		AudioListener.volume = hSlideVolume;
 		version.enabled = !debugScreen;
 		
 		if( creditsButton.PressedUp )
@@ -156,6 +287,10 @@ public class Option : MonoBehaviour {
 			GUI.Label(textRect(8),"Tilt Move",myStyle1);
 			if( GUI.Button(buttonRect(8),TiltingMove?"ON":"OFF",myStyle2 ) )
 				TiltingMove = !TiltingMove;
+			
+			GUI.Label(textRect(9),"X-Inversion",myStyle1);
+			if( GUI.Button(buttonRect(9),XInversion?"ON":"OFF",myStyle2 ) )
+				XInversion = !XInversion;
 			
 			if(showdebug && GUI.Button( new Rect(Screen.width-200,Screen.height-60,80,40),"Debug",myStyle2))
 			{

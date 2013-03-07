@@ -6,11 +6,6 @@ public class ZombieRagdoll : MonoBehaviour {
 	
 	public bool scooby = false;
 	
-	/// <summary>
-	/// Used for a civilian 
-	/// </summary>
-	public bool enableRespawn = true;
-	
 	public GameObject Fire;
 	public GameObject Smoke;
 	public GameObject Zombie;
@@ -50,41 +45,23 @@ public class ZombieRagdoll : MonoBehaviour {
 	{	
 		DestroyTime -= Time.deltaTime;
 		
-	/*	if( throwedout )
+		if( DestroyTime <= 4f )
 		{
-			if( DestroyTime <= 46f )
+			if( !rd )
 			{
-				head.rigidbody.AddForce( new Vector3(0,forcey,0));
-				forcey += 60f*Time.deltaTime;
-				if( head.transform.position.y >= rootbeginposy )
-				{
-					GameObject zomb = (GameObject)Instantiate(Zombie,head.transform.position,Quaternion.identity);
-					zomb.SendMessage("DontSpawn");
-					zomb.SendMessage("SetFireSize",Fire.particleEmitter.maxSize);
-					zomb.SendMessage("SetSmokeSize",Smoke.particleEmitter.maxSize);
-					Destroy(this.gameObject);
-				}
+				var joints = GetComponentsInChildren(typeof(CharacterJoint));
+   					foreach (var child in joints) 
+			    		Destroy(child);
+				var rigidbodies = GetComponentsInChildren(typeof(Rigidbody));
+	   				foreach (var child in rigidbodies) 
+							Destroy(child);
+				var colliders = GetComponentsInChildren(typeof(Collider));
+   					foreach (var child in colliders) 
+			    		Destroy(child);
+				rd = true;
 			}
-		}
-		else*/
-		{
-			if( DestroyTime <= 4f )
-			{
-				if( !rd )
-				{
-					var joints = GetComponentsInChildren(typeof(CharacterJoint));
-       					foreach (var child in joints) 
-				    		Destroy(child);
-					var rigidbodies = GetComponentsInChildren(typeof(Rigidbody));
-    	   				foreach (var child in rigidbodies) 
-								Destroy(child);
-					var colliders = GetComponentsInChildren(typeof(Collider));
-       					foreach (var child in colliders) 
-				    		Destroy(child);
-					rd = true;
-				}
-			if(!throwedout) transform.Translate(0,-0.16f*Time.deltaTime,0);
-			}
+			if(!throwedout)
+				transform.Translate(0,-0.16f*Time.deltaTime,0);
 		}
 		
 		if( !falledsoundplayed && headcol.entered )
@@ -93,10 +70,10 @@ public class ZombieRagdoll : MonoBehaviour {
 			LevelInfo.Audio.PlayZombieFalls();
 		}
 		
-		if(  !healthpackok && !throwedout && DestroyTime <= 6 )
+		if( !healthpackok && !throwedout && !dontSpawnHealthpack && DestroyTime <= 6 )
 		{
 			healthpackok = true;
-			if(!dontSpawnHealthpack && (scooby || Random.Range(0,2)==1))
+			if( scooby || Random.Range(0,2)==1)
 			{
 				LevelInfo.Environments.generator.InstantiatePowerup(transform.position,transform.rotation,scooby);
 				//HealthPack er = (HealthPack)Instantiate(LevelInfo.Environments.healthPack,transform.position,transform.rotation);
@@ -113,12 +90,8 @@ public class ZombieRagdoll : MonoBehaviour {
 				zomb.SendMessage("DontSpawn");
 				zomb.SendMessage("SetFireSize",Fire.particleEmitter.maxSize);
 				zomb.SendMessage("SetSmokeSize",Smoke.particleEmitter.maxSize);
-				Destroy(this.gameObject);		
 			}
-			else
-			{	
-				Destroy(this.gameObject);
-			}
+			Destroy(this.gameObject);		
 		}
 	}
 	
@@ -136,18 +109,14 @@ public class ZombieRagdoll : MonoBehaviour {
 	
 	public void ThrowedOut()
 	{
-		//DestroyTime = 50;
-		if(!enableRespawn) return;
 		throwedout = true;
 	}
 
 	public void IsCivilian()
 	{
-		if(!enableRespawn) return;
-		//DestroyTime = 50;
-		throwedout = true;
 		//iscivilian = true;
 		scooby = false;
+		dontSpawnHealthpack = true;
 	}
 	
 	bool dontSpawnHealthpack = false;

@@ -3,6 +3,8 @@ using System.Collections;
 
 public class BulletAlienBlaster : MonoBehaviour {
 	
+	// THESE CLASS ARE NOT USED. ALIEN BLASTER BULLET IS DETERMINED BY "BulletGunRevolver.cs"
+	
 	public GameObject sparks;
 	public float DestroyTime = 4f;
 	public float Speed = 5f;

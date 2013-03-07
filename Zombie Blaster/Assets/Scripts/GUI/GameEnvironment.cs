@@ -6,7 +6,7 @@ public class GameEnvironment : MonoBehaviour {
 	#region Static Local
 	
 	public static int StartLevel = 0;
-	public static int StartWave = 0;
+	public static int StartWave = 5;
 	
 	
 	public static string loadingLevel = "error";
@@ -279,6 +279,7 @@ public class GameEnvironment : MonoBehaviour {
 		public int store;
 		public bool enabled;
 		public int pocketsize;
+		public int maxammo;
 		public int price;
 		public float speed;
 		public float reloadTime;
@@ -286,11 +287,12 @@ public class GameEnvironment : MonoBehaviour {
 		public bool unlimitedclips;
 		public int damage;
 		public float accuracy;
-		public StoreGun(string name,bool enabled,int pocketsize,int price,float speed,float reloadTime,int damage,float accuracy)
+		public StoreGun(string name,bool enabled,int pocketsize,int maxammo,int price,float speed,float reloadTime,int damage,float accuracy)
 		{
 			this.name = name;
 			this.enabled = enabled;
 			this.pocketsize = pocketsize;
+			this.maxammo = maxammo;
 			this.price = price;
 			this.speed = speed;
 			this.reloadTime = reloadTime;
@@ -304,8 +306,6 @@ public class GameEnvironment : MonoBehaviour {
 				ResetAmmoStandart();
 			else
 				ResetAmmoZero();
-			
-
 		}
 		
 		public void ResetAmmoZero()
@@ -317,7 +317,7 @@ public class GameEnvironment : MonoBehaviour {
 		{
 			unlimited = false;
 			current = pocketsize;
-			store = 5*pocketsize;
+			store = maxammo;
 		}
 		
 		public void SetEnabled(bool enb)
@@ -352,28 +352,24 @@ public class GameEnvironment : MonoBehaviour {
 			{
 				if(unlimited) return "Unlimited";
 				if(unlimitedclips) return "" + current + "/#";
-				return "" + pocketsize + "/" + (5*pocketsize);
+				return "" + pocketsize + "/" + maxammo;
 			}			
 		}
 	}
 	
 	public static StoreGun[] storeGun = new StoreGun[10]
 	{	
-		//				name			enabled    clip    price   speed   reload  power  accuracy
-		new StoreGun("Airsoft"			,true,		20,		0,		12,		2,		10,		80),	//0
-		new StoreGun("Crossbow"			,false,		12,		30,		20,		5,		40,		100),	//1
-		new StoreGun("Shotgun"			,false,		5,		75,		15,		1,		100,	100),	//2
-		new StoreGun("Flamethrower"		,false,		250,	100,	40,		8,		30,		90),	//3
-		new StoreGun("Football"			,false,		5,		100,	50,		3,		100,	100),	//4
-		new StoreGun("Machine Gun"		,false,		100,	150,	9,		12,		20,		60),	//5
-		new StoreGun("Grenades"			,false,		5,		150,	50,		5,		100,	0),		//6
-		new StoreGun("Revolver"			,false,		6,		300,	25,		1,		100,	100),	//7
-		new StoreGun("Rocket Launcher"	,false,		5,		300,	10,		3,		100,	100), 	//8
-		new StoreGun("Alien Blaster"	,false,		10,		500,	25,		10,		100,	100)	//9
-		
-		
-		
-		//new StoreGun("Sniper",false,12)		//9
+		//				name			enabled    clip  maxammo   price   speed   reload  power  accuracy
+		new StoreGun("Airsoft"			,true,		20,		100,	0,		12,		2,		10,		80),	//0
+		new StoreGun("Crossbow"			,false,		10,		60,		30,		20,		5,		40,		100),	//1
+		new StoreGun("Shotgun"			,false,		5,		25,		75,		15,		1,		100,	100),	//2
+		new StoreGun("Flamethrower"		,false,		250,	750,	100,	40,		8,		30,		90),	//3
+		new StoreGun("Football"			,false,		5,		25,		100,	50,		5,		100,	100),	//4
+		new StoreGun("Machine Gun"		,false,		250,	750,	150,	9,		8,		60,		60),	//5
+		new StoreGun("Grenades"			,false,		5,		25,		150,	50,		5,		100,	10),	//6
+		new StoreGun("Revolver"			,false,		6,		30,		300,	25,		1,		100,	100),	//7
+		new StoreGun("Rocket Launcher"	,false,		5,		25,		300,	10,		3,		100,	100), 	//8
+		new StoreGun("Alien Blaster"	,false,		10,		50,		500,	25,		10,		100,	100)	//9
 	};
 	
 	

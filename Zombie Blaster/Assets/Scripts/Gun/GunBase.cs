@@ -31,8 +31,8 @@ public class GunBase : MonoBehaviour {
 		set
 		{
 			GameEnvironment.storeGun[index].store = value;
-			if(GameEnvironment.storeGun[index].store > 5*GameEnvironment.storeGun[index].pocketsize)
-				GameEnvironment.storeGun[index].store = 5*GameEnvironment.storeGun[index].pocketsize;
+			if(GameEnvironment.storeGun[index].store > GameEnvironment.storeGun[index].maxammo)
+				GameEnvironment.storeGun[index].store = GameEnvironment.storeGun[index].maxammo;
 		}	
 	}
 	
@@ -72,6 +72,7 @@ public class GunBase : MonoBehaviour {
 	
 	public void AmmoLost()
 	{
+		if(LevelInfo.Environments.control.UnlimitedAmmo) return;
 		ammoTimeReduce -= Time.deltaTime;
 		if( ammoTimeReduce <= 0 )
 		{

@@ -1065,6 +1065,58 @@ public class Store : MonoBehaviour {
 	
 	private void ShowFillInDialog()
 	{
+		GUI.DrawTexture(new Rect(0.2f*Screen.width,0.15f*Screen.height,0.6f*Screen.width,0.6f*Screen.height),popupTexture);
+	
+		if( GameEnvironment.storeGun[wooi].current == GameEnvironment.storeGun[wooi].pocketsize && GameEnvironment.storeGun[wooi].store == GameEnvironment.storeGun[wooi].maxammo )
+		{
+			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"You already have maximum number of ammo!",myStyle);
+			if( GUI.Button(new Rect(0.42f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "BACK", buttonStyle) )
+			{
+				audio.PlayOneShot(clipBack);
+				wooi = -1;
+				fillin = false;
+				spwchannel = true;
+			}		
+		}
+		else if( Store.zombieHeads >= GameEnvironment.storeGun[wooi].price )
+		{
+			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Do you want to fill in with " + GameEnvironment.storeGun[wooi].price + " heads?",myStyle);
+			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "REFILL", buttonStyle ) )	
+			{
+				audio.Play();
+				Store.zombieHeads -= GameEnvironment.storeGun[wooi].price;
+				LevelInfo.Environments.guns.GetWeaponWithMAX((Weapon)wooi);
+				wooi = -1;
+				fillin = false;
+				spwchannel = true;			
+			}
+			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "BACK", buttonStyle ) )
+			{
+				audio.PlayOneShot(clipBack);
+				wooi = -1;
+				fillin = false;
+				spwchannel = true;			
+			}
+		}
+		else
+		{
+			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.3f*Screen.height),"You have not enough heads to buy this item.",myStyle);
+			
+			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "MORE HEADS", buttonStyle ) )	
+			{
+				Get1000HeadsEvent();
+			}
+			
+			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "BACK", buttonStyle) )
+			{
+				audio.PlayOneShot(clipBack);
+				wooi = -1;
+				fillin = false;
+				spwchannel = true;
+			}		
+		}
+		
+		/*/ old
 		if( Store.zombieHeads >= 100 )
 		{
 			GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"Do you want to Fill in ammo?");
@@ -1099,7 +1151,7 @@ public class Store : MonoBehaviour {
 				spwchannel = true;
 			}
 		}
-		
+		*/
 
 	}
 	

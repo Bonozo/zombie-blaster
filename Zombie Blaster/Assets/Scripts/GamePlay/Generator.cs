@@ -262,7 +262,7 @@ public class Generator : MonoBehaviour {
 		
 		if( scooby )
 		{
-			int r = Random.Range(1,3);//change from (0,3) no dropped weapons 
+			int r = Random.Range(0,2);//change from (0,3) no dropped weapons 
 			
 			// some complicated code
 			/*if( LevelInfo.Environments.control.currentLevel==0&&LevelInfo.Environments.control.currentWave==3
@@ -274,22 +274,21 @@ public class Generator : MonoBehaviour {
 			
 			switch(r)
 			{
-			case 0: packType = HealthPackType.ScoreMultiplier; break;
 			case 1: packType = HealthPackType.XtraLife; break;
-			case 2: packType = HealthPackType.DamageMultiplier; break;
+			case 0: packType = HealthPackType.DamageMultiplier; break;
 			}
 		}
 		else
 		{
-			int r = Random.Range(0,6);
+			int r = Random.Range(0,7);
 			
 			// some complicated code
-			if( LevelInfo.Environments.control.currentLevel==0&&LevelInfo.Environments.control.currentWave<4
+			/*if( LevelInfo.Environments.control.currentLevel==0&&LevelInfo.Environments.control.currentWave<4
 				&& r==5)
 			{
 				r = Random.Range(0,5);
 				
-			}
+			}*/
 			
 			switch(r)
 			{
@@ -299,6 +298,7 @@ public class Generator : MonoBehaviour {
 			case 3: packType = HealthPackType.Health; break;
 			case 4: packType = HealthPackType.Shield; break;
 			case 5: packType = HealthPackType.SuperAmmo; break;
+			case 6: packType = HealthPackType.Rampage; break;
 			}	
 			
 			// If there are many of alive zombies more probablity to spawn Shield
@@ -316,6 +316,12 @@ public class Generator : MonoBehaviour {
 				// 2<=prob<=6
 				if(Random.Range(0,prob)==1) packType = HealthPackType.Health;
 			}
+			
+			if(Store.FirstTimePlay && Random.Range(0,10)<=7) // 80% probablity
+			{
+				packType = HealthPackType.Rampage;
+			}
+				
 			
 		}		
 		return packType;

@@ -392,7 +392,7 @@ public class Control : MonoBehaviour {
 		if(Input.GetKeyUp(KeyCode.PageDown))
 			Shield();
 		if(Input.GetKeyUp(KeyCode.Home))
-			ScoreMultiply();
+			Rampage();
 
 		if( Input.GetKeyUp(KeyCode.H) )
 			health -= 0.1f;
@@ -522,7 +522,10 @@ public class Control : MonoBehaviour {
 			Vector3 rot = transform.rotation.eulerAngles;
 			if(rot.y >= 180.0f ) rot.y -= 360f;
 		
-			rot.y += Speed*Time.deltaTime*swipe;
+			if(Option.XInversion)
+				rot.y -= Speed*Time.deltaTime*swipe;
+			else
+				rot.y += Speed*Time.deltaTime*swipe;
 			if(Option.TiltingMove)
 			{
 				float tilt = GameEnvironment.InputAxis.y;
@@ -530,7 +533,11 @@ public class Control : MonoBehaviour {
 				{
 					if(tilt>0) tilt-=0.075f; else tilt+=0.075f;
 					tilt*=0.5f;
-					rot.y += Speed*Time.deltaTime*tilt;
+					
+					if(Option.XInversion)
+						rot.y -= Speed*Time.deltaTime*tilt;
+					else
+						rot.y += Speed*Time.deltaTime*tilt;
 				}
 			}
 			transform.rotation = Quaternion.Euler(rot);
@@ -934,7 +941,7 @@ public class Control : MonoBehaviour {
 		}
 		
 		
-		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActive(DamageMultiplied||Shielded||ScoreMultiplied);
+		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActive(DamageMultiplied||Shielded||UnlimitedAmmo);
 	}
 	
 	
@@ -1131,12 +1138,12 @@ public class Control : MonoBehaviour {
 	private float damageMultiplieTime = 0f;
 	public bool Shielded = false;
 	private float shieldTime = 0f;
-	public bool ScoreMultiplied = false;
-	private float scoreMultiplierTime = 0f;
+	public bool UnlimitedAmmo = false;
+	private float unlimitedAmmoTime = 0f;
 	
 	private IEnumerator DamageMultiplyThread()
 	{
-		damageMultiplieTime = Time.time + 30f;
+		damageMultiplieTime = Time.time + 15f;
 		
 		if( !DamageMultiplied )
 		{
@@ -1182,42 +1189,42 @@ public class Control : MonoBehaviour {
 		}
 	}
 	
-	private IEnumerator ScoreMultiplyThread()
+	private IEnumerator UnlimitedAmmoThread()
 	{
-		scoreMultiplierTime = Time.time + 30f;
+		unlimitedAmmoTime = Time.time + 15f;
 		
-		if( !ScoreMultiplied )
+		if( !UnlimitedAmmo )
 		{
-			ScoreMultiplied = true;
+			UnlimitedAmmo = true;
 		
-			while( Time.time < scoreMultiplierTime )
+			while( Time.time < unlimitedAmmoTime )
 			{
-				LevelInfo.Environments.guiDamageMultiplier.text = "2x score " + (int)(scoreMultiplierTime-Time.time+1);
+				LevelInfo.Environments.guiDamageMultiplier.text = "Rampage " + (int)(unlimitedAmmoTime-Time.time+1);
 				yield return new WaitForEndOfFrame();
 			}
-			ScoreMultiplied = false;
+			UnlimitedAmmo = false;
 		}
 	}
 	
 	public void DamageMultiply()
 	{
 		shieldTime=0f;
-		scoreMultiplierTime=0f;
+		unlimitedAmmoTime=0f;
 		StartCoroutine(DamageMultiplyThread());
 	}
 	
 	public void Shield()
 	{
 		damageMultiplieTime=0f;
-		scoreMultiplierTime=0f;
+		unlimitedAmmoTime=0f;
 		StartCoroutine(ShieldThread());
 	}
 	
-	public void ScoreMultiply()
+	public void Rampage()
 	{
 		shieldTime=0f;
 		damageMultiplieTime=0f;
-		StartCoroutine(ScoreMultiplyThread());
+		StartCoroutine(UnlimitedAmmoThread());
 	}
 	
 	#endregion

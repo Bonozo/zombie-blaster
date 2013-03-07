@@ -27,10 +27,11 @@ public class BulletGunAirgun : MonoBehaviour {
 	{
 		bool blooded = false;
 		bool headhit = false;
+		bool iscivil = col.gameObject.GetComponent<civilian>() != null;
 		if( col.gameObject.tag == "Zombie" && (col.gameObject.GetComponent<Zombi>() == null || !col.gameObject.GetComponent<Zombi>().haveHelmet) ) blooded = true;
 		if( col.gameObject.tag == "ZombieHead" && !col.gameObject.GetComponent<HeadHit>().HeadContainer.haveHelmet ) { blooded = true; headhit=true;}
 		
-		if(!blooded)
+		if(!blooded || iscivil)
 			Instantiate(LevelInfo.Environments.particleSpark,transform.position,Quaternion.identity);
 		else
 		{	

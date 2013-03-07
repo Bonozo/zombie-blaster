@@ -61,8 +61,12 @@ public class civilian : MonoBehaviour {
 				if(!destinated)
 				{
 					Vector3 v = LevelInfo.Environments.control.transform.position; v.y = transform.position.y;
-					v.x += Random.Range(-7f,7f);
-					v.z += Random.Range(-7f,7f);
+					
+					float x = Random.Range(-7f,7f); if(Mathf.Abs(x)<1f) x=x>0?1:-1;
+					float z = Random.Range(-7f,7f); if(Mathf.Abs(z)<1f) z=z>0?1:-1;
+					
+					v.x += x;
+					v.z += z;
 					transform.rotation = Quaternion.LookRotation(v-transform.position,Vector3.up);
 					destinated = true;
 				}
