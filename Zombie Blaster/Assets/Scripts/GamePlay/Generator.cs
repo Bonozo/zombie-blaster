@@ -63,7 +63,11 @@ public class Generator : MonoBehaviour {
 	#region Zombies
 	
 	public bool generateZombies = false;
+	
+	[System.NonSerializedAttribute]
 	public float GenerationRateMin = 2f, GenerationRateMax=4f;
+	
+	[System.NonSerializedAttribute]
 	public float GenerationDistanceMin = 10f, GenerationDistanceMax = 13f;
 	
 	private float zombieRate = 0;
@@ -96,7 +100,6 @@ public class Generator : MonoBehaviour {
 			}
 			scoobyZombieCount--;
 		}
-		
 		return (GameObject)Instantiate(z,RandomPosition(),Quaternion.Euler(0,180,0) );
 	}
 	
@@ -158,8 +161,10 @@ public class Generator : MonoBehaviour {
 	{
 		// set up minimum and maximum rate and distance for wave
 		GenerationDistanceMin = Mathf.Max(10.5f-0.5f*LevelInfo.Environments.control.currentWave,5f);
+		GenerationDistanceMax = 12f;
+		
 		GenerationRateMin = Mathf.Max(5.5f-0.5f*LevelInfo.Environments.control.currentWave,2f);
-		GenerationRateMax = Mathf.Max(8f-0.5f*LevelInfo.Environments.control.currentWave,4f);
+		GenerationRateMax = Mathf.Max(8f-0.5f*LevelInfo.Environments.control.currentWave,6f);
 		
 		
 		zombiesLeft = numberzombies;
@@ -203,7 +208,7 @@ public class Generator : MonoBehaviour {
 				
 				GameObject newzombie = WhatZombieToSpawn();
 				if(newzombie == null ) 
-					Debug.Log("New generated zombie is null");
+					Debug.Log("ZB error: New generated zombie is null");
 				else if( NearAtZombie(newzombie) ) 
 				{
 					Destroy(newzombie);
@@ -223,7 +228,7 @@ public class Generator : MonoBehaviour {
 			{
 				if( GameObject.FindObjectOfType(typeof(civilian)) == null )
 					Instantiate(civilianPrefabs[Random.Range(0,civilianPrefabs.Length)],RandomPosition(),Quaternion.identity);
-				civilianRate = Random.Range(5f,10f);
+				civilianRate = Random.Range(10f,15f);
 			}
 		}
 	}
@@ -332,18 +337,6 @@ public class Generator : MonoBehaviour {
 		int ind = (int)WhatPowerupToSpawn(scooby);
 		HealthPack er = (HealthPack)Instantiate(powerups[ind],position,rotation);
 		er.scooby = scooby;
-	}
-	
-	private bool AllWeaponsOwned()
-	{
-		var level = LevelInfo.State.level[LevelInfo.Environments.control.currentLevel];
-		for(int i=0;i<level.allowedGun.Length;i++) 
-		{
-			int index = (int)level.allowedGun[i];
-			if(!LevelInfo.Environments.guns.gun[index].EnabledGun && LevelInfo.Environments.store.WeaponAvailable(index))
-				return false;
-		}
-		return true;
 	}
 	
 	#endregion

@@ -22,7 +22,12 @@ public class GunGrenade : GunBase {
 		AmmoLost();
 		
 		// Calculate Fire Direction
-		Ray ray = LevelInfo.Environments.mainCamera.ScreenPointToRay (GameEnvironment.lastInput);
+		Vector3 lastinputnext = GameEnvironment.lastInput;
+		float peturb = (100f-GameEnvironment.storeGun[(int)Weapon.Grenade].accuracy)/20f;
+		float phb = Mathf.Min(Screen.width,Screen.height)*peturb*0.01f;
+		lastinputnext += new Vector3( Random.Range(-phb,phb) , Random.Range(-phb,phb),0f);
+		
+		Ray ray = LevelInfo.Environments.mainCamera.ScreenPointToRay (lastinputnext);
 		Quaternion q = Quaternion.LookRotation(ray.direction);
 			
 		// Institate Bullet

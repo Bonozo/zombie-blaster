@@ -25,7 +25,7 @@ public class StateManager : MonoBehaviour {
 		public GameObject hierarchyPlace;
 		public GameObject[] standardZombie;
 		public GameObject[] scoobyZombies;
-		public Weapon[] allowedGun;
+		//public Weapon[] allowedGun;
 	}
 	
 	#endregion

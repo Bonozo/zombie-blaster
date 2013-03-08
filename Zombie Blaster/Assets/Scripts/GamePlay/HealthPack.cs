@@ -32,6 +32,7 @@ public class HealthPack : MonoBehaviour {
 	
 	private Weapon gunindexifweapon = 0;
 	private float autopickuptime = 0.0f;
+	private float autopickupDistance = 4f;
 	private bool rgb = true;
 	
 	public bool scooby = false;
@@ -68,29 +69,6 @@ public class HealthPack : MonoBehaviour {
 			if(gunindexifweapon == Weapon.None)
 				Debug.LogError("ZB ERROR: error code statement when determining weapon for ammo powerup."); 
 			break;
-		/*case HealthPackType.Armor:
-			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpArmor;
-			break;*/
-		/*case HealthPackType.BonusHeads:
-			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpBonusHeads;
-			break;*/
-		/*case HealthPackType.DamageMultiplier:
-			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpDamageMultiplier;
-			break;*/
-		/*case HealthPackType.Health:
-			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpHealth;
-			break;*/
-		/*case HealthPackType.Shield:
-			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpShields;
-			break;*/
-		case HealthPackType.SuperAmmo:
-			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpSuperAmmo;
-			break;
-		/*case HealthPackType.ScoreMultiplier:
-			break;*/
-		/*case HealthPackType.XtraLife:
-			gameObject.renderer.material.mainTexture = LevelInfo.Environments.texturePickUpXtraLife;
-			break;*/
 		}		
 	}
 	
@@ -100,7 +78,7 @@ public class HealthPack : MonoBehaviour {
 		if( picked ) return;
 		
 		autopickuptime -= Time.deltaTime;
-		if( autopickuptime <= 0f && GameEnvironment.DistXZ(transform.position,LevelInfo.Environments.control.transform.position) < 2.8f )
+		if( autopickuptime <= 0f && GameEnvironment.DistXZ(transform.position,LevelInfo.Environments.control.transform.position) < autopickupDistance )
 		{
 			rgb = false;
 			StartCoroutine(PickedUp());
@@ -111,7 +89,7 @@ public class HealthPack : MonoBehaviour {
 		v.x=v.z=0;
 		transform.rotation = Quaternion.Euler(v);
 		if(rigbd) transform.Rotate(0,rotateSpeed*Time.deltaTime,0);
-		
+		 
 		
 		
 		if( LevelInfo.Environments.control.state == GameState.Paused ) return;

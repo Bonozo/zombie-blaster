@@ -215,7 +215,6 @@ public class Control : MonoBehaviour {
 	
 	private bool restartLevel = false;
 	private int lastZombieHeads;
-	private bool[] allowedWeapons;
 	
 	#endregion
 	
@@ -373,10 +372,6 @@ public class Control : MonoBehaviour {
 		
 		lastZombieHeads = -1;
 		LevelInfo.Environments.hubZombieHeads.SetNumber(Store.zombieHeads);
-		
-		allowedWeapons = new bool[Store.countWeapons];
-		for(int i=0;i<LevelInfo.State.level[currentLevel].allowedGun.Length;i++)
-			allowedWeapons[(int)LevelInfo.State.level[currentLevel].allowedGun[i]]=true;
 		
 		LevelInfo.Environments.fade.Hide(3f);
 		
@@ -554,7 +549,7 @@ public class Control : MonoBehaviour {
 		storeNotificationTime=false;
 		LevelInfo.Environments.store.UpdateWeaponAvailable();
 		for(int i=0;i<Store.countWeapons;i++)
-			if(LevelInfo.Environments.store.WeaponAvailable(i) && Store.CanBuyWeapon(i) && !LevelInfo.Environments.guns.gun[i].EnabledGun && allowedWeapons[i])
+			if(LevelInfo.Environments.store.WeaponAvailable(i) && Store.CanBuyWeapon(i) && !LevelInfo.Environments.guns.gun[i].EnabledGun)
 				storeNotificationTime=true;
 		if(!old&&storeNotificationTime)
 			LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.clipUIStar);
@@ -974,15 +969,6 @@ public class Control : MonoBehaviour {
 	private bool isInWave = false;
 	public bool IsInWave { get { return isInWave; }}
 	
-	public bool ExistGunInCurrentLevel(Weapon w)
-	{
-		var level = LevelInfo.State.level[LevelInfo.Environments.control.currentLevel];
-		for(int i=0;i<level.allowedGun.Length;i++) 
-			if( level.allowedGun[i] == w)
-				return true;
-		return false;
-	}
-	
 	public int AliveZombieCount { get { return ZombiesLeft - LevelInfo.Environments.generator.zombiesLeft; }}
 	
 	#endregion
@@ -1055,12 +1041,13 @@ public class Control : MonoBehaviour {
 	private int bonusForWaveComplete = -1;
 	public IEnumerator WaveComplete()
 	{
-		DestroyAllRemainedWithTag("Zombie");
 		isInWave = false;
 		
 		float time = Time.time + 6f;
 		while( Time.time < time )
 			yield return new WaitForEndOfFrame();
+		
+		DestroyAllRemainedWithTag("Zombie");
 		
 		LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.AudioWaveComplete);
 		bonusForWaveComplete = UnityEngine.Random.Range(0,2);

@@ -61,11 +61,8 @@ public class Guns : MonoBehaviour {
 		}
 		else
 		{
-			Weapon[] w = LevelInfo.State.level[GameEnvironment.StartLevel].allowedGun;
-			for(int i=0;i<w.Length;i++)
-			{
-				GameEnvironment.storeGun[(int)w[i]].SetEnabled(Store.WeaponUnlocked((int)w[i]));
-			}
+			for(int i=0;i<Store.countWeapons;i++)
+				GameEnvironment.storeGun[i].SetEnabled(Store.WeaponUnlocked(i));
 		}
 		
 		if( Option.UnlimitedAmmo )

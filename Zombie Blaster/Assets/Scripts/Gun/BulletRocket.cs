@@ -49,9 +49,8 @@ public class BulletRocket : MonoBehaviour {
 				zombi.SendMessage("Explode");
 		}
 		
-		Control control = (Control)GameObject.FindObjectOfType(typeof(Control));
-		if( GameEnvironment.DistXZ(control.transform.position,transform.position ) <= 2*ExplosionRadius )
-			control.GetHealth(-0.2f);
+		if( GameEnvironment.DistXZ(LevelInfo.Environments.control.transform.position,transform.position ) <= ExplosionRadius )
+			LevelInfo.Environments.control.GetHealth(-0.1f);
 		
 		LevelInfo.Environments.control.Shake();
 		Instantiate(ParticleExplosion,transform.position,Quaternion.identity);

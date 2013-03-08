@@ -82,6 +82,7 @@ public class MainMenu : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
 	{
+		Screen.sleepTimeout = (int)SleepTimeout.NeverSleep;
 		State = MenuState.MainMenu;
 		
 		if( GameEnvironment.ToMap )

@@ -360,16 +360,16 @@ public class GameEnvironment : MonoBehaviour {
 	public static StoreGun[] storeGun = new StoreGun[10]
 	{	
 		//				name			enabled    clip  maxammo   price   speed   reload  power  accuracy
-		new StoreGun("Airsoft"			,true,		20,		100,	0,		12,		2,		10,		80),	//0
-		new StoreGun("Crossbow"			,false,		10,		60,		30,		20,		5,		40,		100),	//1
-		new StoreGun("Shotgun"			,false,		5,		25,		75,		15,		1,		100,	100),	//2
-		new StoreGun("Flamethrower"		,false,		250,	750,	100,	40,		8,		30,		90),	//3
-		new StoreGun("Football"			,false,		5,		25,		100,	50,		5,		100,	100),	//4
-		new StoreGun("Machine Gun"		,false,		250,	750,	150,	9,		8,		60,		60),	//5
-		new StoreGun("Grenades"			,false,		5,		25,		150,	50,		5,		100,	10),	//6
-		new StoreGun("Revolver"			,false,		6,		30,		300,	25,		1,		100,	100),	//7
-		new StoreGun("Rocket Launcher"	,false,		5,		25,		300,	10,		3,		100,	100), 	//8
-		new StoreGun("Alien Blaster"	,false,		10,		50,		500,	25,		10,		100,	100)	//9
+		new StoreGun("Airsoft"			,true,		20,		100,	0,		12,		2,		20,		80),	//0
+		new StoreGun("Crossbow"			,false,		10,		60,		1000,	20,		5,		40,		90),	//1
+		new StoreGun("Shotgun"			,false,		5,		25,		400,	15,		3,		100,	70),	//2
+		new StoreGun("Flamethrower"		,false,		250,	750,	300,	40,		8,		30,		90),	//3
+		new StoreGun("Football"			,false,		5,		25,		400,	50,		5,		100,	100),	//4
+		new StoreGun("Machine Gun"		,false,		250,	750,	750,	9,		8,		60,		60),	//5
+		new StoreGun("Grenades"			,false,		5,		25,		400,	50,		5,		100,	10),	//6
+		new StoreGun("Revolver"			,false,		6,		30,		200,	25,		2,		100,	100),	//7
+		new StoreGun("Rocket Launcher"	,false,		3,		24,		500,	10,		5,		100,	100), 	//8
+		new StoreGun("Alien Blaster"	,false,		10,		50,		2000,	25,		10,		100,	100)	//9
 	};
 	
 	

@@ -156,7 +156,7 @@ public class Store : MonoBehaviour {
 	public static void ClearGameStats()
 	{
 		// Clear Prefabs
-		PlayerPrefs.SetInt("zombieHeads",0);
+		//PlayerPrefs.SetInt("zombieHeads",0);
 		for(int i=1;i<_playerprefs_unlockweapon.Length;i++)
 			PlayerPrefs.SetInt("weapon"+i,0);
 		for(int i=0;i<_playerprefs_unlocklevel.Length;i++)
@@ -366,7 +366,6 @@ public class Store : MonoBehaviour {
 	
 	private int showZombieHeads = -1; 
 	private bool[] showWeapon = new bool[countWeapons];
-	private bool[] showFillIn = new bool[countWeapons];
 	private bool _showStore = false;
 	public bool showStore{
 		get
@@ -384,12 +383,8 @@ public class Store : MonoBehaviour {
 				audio.PlayOneShot(clipShowStore);
 				
 				UpdateWeaponAvailable();
+				buttonGAME.gameObject.SetActive(true);
 				
-				for(int i=0;i<countWeapons;i++) showFillIn[i]=false;
-				if( IsLevelGamePlay )
-					for(int j=0;j<weaponsForLevel[LevelInfo.Environments.control.currentLevel].Length;j++)
-						showFillIn[(int)weaponsForLevel[LevelInfo.Environments.control.currentLevel][j]] = true;
-		
 				if( IsLevelOption )
 				{
 					MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
@@ -650,10 +645,10 @@ public class Store : MonoBehaviour {
 		bool enableshowstashitems = currentStashitem != -1 && stashitemslidecount==0;
 		
 		StashWeaponName.enabled = enableshowstashitems;
-		StashWeaponBuyText.enabled = enableshowstashitems&&IsLevelGamePlay&&showFillIn[currentStashitem];
+		StashWeaponBuyText.enabled = enableshowstashitems&&IsLevelGamePlay&&showWeapon[currentStashitem];
 		StashInfoButton.gameObject.SetActive(enableshowstashitems);
-		StashItemBuy.gameObject.SetActive(enableshowstashitems&&IsLevelGamePlay&&showFillIn[currentStashitem]);
-		StashItemBuy.enabled = enableshowstashitems&&wooi==-1&&IsLevelGamePlay&&showFillIn[currentStashitem];
+		StashItemBuy.gameObject.SetActive(enableshowstashitems&&IsLevelGamePlay&&showWeapon[currentStashitem]);
+		StashItemBuy.enabled = enableshowstashitems&&wooi==-1&&IsLevelGamePlay&&showWeapon[currentStashitem];
 		stashItemTexture.enabled = enableshowstashitems;
 		if( stashItemTexture.enabled ) stashItemTexture.texture = weaponIcon[currentStashitem];
 		
@@ -856,7 +851,7 @@ public class Store : MonoBehaviour {
 		audio.PlayOneShot(clipQuitPlayGame);
 		DisableStoreButtons();
 		Fade.InProcess = true;
-		LevelInfo.Environments.fade.Show(3f);
+		LevelInfo.Environments.fade.Show(1.5f);
 		while( !LevelInfo.Environments.fade.Finished )
 		{
 			yield return new WaitForEndOfFrame();
@@ -1026,7 +1021,7 @@ public class Store : MonoBehaviour {
 				currentStashitem = wooi;
 				audio.Play();
 				Store.zombieHeads -= GameEnvironment.storeGun[wooi].price;
-				if( IsLevelGamePlay && LevelInfo.Environments.control.ExistGunInCurrentLevel((Weapon)wooi))
+				if( IsLevelGamePlay )
 				{
 					//GameEnvironment.storeGun[wooi].store += 5*GameEnvironment.storeGun[wooi].pocketsize;
 					//GameEnvironment.storeGun[wooi].enabled = true;

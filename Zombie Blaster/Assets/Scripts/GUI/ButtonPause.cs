@@ -32,12 +32,12 @@ public class ButtonPause : MonoBehaviour {
 		}
 	}
 	
-	void Update()
+	void OnApplicationPause(bool pause)
 	{
-		if(Screen.lockCursor && LevelInfo.Environments.control.state != GameState.Paused)
+		if(pause)
 		{
 			lastState = LevelInfo.Environments.control.state;
-			LevelInfo.Environments.control.state = GameState.Paused;
+			LevelInfo.Environments.control.state = GameState.Paused;	
 		}
 	}
 }

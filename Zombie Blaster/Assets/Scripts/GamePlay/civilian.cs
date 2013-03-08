@@ -11,6 +11,8 @@ public class civilian : MonoBehaviour {
 	public float Speed = 20f;
 	public float DestroyTime = 30f;
 	
+	private Vector3 lastpos;
+	
 	#region Moving, Life
 	
 	void Start () 
@@ -24,11 +26,13 @@ public class civilian : MonoBehaviour {
 			v -= transform.position;
 			transform.position += 2*v;
 		}
+		lastpos = transform.position;
 	}
 	
 	void Update () 
 	{
 		if(Time.deltaTime==0) return;
+		animation.Play("running");
 		
 		DestroyTime -= Time.deltaTime;
 		if( DestroyTime <= 0f )
@@ -49,14 +53,17 @@ public class civilian : MonoBehaviour {
 		if(CanMoveForward())
 			transform.Translate(Time.deltaTime*Speed/13f*Vector3.forward);
 		else
-		{
-			if(!rotating) StartCoroutine(Rotate(Random.Range(1f,2f)));
-			return;
-		}
+			transform.Rotate(0f,Random.Range(100f,250f),0f);
+			//if(!rotating) StartCoroutine(Rotate(Random.Range(1f,2f)));
+		
+		float olddist = GameEnvironment.DistXZ(LevelInfo.Environments.control.transform.position,lastpos);
+		float newdist = GameEnvironment.DistXZ(LevelInfo.Environments.control.transform.position,transform.position);
+		lastpos = transform.position;
+		
 		if(!rotating)
 		{
 
-			if( GameEnvironment.DistXZ(LevelInfo.Environments.control.transform.position,transform.position) > 10f )
+			if( newdist > 10f )
 			{
 				if(!destinated)
 				{
@@ -73,13 +80,14 @@ public class civilian : MonoBehaviour {
 			}
 			else 
 			{
-				if(Random.Range(0,200)==1)
+				if( newdist > olddist && newdist > Random.Range(4f,6f))
+					StartCoroutine(Rotate(Random.Range(1f,2f)));
+				
+				if(!rotating && Random.Range(0,150)==1)
 					StartCoroutine(Rotate(Random.Range(1f,2f)));
 				destinated = false;
 			}
 		}
-		
-		animation.Play("running");
 	}
 	
 	bool destinated = false;
@@ -91,7 +99,7 @@ public class civilian : MonoBehaviour {
 		while(time>0f)
 		{
 			time -= Time.deltaTime;
-			transform.Rotate(0f,0.25f*(right?1:-1),0f);
+			transform.Rotate(0f,30f*Time.deltaTime*(right?1:-1),0f);
 			yield return new WaitForEndOfFrame();
 		}
 		rotating = false;
@@ -234,14 +242,11 @@ public class civilian : MonoBehaviour {
 		
 		Destroy(this.gameObject);
 	}
-	
-	private float PlayerScoreForDie = -0.01f;
+
 	void ActionForDie()
 	{
 		Store.zombieHeads = Mathf.Max(0,Store.zombieHeads-LevelInfo.Environments.control.currentWave);
-		//LevelInfo.Environments.guns.
-
-		LevelInfo.Environments.control.GetHealth(PlayerScoreForDie);	
+		//LevelInfo.Environments.control.GetHealth(PlayerScoreForDie);	
 	}
 	
 	#endregion
