@@ -49,14 +49,15 @@ public class HealthPack : MonoBehaviour {
 			// calculating active weapons
 			gunindexifweapon = Weapon.None;
 			int count = 0;
-			for(int i=0;i<Store.countWeapons;i++)
-				if(LevelInfo.Environments.guns.gun[i].EnabledGun)
+			for(int i=1;i<Store.countWeapons;i++)
+				if(LevelInfo.Environments.store.WeaponAvailable(i))
 					count++;
 			int index = Random.Range(0,count)+1;
+			Debug.Log("count = " + count + " index = " + index);
 			count = 0;
-			for(int i=0;i<Store.countWeapons;i++)
+			for(int i=1;i<Store.countWeapons;i++)
 			{
-				if(LevelInfo.Environments.guns.gun[i].EnabledGun)	
+				if(LevelInfo.Environments.store.WeaponAvailable(i))	
 				{
 					count++;
 					if(count == index)
@@ -148,8 +149,7 @@ public class HealthPack : MonoBehaviour {
 		switch(packType)
 		{
 		case HealthPackType.Ammo:
-			if(LevelInfo.Environments.guns.gun[(int)gunindexifweapon].EnabledGun)
-				LevelInfo.Environments.guns.GetAmmoWithMax(gunindexifweapon);
+			LevelInfo.Environments.guns.AllAmmoForWeapon(gunindexifweapon);
 			pickupname = GameEnvironment.storeGun[(int)gunindexifweapon].name + " Ammo";
 			break;
 			
@@ -181,7 +181,7 @@ public class HealthPack : MonoBehaviour {
 		case HealthPackType.SuperAmmo:
 			for(int i=0;i<LevelInfo.Environments.guns.gun.Length;i++)
 				if( LevelInfo.Environments.guns.gun[i].EnabledGun )
-					LevelInfo.Environments.guns.GetWeaponWithMAX((Weapon)i);
+					LevelInfo.Environments.guns.AllAmmoForWeapon((Weapon)i);
 			pickupname = "All Ammo";
 			break;
 			

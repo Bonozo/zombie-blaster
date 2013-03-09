@@ -851,7 +851,7 @@ public class Store : MonoBehaviour {
 		audio.PlayOneShot(clipQuitPlayGame);
 		DisableStoreButtons();
 		Fade.InProcess = true;
-		LevelInfo.Environments.fade.Show(1.5f);
+		LevelInfo.Environments.fade.Show(1.1f);
 		while( !LevelInfo.Environments.fade.Finished )
 		{
 			yield return new WaitForEndOfFrame();

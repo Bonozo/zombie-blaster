@@ -163,7 +163,7 @@ public class MainMenu : MonoBehaviour {
 		audioQuitGame.Play();
 		
 		Fade.InProcess = true;
-		fade.Show(1.5f);
+		fade.Show(1.1f);
 		while( !fade.Finished )
 		{
 			yield return new WaitForEndOfFrame();

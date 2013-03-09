@@ -88,9 +88,19 @@ public class GunBase : MonoBehaviour {
 	
 	public void GetAmmoStorePacketWithMaxAmmo()
 	{
-		AmmoStore += PacketSize*5;
+		AmmoStore = GameEnvironment.storeGun[index].maxammo;
 		Ammo = PacketSize;
 		reloading = false;
+	}
+	
+	public void GetAllAmmo()
+	{
+		if( Ammo == 0 && AmmoStore == 0 )
+		{
+			AmmoStore = GameEnvironment.storeGun[index].maxammo;
+			Ammo = PacketSize;
+			reloading = false;
+		}
 	}
 	
 	public void Reload()

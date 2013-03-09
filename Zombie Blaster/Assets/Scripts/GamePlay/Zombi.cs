@@ -381,7 +381,7 @@ public class Zombi : MonoBehaviour {
 		}
 	}
 	
-	void OnTriggerEnter(Collider col)
+	/*void OnTriggerEnter(Collider col)
 	{		
 		// Zapper Attack
 		if( HitWithName(col.gameObject.name,"Zapper") )
@@ -407,9 +407,9 @@ public class Zombi : MonoBehaviour {
 				return;
 			}
 		}	
-	}
+	}*/
 	
-	void OnTriggerStay(Collider col)
+	/*void OnTriggerStay(Collider col)
 	{	
 		// Zapper Attack
 		if( HitWithName(col.gameObject.name,"Zapper") )
@@ -435,7 +435,7 @@ public class Zombi : MonoBehaviour {
 				return;
 			}
 		}	
-	}
+	}*/
 	
 	public bool GetHitDamagedTest(int hitpoints)
 	{
@@ -508,6 +508,11 @@ public class Zombi : MonoBehaviour {
 	public void DieWithJump()
 	{
 		if( died ) return;
+		if(animation.IsPlaying("spawn"))
+		{
+			DieNormal();
+			return;
+		}
 		died = true;
 		LevelInfo.Environments.control.GetZombie();
 		
@@ -526,6 +531,11 @@ public class Zombi : MonoBehaviour {
 	public void DieWithFootball()
 	{
 		if( died ) return;
+		if(animation.IsPlaying("spawn"))
+		{
+			DieNormal();
+			return;
+		}
 		died = true;
 		LevelInfo.Environments.control.GetZombie();
 		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);

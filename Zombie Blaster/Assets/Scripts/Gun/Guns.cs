@@ -125,27 +125,6 @@ public class Guns : MonoBehaviour {
 	
 	#region Messages
 	
-/*	public void GetAmmo(int coef)
-	{
-		gun[current].GetAmmoStorePacket(coef);
-	}
-	
-	public void GetWeapon(int gunnumber,int coef)
-	{
-		if( !gun[gunnumber].EnabledGun )
-		{
-			// Get Pocket and fast Reload
-			gun[gunnumber].EnabledGun = true;
-			gun[gunnumber].Ammo += gun[gunnumber].PacketSize;
-			gun[gunnumber].GetAmmoStorePacket(coef-1);
-		}
-		else
-		{
-			// Get Pocket
-			gun[gunnumber].GetAmmoStorePacket(coef);
-		}
-	}
-*/	
 	public void GetWeaponWithMAX(Weapon weapon)
 	{
 		int gunnumber = (int)weapon;
@@ -158,6 +137,19 @@ public class Guns : MonoBehaviour {
 		}
 		
 		gun[gunnumber].GetAmmoStorePacketWithMaxAmmo();
+	}
+	
+	public void AllAmmoForWeapon(Weapon weapon)
+	{
+		int gunnumber = (int)weapon;
+		if( !gun[gunnumber].EnabledGun )
+		{
+			// Get Pocket and fast Reload
+			gun[gunnumber].EnabledGun = true;
+			LevelInfo.Environments.control.ShowStoreNotifiaction();
+		}
+		
+		gun[gunnumber].GetAllAmmo();
 	}
 	
 	public void GetAmmoWithMax(Weapon weapon)

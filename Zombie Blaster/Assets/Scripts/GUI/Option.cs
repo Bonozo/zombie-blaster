@@ -144,6 +144,18 @@ public class Option : MonoBehaviour {
 		XInversion = PlayerPrefs.GetInt("options_xinversion",0)==1;
 	}
 	
+	private void RestoreDefault()
+	{
+		hSlideVolume = 1f;	
+		Vibration = true;
+		SpotLight = true;
+		Fog=false;
+		ShoveHelper = true;
+		Sensitivity = 0.01f;
+		TiltingMove = false;
+		XInversion = false;
+	}
+	
 	#endregion
 
 
@@ -185,12 +197,12 @@ public class Option : MonoBehaviour {
 	private Rect textRect(float index)
 	{
 		index++;
-		return new Rect(Screen.width*0.05f,index*0.075f*Screen.height,Screen.width*0.4f,Screen.height*0.06f);
+		return new Rect(Screen.width*0.05f,index*0.075f*Screen.height,Screen.width*0.3f,Screen.height*0.06f);
 	}
 	private Rect buttonRect(float index)
 	{
 		index++;
-		return new Rect(Screen.width*0.5f,index*0.075f*Screen.height,Screen.width*0.4f,Screen.height*0.06f);
+		return new Rect(Screen.width*0.4f,index*0.075f*Screen.height,Screen.width*0.4f,Screen.height*0.06f);
 	}
 	
 	void OnGUI()
@@ -225,7 +237,7 @@ public class Option : MonoBehaviour {
 			if( GUI.Button(buttonRect(7),ShowFPS?"ON":"OFF" ,myStyle2) )
 				ShowFPS = !ShowFPS;
 			
-			GUI.Label(textRect(8),"Airsoft Accuracy(" + GameEnvironment.storeGun[0].accuracy + "%)",myStyle1);
+			GUI.Label(textRect(8),"Airsoft Accuracy (" + GameEnvironment.storeGun[0].accuracy + "%)",myStyle1);
 			GameEnvironment.storeGun[0].accuracy = Mathf.RoundToInt(GUI.HorizontalSlider(buttonRect(8),GameEnvironment.storeGun[0].accuracy,0f,100f));
 		
 			GUI.Label(textRect(9),"FT wait frames (" + FlameWaitingFrames + ")",myStyle1);
@@ -252,7 +264,7 @@ public class Option : MonoBehaviour {
 		
 		else
 		{
-			GUI.Label(textRect(1),"Volume",myStyle1);
+			GUI.Label(textRect(1),"Volume ("+(int)(hSlideVolume*100)+"%)",myStyle1);
 			hSlideVolume = GUI.HorizontalSlider(buttonRect(1),hSlideVolume,0f,1f);
 			
 			GUI.Label(textRect(2),"Vibration",myStyle1);
@@ -291,6 +303,9 @@ public class Option : MonoBehaviour {
 			GUI.Label(textRect(9),"X-Inversion",myStyle1);
 			if( GUI.Button(buttonRect(9),XInversion?"ON":"OFF",myStyle2 ) )
 				XInversion = !XInversion;
+			
+			if( GUI.Button(buttonRect(10),"Restore Defaults",myStyle2 ) )
+				RestoreDefault();
 			
 			if(showdebug && GUI.Button( new Rect(Screen.width-200,Screen.height-60,80,40),"Debug",myStyle2))
 			{

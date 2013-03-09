@@ -29,7 +29,9 @@ public class GameManager : MonoBehaviour {
 	public civilian civilianPrefab;
 	
 	public WaveInfo waveInfo;
-	public UILabel guiDamageMultiplier;
+	public UILabel powerupTimeDamageMultiplier;
+	public UILabel powerupTimeUnlimitedAmmo;
+	public UILabel powerupTimeShilded;
 	public Goo goo;
 	public GameObject fpsGUI;
 	

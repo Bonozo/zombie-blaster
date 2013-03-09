@@ -53,8 +53,9 @@ public class civilian : MonoBehaviour {
 		if(CanMoveForward())
 			transform.Translate(Time.deltaTime*Speed/13f*Vector3.forward);
 		else
+		{
 			transform.Rotate(0f,Random.Range(100f,250f),0f);
-			//if(!rotating) StartCoroutine(Rotate(Random.Range(1f,2f)));
+		}
 		
 		float olddist = GameEnvironment.DistXZ(LevelInfo.Environments.control.transform.position,lastpos);
 		float newdist = GameEnvironment.DistXZ(LevelInfo.Environments.control.transform.position,transform.position);
@@ -123,22 +124,22 @@ public class civilian : MonoBehaviour {
 		Debug.DrawRay(pos, -CollisionToDownLenght*transform.up, Color.green);
 	}
 	
-	private float cmftd = 0;
+	//private float cmftd = 0;
 	private bool _canmoveforward = true;
 	private bool CanMoveForward()
 	{
-		cmftd -= Time.deltaTime;
+		/*cmftd -= Time.deltaTime;
 		if(cmftd > 0 ) return _canmoveforward;
-		cmftd = 1.1f;
+		cmftd = 1.1f;*/
 		_canmoveforward = CanMoveForwardHelper();
 		return _canmoveforward;
 	
 	}
 	private bool CanMoveForwardHelper()
 	{
-		float forwarddist = 0.5f;
-		float leftrightdist = 0.3f;
-		float diagonaldist = 0.7f;
+		float forwarddist = 2f;
+		float leftrightdist = 1f;
+		float diagonaldist = 2f;
 		RaycastHit hit;    
 		Vector3 pos = transform.position; pos.y += 0.4f;
 		Debug.DrawRay(pos, forwarddist*transform.forward, Color.green);

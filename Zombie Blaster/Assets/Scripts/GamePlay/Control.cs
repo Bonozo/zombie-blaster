@@ -360,7 +360,9 @@ public class Control : MonoBehaviour {
 		LevelInfo.Environments.lightDirectional.SetActive(!Option.SpotLight);
 		LevelInfo.Environments.lightSpot.GetComponent<Light>().spotAngle = Option.SpotLightAngle;
 		
-		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActive(false);
+		LevelInfo.Environments.powerupTimeDamageMultiplier.gameObject.SetActive(false);
+		LevelInfo.Environments.powerupTimeUnlimitedAmmo.gameObject.SetActive(false);
+		LevelInfo.Environments.powerupTimeShilded.gameObject.SetActive(false);
 		
 		RenderSettings.fog = Option.Fog;
 		RenderSettings.ambientLight = new Color(Option.BackgroundAmbient/256f,Option.BackgroundAmbient/256f,Option.BackgroundAmbient/256f);
@@ -936,7 +938,9 @@ public class Control : MonoBehaviour {
 		}
 		
 		
-		LevelInfo.Environments.guiDamageMultiplier.gameObject.SetActive(DamageMultiplied||Shielded||UnlimitedAmmo);
+		LevelInfo.Environments.powerupTimeDamageMultiplier.gameObject.SetActive(DamageMultiplied);
+		LevelInfo.Environments.powerupTimeUnlimitedAmmo.gameObject.SetActive(UnlimitedAmmo);
+		LevelInfo.Environments.powerupTimeShilded.gameObject.SetActive(Shielded);
 	}
 	
 	
@@ -1138,7 +1142,7 @@ public class Control : MonoBehaviour {
 		
 			while( Time.time < damageMultiplieTime )
 			{
-				LevelInfo.Environments.guiDamageMultiplier.text = "4x damage " + (int)(damageMultiplieTime-Time.time+1);
+				LevelInfo.Environments.powerupTimeDamageMultiplier.text = "4x damage " + (int)(damageMultiplieTime-Time.time+1);
 				yield return new WaitForEndOfFrame();
 			}
 			DamageMultiplied = false;
@@ -1159,7 +1163,7 @@ public class Control : MonoBehaviour {
 			while( Time.time < shieldTime )
 			{
 				LevelInfo.Environments.shield.SetActive(true);
-				LevelInfo.Environments.guiDamageMultiplier.text = "Invincibility " + (int)(shieldTime-Time.time+1);
+				LevelInfo.Environments.powerupTimeShilded.text = "Invincibility " + (int)(shieldTime-Time.time+1);
 				yield return new WaitForEndOfFrame();
 			}
 			Shielded = false;
@@ -1186,7 +1190,7 @@ public class Control : MonoBehaviour {
 		
 			while( Time.time < unlimitedAmmoTime )
 			{
-				LevelInfo.Environments.guiDamageMultiplier.text = "Rampage " + (int)(unlimitedAmmoTime-Time.time+1);
+				LevelInfo.Environments.powerupTimeUnlimitedAmmo.text = "Rampage " + (int)(unlimitedAmmoTime-Time.time+1);
 				yield return new WaitForEndOfFrame();
 			}
 			UnlimitedAmmo = false;
@@ -1195,22 +1199,22 @@ public class Control : MonoBehaviour {
 	
 	public void DamageMultiply()
 	{
-		shieldTime=0f;
-		unlimitedAmmoTime=0f;
+		//shieldTime=0f;
+		//unlimitedAmmoTime=0f;
 		StartCoroutine(DamageMultiplyThread());
 	}
 	
 	public void Shield()
 	{
-		damageMultiplieTime=0f;
-		unlimitedAmmoTime=0f;
+		//damageMultiplieTime=0f;
+		//unlimitedAmmoTime=0f;
 		StartCoroutine(ShieldThread());
 	}
 	
 	public void Rampage()
 	{
-		shieldTime=0f;
-		damageMultiplieTime=0f;
+		//shieldTime=0f;
+		//damageMultiplieTime=0f;
 		StartCoroutine(UnlimitedAmmoThread());
 	}
 	

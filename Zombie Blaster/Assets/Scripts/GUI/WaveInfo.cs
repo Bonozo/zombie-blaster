@@ -48,7 +48,7 @@ public class WaveInfo : MonoBehaviour {
 				if(waitforreward<=0f)
 				{
 					int score = (LevelInfo.Environments.control.currentLevel+1)*
-					LevelInfo.Environments.control.currentWave*stars;
+					LevelInfo.Environments.control.currentWave*stars*10;
 					LevelInfo.Environments.control.GetScore(score,false);
 					waveBonus.text = "Wave Bonus " + score;		
 				}
