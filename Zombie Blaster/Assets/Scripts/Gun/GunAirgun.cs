@@ -37,7 +37,7 @@ public class GunAirgun : GunBase {
 			dt = 0.5f;
 		
 		if( !GameEnvironment.FireButton && dt > 0f) return Ammo;
-		if( reloading ) return Ammo;
+		if( reloading && !LevelInfo.Environments.control.UnlimitedAmmo ) return Ammo;
 		if( Ammo == 0 )
 		{
 			if( Ammo==0 && AmmoStore != 0 && weapon == Weapon.BB )
@@ -52,7 +52,7 @@ public class GunAirgun : GunBase {
 		
 		GameObject g = (GameObject)Instantiate(BulletPrefab,transform.position,Quaternion.identity);
 		g.transform.LookAt(RaycastsTargetPosition(LevelInfo.Environments.mainCamera,ray,hit),Vector3.up);
-		audio.PlayOneShot(AudioFire);
+		LevelInfo.Audio.audioSourcePlayer.PlayOneShot(AudioFire);
 		
 		if( Ammo == 0.0f ) Reload();
 		dt = 0.5f;

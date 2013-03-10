@@ -20,6 +20,20 @@ public class Option : MonoBehaviour {
 		}
 	}
 	
+	private static float _sfxVolume = 1f;
+	public static float sfxVolume{
+		get{
+			return _sfxVolume;
+		}
+		set{
+			if(_sfxVolume != value)
+			{
+				_sfxVolume = value;
+				PlayerPrefs.SetFloat("options_sfxvolume",_sfxVolume);
+			}
+		}
+	}
+	
 	private static bool _Vibration = true;
 	public static bool Vibration{
 		get{
@@ -90,7 +104,7 @@ public class Option : MonoBehaviour {
 		}
 	}
 	
-	private static bool _TiltingMove = false;
+	private static bool _TiltingMove = true;
 	public static bool TiltingMove{
 		get{
 			return _TiltingMove;
@@ -134,25 +148,27 @@ public class Option : MonoBehaviour {
 	
 	public static void Init()
 	{
-		hSlideVolume = PlayerPrefs.GetFloat("options_volume",1f);
+		hSlideVolume = PlayerPrefs.GetFloat("options_volume",0.5f);
+		sfxVolume = PlayerPrefs.GetFloat("options_sfxvolume",1f);
 		Vibration = PlayerPrefs.GetInt("options_vibration",1)==1;
 		SpotLight = PlayerPrefs.GetInt("options_spotlight",1)==1;
 		Fog = PlayerPrefs.GetInt("options_fog",0)==1;
 		ShoveHelper = PlayerPrefs.GetInt("options_shovehelper",1)==1;
 		Sensitivity = PlayerPrefs.GetFloat("options_sensitivity",0.01f);
-		TiltingMove = PlayerPrefs.GetInt("options_tiltmove",0)==1;
+		TiltingMove = PlayerPrefs.GetInt("options_tiltmove",1)==1;
 		XInversion = PlayerPrefs.GetInt("options_xinversion",0)==1;
 	}
 	
 	private void RestoreDefault()
 	{
-		hSlideVolume = 1f;	
+		hSlideVolume = 0.5f;
+		sfxVolume = 1f;
 		Vibration = true;
 		SpotLight = true;
 		Fog=false;
 		ShoveHelper = true;
 		Sensitivity = 0.01f;
-		TiltingMove = false;
+		TiltingMove = true;
 		XInversion = false;
 	}
 	
@@ -202,7 +218,7 @@ public class Option : MonoBehaviour {
 	private Rect buttonRect(float index)
 	{
 		index++;
-		return new Rect(Screen.width*0.4f,index*0.075f*Screen.height,Screen.width*0.4f,Screen.height*0.06f);
+		return new Rect(Screen.width*0.35f,index*0.075f*Screen.height,Screen.width*0.4f,Screen.height*0.06f);
 	}
 	
 	void OnGUI()
@@ -266,14 +282,17 @@ public class Option : MonoBehaviour {
 		{
 			GUI.Label(textRect(1),"Volume ("+(int)(hSlideVolume*100)+"%)",myStyle1);
 			hSlideVolume = GUI.HorizontalSlider(buttonRect(1),hSlideVolume,0f,1f);
+		
+			GUI.Label(textRect(2),"SFX ("+(int)(sfxVolume*100)+"%)",myStyle1);
+			sfxVolume = GUI.HorizontalSlider(buttonRect(2),sfxVolume,0f,1f);
 			
-			GUI.Label(textRect(2),"Vibration",myStyle1);
-			if( GUI.Button(buttonRect(2),Vibration?"ON":"OFF" ,myStyle2) )
+			GUI.Label(textRect(3),"Vibration",myStyle1);
+			if( GUI.Button(buttonRect(3),Vibration?"ON":"OFF" ,myStyle2) )
 				Vibration = !Vibration;
 			
-			GUI.Label(textRect(3),"Quality",myStyle1);
+			GUI.Label(textRect(10),"Quality",myStyle1);
 			
-			if( GUI.Button(buttonRect(3),QualitySettings.names[QualitySettings.GetQualityLevel()],myStyle2 ) )
+			if( GUI.Button(buttonRect(10),QualitySettings.names[QualitySettings.GetQualityLevel()],myStyle2 ) )
 			{
 				if( QualitySettings.GetQualityLevel() == QualitySettings.names.Length-1 )
 					QualitySettings.SetQualityLevel(0);
@@ -304,7 +323,7 @@ public class Option : MonoBehaviour {
 			if( GUI.Button(buttonRect(9),XInversion?"ON":"OFF",myStyle2 ) )
 				XInversion = !XInversion;
 			
-			if( GUI.Button(buttonRect(10),"Restore Defaults",myStyle2 ) )
+			if( GUI.Button(buttonRect(11),"Restore Defaults",myStyle2 ) )
 				RestoreDefault();
 			
 			if(showdebug && GUI.Button( new Rect(Screen.width-200,Screen.height-60,80,40),"Debug",myStyle2))

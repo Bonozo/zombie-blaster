@@ -17,7 +17,7 @@ public class GunMachineGun : GunBase {
 		deltawait -= Time.deltaTime;
 		if( deltawait > 0 ) return Ammo;
 		if( weapon != Weapon.MachineGun || !GameEnvironment.FlameButton ) return Ammo;
-		if( reloading ) return Ammo;
+		if( reloading && !LevelInfo.Environments.control.UnlimitedAmmo) return Ammo;
 		if( Ammo == 0 )
 		{
 			if( Ammo==0 && AmmoStore != 0 && weapon == Weapon.MachineGun )
@@ -39,7 +39,7 @@ public class GunMachineGun : GunBase {
 		GameObject g = (GameObject)Instantiate(BulletPrefab,transform.position,Quaternion.identity);
 		g.transform.LookAt(RaycastsTargetPosition(LevelInfo.Environments.mainCamera,ray,hit),Vector3.up);
 
-		audio.PlayOneShot(AudioFire);
+		LevelInfo.Audio.audioSourcePlayer.PlayOneShot(AudioFire);
 		
 		if( Ammo == 0.0f ) Reload();
 		

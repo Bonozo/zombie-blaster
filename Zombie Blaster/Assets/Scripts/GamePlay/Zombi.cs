@@ -571,7 +571,25 @@ public class Zombi : MonoBehaviour {
 	public void DieWithFireAndSmoke()
 	{
 		flaming = smoking = 0;
-		DieNormal();
+		if( died ) return;
+		if(animation.IsPlaying("spawn"))
+		{
+			DieNormal();
+			return;
+		}
+		died = true;
+		LevelInfo.Environments.control.GetZombie();
+		
+		// Adding Force
+		GameObject ragdoll = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
+		ragdoll.SendMessage("SetFireSize",ZombieFire.particleEmitter.maxSize);
+		ragdoll.SendMessage("SetSmokeSize",ZombieSmoke.particleEmitter.maxSize);
+		if(scooby && !headHit.HeadShotted) ragdoll.SendMessage("DontSpawnHealthpack");
+		var rigidbodies = ragdoll.GetComponentsInChildren(typeof(Rigidbody));
+        foreach (Rigidbody child in rigidbodies) 
+			child.AddForce(new Vector3(Random.Range(-100f,100f),100f,Random.Range(-100f,100f)));
+		
+		Destroy(this.gameObject);
 	}
 	
 	void OnDestroy()

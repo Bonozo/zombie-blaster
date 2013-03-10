@@ -312,7 +312,9 @@ public class Control : MonoBehaviour {
 	#region Awake, Start , Update
 	
 	void Awake()
-	{			
+	{		
+		LevelInfo.Environments.store.showLoadingScreen = false;
+		
 		if( Store.FirstTimePlay )
 		{
 			LevelInfo.Environments.buttonMap.isEnabled=false;

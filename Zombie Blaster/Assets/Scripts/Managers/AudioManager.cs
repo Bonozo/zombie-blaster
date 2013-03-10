@@ -9,11 +9,13 @@ public class AudioManager : MonoBehaviour {
 	public AudioSource audioSourcePlayer;
 	public AudioSource audioSourceZombies;
 	public AudioSource audioSourceWindLoop;
+	public AudioSource audioSourceFlamethrower;
 	
 	public void StopEffects()
 	{
 		audioSourcePlayer.Stop();
 		audioSourceZombies.Stop();
+		audioSourceFlamethrower.Stop();
 	}
 	
 	public void StopAll()
@@ -35,6 +37,22 @@ public class AudioManager : MonoBehaviour {
 		audioSourceWindLoop.Play();
 		audioSourcePlayer.Play();
 		audioSourceZombies.Play();
+		
+	}
+	
+	public void Awake()
+	{
+		
+		//// init volumes
+		audioSourceBackground.volume = Option.hSlideVolume;
+
+		audioSourcePlayer.volume = Option.sfxVolume;
+		audioSourceZombies.volume = Option.sfxVolume;
+		audioSourceWindLoop.volume = Option.sfxVolume;
+		audioSourceFlamethrower.volume = Option.sfxVolume;
+		
+		AudioListener.volume = Mathf.Max(Option.hSlideVolume,Option.sfxVolume);
+		
 		
 	}
 	

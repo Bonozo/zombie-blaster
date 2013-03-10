@@ -75,8 +75,9 @@ public class MainMenu : MonoBehaviour {
 	{
 		Option.Init();
 		Time.timeScale = 1f;
-		GameObject.Find("Store").GetComponent<Store>().showStore = false;
-		GameObject.Find("Store").GetComponent<Store>().LoadingGUI.SetActive(false);
+		Store store = GameObject.Find("Store").GetComponent<Store>();
+		store.showStore = false;
+		store.showLoadingScreen = false;
 	}
 	 
 	// Use this for initialization

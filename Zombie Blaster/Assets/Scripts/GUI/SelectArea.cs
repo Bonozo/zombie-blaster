@@ -25,12 +25,6 @@ public class SelectArea : MonoBehaviour {
 	public AudioSource audioBack;
 	public AudioSource audioOpenMap;
 	
-	public GameObject guiLoading;
-	public Texture2D[] screen;
-	public string[] tip;
-	public GUITexture guiFullscreen;
-	public GUIText guiTip;
-	
 	private bool[] unlocked = new bool[5];
 	private int unlock_index = -1;
 	private int play_index = -1;
@@ -64,11 +58,11 @@ public class SelectArea : MonoBehaviour {
 	
 	private Weapon[][] newWeapos = new Weapon[][] //??// Same as Store
 	{
-		new Weapon[] {Weapon.Flamethrower,Weapon.Crossbow},
+		new Weapon[] {Weapon.Flamethrower,Weapon.Revolver},
 		new Weapon[] {Weapon.Grenade},
 		new Weapon[] {Weapon.Football,Weapon.MachineGun},
 		new Weapon[] {Weapon.Rocket},
-		new Weapon[] {Weapon.PulseShotGun,Weapon.Revolver}
+		new Weapon[] {Weapon.PulseShotGun,Weapon.Crossbow}
 	};
 	
 	void OnEnable()
@@ -80,9 +74,7 @@ public class SelectArea : MonoBehaviour {
 			GameEnvironment.StartWave = 0;
 			Destroy(GameObject.Find("Sound Background"));
 			Destroy(GameObject.Find("Sound Wind"));
-			guiLoading.SetActive(true);
-			guiFullscreen.texture = screen[Random.Range(0,screen.Length)];
-			guiTip.text = tip[Random.Range(0,tip.Length)];
+			store.showLoadingScreen = true;
 			System.GC.Collect();
 			Application.LoadLevel("playgame");
 			return;
@@ -92,7 +84,6 @@ public class SelectArea : MonoBehaviour {
 		GameEnvironment.StartWave = 0;
 		
 		audioOpenMap.Play();
-		guiLoading.SetActive(false);
 		for(int i=0;i<5;i++)
 		{
 			lockIcon[i].gameObject.GetComponent<ColorPlay>().pauseInStart = 
@@ -205,9 +196,10 @@ public class SelectArea : MonoBehaviour {
 		
 		Destroy(GameObject.Find("Sound Background"));
 		Destroy(GameObject.Find("Sound Wind"));
-		guiLoading.SetActive(true);
+		/*guiLoading.SetActive(true);
 		guiFullscreen.texture = screen[Random.Range(0,screen.Length)];
-		guiTip.text = tip[Random.Range(0,tip.Length)];
+		guiTip.text = tip[Random.Range(0,tip.Length)];*/
+		store.showLoadingScreen = true;
 		play_index = -1;
 		fade.Disable();
 		yield return new WaitForEndOfFrame();

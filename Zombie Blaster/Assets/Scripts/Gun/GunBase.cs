@@ -107,7 +107,7 @@ public class GunBase : MonoBehaviour {
 	{
 		if( AmmoStore > 0 && Ammo < PacketSize)
 		{
-			audio.PlayOneShot(AudioReload);
+			LevelInfo.Audio.audioSourcePlayer.PlayOneShot(AudioReload);
 			reloading = true;
 			ammoTimeIncrease = 0.0f;
 		}

@@ -15,13 +15,13 @@ public enum Weapon
 {
 	// // Crossbow, Shotgun, Flame Thrower, Football, Machine Gun, Grenades, Revolver, Rocket Launcher
 	BB,
-	Crossbow,
+	Revolver,
 	PulseShotGun,
 	Flamethrower,
 	Football,
 	MachineGun,
 	Grenade,
-	Revolver,
+	Crossbow,
 	Rocket,
 	AlienBlaster,
 	Sniper,
@@ -45,11 +45,11 @@ public class Store : MonoBehaviour {
 	};*/
 	public static Weapon[][] weaponsForLevel = new Weapon[][]
 	{
-		new Weapon[] {Weapon.Flamethrower,Weapon.Crossbow,Weapon.AlienBlaster},
+		new Weapon[] {Weapon.Flamethrower,Weapon.Revolver,Weapon.AlienBlaster},
 		new Weapon[] {Weapon.Grenade},
 		new Weapon[] {Weapon.Football,Weapon.MachineGun},
 		new Weapon[] {Weapon.Rocket},
-		new Weapon[] {Weapon.PulseShotGun,Weapon.Revolver}
+		new Weapon[] {Weapon.PulseShotGun,Weapon.Crossbow}
 	};
 	
 	public Texture2D[] weaponIcon;
@@ -322,7 +322,6 @@ public class Store : MonoBehaviour {
 	public AudioClip clipShowStore;
 	public AudioClip clipQuitPlayGame;
 	
-	public Texture2D[] textureWeapons;
 	public GameObject[] objectWeapons;
 	public AudioClip[] clipWeaponInfo;
 	
@@ -393,7 +392,6 @@ public class Store : MonoBehaviour {
 				}
 				showZombieHeads = zombieHeads;
 				
-				LoadingGUI.SetActive(false);
 				wantToExit = false;
 				//FirstShopItem();
 				//FirstStashItem();
@@ -563,7 +561,7 @@ public class Store : MonoBehaviour {
 		arrowUpShow.enabled = arrowDownShow.enabled = arrowUpStash.enabled = arrowDownStash.enabled = false;
 		// shop
 		
-		for(int i=2;i<countWeapons;i++)
+		for(int i=1;i<countWeapons;i++)
 			if(showWeapon[i])
 				SetMaterial(objectWeapons[i],Color.white);
 			else
@@ -846,6 +844,32 @@ public class Store : MonoBehaviour {
 	public GUITexture guiFullscreen;
 	public GUIText guiTip;
 	
+	private bool _showLoadingScreen = false;
+	public bool showLoadingScreen
+	{
+		get
+		{
+			return _showLoadingScreen;
+		}
+		set
+		{
+			_showLoadingScreen = value;
+			if(_showLoadingScreen)
+			{
+				int index = Random.Range(0,screen.Length);
+				guiFullscreen.texture = screen[index];
+	
+				if(index==1&&Random.Range(0,tip.Length+1)==0)// special code
+				{
+					guiTip.text = "FUN FACT: MOST JERSEY NUMBERS ARE YEARS OF ROMERO MOVIES";
+				}
+				else
+					guiTip.text = tip[Random.Range(0,tip.Length)];
+			}
+			LoadingGUI.SetActive(_showLoadingScreen);
+		}
+	}
+	
 	private IEnumerator GoMainMenuThread()
 	{
 		audio.PlayOneShot(clipQuitPlayGame);
@@ -862,9 +886,7 @@ public class Store : MonoBehaviour {
 		showStore = false;
 		LevelInfo.Audio.StopAll();
 		Destroy(GameObject.Find("Audio Wind Loop"));
-		LoadingGUI.SetActive(true);
-		guiFullscreen.texture = screen[Random.Range(0,screen.Length)];
-		guiTip.text = tip[Random.Range(0,tip.Length)];
+		showLoadingScreen = true;
 		LevelInfo.Environments.fade.Disable();
 		yield return new WaitForEndOfFrame();
 		EnableStoreButtons();
@@ -895,18 +917,6 @@ public class Store : MonoBehaviour {
 	
 	public void GoMainMenuFromGamePlay()
 	{
-		/*if(!IsLevelGamePlay) Debug.LogError("Error at Store->GoMainMenuFromGamePlay()");
-		LevelInfo.Environments.control.guiPlayGame.SetActive(false);
-		LevelInfo.Environments.control.allowShowGUI = false;
-		showStore = false;
-		LevelInfo.Audio.StopAll();
-		audio.PlayOneShot(clipQuitPlayGame);
-		Destroy(GameObject.Find("Audio Wind Loop"));
-		LoadingGUI.SetActive(true);
-		guiFullscreen.texture = screen[Random.Range(0,screen.Length)];
-		guiTip.text = tip[Random.Range(0,tip.Length)];
-		LevelInfo.Environments.fade.Disable();
-		Application.LoadLevel("mainmenu");		*/
 		StartCoroutine(GoMainMenuThread());
 		
 	}
@@ -935,65 +945,6 @@ public class Store : MonoBehaviour {
 			return;
 		}
 
-		
-		// Shop
-		/*Rect shopRect = new Rect(0.01f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
-		scrollposition = GUI.BeginScrollView(new Rect(0.01f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height),scrollposition,new Rect(0f,0f,0.457f*Screen.width,8*itemHeight),false,true);
-		foreach(Touch touch in Input.touches)
-			if( RectContainPoint(shopRect,touch.position))
-				scrollposition.y += 0.5f*touch.deltaPosition.y;
-		
-		for(int i=0,j=0;i<GameEnvironment.storeGun.Length;i++)
-			if(!WeaponUnlocked(i) )
-			{
-				objectWeapons[i].transform.localPosition = new Vector3(0,-j + 1/0.42f*scrollposition.y/Screen.height,0);
-				SetLayer(objectWeapons[i],8);
-				//Texture2D texture = showWeapon[i]?textureWeapons[i]:textureWeaponUnknown;
-				//GUI.DrawTexture(new Rect(0.035f*Screen.width,j*itemHeight,0.246f*Screen.width,itemHeight),textureWeapons[i]);
-				GUI.Box(new Rect(0.02f*Screen.width,j*itemHeight,0.3f*Screen.width,0.08f*Screen.height),GameEnvironment.storeGun[i].name,myStyle);	
-				if(wooi==-1)
-				{			
-					if( GUI.Button(new Rect(0.335f*Screen.width,(j+0.5f)*itemHeight,0.14f*Screen.width,0.08f*Screen.height),"" + (25*i),myStyle) )
-						wooi = i;
-				}
-				else
-					GUI.Box(new Rect(0.335f*Screen.width,(j+0.5f)*itemHeight,0.14f*Screen.width,0.08f*Screen.height),"" + (25*i),myStyle);
-				j++;
-			}
-		
-		GUI.EndScrollView();*/
-	
-		
-		// Stash
-		/*Rect stashRect = new Rect(0.51f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
-		scrollposition2 = GUI.BeginScrollView(new Rect(0.51f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height),scrollposition2,new Rect(0f,0f,0.457f*Screen.width,8*itemHeight),false,true);
-		foreach(Touch touch in Input.touches)
-			if( RectContainPoint(stashRect,touch.position))
-				scrollposition2.y += 0.5f*touch.deltaPosition.y;
-		
-		for(int i=0,j=0;i<GameEnvironment.storeGun.Length;i++)
-			if( WeaponUnlocked(i) )
-			{
-				objectWeapons[i].transform.localPosition = new Vector3(0,-j + 1/0.42f*scrollposition2.y/Screen.height,0);
-				SetLayer(objectWeapons[i],9);	
-				
-				GUI.Box(new Rect(0.02f*Screen.width,j*itemHeight,0.3f*Screen.width,0.08f*Screen.height),GameEnvironment.storeGun[i].name,myStyle);	
-				if( IsLevelGamePlay && showFillIn[i])
-				{
-					if(wooi==-1 && GUI.Button(new Rect(0.335f*Screen.width,(j+0.5f)*itemHeight,0.14f*Screen.width,0.08f*Screen.height),GameEnvironment.storeGun[i].AmmoInformation,myStyle) )
-					{
-						wooi = i;
-						fillin = true;
-					}
-					else
-						GUI.Box(new Rect(0.335f*Screen.width,(j+0.5f)*itemHeight,0.14f*Screen.width,0.08f*Screen.height),GameEnvironment.storeGun[i].AmmoInformation,myStyle);
-				}
-				j++;
-			}
-		
-		
-		GUI.EndScrollView();
-		*/
 		if( wooi != -1 )
 		{
 			if(fillin)

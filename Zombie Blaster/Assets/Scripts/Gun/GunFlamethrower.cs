@@ -19,7 +19,7 @@ public class GunFlamethrower : GunBase {
 		FlameThrower.particleEmitter.emit = false;
 		bool canattack = true;
 		if( weapon != Weapon.Flamethrower || !GameEnvironment.FlameButton ) canattack = false;
-		if( reloading ) canattack = false;
+		if( reloading && !LevelInfo.Environments.control.UnlimitedAmmo ) canattack = false;
 		if( Ammo == 0 )
 		{
 			if( Ammo==0 && AmmoStore != 0 && weapon == Weapon.Flamethrower)

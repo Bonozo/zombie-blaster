@@ -53,7 +53,6 @@ public class HealthPack : MonoBehaviour {
 				if(LevelInfo.Environments.store.WeaponAvailable(i))
 					count++;
 			int index = Random.Range(0,count)+1;
-			Debug.Log("count = " + count + " index = " + index);
 			count = 0;
 			for(int i=1;i<Store.countWeapons;i++)
 			{
