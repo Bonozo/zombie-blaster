@@ -42,7 +42,11 @@ public class AudioManager : MonoBehaviour {
 	
 	public void Awake()
 	{
-		
+		InitVolume();
+	}
+	
+	public void InitVolume()
+	{
 		//// init volumes
 		audioSourceBackground.volume = Option.hSlideVolume;
 
@@ -51,9 +55,7 @@ public class AudioManager : MonoBehaviour {
 		audioSourceWindLoop.volume = Option.sfxVolume;
 		audioSourceFlamethrower.volume = Option.sfxVolume;
 		
-		AudioListener.volume = Mathf.Max(Option.hSlideVolume,Option.sfxVolume);
-		
-		
+		AudioListener.volume = Mathf.Max(Option.hSlideVolume,Option.sfxVolume);		
 	}
 	
 	public AudioDistortionFilter filter;

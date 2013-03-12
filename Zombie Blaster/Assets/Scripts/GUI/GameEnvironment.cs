@@ -287,7 +287,8 @@ public class GameEnvironment : MonoBehaviour {
 		public bool unlimitedclips;
 		public int damage;
 		public float accuracy;
-		public StoreGun(string name,bool enabled,int pocketsize,int maxammo,int price,float speed,float reloadTime,int damage,float accuracy)
+		public string description;
+		public StoreGun(string name,bool enabled,int pocketsize,int maxammo,int price,float speed,float reloadTime,int damage,float accuracy,string description)
 		{
 			this.name = name;
 			this.enabled = enabled;
@@ -300,6 +301,7 @@ public class GameEnvironment : MonoBehaviour {
 			this.unlimitedclips = enabled;
 			this.damage = damage;
 			this.accuracy = accuracy;
+			this.description = description;
 			
 			this.current = this.store = 0;
 			if( enabled )
@@ -357,23 +359,24 @@ public class GameEnvironment : MonoBehaviour {
 		}
 	}
 	
-	public static StoreGun[] storeGun = new StoreGun[10]
+	public static StoreGun[] storeGun = new StoreGun[11]
 	{	
-		//				name			enabled    clip  maxammo   price   speed   reload  power  accuracy
-		new StoreGun("Airsoft"			,true,		20,		100,	0,		12,		2,		20,		80),	//0
-		new StoreGun("Revolver"			,false,		6,		30,		200,	25,		5,		100,	100),	//1
-		new StoreGun("Shotgun"			,false,		5,		25,		400,	15,		3,		100,	70),	//2
-		new StoreGun("Flamethrower"		,false,		250,	750,	300,	40,		8,		30,		90),	//3
-		new StoreGun("Football"			,false,		5,		25,		400,	50,		5,		100,	100),	//4
-		new StoreGun("Machine Gun"		,false,		250,	750,	750,	9,		8,		60,		60),	//5
-		new StoreGun("Grenades"			,false,		5,		25,		400,	50,		5,		100,	10),	//6
-		new StoreGun("Crossbow"			,false,		10,		60,		1000,	20,		5,		40,		90),	//7
-		new StoreGun("Rocket Launcher"	,false,		3,		24,		500,	10,		5,		100,	100), 	//8
-		new StoreGun("Alien Blaster"	,false,		10,		50,		2000,	25,		10,		100,	100)	//9
+		//			    	name			    enabled    clip  maxammo   price   speed   reload  power  accuracy
+		/*0*/ new StoreGun("Airsoft"			,true,		20,		100,	0,		12,		2,		20,		80,		"The Airsoft is your first weapon. It shoots lightweight projectiles at attacking zombies."),
+		/*1*/ new StoreGun("Revolver"			,false,		6,		30,		200,	25,		5,		40,		80,		"The Revolver is a small, yet lethal, hand-held weapon. Best for headshots in the beginning."),	
+		/*2*/ new StoreGun("Shotgun"			,false,		5,		25,		400,	15,		3,		100,	70,		"The Shotgun is a heavyweight weapon that shoots many small bullets at zombies. Great for short to middle distance kills."),
+		/*3*/ new StoreGun("Flamethrower"		,false,		250,	500,	300,	40,		8,		30,		90,		"The Flamethrower is useful for killing groups of zombies in one go. Effective in all ranges."),
+		/*4*/ new StoreGun("Football"			,false,		5,		25,		400,	50,		5,		100,	100,	"The Football is most effective on quick kills, but not the best choice for getting headshots."),
+		/*5*/ new StoreGun("Machine Gun"		,false,		250,	500,	750,	9,		8,		60,		60,		"The Machine Gun works best for killing large hordes of zombies within close range."),
+		/*6*/ new StoreGun("Grenades"			,false,		5,		25,		400,	50,		5,		100,	10,		"Grenades are the only weapons that can\'t get headshots but are great at getting multiple kill bonuses."),
+		/*7*/ new StoreGun("Crossbow"			,false,		10,		60,		1000,	20,		5,		40,		90,		"The Crossbow is one of the best weapons for taking headshots as it\'s accuracy is sublime."),
+		/*8*/ new StoreGun("Rocket Launcher"	,false,		3,		24,		500,	10,		5,		100,	100,	"The Rocket Launcher is a great weapon for long range kills of groups of zombies."),
+		/*9*/ new StoreGun("Alien Blaster"		,false,		10,		50,		2000,	25,		10,		100,	100,	"The juggernaut of all weapons. The Alien Blaster is difficult to get, but it\'s all worth your while."),
+		/*10*/new StoreGun("Spade"				,false,		-1,		-1,		1250,	-1,		-1,		-1,		-1, 	"Perfect for if your weapons just aren\'t enough. The Spade shoves zombies back further if they get too close.")
 	};
 	
 	
-	public static int[] levelPrice = new int [5] {0,500,1000,1500,2000};
+	public static int[] levelPrice = new int [5] {500,1000,1500,2000,2500};
 	
 	#endregion
 	

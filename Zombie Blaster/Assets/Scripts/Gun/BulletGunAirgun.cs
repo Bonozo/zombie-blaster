@@ -45,6 +45,9 @@ public class BulletGunAirgun : MonoBehaviour {
 		if( col.gameObject.tag == "ZombieHead" )
 			col.gameObject.SendMessage("DieWithAirsoft");
 		
+		if( col.gameObject.tag == "Ufo" )
+			col.gameObject.SendMessage("GetHitDamaged",damage);
+		
 		Destroy(this.gameObject);
 	}
 }

@@ -43,6 +43,9 @@ public class BulletGunSniper : MonoBehaviour {
 		if( col.gameObject.tag == "ZombieHead" )
 			col.gameObject.SendMessage("DieNormal");
 		
+		if( col.gameObject.tag == "Ufo" )
+			col.gameObject.SendMessage("GetHitDamaged",5);
+		
 		Destroy(this.gameObject);
 	}
 	

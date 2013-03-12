@@ -7,6 +7,7 @@ public class BulletGunRevolver : MonoBehaviour {
 	public float DestroyTime = 4f;
 	public float Speed = 5f;
 	public float Y = 2.5f;
+	public float power = 4;
 	
 	// Use this for initialization
 	void Start () {
@@ -39,10 +40,13 @@ public class BulletGunRevolver : MonoBehaviour {
 		}
 		
 		if( col.gameObject.tag == "Zombie" )
-			col.gameObject.SendMessage("GetHitDamaged",10);
+			col.gameObject.SendMessage("GetHitDamaged",power);
 		
 		if( col.gameObject.tag == "ZombieHead" )
 			col.gameObject.SendMessage("DieDamaged");
+		
+		if( col.gameObject.tag == "Ufo" )
+			col.gameObject.SendMessage("GetHitDamaged",power);
 		
 		Destroy(this.gameObject);
 	}

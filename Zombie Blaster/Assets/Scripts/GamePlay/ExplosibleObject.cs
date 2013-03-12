@@ -29,15 +29,8 @@ public class ExplosibleObject : MonoBehaviour {
 	void OnCollisionEnter(Collision col)
 	{		
 		if( exploded ) return;
-		if( HitWithName(col.gameObject.name,"BulletPulseShotGun") ||
-			HitWithName(col.gameObject.name,"BulletAirgun")  ||
-			HitWithName(col.gameObject.name,"BulletCrossbow") )
+		if( col.gameObject.tag == "Bullet" )
 			if(--countToExplode == 0 )
 				Explode();
-	}
-	
-	private bool HitWithName(string name,string comparewith)
-	{
-		return name.Length >= comparewith.Length && name.Substring(0,comparewith.Length) == comparewith;
 	}
 }

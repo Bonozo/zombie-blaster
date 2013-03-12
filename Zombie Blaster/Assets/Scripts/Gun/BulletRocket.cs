@@ -33,7 +33,7 @@ public class BulletRocket : MonoBehaviour {
 			Exhaust.particleEmitter.emit=false;
 	}
 	
-	void OnCollisionEnter()
+	void OnCollisionEnter(Collision col)
 	{
 		GameObject[] zomb = GameObject.FindGameObjectsWithTag("Zombie");
 		foreach( GameObject zombi in zomb )
@@ -51,6 +51,9 @@ public class BulletRocket : MonoBehaviour {
 		
 		if( GameEnvironment.DistXZ(LevelInfo.Environments.control.transform.position,transform.position ) <= ExplosionRadius )
 			LevelInfo.Environments.control.GetHealth(-0.1f);
+		
+		if( col.gameObject.tag == "Ufo" )
+			col.gameObject.SendMessage("GetHitDamaged",10);
 		
 		LevelInfo.Environments.control.Shake();
 		Instantiate(ParticleExplosion,transform.position,Quaternion.identity);

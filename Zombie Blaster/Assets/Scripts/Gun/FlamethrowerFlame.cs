@@ -7,7 +7,7 @@ public class FlamethrowerFlame : MonoBehaviour
 	
   	void OnParticleCollision(GameObject other) 
 	{
-		if(other.tag == "Zombie" || other.tag == "ZombieHead")
+		if(other.tag == "Zombie" || other.tag == "ZombieHead" || other.tag == "Ufo")
 		{
 			other.SendMessage("GetFlame",0.03f);
 		}

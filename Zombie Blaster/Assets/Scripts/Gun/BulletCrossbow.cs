@@ -42,6 +42,9 @@ public class BulletCrossbow : MonoBehaviour {
 		if( col.gameObject.tag == "ZombieHead" )
 			col.gameObject.SendMessage("DieNormal");
 		
+		if( col.gameObject.tag == "Ufo" )
+			col.gameObject.SendMessage("GetHitDamaged",4);
+		
 
 		Destroy(this.gameObject);
 	}

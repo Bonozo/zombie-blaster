@@ -15,7 +15,14 @@ public class Option : MonoBehaviour {
 			{
 				_hSlideVolume = value;
 				PlayerPrefs.SetFloat("options_volume",_hSlideVolume);
-				AudioListener.volume = _hSlideVolume;
+				if(Store.Instance.IsLevelGamePlay)
+				{
+					LevelInfo.Audio.InitVolume();
+				}
+				else
+				{
+					AudioListener.volume = _hSlideVolume;
+				}
 			}
 		}
 	}
@@ -30,6 +37,10 @@ public class Option : MonoBehaviour {
 			{
 				_sfxVolume = value;
 				PlayerPrefs.SetFloat("options_sfxvolume",_sfxVolume);
+				if(Store.Instance.IsLevelGamePlay)
+				{
+					LevelInfo.Audio.InitVolume();
+				}
 			}
 		}
 	}
@@ -133,8 +144,7 @@ public class Option : MonoBehaviour {
 	}
 	#endregion
 	
-	#region Debug
-	public static float Health = 1f;	
+	#region Debug	
 	public static bool UnlimitedHealth = false;
 	public static bool UnlimitedAmmo = false;
 	public static float SpotLightAngle = 65f;
@@ -184,6 +194,7 @@ public class Option : MonoBehaviour {
 	public GUIText version;
 	public GUIStyle myStyle1;
 	public GUIStyle myStyle2;
+	public ButtonBase backToGameForGamePlay;
 	
 	#endregion
 	
@@ -192,7 +203,13 @@ public class Option : MonoBehaviour {
 	{
 		version.enabled = !debugScreen;
 		
-		if( creditsButton.PressedUp )
+		if( backToGameForGamePlay!=null && backToGameForGamePlay.PressedUp )
+		{
+			LevelInfo.Environments.control.state = GameState.Paused;
+			return;
+		}
+		
+		if( creditsButton!=null && creditsButton.PressedUp )
 		{
 			MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
 			mainmenu.GoState(MainMenu.MenuState.Credits);
@@ -258,19 +275,21 @@ public class Option : MonoBehaviour {
 		
 			GUI.Label(textRect(9),"FT wait frames (" + FlameWaitingFrames + ")",myStyle1);
 			FlameWaitingFrames = Mathf.RoundToInt(GUI.HorizontalSlider(buttonRect(9),(float)FlameWaitingFrames,0f,60f));
-				
-			GUI.Label(textRect(10),"Health",myStyle1);
-			Health = GUI.HorizontalSlider(buttonRect(10),Health,0.05f,1f);
 			
-			if( GUI.Button( new Rect(Screen.width-200,Screen.height-60,80,40),"Options",myStyle2))
+			if( GUI.Button( new Rect(0.84f*Screen.width,0.01f*Screen.height,0.15f*Screen.width,0.09f*Screen.height),"Options",myStyle2))
 			{
 				debugScreen = false;
 				title.text = "Options";
 			}
 			
+			if( GUI.Button( new Rect(0.84f*Screen.width,0.11f*Screen.height,0.15f*Screen.width,0.09f*Screen.height),"+1000 ZH",myStyle2))
+			{
+				Store.zombieHeads += 1000;
+			}
+			
 			//By Mak Kaloliya on 07022013
 			#if UNITY_IPHONE
-			if( GUI.Button( new Rect(Screen.width-450,Screen.height-60,220,40),"Show TapJoy Offers",myStyle2))
+			if( GUI.Button( new Rect(0.84f*Screen.width,0.21f*Screen.height,0.15f*Screen.width,0.09f*Screen.height),"Show TapJoy Offers",myStyle2))
 			{
 				TapjoyBinding.showOffers();
 			}
@@ -326,7 +345,7 @@ public class Option : MonoBehaviour {
 			if( GUI.Button(buttonRect(11),"Restore Defaults",myStyle2 ) )
 				RestoreDefault();
 			
-			if(showdebug && GUI.Button( new Rect(Screen.width-200,Screen.height-60,80,40),"Debug",myStyle2))
+			if(showdebug && GUI.Button( new Rect(0.84f*Screen.width,0.01f*Screen.height,0.15f*Screen.width,0.09f*Screen.height),"Debug",myStyle2))
 			{
 				debugScreen = true;
 				title.text = "Options Debug";

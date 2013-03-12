@@ -29,6 +29,9 @@ public class BulletFootball : MonoBehaviour {
 		if( col.gameObject.tag == "ZombieHead" )
 			col.gameObject.SendMessage("DieWithFootball");
 		
+		if( col.gameObject.tag == "Ufo" )
+			col.gameObject.SendMessage("GetHitDamaged",10);
+		
 		Instantiate(LevelInfo.Environments.particleSpark,transform.position,Quaternion.identity);
 		Destroy(this.gameObject);
 	}

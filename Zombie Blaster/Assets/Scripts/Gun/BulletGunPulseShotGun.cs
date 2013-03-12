@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BulletGunPulseShotGun : MonoBehaviour {
 	
-	public GameObject ParticleSpark;
+	public GameObject sparks;
 	
 	public float DestroyTime = 3f;
 	public float Speed = 5f;
@@ -12,6 +12,7 @@ public class BulletGunPulseShotGun : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		transform.position = new Vector3(transform.position.x,Y,transform.position.z);
+		Instantiate(sparks,transform.position,transform.rotation);
 	}
 	
 	// Update is called once per frame
@@ -43,6 +44,8 @@ public class BulletGunPulseShotGun : MonoBehaviour {
 			col.gameObject.SendMessage("DieWithJump");	
 		else if( col.gameObject.tag == "ZombieHead" )
 			col.gameObject.SendMessage("DieWithJump");
+		if( col.gameObject.tag == "Ufo" )
+			col.gameObject.SendMessage("GetHitDamaged",10);
 		Destroy(this.gameObject);
 	}
 }

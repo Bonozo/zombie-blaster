@@ -24,25 +24,17 @@ public enum Weapon
 	Crossbow,
 	Rocket,
 	AlienBlaster,
-	Sniper,
-	Zapper,
-	Microwave,
+	Spade,
 	None
 };
 
 public class Store : MonoBehaviour {
 	
-	public static int countLevel = 5;
-	public static int countWeapons = 10;
+	#region Environments
 	
-	/*public static Weapon[][] weaponsForLevel = new Weapon[][]
-	{
-		new Weapon[] {Weapon.BB,Weapon.Flamethrower,Weapon.Crossbow},
-		new Weapon[] {Weapon.BB,Weapon.Flamethrower,Weapon.Crossbow,Weapon.Grenade},
-		new Weapon[] {Weapon.BB,Weapon.Flamethrower,Weapon.Crossbow,Weapon.Football,Weapon.MachineGun},
-		new Weapon[] {Weapon.BB,Weapon.Flamethrower,Weapon.Crossbow,Weapon.Grenade,Weapon.MachineGun,Weapon.Rocket},
-		new Weapon[] {Weapon.BB,Weapon.Flamethrower,Weapon.Crossbow,Weapon.Grenade,Weapon.MachineGun,Weapon.Rocket,Weapon.Football,Weapon.PulseShotGun,Weapon.Revolver}
-	};*/
+	public static int countLevel = 5;
+	public static int countWeapons = 11;
+	
 	public static Weapon[][] weaponsForLevel = new Weapon[][]
 	{
 		new Weapon[] {Weapon.Flamethrower,Weapon.Revolver,Weapon.AlienBlaster},
@@ -52,7 +44,7 @@ public class Store : MonoBehaviour {
 		new Weapon[] {Weapon.PulseShotGun,Weapon.Crossbow}
 	};
 	
-	public Texture2D[] weaponIcon;
+	#endregion
 	
 	#region Player Prefs
 	
@@ -129,7 +121,7 @@ public class Store : MonoBehaviour {
 		// heads
 		_playerprefs_zombieHeads = PlayerPrefs.GetInt("zombieHeads",0);
 		
-		// forst time play
+		// first time play
 		_firsttimeplay = PlayerPrefs.GetInt("zbfirsttimeplay",0);
 		
 		// weapons
@@ -163,7 +155,7 @@ public class Store : MonoBehaviour {
 			PlayerPrefs.SetInt("level"+i,0);
 		for(int i=0;i<_playerprefs_highestwavecompleted.Length;i++)
 			PlayerPrefs.SetInt("highestwavecompleted"+i,0);
-		//PlayerPrefs.SetInt("zbfirsttimeplay",0);	
+		PlayerPrefs.SetInt("zbfirsttimeplay",0);	
 		Store instance = GameObject.Find("Store").GetComponent<Store>();
 		instance.RestorePlayerPrefs();
 		instance.currentshopitem = instance.currentStashitem = -2;
@@ -295,7 +287,7 @@ public class Store : MonoBehaviour {
 		//End
 		
 		// Clear Prefabs
-		//PlayerPrefs.SetInt("zombieHeads",10000);
+		//PlayerPrefs.SetInt("zombieHeads",100000);
 		//for(int i=1;i<_playerprefs_unlockweapon.Length;i++)
 		//	PlayerPrefs.SetInt("weapon"+i,0);
 		//for(int i=0;i<_playerprefs_unlocklevel.Length;i++)
@@ -313,7 +305,32 @@ public class Store : MonoBehaviour {
 	//--------------- store purchase code end ------------------//
 	
 	#endregion
-
+	
+	#region Extra shot items
+	
+	[System.SerializableAttribute]
+	public class ExtraShopItem
+	{
+		public string name;
+		public GameObject obj;
+		private int _purchased;
+		public bool Purchased{
+			get{
+				return _purchased==1;
+			}
+			set{
+				_purchased = value?1:0;
+				PlayerPrefs.SetInt("store_"+name,_purchased);
+			}
+		}
+		public void Init()
+		{
+			_purchased = PlayerPrefs.GetInt("store_"+name);
+		}
+	}
+	
+	#endregion
+	
 	#region GUI
 	
 	public AudioClip audioScrolling;
@@ -323,6 +340,7 @@ public class Store : MonoBehaviour {
 	public AudioClip clipQuitPlayGame;
 	
 	public GameObject[] objectWeapons;
+	public Texture2D[] weaponIcon;
 	public AudioClip[] clipWeaponInfo;
 	
 	public Font blackFont,redFont,greenFont;
@@ -418,6 +436,7 @@ public class Store : MonoBehaviour {
 			else
 				alllevelsunlocked = false;
 		showWeapon[(int)Weapon.AlienBlaster]=alllevelsunlocked;
+		showWeapon[(int)Weapon.Spade]=true;
 	}
 	
 	/// <summary>
@@ -484,7 +503,7 @@ public class Store : MonoBehaviour {
 			}
 		}		
 	}
-	
+		
 	void Update()
 	{
 		if(exitVerified)
@@ -505,7 +524,7 @@ public class Store : MonoBehaviour {
 		
 		if( buttonGAME.PressedUp ) 
 		{
-			if( IsLevelGamePlay ) LevelInfo.Environments.control.state = GameState.Play;
+			if( IsLevelGamePlay ) LevelInfo.Environments.control.state = GameState.Paused;
 			if( IsLevelOption ) 
 			{
 				MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
@@ -532,6 +551,11 @@ public class Store : MonoBehaviour {
 			Get1000HeadsEvent();
 		}
 		
+		UpdateItems();
+	}
+	
+	void UpdateItems()
+	{
 		if( currentshopitem == -2 )
 			currentshopitem = FirstWeapon(false);
 	
@@ -541,11 +565,11 @@ public class Store : MonoBehaviour {
 		bool enableshowshopitems = currentshopitem != -1 && shopitemslidecount==0;
 		
 		ShopWeaponName.enabled = enableshowshopitems;
-		ShopWeaponBuyText.enabled = enableshowshopitems&&showWeapon[currentshopitem];;
+		ShopWeaponBuyText.enabled = enableshowshopitems&&showWeapon[currentshopitem];
 		shopInfoButton.gameObject.SetActive(enableshowshopitems&&showWeapon[currentshopitem]);
 		shotItemBuy.gameObject.SetActive(enableshowshopitems&&showWeapon[currentshopitem]);
 		shotItemBuy.enabled = enableshowshopitems&&showWeapon[currentshopitem]&&wooi==-1;
-		shopItemTexture.enabled = enableshowshopitems;
+		shopItemTexture.enabled = enableshowshopitems && currentshopitem!=(int)Weapon.Spade;
 		if( shopItemTexture.enabled ) shopItemTexture.texture = weaponIcon[currentshopitem];
 		
 		for(int i=0;i<countWeapons;i++)
@@ -559,8 +583,8 @@ public class Store : MonoBehaviour {
 			}
 		
 		arrowUpShow.enabled = arrowDownShow.enabled = arrowUpStash.enabled = arrowDownStash.enabled = false;
-		// shop
 		
+		// shop
 		for(int i=1;i<countWeapons;i++)
 			if(showWeapon[i])
 				SetMaterial(objectWeapons[i],Color.white);
@@ -576,10 +600,7 @@ public class Store : MonoBehaviour {
 			for(int i=0;i<countWeapons;i++)
 				if( !WeaponUnlocked(i) )
 					objectWeapons[i].transform.localPosition = new Vector3(0,1f,0);
-			////objectsWeaponsUnknown1.transform.localPosition = new Vector3(0,1f,0);
-			////objectsWeaponsUnknown2.transform.localPosition = new Vector3(0,1f,0);
-			
-			////GameObject currentWeaponobj = showWeapon[currentshopitem]?objectWeapons[currentshopitem]:objectsWeaponsUnknown1;
+
 			GameObject currentWeaponobj = objectWeapons[currentshopitem];
 			
 			currentWeaponobj.transform.localPosition = new Vector3(0f,0f,0f);
@@ -614,7 +635,6 @@ public class Store : MonoBehaviour {
 				currentshopitem = NextWeapon(currentshopitem,false);
 				if( olditem != currentshopitem )
 				{
-					//GameObject newWeaponobj = showWeapon[currentshopitem]?objectWeapons[currentshopitem]:objectsWeaponsUnknown2;
 					GameObject newWeaponobj = objectWeapons[currentshopitem];
 					StartCoroutine(ShopItemsSlide(currentWeaponobj,0f,1f));
 					StartCoroutine(ShopItemsSlide(newWeaponobj,-1f,0f));
@@ -626,7 +646,6 @@ public class Store : MonoBehaviour {
 				currentshopitem = PrevWeapon(currentshopitem,false);
 				if( olditem != currentshopitem )
 				{
-					//GameObject newWeaponobj = showWeapon[currentshopitem]?objectWeapons[currentshopitem]:objectsWeaponsUnknown2;
 					GameObject newWeaponobj = objectWeapons[currentshopitem];
 					StartCoroutine(ShopItemsSlide(currentWeaponobj,0f,-1f));
 					StartCoroutine(ShopItemsSlide(newWeaponobj,1f,0f));
@@ -634,20 +653,14 @@ public class Store : MonoBehaviour {
 			}
 		}
 		
-		if( currentshopitem == -1 )
-		{
-			//objectsWeaponsUnknown1.transform.localPosition = new Vector3(0,1f,0);
-			//objectsWeaponsUnknown2.transform.localPosition = new Vector3(0,1f,0);		
-		}
-		
 		bool enableshowstashitems = currentStashitem != -1 && stashitemslidecount==0;
 		
 		StashWeaponName.enabled = enableshowstashitems;
-		StashWeaponBuyText.enabled = enableshowstashitems&&IsLevelGamePlay&&showWeapon[currentStashitem];
+		StashWeaponBuyText.enabled = enableshowstashitems&&IsLevelGamePlay&&showWeapon[currentStashitem]&&currentStashitem != (int)Weapon.Spade;
 		StashInfoButton.gameObject.SetActive(enableshowstashitems);
-		StashItemBuy.gameObject.SetActive(enableshowstashitems&&IsLevelGamePlay&&showWeapon[currentStashitem]);
-		StashItemBuy.enabled = enableshowstashitems&&wooi==-1&&IsLevelGamePlay&&showWeapon[currentStashitem];
-		stashItemTexture.enabled = enableshowstashitems;
+		StashItemBuy.gameObject.SetActive(enableshowstashitems&&IsLevelGamePlay&&showWeapon[currentStashitem]&&currentStashitem != (int)Weapon.Spade);
+		StashItemBuy.enabled = enableshowstashitems&&wooi==-1&&IsLevelGamePlay&&showWeapon[currentStashitem]&&currentStashitem != (int)Weapon.Spade;
+		stashItemTexture.enabled = enableshowstashitems && currentStashitem != (int)Weapon.Spade;
 		if( stashItemTexture.enabled ) stashItemTexture.texture = weaponIcon[currentStashitem];
 		
 
@@ -668,11 +681,6 @@ public class Store : MonoBehaviour {
 			
 			if( StashWeaponBuyText.enabled )
 				StashWeaponBuyText.text = LevelInfo.Environments.guns.gun[currentStashitem].AmmoInformation;
-			/*StashWeaponBuyText.text = 
-				"Dmg: " + GameEnvironment.storeGun[currentStashitem].AmmoInformationFormal +
-				"\nAmmo: " + GameEnvironment.storeGun[currentStashitem].pocketsize + 
-				"\nReload: " + GameEnvironment.storeGun[currentStashitem].reloadTime + 
-				"\nSpeed: " + GameEnvironment.storeGun[currentStashitem].speed;	*/		
 			if( StashInfoButton.PressedDown )
 			{
 				wooi = currentStashitem;
@@ -688,8 +696,7 @@ public class Store : MonoBehaviour {
 			}	
 			
 			Rect StashRect = new Rect(0.51f*Screen.width,0.25f*Screen.height,0.487f*Screen.width,0.75f*Screen.height);
-			//Rect StashRect = new Rect(0.51f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
-			
+		
 			if( RectContainPoint(StashRect,GameEnvironment.AbsoluteSwipeBegin) && RectContainPoint(StashRect,GameEnvironment.AbsoluteSwipeEnd) && swp.y > 0 )
 			{
 				int olditem = currentStashitem;
@@ -710,7 +717,7 @@ public class Store : MonoBehaviour {
 					StartCoroutine(StashItemsSlide(objectWeapons[currentStashitem],1f,0f));
 				}
 			}
-		}
+		}		
 	}
 	
 	public void DisableStoreButtons()
@@ -767,10 +774,7 @@ public class Store : MonoBehaviour {
 	
 	public GUIStyle myStyle;
 	public GUIStyle buttonStyle;
-	
-	//private readonly Rect shopRect = new Rect(0.01f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
-	//private readonly Rect stashRect = new Rect(0.51f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
-	
+
 	private float itemdist = 0.6f;
 	private void PrepareShopItems()
 	{
@@ -875,7 +879,12 @@ public class Store : MonoBehaviour {
 		audio.PlayOneShot(clipQuitPlayGame);
 		DisableStoreButtons();
 		Fade.InProcess = true;
-		LevelInfo.Environments.fade.Show(1.1f);
+		
+		if(GameEnvironment.ToMap)
+			LevelInfo.Environments.fade.Show(3f);
+		else
+			LevelInfo.Environments.fade.Show(1.1f);
+		
 		while( !LevelInfo.Environments.fade.Finished )
 		{
 			yield return new WaitForEndOfFrame();
@@ -931,8 +940,7 @@ public class Store : MonoBehaviour {
 		{
 			GUI.DrawTexture(new Rect(0.2f*Screen.width,0.15f*Screen.height,0.6f*Screen.width,0.6f*Screen.height),popupTexture);
 			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Leave Game?",myStyle);
-			//GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"Leave Game?");
-			
+
 			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Quit", buttonStyle ) )	
 			{
 				GoMainMenuFromGamePlay();
@@ -961,8 +969,7 @@ public class Store : MonoBehaviour {
 		GUI.DrawTexture(new Rect(0.2f*Screen.width,0.15f*Screen.height,0.6f*Screen.width,0.6f*Screen.height),popupTexture);
 		if( Store.zombieHeads >= GameEnvironment.storeGun[wooi].price )
 		{
-			//GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"Do you want to buy this item?");
-			
+		
 			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Do you want to buy this item?",myStyle);
 			
 			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "BUY", buttonStyle ) )	
@@ -972,10 +979,8 @@ public class Store : MonoBehaviour {
 				currentStashitem = wooi;
 				audio.Play();
 				Store.zombieHeads -= GameEnvironment.storeGun[wooi].price;
-				if( IsLevelGamePlay )
+				if( IsLevelGamePlay && wooi != (int)Weapon.Spade)
 				{
-					//GameEnvironment.storeGun[wooi].store += 5*GameEnvironment.storeGun[wooi].pocketsize;
-					//GameEnvironment.storeGun[wooi].enabled = true;
 					LevelInfo.Environments.guns.GetWeaponWithMAX((Weapon)wooi);
 				}
 				wooi = -1;
@@ -1046,7 +1051,7 @@ public class Store : MonoBehaviour {
 		}
 		else
 		{
-			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.3f*Screen.height),"You have not enough heads to buy this item.",myStyle);
+			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.3f*Screen.height),"You do not have enough heads. Need " + GameEnvironment.storeGun[wooi].price + ".",myStyle);
 			
 			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "MORE HEADS", buttonStyle ) )	
 			{
@@ -1103,37 +1108,42 @@ public class Store : MonoBehaviour {
 	
 	private void ShowWeaponDescription()
 	{
-		GUI.DrawTexture(new Rect(0.2f*Screen.width,0.15f*Screen.height,0.6f*Screen.width,0.6f*Screen.height),popupTexture);
+		GUI.DrawTexture(new Rect(0.1f*Screen.width,0.1f*Screen.height,0.8f*Screen.width,0.8f*Screen.height),popupTexture);
 
-		GUI.Label(new Rect(0.4f*Screen.width,0.28f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Weapon Description",myStyle);
+		GUI.Label(new Rect(0.4f*Screen.width,0.25f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Weapon Description",myStyle);
 		
-		string s = 	
-			"Power:" +
-			"\nAccuracy:" + 
-		    "\nClip Size:" +
-			"\nMax Ammo:" +
-			"\nSpeed:" +
-			"\nReload Delay:";
+		GUI.Label(new Rect(0.25f*Screen.width,0.32f*Screen.height,0.5f*Screen.width,0.25f*Screen.height),
+			GameEnvironment.storeGun[wooi].description,myStyle);
 		
-		if( !WeaponUnlocked(wooi) )
-			s += "\nPrice:";
-		
-		GUI.Label(new Rect(0.35f*Screen.width,0.34f*Screen.height,0.3f*Screen.width,0.25f*Screen.height),s,myStyle);
-		
-		s = 	
-			"" + GameEnvironment.storeGun[wooi].damage +
-			"\n" + GameEnvironment.storeGun[wooi].accuracy + "%" +
-			"\n" + GameEnvironment.storeGun[wooi].pocketsize +
-			"\n" + (5*GameEnvironment.storeGun[wooi].pocketsize) + 
-			"\n" + GameEnvironment.storeGun[wooi].speed + " m/s" +
-			"\n" + GameEnvironment.storeGun[wooi].reloadTime + " sec";
-		
-		if( !WeaponUnlocked(wooi) ) 
-			s += "\n" + GameEnvironment.storeGun[wooi].price;
-		
-		GUI.Label(new Rect(0.5f*Screen.width,0.34f*Screen.height,0.3f*Screen.width,0.25f*Screen.height),s,myStyle);
-		
-		if( GUI.Button(new Rect(0.58f*Screen.width,0.5f*Screen.height,0.1f*Screen.width,0.1f*Screen.height), "OK", buttonStyle ) )
+		if(wooi != (int)Weapon.Spade)
+		{
+			string s = 
+				"Power:" +
+				"\nAccuracy:" + 
+			    "\nClip Size:" +
+				"\nMax Ammo:" +
+				"\nSpeed:" +
+				"\nReload Delay:";
+			
+			if( !WeaponUnlocked(wooi) )
+				s += "\nPrice:";
+			
+			GUI.Label(new Rect(0.3f*Screen.width,0.44f*Screen.height,0.3f*Screen.width,0.25f*Screen.height),s,myStyle);
+			
+			s = 	
+				"" + GameEnvironment.storeGun[wooi].damage +
+				"\n" + GameEnvironment.storeGun[wooi].accuracy + "%" +
+				"\n" + GameEnvironment.storeGun[wooi].pocketsize +
+				"\n" + (GameEnvironment.storeGun[wooi].maxammo) + 
+				"\n" + GameEnvironment.storeGun[wooi].speed + " m/s" +
+				"\n" + GameEnvironment.storeGun[wooi].reloadTime + " sec";
+			
+			if( !WeaponUnlocked(wooi) ) 
+				s += "\n" + GameEnvironment.storeGun[wooi].price;
+			
+			GUI.Label(new Rect(0.45f*Screen.width,0.44f*Screen.height,0.3f*Screen.width,0.25f*Screen.height),s,myStyle);
+		}
+		if( GUI.Button(new Rect(0.58f*Screen.width,0.585f*Screen.height,0.15f*Screen.width,0.1f*Screen.height), "OK", buttonStyle ) )
 		{
 			audio.Stop();
 			audio.PlayOneShot(clipBack);
@@ -1156,6 +1166,28 @@ public class Store : MonoBehaviour {
 	{
 		return rect.xMin <= pos.x && pos.x <= rect.xMax && rect.yMin <= pos.y && pos.y <= rect.yMax;
 	}
+	
+	#endregion
+	
+	#region safe
+	// Multithreaded Safe Singleton Pattern
+    // URL: http://msdn.microsoft.com/en-us/library/ms998558.aspx
+    private static readonly object _syncRoot = new Object();
+    private static volatile Store _staticInstance;	
+    public static Store Instance 
+	{
+        get {
+            if (_staticInstance == null) {				
+                lock (_syncRoot) {
+                    _staticInstance = FindObjectOfType (typeof(Store)) as Store;
+                    if (_staticInstance == null) {
+                       Debug.LogError("The Store instance was unable to be found, if this error persists please contact support.");						
+                    }
+                }
+            }
+            return _staticInstance;
+        }
+    }
 	
 	#endregion
 }

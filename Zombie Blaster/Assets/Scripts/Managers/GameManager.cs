@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour {
 	
 	#region Main Objects
 	
+	public Transform environmentsTransform;
 	public Camera mainCamera;
 	public Control control;
 	public Store store;
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour {
 	public ScreenBlood screenBlood;
 	public Shield shield;
 	public SelectArea map;
+	public GameObject guiOptions;
 	public GameObject guiPaused;
 	public SwipeUpCaution swipeUpCaution;
 	
@@ -22,11 +24,9 @@ public class GameManager : MonoBehaviour {
 	
 	public UISprite notificationStore;
 	public UISprite notificationMap;
-
 	
 	public GameObject messageText;
 	public GameObject messageText2;
-	public civilian civilianPrefab;
 	
 	public WaveInfo waveInfo;
 	public UILabel powerupTimeDamageMultiplier;
@@ -34,16 +34,6 @@ public class GameManager : MonoBehaviour {
 	public UILabel powerupTimeShilded;
 	public Goo goo;
 	public GameObject fpsGUI;
-	
-	/*public GUIText guiZombieHeads;
-	public GUIText guiScore;
-	public GUIText guiZombiesLeft;
-	public GUIText guiLives;*/
-	
-	//public UILabel uiZombieHeads;
-	//public UILabel uiScore;
-	//public UILabel uiZombiesLeft;
-	//public UILabel uiLives;
 	
 	public UISprite healthbarHealth;
 	public UISprite healthbarArmor;
@@ -74,8 +64,9 @@ public class GameManager : MonoBehaviour {
 	
 	#endregion
 	
-	#region Zombies
+	#region Prefabs
 	
+	public GameObject ufoSpaceship;
 	public GameObject dirtyClodPrefab;
 	public GameObject dirtyClodCityPrefab;
 	public GameObject zombieHealthBar;

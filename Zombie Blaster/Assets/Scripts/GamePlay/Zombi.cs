@@ -473,12 +473,6 @@ public class Zombi : MonoBehaviour {
 		return b;
 	}
 	
-	public void GetHit()
-	{
-		animation.Play("get hit");
-		animation["get hit"].time = 0.0f;
-	}
-	
 	#endregion
 	
 	#region Die
@@ -562,8 +556,12 @@ public class Zombi : MonoBehaviour {
 		ragdoll.SendMessage("SetSmokeSize",ZombieSmoke.particleEmitter.maxSize);
 		var rigidbodies = ragdoll.GetComponentsInChildren(typeof(Rigidbody));
 		Vector3 dir = transform.position - LevelInfo.Environments.control.transform.position; dir.Normalize(); dir.y = 0.5f;
-        foreach (Rigidbody child in rigidbodies) 
-			child.AddForce(200f*dir);
+      
+		float throwoutpower = Store.WeaponUnlocked((int)Weapon.Spade)?300f:200f;
+		
+		foreach (Rigidbody child in rigidbodies) 
+			child.AddForce(throwoutpower*dir);
+		
 		ragdoll.SendMessage("ThrowedOut");
 		Destroy(this.gameObject);
 	}

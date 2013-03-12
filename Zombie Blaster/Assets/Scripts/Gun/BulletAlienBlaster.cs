@@ -38,6 +38,9 @@ public class BulletAlienBlaster : MonoBehaviour {
 		if( col.gameObject.tag == "ZombieHead" )
 			col.gameObject.SendMessage("DieDamaged");
 		
+		if( col.gameObject.tag == "Ufo" )
+			col.gameObject.SendMessage("GetHitDamaged",10);
+		
 		Destroy(this.gameObject);
 	}
 }

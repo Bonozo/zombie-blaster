@@ -9,7 +9,8 @@ public enum GameState
 	Paused,
 	Lose,
 	Store,
-	Map
+	Map,
+	Options
 }
 	
 #endregion

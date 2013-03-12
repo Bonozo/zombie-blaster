@@ -303,6 +303,9 @@ public class Leaderboard : MonoBehaviour {
 				GUI.Label(new Rect(0.38f*Screen.width,0.57f*Screen.height,0.30f*Screen.width,0.032f*Screen.height), postScoreResponse.ToString(),postGUIStyle);					
 		}
 		
+		if( GUI.Button(new Rect(0.76f*Screen.width,0.59f*Screen.height, 0.2f*Screen.width,0.1f*Screen.height), "RESET GAME",buttonGUIStyle) )
+			wanttoresetgame = true;
+		
 		if(wanttoresetgame)
 		{
 			GUI.DrawTexture(new Rect(0.2f*Screen.width,0.15f*Screen.height,0.6f*Screen.width,0.6f*Screen.height),texturePopup);
@@ -318,8 +321,7 @@ public class Leaderboard : MonoBehaviour {
 				wanttoresetgame = false;
 			}	
 		}
-		if( GUI.Button(new Rect(0.76f*Screen.width,0.59f*Screen.height, 0.2f*Screen.width,0.1f*Screen.height), "RESET GAME",buttonGUIStyle) )
-			wanttoresetgame = true;
+
 
 		#endregion
 	}

@@ -231,7 +231,6 @@ public class Control : MonoBehaviour {
 		{
 			if( _state == GameState.Paused && value != GameState.Paused)
 			{
-				LevelInfo.Audio.UnPauseAll();
 				LevelInfo.Audio.PlayAudioPause(false);
 			}
 			
@@ -245,7 +244,15 @@ public class Control : MonoBehaviour {
 				guiPlayGame.SetActive(true);
 				guiMap.SetActive(false);
 			}	
+			if(_state == GameState.Options && value != GameState.Options)
+			{
+				InitOptions();
+				LevelInfo.Audio.InitVolume();
+				guiPlayGame.SetActive(true);
+				LevelInfo.Environments.guiOptions.SetActive(false);
+			}
 			
+			GameState laststate = state;
 			_state = value;
 			
 			switch(_state)
@@ -259,11 +266,18 @@ public class Control : MonoBehaviour {
 			case GameState.Play:
 				Time.timeScale = 1f;
 				LevelInfo.Environments.guns.Update();
+				
+				if(laststate == GameState.Paused)
+					LevelInfo.Audio.UnPauseAll();
+				
 				break;
 			case GameState.Paused:
 				Time.timeScale = 0f;
 				LevelInfo.Audio.PauseAll();
-				LevelInfo.Audio.PlayAudioPause(true);
+				
+				if(laststate == GameState.Play)
+					LevelInfo.Audio.PlayAudioPause(true);
+				
 				System.GC.Collect();
 				break;
 			case GameState.Store:
@@ -277,6 +291,10 @@ public class Control : MonoBehaviour {
 				Time.timeScale = 0f;
 				guiPlayGame.SetActive(false);
 				guiMap.SetActive(true);
+				break;
+			case GameState.Options:
+				guiPlayGame.SetActive(false);
+				LevelInfo.Environments.guiOptions.SetActive(true);
 				break;
 			}
 		}
@@ -314,6 +332,7 @@ public class Control : MonoBehaviour {
 	void Awake()
 	{		
 		LevelInfo.Environments.store.showLoadingScreen = false;
+		InitOptions();
 		
 		if( Store.FirstTimePlay )
 		{
@@ -322,6 +341,15 @@ public class Control : MonoBehaviour {
 			LevelInfo.Environments.buttonPauseStore.isEnabled=false;
 			LevelInfo.Environments.buttonPauseMap.isEnabled=false;
 		}
+	}
+	
+	void InitOptions()
+	{
+		LevelInfo.Environments.lightSpot.SetActive(Option.SpotLight);
+		LevelInfo.Environments.lightDirectional.SetActive(!Option.SpotLight);
+		LevelInfo.Environments.lightSpot.GetComponent<Light>().spotAngle = Option.SpotLightAngle;		
+		RenderSettings.fog = Option.Fog;
+		RenderSettings.ambientLight = new Color(Option.BackgroundAmbient/256f,Option.BackgroundAmbient/256f,Option.BackgroundAmbient/256f);
 	}
 	
 	// Use this for initialization
@@ -345,8 +373,6 @@ public class Control : MonoBehaviour {
 		//*commented for warning*//scoreLB = "";
 		
 		#endregion
-		
-		health = Option.Health;
 	
 		int vi = GameEnvironment.StartWave % VantagePoints.Length;
 		transform.position = new Vector3(VantagePoints[vi].x,transform.position.y,VantagePoints[vi].z);
@@ -358,17 +384,11 @@ public class Control : MonoBehaviour {
 		LevelInfo.Environments.hubLives.SetNumber(startLives);
 		LevelInfo.Environments.hubScores.SetNumber(startScore);
 		
-		LevelInfo.Environments.lightSpot.SetActive(Option.SpotLight);
-		LevelInfo.Environments.lightDirectional.SetActive(!Option.SpotLight);
-		LevelInfo.Environments.lightSpot.GetComponent<Light>().spotAngle = Option.SpotLightAngle;
-		
 		LevelInfo.Environments.powerupTimeDamageMultiplier.gameObject.SetActive(false);
 		LevelInfo.Environments.powerupTimeUnlimitedAmmo.gameObject.SetActive(false);
 		LevelInfo.Environments.powerupTimeShilded.gameObject.SetActive(false);
 		
-		RenderSettings.fog = Option.Fog;
-		RenderSettings.ambientLight = new Color(Option.BackgroundAmbient/256f,Option.BackgroundAmbient/256f,Option.BackgroundAmbient/256f);
-		
+
 		//if( !restartLevel )
 		//	StartCoroutine(ShowHints());
 		
@@ -405,11 +425,12 @@ public class Control : MonoBehaviour {
 			GetBite(0.1f);
 		
 		
-		if( Fade.InProcess || prologuecomplete) return;
-		
 		// Update Zombie Heads Number On Screen
 		if( ScreenShowed )
 			LevelInfo.Environments.hubZombieHeads.SetNumberWithFlash(Store.zombieHeads);
+		
+		if( Fade.InProcess || prologuecomplete) return;
+		
 		LevelInfo.Environments.guiPaused.SetActive(state == GameState.Paused);
 		
 		
@@ -553,7 +574,7 @@ public class Control : MonoBehaviour {
 		storeNotificationTime=false;
 		LevelInfo.Environments.store.UpdateWeaponAvailable();
 		for(int i=0;i<Store.countWeapons;i++)
-			if(LevelInfo.Environments.store.WeaponAvailable(i) && Store.CanBuyWeapon(i) && !LevelInfo.Environments.guns.gun[i].EnabledGun)
+			if(LevelInfo.Environments.store.WeaponAvailable(i) && Store.CanBuyWeapon(i) )
 				storeNotificationTime=true;
 		if(!old&&storeNotificationTime)
 			LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.clipUIStar);
@@ -1094,6 +1115,10 @@ public class Control : MonoBehaviour {
 		LevelInfo.Audio.PlayLevel(currentWave);
 		LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.AudioWaveComplete);
 		
+		DestroyAllRemainedWithTag("Ufo");
+		GameObject g = (GameObject)Instantiate(LevelInfo.Environments.ufoSpaceship,new Vector3(transform.position.x+UnityEngine.Random.Range(4f,6f),4f,0f),Quaternion.identity);
+		g.transform.parent = LevelInfo.Environments.environmentsTransform;
+		
 		if( !restartLevel && currentLevel==0 )
 		{
 			switch(currentWave)
@@ -1113,11 +1138,25 @@ public class Control : MonoBehaviour {
 			StartCoroutine(ShowTip("TIP: SWIPE LEFT OR RIGHT TO TURN",4f));
 	}
 	
-	private bool prologuecomplete = false;
+	public bool prologuecomplete = false;
 	private void PrologueComplete()
 	{
+		StartCoroutine(PrologueCompleteThread());		
+	}
+	
+	IEnumerator PrologueCompleteThread()
+	{
 		prologuecomplete=true;
-		LevelInfo.Environments.buttonPause.isEnabled=false;
+		//LevelInfo.Environments.buttonPause.isEnabled=false;
+		
+		yield return new WaitForSeconds(2f);
+		LevelInfo.Environments.waveInfo.ShowPrologueComplete();
+		yield return new WaitForSeconds(5f);
+		Store.zombieHeads += 500;
+		yield return new WaitForSeconds(1f);
+		LevelInfo.Environments.waveInfo.HideWaveComplete();
+		yield return new WaitForSeconds(2f);
+		
 		Store.FirstTimePlay=false;
 		GameEnvironment.ToMap = true;
 		LevelInfo.Environments.store.GoMainMenuFromGamePlay();

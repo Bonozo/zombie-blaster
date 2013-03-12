@@ -13,6 +13,7 @@ public class WaveInfo : MonoBehaviour {
 	public UISprite[] spriteStar;
 	public GameObject rewardSprite;
 	public UILabel waveBonus;
+	public UILabel waveComplete;
 	
 	public float Wait = 5.0f;
 	private float waitfor = 0f;
@@ -35,6 +36,10 @@ public class WaveInfo : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		
+		if( Input.GetKeyUp(KeyCode.M) )
+		ShowWaveComplete(HealthPackType.BonusHeads,3,0.3f,0.2f,0.2f);
+		
 		if( waitfor > 0f ) waitfor -= Time.deltaTime;
 		root.SetActive(waitfor>0&&Time.deltaTime>0);
 		
@@ -48,9 +53,12 @@ public class WaveInfo : MonoBehaviour {
 				if(waitforreward<=0f)
 				{
 					int score = (LevelInfo.Environments.control.currentLevel+1)*
-					LevelInfo.Environments.control.currentWave*stars*10;
+					LevelInfo.Environments.control.currentWave;
 					LevelInfo.Environments.control.GetScore(score,false);
-					waveBonus.text = "Wave Bonus " + score;		
+					if(Store.FirstTimePlay)
+						waveBonus.text = "HEAD BONUS 500";	
+					else
+						waveBonus.text = "SCORE BONUS " + score;		
 				}
 			}
 			
@@ -112,10 +120,20 @@ public class WaveInfo : MonoBehaviour {
 		this.stars = stars;
 		
 		waitforreward = startime[0]+startime[1]+startime[2]+0.5f;
+		
+		if(Store.FirstTimePlay)
+			waveComplete.text = "PROLOGUE COMPLETE";
+		else
+			waveComplete.text = "WAVE " + LevelInfo.Environments.control.currentWave + " COMPLETE";
 	}
 	
 	public void HideWaveComplete()
 	{
 		showWaveComplete = false;
+	}
+	
+	public void ShowPrologueComplete()
+	{
+		ShowWaveComplete(HealthPackType.BonusHeads,3,0.3f,0.2f,0.2f);
 	}
 }

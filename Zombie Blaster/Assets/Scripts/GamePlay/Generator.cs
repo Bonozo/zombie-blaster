@@ -41,7 +41,7 @@ public class Generator : MonoBehaviour {
 		
 		objLevel = (GameObject)Instantiate(Resources.Load("Environments/"+LevelInfo.State.level[GameEnvironment.StartLevel].name));
 		objLevel.SetActive(true);
-		objLevel.transform.parent = GameObject.Find("Environments").transform;
+		objLevel.transform.parent = LevelInfo.Environments.environmentsTransform;
 		
 		for(int i=0;i<levelZombies[lev].zombie.Length;i++)
 		{
@@ -221,7 +221,7 @@ public class Generator : MonoBehaviour {
 		}
 		
 		// Civilian
-		if( LevelInfo.Environments.control.currentLevel!=0 || LevelInfo.Environments.control.currentWave >= 3 )
+		if(!Store.FirstTimePlay && LevelInfo.Environments.control.currentLevel!=0 || LevelInfo.Environments.control.currentWave >= 3 )
 		{
 			civilianRate -= Time.deltaTime;
 			if( civilianRate <= 0f && LevelInfo.Environments.control.IsInWave)

@@ -37,8 +37,11 @@ public class HealthPack : MonoBehaviour {
 	
 	public bool scooby = false;
 	
+	private int countweaponslocal;
+	
 	// Use this for initialization
 	void Start () {
+		countweaponslocal = Store.countWeapons-1;
 
 		transform.Translate(0,StartHeight-transform.position.y,0);
 		transform.LookAt(LevelInfo.Environments.control.transform.position,Vector3.up);
@@ -49,12 +52,12 @@ public class HealthPack : MonoBehaviour {
 			// calculating active weapons
 			gunindexifweapon = Weapon.None;
 			int count = 0;
-			for(int i=1;i<Store.countWeapons;i++)
+			for(int i=1;i<countweaponslocal;i++)
 				if(LevelInfo.Environments.store.WeaponAvailable(i))
 					count++;
 			int index = Random.Range(0,count)+1;
 			count = 0;
-			for(int i=1;i<Store.countWeapons;i++)
+			for(int i=1;i<countweaponslocal;i++)
 			{
 				if(LevelInfo.Environments.store.WeaponAvailable(i))	
 				{
