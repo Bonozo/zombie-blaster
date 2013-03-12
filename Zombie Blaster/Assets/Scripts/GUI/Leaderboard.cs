@@ -188,7 +188,7 @@ public class Leaderboard : MonoBehaviour {
 	
 	void OnEnable()
 	{	
-		string url = "http://crustdesigns.com/demo/game/gettopscore.php?top=10&format=xml";
+		string url = "http://therealmattharmon.com/Zombie/gettopscore.php?top=10&format=xml";
     	WWW www = new WWW(url);
 		StartCoroutine(WaitForRequest(www));
 
@@ -217,7 +217,7 @@ public class Leaderboard : MonoBehaviour {
 		#region Post, Get Best Score
 		/*if( (GUI.Button(new Rect(0.27f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "Get Top Score")) && (isScoreDisplayed == false) )
 		{	
-        	string url = "http://crustdesigns.com/demo/game/gettopscore.php?top=10&format=xml";
+        	string url = "http://therealmattharmon.com/Zombie/gettopscore.php?top=10&format=xml";
         	WWW www = new WWW(url);
         	StartCoroutine(WaitForRequest(www));
 		
@@ -293,7 +293,7 @@ public class Leaderboard : MonoBehaviour {
 				else
 				{	
 					isName = true;
-					string url = "http://crustdesigns.com/demo/game/addscoreresp.php?snm=" + nameLB + "&score=" + (LevelInfo.Environments.hubScores.GetNumber()).ToString() + "&format=xml";
+					string url = "http://therealmattharmon.com/Zombie/addscoreresp.php?snm=" + nameLB + "&score=" + (LevelInfo.Environments.hubScores.GetNumber()).ToString() + "&format=xml";
 	        		WWW www = new WWW(url);
 	        		StartCoroutine(WaitForRequest(www));
 				}						
