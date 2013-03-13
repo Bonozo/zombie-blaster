@@ -233,7 +233,13 @@ public class AudioManager : MonoBehaviour {
 	}*/
 	
 	#endregion
-
+	
+	#region Weapons
+	
+	public AudioClip clipGunEmpty;
+	
+	#endregion
+	
 	#region Wave Complete
 	
 	public AudioClip clipUIStar;

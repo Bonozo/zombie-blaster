@@ -90,7 +90,9 @@ ModelImporter:
     400082: //RootNode
     400084: ruler
     2300000: ruler
+    2300002: farmer:Mesh
     3300000: ruler
+    3300002: farmer:Mesh
     4300000: farmer:Mesh
     4300002: ruler
     9500000: //RootNode

@@ -17,7 +17,11 @@ public class GunMachineGun : GunBase {
 		deltawait -= Time.deltaTime;
 		if( deltawait > 0 ) return Ammo;
 		if( weapon != Weapon.MachineGun || !GameEnvironment.FlameButton ) return Ammo;
-		if( reloading && !LevelInfo.Environments.control.UnlimitedAmmo) return Ammo;
+		if( reloading && !LevelInfo.Environments.control.UnlimitedAmmo)
+		{
+			LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.clipGunEmpty);
+			return Ammo;
+		}
 		if( Ammo == 0 )
 		{
 			if( Ammo==0 && AmmoStore != 0 && weapon == Weapon.MachineGun )

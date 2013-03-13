@@ -10,6 +10,7 @@ public class Ufo : MonoBehaviour {
 	
 	private bool died = false;
 	private float health = 10;
+	private int toplayer = 0;
 	
 	// Use this for initialization
 	void Start () {
@@ -21,6 +22,16 @@ public class Ufo : MonoBehaviour {
 		Vector3 pos = LevelInfo.Environments.control.transform.position;
 		pos.y = transform.position.y;
 		transform.RotateAround(pos,Vector3.up,Time.deltaTime*Speed);
+		
+		var player = LevelInfo.Environments.control.transform.position;
+		
+		if(Random.Range(0,70)==1) toplayer = Random.Range(-1,2);
+		float dist = GameEnvironment.DistXZ(transform.position,player);
+		if( dist >= 9f ) toplayer = -1;
+		if( dist <= 4f ) toplayer = 1;
+		pos = (transform.position-player).normalized;
+		transform.position += Time.deltaTime*pos*toplayer;
+		
 	}
 	
 	void OnCollisionEnter(Collision col)

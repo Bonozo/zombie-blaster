@@ -47,8 +47,6 @@ public class Leaderboard : MonoBehaviour {
 	string scoreLB;
 	string nameLB;
 	
-	#endregion
-	
    IEnumerator WaitForRequest(WWW www)
     //void ResponseData()
 	{
@@ -186,6 +184,8 @@ public class Leaderboard : MonoBehaviour {
 		}	
     }	
 	
+	#endregion
+	
 	void OnEnable()
 	{	
 		string url = "http://therealmattharmon.com/Zombie/gettopscore.php?top=10&format=xml";
@@ -252,14 +252,14 @@ public class Leaderboard : MonoBehaviour {
 				for(int i = 0; i < 10 && nameArray[i] != null/*by Aharon*/; i++)
 				{	
 					string nmb = (i+1).ToString() + (i<9?".  ":". ");
-					GUI.Label(new Rect(0.05f*Screen.width, (0.15f + yPosition*i)*Screen.height, 0.15f*Screen.width,0.03f*Screen.height), nmb + nameArray[i].ToString(),postGUIStyle);
+					GUI.Label(new Rect(0.05f*Screen.width, (0.15f + yPosition*i)*Screen.height, 0.3f*Screen.width,0.03f*Screen.height), nmb + nameArray[i].ToString(),postGUIStyle);
 				}	
 					//GUI.Label(new Rect(400,40, 200, 70), "" + scoreArray[i].ToString());
 					
 					//GUI.Label(new Rect(200,40 + yPosition*(i+1), 200, 70), "" + nameArray[i].ToString());
 				for(int i = 0; i < 10 && nameArray[i] != null/*by Aharon*/; i++)
 				{			
-					GUI.Label(new Rect(0.25f*Screen.width, (0.15f + yPosition*i)*Screen.height, 0.15f*Screen.width,0.03f*Screen.height), "" + scoreArray[i].ToString(),postGUIStyle);
+					GUI.Label(new Rect(0.36f*Screen.width, (0.15f + yPosition*i)*Screen.height, 0.15f*Screen.width,0.03f*Screen.height), "" + scoreArray[i].ToString(),postGUIStyle);
 				}
 				
 				// GUI.EndGroup();
@@ -302,6 +302,8 @@ public class Leaderboard : MonoBehaviour {
 			if(!isName || (isPost == true))
 				GUI.Label(new Rect(0.38f*Screen.width,0.57f*Screen.height,0.30f*Screen.width,0.032f*Screen.height), postScoreResponse.ToString(),postGUIStyle);					
 		}
+
+		#endregion
 		
 		if( GUI.Button(new Rect(0.76f*Screen.width,0.59f*Screen.height, 0.2f*Screen.width,0.1f*Screen.height), "RESET GAME",buttonGUIStyle) )
 			wanttoresetgame = true;
@@ -321,9 +323,6 @@ public class Leaderboard : MonoBehaviour {
 				wanttoresetgame = false;
 			}	
 		}
-
-
-		#endregion
 	}
 	
 	public Texture2D texturePopup;

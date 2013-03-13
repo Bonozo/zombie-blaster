@@ -280,11 +280,13 @@ public class Option : MonoBehaviour {
 			{
 				debugScreen = false;
 				title.text = "Options";
+				PlayTapAudio();
 			}
 			
 			if( GUI.Button( new Rect(0.84f*Screen.width,0.11f*Screen.height,0.15f*Screen.width,0.09f*Screen.height),"+1000 ZH",myStyle2))
 			{
 				Store.zombieHeads += 1000;
+				PlayTapAudio();
 			}
 			
 			//By Mak Kaloliya on 07022013
@@ -307,52 +309,79 @@ public class Option : MonoBehaviour {
 			
 			GUI.Label(textRect(3),"Vibration",myStyle1);
 			if( GUI.Button(buttonRect(3),Vibration?"ON":"OFF" ,myStyle2) )
+			{
 				Vibration = !Vibration;
+				PlayTapAudio();
+			}
 			
-			GUI.Label(textRect(10),"Quality",myStyle1);
+			GUI.Label(textRect(4),"Light",myStyle1);
+			if( GUI.Button(buttonRect(4),SpotLight?"FlashLight":"Directional",myStyle2 ) )
+			{
+				SpotLight = !SpotLight;
+				PlayTapAudio();
+			}
 			
+			GUI.Label(textRect(5),"Fog",myStyle1);
+			if( GUI.Button(buttonRect(5),Fog?"ON":"OFF",myStyle2 ) )
+			{
+				Fog = !Fog;
+				PlayTapAudio();
+			}
+			
+			GUI.Label(textRect(6),"Shove Helper",myStyle1);
+			if( GUI.Button(buttonRect(6),ShoveHelper?"ON":"OFF",myStyle2 ) )
+			{
+				ShoveHelper = !ShoveHelper;
+				PlayTapAudio();
+			}
+			
+			GUI.Label(textRect(7),"Sensitivity(" + Mathf.Round(10000*Sensitivity)/100f + "%)",myStyle1);
+			Sensitivity = GUI.HorizontalSlider(buttonRect(7),(float)Sensitivity,0f,0.2f);
+			
+			GUI.Label(textRect(8),"Tilt Move",myStyle1);
+			if( GUI.Button(buttonRect(8),TiltingMove?"ON":"OFF",myStyle2 ) )
+			{
+				TiltingMove = !TiltingMove;
+				PlayTapAudio();
+			}
+			
+			GUI.Label(textRect(9),"X-Inversion",myStyle1);
+			if( GUI.Button(buttonRect(9),XInversion?"ON":"OFF",myStyle2 ) )
+			{
+				XInversion = !XInversion;
+				PlayTapAudio();
+			}
+			
+			GUI.Label(textRect(10),"Quality",myStyle1);	
 			if( GUI.Button(buttonRect(10),QualitySettings.names[QualitySettings.GetQualityLevel()],myStyle2 ) )
 			{
 				if( QualitySettings.GetQualityLevel() == QualitySettings.names.Length-1 )
 					QualitySettings.SetQualityLevel(0);
 				else
 					QualitySettings.IncreaseLevel();
+				PlayTapAudio();
 			}
 			
-			GUI.Label(textRect(4),"Light",myStyle1);
-			if( GUI.Button(buttonRect(4),SpotLight?"FlashLight":"Directional",myStyle2 ) )
-				SpotLight = !SpotLight;
-			
-			GUI.Label(textRect(5),"Fog",myStyle1);
-			if( GUI.Button(buttonRect(5),Fog?"ON":"OFF",myStyle2 ) )
-				Fog = !Fog;
-				
-			GUI.Label(textRect(6),"Shove Helper",myStyle1);
-			if( GUI.Button(buttonRect(6),ShoveHelper?"ON":"OFF",myStyle2 ) )
-				ShoveHelper = !ShoveHelper;
-				
-			GUI.Label(textRect(7),"Sensitivity(" + Mathf.Round(10000*Sensitivity)/100f + "%)",myStyle1);
-			Sensitivity = GUI.HorizontalSlider(buttonRect(7),(float)Sensitivity,0f,0.2f);
-			
-			GUI.Label(textRect(8),"Tilt Move",myStyle1);
-			if( GUI.Button(buttonRect(8),TiltingMove?"ON":"OFF",myStyle2 ) )
-				TiltingMove = !TiltingMove;
-			
-			GUI.Label(textRect(9),"X-Inversion",myStyle1);
-			if( GUI.Button(buttonRect(9),XInversion?"ON":"OFF",myStyle2 ) )
-				XInversion = !XInversion;
-			
 			if( GUI.Button(buttonRect(11),"Restore Defaults",myStyle2 ) )
+			{
 				RestoreDefault();
+				PlayTapAudio();
+			}
 			
 			if(showdebug && GUI.Button( new Rect(0.84f*Screen.width,0.01f*Screen.height,0.15f*Screen.width,0.09f*Screen.height),"Debug",myStyle2))
 			{
 				debugScreen = true;
 				title.text = "Options Debug";
+				PlayTapAudio();
 			}
 		}
 		
 
 			
+	}
+	
+	void PlayTapAudio()
+	{
+		audio.Play();
 	}
 }

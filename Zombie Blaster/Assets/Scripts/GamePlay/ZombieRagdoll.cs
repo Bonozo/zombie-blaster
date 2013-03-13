@@ -23,6 +23,21 @@ public class ZombieRagdoll : MonoBehaviour {
 	private CollisionSender headcol;
 	private bool falledsoundplayed = false;
 	
+	void SetMaterialToLighning()
+	{
+		foreach(Transform t in gameObject.transform)
+		{
+			if(t.gameObject.renderer != null)
+			{
+				var text = t.gameObject.renderer.material.mainTexture;
+				t.gameObject.renderer.material = LevelInfo.Environments.materialLighnings;
+				t.gameObject.renderer.material.mainTexture = text;
+				return;
+			}
+		}
+		Debug.LogError("ZB error: Cannot find zombie material");
+	}
+	
 	// Use this for initialization
 	void Start () {
 		

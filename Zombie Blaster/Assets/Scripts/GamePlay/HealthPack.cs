@@ -70,7 +70,12 @@ public class HealthPack : MonoBehaviour {
 				}
 			}
 			if(gunindexifweapon == Weapon.None)
-				Debug.LogError("ZB ERROR: error code statement when determining weapon for ammo powerup."); 
+			{
+				if(Store.FirstTimePlay)
+					gunindexifweapon = Weapon.AlienBlaster;
+				else
+					Debug.LogError("ZB ERROR: error code statement when determining weapon for ammo powerup."); 
+			}
 			break;
 		}		
 	}
@@ -151,7 +156,8 @@ public class HealthPack : MonoBehaviour {
 		switch(packType)
 		{
 		case HealthPackType.Ammo:
-			LevelInfo.Environments.guns.AllAmmoForWeapon(gunindexifweapon);
+			if(LevelInfo.Environments.guns.gun[(int)gunindexifweapon].EnabledGun)
+				LevelInfo.Environments.guns.AllAmmoForWeapon(gunindexifweapon);
 			pickupname = GameEnvironment.storeGun[(int)gunindexifweapon].name + " Ammo";
 			break;
 			

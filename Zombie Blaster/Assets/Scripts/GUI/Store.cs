@@ -379,6 +379,11 @@ public class Store : MonoBehaviour {
 	public GUITexture arrowUpStash;
 	public GUITexture arrowDownStash;
 	
+	public ButtonBase arrowUpShowButton;
+	public ButtonBase arrowDownShowButton;
+	public ButtonBase arrowUpStashButton;
+	public ButtonBase arrowDownStashButton;
+	
 	private bool spwchannel = false;
 	
 	private int showZombieHeads = -1; 
@@ -569,7 +574,7 @@ public class Store : MonoBehaviour {
 		shopInfoButton.gameObject.SetActive(enableshowshopitems&&showWeapon[currentshopitem]);
 		shotItemBuy.gameObject.SetActive(enableshowshopitems&&showWeapon[currentshopitem]);
 		shotItemBuy.enabled = enableshowshopitems&&showWeapon[currentshopitem]&&wooi==-1;
-		shopItemTexture.enabled = enableshowshopitems && currentshopitem!=(int)Weapon.Spade;
+		shopItemTexture.enabled = enableshowshopitems;
 		if( shopItemTexture.enabled ) shopItemTexture.texture = weaponIcon[currentshopitem];
 		
 		for(int i=0;i<countWeapons;i++)
@@ -615,7 +620,7 @@ public class Store : MonoBehaviour {
 			{
 				wooi = currentshopitem;
 				weapondescription = true;
-				audio.PlayOneShot(clipWeaponInfo[wooi]);
+				//audio.PlayOneShot(clipWeaponInfo[wooi]);
 				spwchannel = true;
 			}
 			
@@ -629,7 +634,8 @@ public class Store : MonoBehaviour {
 			Rect shopRect = new Rect(0.01f*Screen.width,0.1f*Screen.height,0.487f*Screen.width,0.9f*Screen.height);
 			//Rect shopRect = new Rect(0.01f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
 			
-			if( RectContainPoint(shopRect,GameEnvironment.AbsoluteSwipeBegin) && RectContainPoint(shopRect,GameEnvironment.AbsoluteSwipeEnd) && swp.y > 0 )
+			if( (RectContainPoint(shopRect,GameEnvironment.AbsoluteSwipeBegin) && RectContainPoint(shopRect,GameEnvironment.AbsoluteSwipeEnd) && swp.y > 0 )
+				|| (arrowUpShow.enabled && arrowUpShowButton.PressedUp) )
 			{
 				int olditem = currentshopitem;
 				currentshopitem = NextWeapon(currentshopitem,false);
@@ -640,7 +646,8 @@ public class Store : MonoBehaviour {
 					StartCoroutine(ShopItemsSlide(newWeaponobj,-1f,0f));
 				}
 			}
-			if( RectContainPoint(shopRect,GameEnvironment.AbsoluteSwipeBegin) && RectContainPoint(shopRect,GameEnvironment.AbsoluteSwipeEnd) && swp.y < 0 )
+			if( (RectContainPoint(shopRect,GameEnvironment.AbsoluteSwipeBegin) && RectContainPoint(shopRect,GameEnvironment.AbsoluteSwipeEnd) && swp.y < 0 )
+				|| (arrowDownShow.enabled && arrowDownShowButton.PressedUp) )
 			{
 				int olditem = currentshopitem;
 				currentshopitem = PrevWeapon(currentshopitem,false);
@@ -660,7 +667,7 @@ public class Store : MonoBehaviour {
 		StashInfoButton.gameObject.SetActive(enableshowstashitems);
 		StashItemBuy.gameObject.SetActive(enableshowstashitems&&IsLevelGamePlay&&showWeapon[currentStashitem]&&currentStashitem != (int)Weapon.Spade);
 		StashItemBuy.enabled = enableshowstashitems&&wooi==-1&&IsLevelGamePlay&&showWeapon[currentStashitem]&&currentStashitem != (int)Weapon.Spade;
-		stashItemTexture.enabled = enableshowstashitems && currentStashitem != (int)Weapon.Spade;
+		stashItemTexture.enabled = enableshowstashitems;
 		if( stashItemTexture.enabled ) stashItemTexture.texture = weaponIcon[currentStashitem];
 		
 
@@ -685,7 +692,7 @@ public class Store : MonoBehaviour {
 			{
 				wooi = currentStashitem;
 				weapondescription = true;
-				audio.PlayOneShot(clipWeaponInfo[wooi]);
+				//audio.PlayOneShot(clipWeaponInfo[wooi]);
 			}
 			
 			if( StashItemBuy.enabled && StashItemBuy.PressedDown )
@@ -697,7 +704,8 @@ public class Store : MonoBehaviour {
 			
 			Rect StashRect = new Rect(0.51f*Screen.width,0.25f*Screen.height,0.487f*Screen.width,0.75f*Screen.height);
 		
-			if( RectContainPoint(StashRect,GameEnvironment.AbsoluteSwipeBegin) && RectContainPoint(StashRect,GameEnvironment.AbsoluteSwipeEnd) && swp.y > 0 )
+			if( (RectContainPoint(StashRect,GameEnvironment.AbsoluteSwipeBegin) && RectContainPoint(StashRect,GameEnvironment.AbsoluteSwipeEnd) && swp.y > 0 )
+				|| (arrowUpStash.enabled && arrowUpStashButton.PressedUp) )
 			{
 				int olditem = currentStashitem;
 				currentStashitem = NextWeapon(currentStashitem,true);
@@ -707,7 +715,8 @@ public class Store : MonoBehaviour {
 					StartCoroutine(StashItemsSlide(objectWeapons[currentStashitem],-1f,0f));
 				}
 			}
-			if( RectContainPoint(StashRect,GameEnvironment.AbsoluteSwipeBegin) && RectContainPoint(StashRect,GameEnvironment.AbsoluteSwipeEnd) && swp.y < 0 )
+			if( (RectContainPoint(StashRect,GameEnvironment.AbsoluteSwipeBegin) && RectContainPoint(StashRect,GameEnvironment.AbsoluteSwipeEnd) && swp.y < 0 )
+				|| (arrowDownStash.enabled && arrowDownStashButton.PressedUp) )	
 			{
 				int olditem = currentStashitem;
 				currentStashitem = PrevWeapon(currentStashitem,true);

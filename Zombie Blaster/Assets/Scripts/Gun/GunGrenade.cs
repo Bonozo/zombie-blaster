@@ -12,7 +12,12 @@ public class GunGrenade : GunBase {
 	public override float ManualUpdate (Weapon weapon) 
 	{
 		if( weapon != Weapon.Grenade || !GameEnvironment.FireButton ) return Ammo;
-		if( reloading && !LevelInfo.Environments.control.UnlimitedAmmo) return Ammo;
+		if( reloading && !LevelInfo.Environments.control.UnlimitedAmmo)
+		{
+			
+			LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.clipGunEmpty);
+			return Ammo;
+		}
 		if( Ammo == 0 )
 		{
 			if( Ammo==0 && AmmoStore != 0 && weapon == Weapon.Grenade )

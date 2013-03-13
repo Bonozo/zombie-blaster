@@ -37,7 +37,11 @@ public class GunAirgun : GunBase {
 			dt = 0.5f;
 		
 		if( !GameEnvironment.FireButton && dt > 0f) return Ammo;
-		if( reloading && !LevelInfo.Environments.control.UnlimitedAmmo ) return Ammo;
+		if( reloading && !LevelInfo.Environments.control.UnlimitedAmmo ) 
+		{
+			LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.clipGunEmpty);
+			return Ammo;
+		}
 		if( Ammo == 0 )
 		{
 			if( Ammo==0 && AmmoStore != 0 && weapon == Weapon.BB )

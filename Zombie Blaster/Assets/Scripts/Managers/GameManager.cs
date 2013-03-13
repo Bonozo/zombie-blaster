@@ -73,6 +73,12 @@ public class GameManager : MonoBehaviour {
 	
 	#endregion
 	
+	#region Materials
+	
+	public Material materialLighnings;
+	
+	#endregion
+	
 	#region HUB
 	
 	public HubUI hubZombiesLeft;

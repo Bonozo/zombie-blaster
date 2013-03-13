@@ -109,6 +109,8 @@ ModelImporter:
     100206: tree5
     100208: tree6
     100210: tree7
+    100212: pPlane5
+    100214: pPlane6
     400000: FraRow
     400002: //RootNode
     400004: group44
@@ -215,6 +217,8 @@ ModelImporter:
     400206: tree5
     400208: tree6
     400210: tree7
+    400212: pPlane5
+    400214: pPlane6
     2300000: pCube36
     2300002: pCube37
     2300004: pCube38
@@ -308,6 +312,8 @@ ModelImporter:
     2300180: tree5
     2300182: tree6
     2300184: tree7
+    2300186: pPlane5
+    2300188: pPlane6
     3300000: pCube36
     3300002: pCube37
     3300004: pCube38
@@ -401,6 +407,8 @@ ModelImporter:
     3300180: tree5
     3300182: tree6
     3300184: tree7
+    3300186: pPlane5
+    3300188: pPlane6
     4300000: polySurface2414
     4300002: pCube39
     4300004: pPlane4
@@ -494,6 +502,8 @@ ModelImporter:
     4300180: tree6
     4300182: tree7
     4300184: polySurface3280
+    4300186: pPlane5
+    4300188: pPlane6
     9500000: //RootNode
   materials:
     importMaterials: 1

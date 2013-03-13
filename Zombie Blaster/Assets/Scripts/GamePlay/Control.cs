@@ -714,7 +714,7 @@ public class Control : MonoBehaviour {
 						else
 						{	
 							isName = true;
-							string url = "http://crustdesigns.com/demo/game/addscoreresp.php?snm=" + nameLB + "&score=" + (LevelInfo.Environments.hubScores.GetNumber()).ToString() + "&format=xml";
+							string url = "http://therealmattharmon.com/Zombie/addscoreresp.php?snm=" + nameLB + "&score=" + (LevelInfo.Environments.hubScores.GetNumber()).ToString() + "&format=xml";
 			        		WWW www = new WWW(url);
 			        		StartCoroutine(WaitForRequest(www));
 						}						

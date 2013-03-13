@@ -77,6 +77,12 @@ public class HeadHit : MonoBehaviour {
 		HeadContainer.SendMessage("DieWithFootball");
 	}
 	
+	public void DieWithElectricity()
+	{
+		DiePrepare();
+		HeadContainer.SendMessage("DieWithElectricity");	
+	}
+	
 	private void DiePrepare()
 	{
 		HeadShotted = true;

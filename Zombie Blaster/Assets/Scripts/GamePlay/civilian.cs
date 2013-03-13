@@ -214,6 +214,23 @@ public class civilian : MonoBehaviour {
 		Destroy(this.gameObject);
 	}
 	
+	public void DieWithElectricity()
+	{
+		if(died) return; died=true;
+		ActionForDie();
+		//LevelInfo.Environments.hubZombiesLeft.SetNumber(LevelInfo.Environments.hubZombiesLeft.GetNumber()+1);
+		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
+		g.SendMessage("IsCivilian");
+		g.SendMessage("SetMaterialToLighning");
+		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
+		Vector3 dir = transform.position - LevelInfo.Environments.control.transform.position; dir.Normalize();
+        foreach (Rigidbody child in rigidbodies) 
+			child.AddForce(20f*dir);
+		
+		Destroy(this.gameObject);
+	}
+	
+	
 	public void DieWithJump()
 	{
 		if(died) return; died=true;

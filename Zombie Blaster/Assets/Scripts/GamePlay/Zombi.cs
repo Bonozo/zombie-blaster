@@ -345,25 +345,6 @@ public class Zombi : MonoBehaviour {
 		healthBar.scoobyArrow.gameObject.SetActive(scooby);
 	}
 	
-	/*void OnGUI()
-	{
-		// showing healt bar
-		
-		if( Time.timeScale == 0.0f ) return;
-		
-		Vector3 head = headHit.transform.position; head.y += 0.5f;
-		Vector3 pos = LevelInfo.Environments.mainCamera.WorldToScreenPoint(head);
-		if( pos.z > 0 )
-		{
-			pos.y = Screen.height - pos.y;
-			pos.z = 1f;
-		
-			GUI.DrawTexture(new Rect(pos.x-20,pos.y,40,5),LevelInfo.Environments.ProgressBarZombieEmpty);
-			GUI.DrawTexture(new Rect(pos.x-20,pos.y,damage*4,5),LevelInfo.Environments.ProgressBarZombieFull);
-		}
-		//GUI.Label(new Rect(0,100,200,200),"Dist " + transform.position.magnitude );
-	}*/
-	
 	#endregion
 	
 	#region Zombie Get Hit Setup
@@ -380,62 +361,6 @@ public class Zombi : MonoBehaviour {
 			return;
 		}
 	}
-	
-	/*void OnTriggerEnter(Collider col)
-	{		
-		// Zapper Attack
-		if( HitWithName(col.gameObject.name,"Zapper") )
-		{
-			smoking -= Time.deltaTime;
-			ZombieSmoke.particleEmitter.minSize = ZombieSmoke.particleEmitter.maxSize = (1-smoking)*1f;
-			animation.Play("zap");
-			if( smoking <= 0 )
-			{
-				DieNormal();
-				return;
-			}
-		}
-		
-		// Flame Attack
-		if( HitWithName(col.gameObject.name,"Flame") )
-		{
-			flaming -= Time.deltaTime;
-			ZombieFire.particleEmitter.minSize = ZombieFire.particleEmitter.maxSize = (1-flaming)*1f;
-			if( flaming <= 0 )
-			{
-				DieNormal();
-				return;
-			}
-		}	
-	}*/
-	
-	/*void OnTriggerStay(Collider col)
-	{	
-		// Zapper Attack
-		if( HitWithName(col.gameObject.name,"Zapper") )
-		{
-			smoking -= Time.deltaTime;
-			ZombieSmoke.particleEmitter.minSize = ZombieSmoke.particleEmitter.maxSize = (1-smoking)*1f;
-			animation.Play("zap");
-			if( smoking <= 0 )
-			{
-				DieNormal();
-				return;
-			}
-		}
-		
-		// Flame Attack
-		if( HitWithName(col.gameObject.name,"Flame") )
-		{
-			flaming -= Time.deltaTime;
-			ZombieFire.particleEmitter.minSize = ZombieFire.particleEmitter.maxSize = (1-flaming)*1f;
-			if( flaming <= 0 )
-			{
-				DieNormal();
-				return;
-			}
-		}	
-	}*/
 	
 	public bool GetHitDamagedTest(int hitpoints)
 	{
@@ -545,6 +470,51 @@ public class Zombi : MonoBehaviour {
 			child.AddForce(200f*dir);
 		
 		Destroy(this.gameObject);	
+	}
+	
+	public void DieNormalWithElectricity()
+	{
+		if( died ) return;
+		died = true;
+		LevelInfo.Environments.control.GetZombie();
+		GameObject g = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
+		ZombieSmoke.particleEmitter.minSize = ZombieSmoke.particleEmitter.maxSize = (1-smoking)*1f;
+		ZombieSmoke.particleEmitter.minSize = ZombieSmoke.particleEmitter.maxSize = (1-smoking)*1f;
+		g.SendMessage("SetFireSize",ZombieFire.particleEmitter.maxSize);
+		g.SendMessage("SetSmokeSize",ZombieSmoke.particleEmitter.maxSize);
+		g.SendMessage("SetMaterialToLighning");
+		if(scooby && !headHit.HeadShotted) g.SendMessage("DontSpawnHealthpack");
+		
+		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
+		Vector3 dir = transform.position - LevelInfo.Environments.control.transform.position; dir.Normalize();
+        foreach (Rigidbody child in rigidbodies) 
+			child.AddForce(200f*dir);
+		
+		Destroy(this.gameObject);
+	}
+	
+	public void DieWithElectricity()
+	{	
+		if( died ) return;
+		if(animation.IsPlaying("spawn"))
+		{
+			DieNormalWithElectricity();
+			return;
+		}
+		died = true;
+		LevelInfo.Environments.control.GetZombie();
+		
+		// Adding Force
+		GameObject ragdoll = (GameObject)Instantiate(ZombieRagdoll,transform.position,transform.rotation);
+		ragdoll.SendMessage("SetFireSize",ZombieFire.particleEmitter.maxSize);
+		ragdoll.SendMessage("SetSmokeSize",ZombieSmoke.particleEmitter.maxSize);
+		ragdoll.SendMessage("SetMaterialToLighning");
+		if(scooby && !headHit.HeadShotted) ragdoll.SendMessage("DontSpawnHealthpack");
+		var rigidbodies = ragdoll.GetComponentsInChildren(typeof(Rigidbody));
+        foreach (Rigidbody child in rigidbodies) 
+			child.AddForce(new Vector3(Random.Range(-100f,100f),100f,Random.Range(-100f,100f)));
+		
+		Destroy(this.gameObject);
 	}
 	
 	public void ThrowOut()

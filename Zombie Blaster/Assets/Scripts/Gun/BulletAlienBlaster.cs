@@ -3,12 +3,11 @@ using System.Collections;
 
 public class BulletAlienBlaster : MonoBehaviour {
 	
-	// THESE CLASS ARE NOT USED. ALIEN BLASTER BULLET IS DETERMINED BY "BulletGunRevolver.cs"
-	
 	public GameObject sparks;
 	public float DestroyTime = 4f;
 	public float Speed = 5f;
 	public float Y = 2.5f;
+	public float power = 4;
 	
 	// Use this for initialization
 	void Start () {
@@ -27,19 +26,27 @@ public class BulletAlienBlaster : MonoBehaviour {
 	void OnCollisionEnter(Collision col)
 	{
 		bool blooded = false;
+		bool iscivil = col.gameObject.GetComponent<civilian>() != null;
 		if( col.gameObject.tag == "Zombie" && (col.gameObject.GetComponent<Zombi>() == null || !col.gameObject.GetComponent<Zombi>().haveHelmet) ) blooded = true;
 		if( col.gameObject.tag == "ZombieHead" && !col.gameObject.GetComponent<HeadHit>().HeadContainer.haveHelmet ) blooded = true;
-		Instantiate(blooded?LevelInfo.Environments.particleBlood:LevelInfo.Environments.particleSpark,transform.position,Quaternion.identity);
-		
+
+		if(!blooded || iscivil)
+			Instantiate(LevelInfo.Environments.particleSpark,transform.position,Quaternion.identity);
+		else
+		{	
+			ParticleSystem p = ((GameObject)Instantiate(LevelInfo.Environments.particleBlood,transform.position,Quaternion.identity)).GetComponent<ParticleSystem>();
+			p.startSpeed = 4f;
+			p.Emit(200);
+		}
 		
 		if( col.gameObject.tag == "Zombie" )
-			col.gameObject.SendMessage("GetHitDamaged",10);
+			col.gameObject.SendMessage("DieWithElectricity",power);
 		
 		if( col.gameObject.tag == "ZombieHead" )
-			col.gameObject.SendMessage("DieDamaged");
+			col.gameObject.SendMessage("DieWithElectricity");
 		
 		if( col.gameObject.tag == "Ufo" )
-			col.gameObject.SendMessage("GetHitDamaged",10);
+			col.gameObject.SendMessage("GetHitDamaged",power);
 		
 		Destroy(this.gameObject);
 	}
