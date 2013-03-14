@@ -172,7 +172,6 @@ public class Control : MonoBehaviour {
 		if(www.error == null && isPost == true)
 		{
 			postScoreResponse = "Score is successfully posted!";
-			LevelInfo.Environments.hubScores.SetNumber(0);
 			//Debug.Log("WWW Ok!: " + www.data);
 		}	
 		else if(www.error != null && isPost == true)
@@ -262,6 +261,7 @@ public class Control : MonoBehaviour {
 				LevelInfo.Audio.StopAll();
 				LevelInfo.Audio.PlayGameOver();
 				LevelInfo.Environments.hubLives.SetNumberWithFlash(LevelInfo.Environments.hubLives.GetNumber()-1);
+				ZBFacebook.Instance.Init();
 				break;
 			case GameState.Play:
 				Time.timeScale = 1f;
@@ -599,6 +599,7 @@ public class Control : MonoBehaviour {
 
 	#region GUI
 	
+	private bool postedscore = false;
 	public bool allowShowGUI = true;
 	void OnGUI()
 	{
@@ -695,30 +696,58 @@ public class Control : MonoBehaviour {
 					GUI.Label(new Rect(0.35f*Screen.width,0.355f*Screen.height, 0.1f*Screen.width,0.05f*Screen.height), "NAME: ",myGUIStyle);
 					GUI.Label(new Rect(0.35f*Screen.width,0.42f*Screen.height, 0.1f*Screen.width,0.05f*Screen.height), "SCORE: ",myGUIStyle);
 					
+					
+					#if UNITY_ANDROID || UNITY_IPHONE
+					if( ZBFacebook.Instance.Ready)
+					{
+						nameLB = ZBFacebook.Instance.fbname;
+						GUI.Label(new Rect(0.48f*Screen.width,0.35f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), nameLB,myGUIStyle);
+					}
+					else
+					{
+						if( GUI.Button(new Rect(0.48f*Screen.width,0.35f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), "Log in ", buttonGUIStyle) && !ZBFacebook.Instance.Logging)
+						{
+							ZBFacebook.Instance.Login();
+						}
+					}
+					#else
 					nameLB = GUI.TextField(new Rect(0.48f*Screen.width,0.35f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), nameLB,12,myGUIStyle);
+					#endif
+					
 					GUI.Label(new Rect(0.48f*Screen.width,0.42f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), (LevelInfo.Environments.hubScores.GetNumber()).ToString(),myGUIStyle);
 					
 					//scoreLB = GUI.TextField(new Rect(0.45f*Screen.width,0.40f*Screen.height, 0.15f*Screen.width,0.035f*Screen.height), scoreLB);
 
 					if(GUI.Button(new Rect(0.45f*Screen.width,0.5f*Screen.height, 0.10f*Screen.width,0.05f*Screen.height), "Post", buttonGUIStyle) )
 					{
-						if(nameLB.Trim().Equals(""))	
+						if(postedscore)
+						{
+							postScoreResponse = "You already have posted.";
+						}
+						else if(nameLB.Trim().Equals(""))	
 						{
 							isName = false;
-							postScoreResponse = "Please Enter Name!";
-						}
-						else if(LevelInfo.Environments.hubScores.GetNumber() == 0 )
-						{
-							postScoreResponse = "0 Score.";
+							postScoreResponse = "Please log in to facebook.";//"Please Enter Name!";
+							ZBFacebook.Instance.Init();
 						}
 						else
 						{	
 							isName = true;
-							string url = "http://therealmattharmon.com/Zombie/addscoreresp.php?snm=" + nameLB + "&score=" + (LevelInfo.Environments.hubScores.GetNumber()).ToString() + "&format=xml";
+							string url = "http://therealmattharmon.com/Zombie/addscoreresp.php?snm=" + nameLB.Replace(' ','_') + "&score=" + (LevelInfo.Environments.hubScores.GetNumber()).ToString() + "&format=xml";
 			        		WWW www = new WWW(url);
 			        		StartCoroutine(WaitForRequest(www));
+							postedscore = true;
 						}						
 					}
+			
+					#if UNITY_ANDROID || UNITY_IPHONE
+					if(GUI.Button(new Rect(0.57f*Screen.width,0.5f*Screen.height, 0.10f*Screen.width,0.05f*Screen.height), "Share", buttonGUIStyle) )
+					{
+						ZBFacebook.Instance.PostOnWall(LevelInfo.Environments.hubScores.GetNumber());		
+					}
+					#endif
+					
+					
 					
 					if(!isName || (isPost == true))
 						GUI.Label(new Rect(0.38f*Screen.width,0.57f*Screen.height,0.30f*Screen.width,0.032f*Screen.height), postScoreResponse.ToString(),myGUIStyle);					

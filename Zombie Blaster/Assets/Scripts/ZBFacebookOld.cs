@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class ZBFacebook : ButtonBase {
+public class ZBFacebookOld : ButtonBase {
 	
 	public string appID;
 	
