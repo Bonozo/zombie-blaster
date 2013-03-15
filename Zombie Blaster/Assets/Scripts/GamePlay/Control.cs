@@ -699,7 +699,7 @@ public class Control : MonoBehaviour {
 					GUI.Label(new Rect(0.35f*Screen.width,0.42f*Screen.height, 0.1f*Screen.width,0.05f*Screen.height), "SCORE: ",myGUIStyle);
 					
 					
-					#if UNITY_ANDROID || UNITY_IPHONE
+					#if UNITY_ANDROID
 					if( ZBFacebook.Instance.Ready)
 					{
 						nameLB = ZBFacebook.Instance.fbname;
@@ -742,7 +742,7 @@ public class Control : MonoBehaviour {
 						}						
 					}
 			
-					#if UNITY_ANDROID || UNITY_IPHONE
+					#if UNITY_ANDROID
 					
 					if(ZBFacebook.Instance.Posted)
 					{
