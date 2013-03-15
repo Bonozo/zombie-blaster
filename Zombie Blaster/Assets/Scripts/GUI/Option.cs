@@ -301,7 +301,7 @@ public class Option : MonoBehaviour {
 		
 		else
 		{
-			GUI.Label(textRect(1),"Volume ("+(int)(hSlideVolume*100)+"%)",myStyle1);
+			GUI.Label(textRect(1),"Music ("+(int)(hSlideVolume*100)+"%)",myStyle1);
 			hSlideVolume = GUI.HorizontalSlider(buttonRect(1),hSlideVolume,0f,1f);
 		
 			GUI.Label(textRect(2),"SFX ("+(int)(sfxVolume*100)+"%)",myStyle1);

@@ -55,6 +55,10 @@ public class AudioManager : MonoBehaviour {
 		audioSourceWindLoop.volume = Option.sfxVolume;
 		audioSourceFlamethrower.volume = Option.sfxVolume;
 		
+		if(Option.hSlideVolume==0f && Option.sfxVolume == 0f)
+			AudioListener.volume = 0f;
+		else
+			AudioListener.volume = 1f;
 		//AudioListener.volume = Mathf.Max(Option.hSlideVolume,Option.sfxVolume);		
 	}
 	
