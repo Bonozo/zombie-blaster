@@ -45,7 +45,7 @@ public class ZBFacebook : MonoBehaviour {
 	{
 		if(Application.loadedLevel == 2)
 		{
-			time -= Time.time;
+			time -= Time.deltaTime;
 			if( time <= 0f )
 			{
 				if(LevelInfo.Environments.control.state == GameState.Play)
