@@ -21,11 +21,13 @@ public class ZBFacebook : MonoBehaviour {
 	void Awake()
 	{
 		DontDestroyOnLoad(this.gameObject);
-		
+				
+		#if UNITY_ANDROID
 		FacebookManager.loginSucceededEvent += facebookLogin;
 		FacebookManager.loginFailedEvent += facebookLoginFailed;
 		FacebookManager.loggedOutEvent += facebookDidLogoutEvent;
-		//Init();
+		#endif
+		Init();
 		// Init also is called from 1. when going to lose state and when posting with an error 0 length name
 	}
 	
@@ -43,6 +45,7 @@ public class ZBFacebook : MonoBehaviour {
 	
 	void Update()
 	{
+		#if UNITY_ANDROID
 		if(Application.loadedLevel == 2)
 		{
 			time -= Time.deltaTime;
@@ -53,19 +56,24 @@ public class ZBFacebook : MonoBehaviour {
 				time = (++sc)*10f;
 			}
 		}
+		#endif
 	}
 	
 	#endregion
 	
 	public void Init()
 	{
+		#if UNITY_ANDROID
 		FacebookAndroid.init(appID);
 		lastmessage = "Init called";
+		#endif
 	}
 	
 	public void Login()
 	{
+		#if UNITY_ANDROID
 		FacebookAndroid.loginWithRequestedPermissions( new string[] { "publish_stream", "email", "user_birthday" } );
+		#endif
 	}
 
 	void facebookLogin()
@@ -100,12 +108,14 @@ public class ZBFacebook : MonoBehaviour {
 	
 	public void PostOnWall(int scores)
 	{
+		#if UNITY_ANDROID
 		string posttext = fbfirstname + " played Zombie Blaster! (Score: " + scores + ")";
 		
 		var pathToImage = Application.persistentDataPath + "/" + screenshotFilename;
 		var bytes = System.IO.File.ReadAllBytes( pathToImage );
 		
 		Facebook.instance.postImage( bytes, posttext, completionHandler1 );
+		#endif
 	}
 	
 	private void completionHandler1( string error, object result )
@@ -121,7 +131,11 @@ public class ZBFacebook : MonoBehaviour {
 	
 	public bool isSessionValid()
 	{
+		#if UNITY_ANDROID
 		return FacebookAndroid.isSessionValid();
+		#else
+		return false;
+		#endif
 	}
 	
 	/*void OnGUI()
