@@ -22,6 +22,8 @@ public class Generator : MonoBehaviour {
 	}
 	
 	public LevelZombies[] levelZombies;
+	
+	[System.NonSerialized]
 	public GameObject objLevel;
 	
 	private string GetZombieResourcePath(LevelZombie z,int cur)
@@ -74,7 +76,7 @@ public class Generator : MonoBehaviour {
 	
 	[System.NonSerializedAttribute]
 	public int zombiesLeft = 0;
-	private int scoobyZombieCount = 10;
+	private int scoobyZombieCount = 20;
 	
 	private GameObject WhatZombieToSpawn()
 	{	
@@ -93,10 +95,10 @@ public class Generator : MonoBehaviour {
 		// Check scooby zombie to spawn
 		if(LevelInfo.Environments.control.currentWave > 1)
 		{
-			if(scoobyZombieCount <= 10 && Random.Range(0,scoobyZombieCount+1) == 0 )
+			if(scoobyZombieCount <= 20 && Random.Range(0,scoobyZombieCount+1) == 0 )
 			{
 				z = levelZombies[currentLevel].scoobyZombies[Random.Range(0,levelZombies[currentLevel].scoobyZombies.Length)].obj[0];
-				scoobyZombieCount += 10;
+				scoobyZombieCount += 20;
 			}
 			scoobyZombieCount--;
 		}
