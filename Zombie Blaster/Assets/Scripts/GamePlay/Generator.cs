@@ -109,7 +109,7 @@ public class Generator : MonoBehaviour {
 		float alpa = Random.Range(0f,360f);
 		
 		// special for Level1 Wave1
-		if( LevelInfo.Environments.control.currentLevel == 0 && LevelInfo.Environments.control.currentWave == 1 )
+		if( (LevelInfo.Environments.control.currentLevel == 0 && LevelInfo.Environments.control.currentWave == 1) || Store.FirstTimePlay )
 		{
 			alpa = 90f+Random.Range(-35f,35f);
 		}
@@ -322,10 +322,10 @@ public class Generator : MonoBehaviour {
 				if(Random.Range(0,prob)==1) packType = HealthPackType.Health;
 			}
 			
-			if(Store.FirstTimePlay && Random.Range(0,10)<=7) // 80% probablity
+			/*if(Store.FirstTimePlay && Random.Range(0,10)<=7) // 80% probablity
 			{
 				packType = HealthPackType.Rampage;
-			}
+			}*/
 				
 			
 		}		

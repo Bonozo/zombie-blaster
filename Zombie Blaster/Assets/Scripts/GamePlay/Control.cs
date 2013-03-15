@@ -537,7 +537,7 @@ public class Control : MonoBehaviour {
 			else rightAutoTargetTime-=Time.deltaTime;
 		}
 		// Rotate Updates
-		if( !(currentLevel==0&&currentWave==1) )
+		if( !(currentLevel==0&&currentWave==1) && !Store.FirstTimePlay )
 		{
 			Vector3 rot = transform.rotation.eulerAngles;
 			if(rot.y >= 180.0f ) rot.y -= 360f;
@@ -600,6 +600,8 @@ public class Control : MonoBehaviour {
 	#region GUI
 	
 	private bool postedscore = false;
+	private bool sharedonfacebook = false;
+	
 	public bool allowShowGUI = true;
 	void OnGUI()
 	{
@@ -613,7 +615,7 @@ public class Control : MonoBehaviour {
 			{
 				//GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"CONTINUE?");
 				GUI.Label(new Rect(0.3f*Screen.width,0.28f*Screen.height,0.5f*Screen.width,0.2f*Screen.height),"CONTINUE?",myGUIStyle);
-				if( GUI.Button(new Rect(0.27f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "YES", buttonGUIStyle ) )	
+				if( GUI.Button(new Rect(0.27f*Screen.width,0.62f*Screen.height,0.15f*Screen.width,0.1f*Screen.height), "YES", buttonGUIStyle ) )	
 				{
 					isLeaderBoard = false;
 					GameEnvironment.StartWave = currentWave-1;
@@ -625,7 +627,7 @@ public class Control : MonoBehaviour {
 					Time.timeScale = 1.0f;
 					Application.LoadLevel(Application.loadedLevel);
 				}
-				if( GUI.Button(new Rect(0.58f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "NO", buttonGUIStyle) )
+				if( GUI.Button(new Rect(0.58f*Screen.width,0.62f*Screen.height,0.15f*Screen.width,0.1f*Screen.height), "NO", buttonGUIStyle) )
 				{
 					isLeaderBoard = true;
 					//Time.timeScale = 1.0f;
@@ -649,7 +651,7 @@ public class Control : MonoBehaviour {
 					
 					isScoreDisplayed = true;	
 				}*/
-				if( GUI.Button(new Rect(0.3f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "Post Score", buttonGUIStyle ) )
+				if( GUI.Button(new Rect(0.3f*Screen.width,0.62f*Screen.height,0.15f*Screen.width,0.1f*Screen.height), "Post Score", buttonGUIStyle ) )
 				{			
 					isGet = false;
 					isPost = true;
@@ -718,7 +720,7 @@ public class Control : MonoBehaviour {
 					
 					//scoreLB = GUI.TextField(new Rect(0.45f*Screen.width,0.40f*Screen.height, 0.15f*Screen.width,0.035f*Screen.height), scoreLB);
 
-					if(GUI.Button(new Rect(0.45f*Screen.width,0.5f*Screen.height, 0.10f*Screen.width,0.05f*Screen.height), "Post", buttonGUIStyle) )
+					if(GUI.Button(new Rect(0.45f*Screen.width,0.475f*Screen.height, 0.10f*Screen.width,0.075f*Screen.height), "Post", buttonGUIStyle) )
 					{
 						if(postedscore)
 						{
@@ -741,9 +743,24 @@ public class Control : MonoBehaviour {
 					}
 			
 					#if UNITY_ANDROID || UNITY_IPHONE
-					if(GUI.Button(new Rect(0.57f*Screen.width,0.5f*Screen.height, 0.10f*Screen.width,0.05f*Screen.height), "Share", buttonGUIStyle) )
+					
+					if(ZBFacebook.Instance.Posted)
 					{
-						ZBFacebook.Instance.PostOnWall(LevelInfo.Environments.hubScores.GetNumber());		
+						sharedonfacebook = true;
+						ZBFacebook.Instance.Posted = false;
+						postScoreResponse = "Shared on facebook!";
+					}
+					
+					if(GUI.Button(new Rect(0.585f*Screen.width,0.475f*Screen.height, 0.10f*Screen.width,0.075f*Screen.height), "Share", buttonGUIStyle))
+					{
+						if( !sharedonfacebook )
+						{
+							postScoreResponse = "Already shared on facebook!";
+						}
+						else
+						{
+							ZBFacebook.Instance.PostOnWall(LevelInfo.Environments.hubScores.GetNumber());		
+						}
 					}
 					#endif
 					
@@ -754,7 +771,7 @@ public class Control : MonoBehaviour {
 				}
 				#endregion
 	
-				if( GUI.Button(new Rect(0.58f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "EXIT", buttonGUIStyle) )
+				if( GUI.Button(new Rect(0.58f*Screen.width,0.62f*Screen.height,0.15f*Screen.width,0.1f*Screen.height), "EXIT", buttonGUIStyle) )
 				{
 					isLeaderBoard = false;		
 					GameEnvironment.ToMap = true;
@@ -1164,7 +1181,7 @@ public class Control : MonoBehaviour {
 			}
 		}
 		if( Store.FirstTimePlay )
-			StartCoroutine(ShowTip("TIP: SWIPE LEFT OR RIGHT TO TURN",4f));
+			StartCoroutine(ShowTip("TIP: TAP TO SHOOT",4f));
 	}
 	
 	public bool prologuecomplete = false;

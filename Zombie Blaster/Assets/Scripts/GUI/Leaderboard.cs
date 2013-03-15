@@ -8,6 +8,7 @@ public class Leaderboard : MonoBehaviour {
 	public ButtonBase buttonMainMenu;
 	public GUIStyle postGUIStyle;
 	public GUIStyle buttonGUIStyle;
+	public AudioSource audioOpen,audioNo;
 	
 	#region LeaderBoardDemo
 	
@@ -305,9 +306,11 @@ public class Leaderboard : MonoBehaviour {
 
 		#endregion
 		
-		if( GUI.Button(new Rect(0.76f*Screen.width,0.59f*Screen.height, 0.2f*Screen.width,0.1f*Screen.height), "RESET GAME",buttonGUIStyle) )
+		if( GUI.Button(new Rect(0.76f*Screen.width,0.59f*Screen.height, 0.2f*Screen.width,0.1f*Screen.height), "RESET GAME",buttonGUIStyle) && !wanttoresetgame)
+		{
+			audioOpen.Play();
 			wanttoresetgame = true;
-		
+		}
 		if(wanttoresetgame)
 		{
 			GUI.DrawTexture(new Rect(0.2f*Screen.width,0.15f*Screen.height,0.6f*Screen.width,0.6f*Screen.height),texturePopup);
@@ -321,6 +324,7 @@ public class Leaderboard : MonoBehaviour {
 			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "NO", buttonGUIStyle ) )
 			{
 				wanttoresetgame = false;
+				audioNo.Play();
 			}	
 		}
 	}

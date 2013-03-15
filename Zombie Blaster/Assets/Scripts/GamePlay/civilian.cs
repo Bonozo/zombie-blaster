@@ -223,9 +223,8 @@ public class civilian : MonoBehaviour {
 		g.SendMessage("IsCivilian");
 		g.SendMessage("SetMaterialToLighning");
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
-		Vector3 dir = transform.position - LevelInfo.Environments.control.transform.position; dir.Normalize();
         foreach (Rigidbody child in rigidbodies) 
-			child.AddForce(20f*dir);
+			child.AddForce(new Vector3(Random.Range(-100f,100f),100f,Random.Range(-100f,100f)));
 		
 		Destroy(this.gameObject);
 	}
@@ -254,9 +253,8 @@ public class civilian : MonoBehaviour {
 		g.SendMessage("SetFireSize",1f);
 		g.SendMessage("SetSmokeSize",1f);
 		var rigidbodies = g.GetComponentsInChildren(typeof(Rigidbody));
-		Vector3 dir = transform.position - LevelInfo.Environments.control.transform.position; dir.Normalize();
         foreach (Rigidbody child in rigidbodies) 
-			child.AddForce(20f*dir);
+			child.AddForce(new Vector3(Random.Range(-100f,100f),100f,Random.Range(-100f,100f)));
 		
 		Destroy(this.gameObject);
 	}

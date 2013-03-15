@@ -223,7 +223,7 @@ public class Option : MonoBehaviour {
 	{
 		debugScreen = false;
 		showdebug = false;
-		title.text = "Options";
+		title.text = "";
 		Update();
 	}
 	
@@ -279,7 +279,7 @@ public class Option : MonoBehaviour {
 			if( GUI.Button( new Rect(0.84f*Screen.width,0.01f*Screen.height,0.15f*Screen.width,0.09f*Screen.height),"Options",myStyle2))
 			{
 				debugScreen = false;
-				title.text = "Options";
+				title.text = "";
 				PlayTapAudio();
 			}
 			
@@ -371,7 +371,7 @@ public class Option : MonoBehaviour {
 			if(showdebug && GUI.Button( new Rect(0.84f*Screen.width,0.01f*Screen.height,0.15f*Screen.width,0.09f*Screen.height),"Debug",myStyle2))
 			{
 				debugScreen = true;
-				title.text = "Options Debug";
+				title.text = "Debug";
 				PlayTapAudio();
 			}
 		}

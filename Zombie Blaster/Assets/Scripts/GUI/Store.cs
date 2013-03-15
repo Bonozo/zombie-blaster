@@ -38,7 +38,7 @@ public class Store : MonoBehaviour {
 	public static Weapon[][] weaponsForLevel = new Weapon[][]
 	{
 		new Weapon[] {Weapon.Flamethrower,Weapon.Revolver,Weapon.AlienBlaster},
-		new Weapon[] {Weapon.Grenade},
+		new Weapon[] {Weapon.Grenade,Weapon.Spade},
 		new Weapon[] {Weapon.Football,Weapon.MachineGun},
 		new Weapon[] {Weapon.Rocket},
 		new Weapon[] {Weapon.PulseShotGun,Weapon.Crossbow}
@@ -441,7 +441,6 @@ public class Store : MonoBehaviour {
 			else
 				alllevelsunlocked = false;
 		showWeapon[(int)Weapon.AlienBlaster]=alllevelsunlocked;
-		showWeapon[(int)Weapon.Spade]=true;
 	}
 	
 	/// <summary>
@@ -620,7 +619,7 @@ public class Store : MonoBehaviour {
 			{
 				wooi = currentshopitem;
 				weapondescription = true;
-				//audio.PlayOneShot(clipWeaponInfo[wooi]);
+				audio.PlayOneShot(clipWeaponInfo[wooi]);
 				spwchannel = true;
 			}
 			
@@ -663,7 +662,7 @@ public class Store : MonoBehaviour {
 		bool enableshowstashitems = currentStashitem != -1 && stashitemslidecount==0;
 		
 		StashWeaponName.enabled = enableshowstashitems;
-		StashWeaponBuyText.enabled = enableshowstashitems&&IsLevelGamePlay&&showWeapon[currentStashitem]&&currentStashitem != (int)Weapon.Spade;
+		StashWeaponBuyText.enabled = enableshowstashitems&&IsLevelGamePlay&&showWeapon[currentStashitem];
 		StashInfoButton.gameObject.SetActive(enableshowstashitems);
 		StashItemBuy.gameObject.SetActive(enableshowstashitems&&IsLevelGamePlay&&showWeapon[currentStashitem]&&currentStashitem != (int)Weapon.Spade);
 		StashItemBuy.enabled = enableshowstashitems&&wooi==-1&&IsLevelGamePlay&&showWeapon[currentStashitem]&&currentStashitem != (int)Weapon.Spade;
@@ -692,7 +691,7 @@ public class Store : MonoBehaviour {
 			{
 				wooi = currentStashitem;
 				weapondescription = true;
-				//audio.PlayOneShot(clipWeaponInfo[wooi]);
+				audio.PlayOneShot(clipWeaponInfo[wooi]);
 			}
 			
 			if( StashItemBuy.enabled && StashItemBuy.PressedDown )
@@ -1119,7 +1118,7 @@ public class Store : MonoBehaviour {
 	{
 		GUI.DrawTexture(new Rect(0.1f*Screen.width,0.1f*Screen.height,0.8f*Screen.width,0.8f*Screen.height),popupTexture);
 
-		GUI.Label(new Rect(0.4f*Screen.width,0.25f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Weapon Description",myStyle);
+		GUI.Label(new Rect(0.4f*Screen.width,0.25f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),GameEnvironment.storeGun[wooi].name,myStyle);
 		
 		GUI.Label(new Rect(0.25f*Screen.width,0.32f*Screen.height,0.5f*Screen.width,0.25f*Screen.height),
 			GameEnvironment.storeGun[wooi].description,myStyle);

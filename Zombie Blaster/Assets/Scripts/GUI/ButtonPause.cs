@@ -34,7 +34,7 @@ public class ButtonPause : MonoBehaviour {
 	
 	void OnApplicationPause(bool pause)
 	{
-		if(pause && LevelInfo.Environments.control.state == GameState.Play )
+		if(pause && LevelInfo.Environments.control.state == GameState.Play && !Store.FirstTimePlay)
 		{
 			lastState = LevelInfo.Environments.control.state;
 			LevelInfo.Environments.control.state = GameState.Paused;	

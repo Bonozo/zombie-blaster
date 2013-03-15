@@ -15,6 +15,8 @@ public class ZBFacebook : MonoBehaviour {
 	public bool Ready = false;
 	[System.NonSerializedAttribute]
 	public bool Logging = false;	
+	[System.NonSerializedAttribute]
+	public bool Posted = false;
 	
 	void Awake()
 	{
@@ -98,7 +100,7 @@ public class ZBFacebook : MonoBehaviour {
 	
 	public void PostOnWall(int scores)
 	{
-		string posttext = fbfirstname + " played Zombie Blaster! (" + scores + ")";
+		string posttext = fbfirstname + " played Zombie Blaster! (Score: " + scores + ")";
 		
 		var pathToImage = Application.persistentDataPath + "/" + screenshotFilename;
 		var bytes = System.IO.File.ReadAllBytes( pathToImage );
@@ -111,7 +113,10 @@ public class ZBFacebook : MonoBehaviour {
 		if(error!=null)
 			lastmessage = "Error when posting on facebook: " + error;
 		else
+		{
 			lastmessage = "Successfully posted on facebook wall";
+			Posted = true;
+		}
 	}
 	
 	public bool isSessionValid()
