@@ -26,21 +26,33 @@ public class GunPulseShotGun : GunBase {
 		}
 		AmmoLost();
 		
-		// Institate Bullet
-		Vector3 lastinputnext = GameEnvironment.lastInput;
-		float peturb = (100f-GameEnvironment.storeGun[(int)Weapon.PulseShotGun].accuracy)/20f;
-		float phb = Mathf.Min(Screen.width,Screen.height)*peturb*0.01f;
-		lastinputnext += new Vector3( Random.Range(-phb,phb) , Random.Range(-phb,phb),0f);
-		Ray ray = LevelInfo.Environments.mainCamera.ScreenPointToRay (lastinputnext);
+		Shoot();
+		Shoot();
+		Shoot();
+		Shoot();
+		Shoot();
+		Shoot();
+		Shoot();
 		
-		RaycastHit hit;
-		Physics.Raycast(ray.origin,ray.direction,out hit);
-		GameObject g = (GameObject)Instantiate(BulletPrefab,transform.position,Quaternion.identity);
-		g.transform.LookAt(RaycastsTargetPosition(LevelInfo.Environments.mainCamera,ray,hit),Vector3.up);	
 		LevelInfo.Audio.audioSourcePlayer.PlayOneShot(AudioFire);
 		
 		if( Ammo == 0.0f ) Reload();
 		
 		return Ammo;
+	}
+	
+	void Shoot()
+	{
+		// Institate Bullet
+		Vector3 lastinputnext = GameEnvironment.lastInput;
+		float peturb = (100f-GameEnvironment.storeGun[(int)Weapon.PulseShotGun].accuracy)/20f;
+		float phb = Mathf.Min(Screen.width,Screen.height)*peturb*0.01f;
+		lastinputnext += new Vector3( Random.Range(-5*phb,5*phb) , Random.Range(-phb,phb),0f);
+		Ray ray = LevelInfo.Environments.mainCamera.ScreenPointToRay (lastinputnext);
+		
+		RaycastHit hit;
+		Physics.Raycast(ray.origin,ray.direction,out hit);
+		GameObject g = (GameObject)Instantiate(BulletPrefab,transform.position,Quaternion.identity);
+		g.transform.LookAt(RaycastsTargetPosition(LevelInfo.Environments.mainCamera,ray,hit),Vector3.up);		
 	}
 }
