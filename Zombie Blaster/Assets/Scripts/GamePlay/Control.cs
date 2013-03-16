@@ -1065,7 +1065,7 @@ public class Control : MonoBehaviour {
 	
 	public void GetBite(float lostHealth)
 	{
-		lostHealth *= 10f;
+		//lostHealth *= 10f;//HACK
 		LevelInfo.Audio.PlayPlayerGetHit();
 		
 		if(armor==0)
