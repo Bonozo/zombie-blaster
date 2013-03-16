@@ -377,6 +377,7 @@ public class GameEnvironment : MonoBehaviour {
 	
 	
 	public static int[] levelPrice = new int [5] {500,1000,1500,2000,2500};
+	public static string[] levelName = new string [5] {"Farm","College","Stadium","Town","Cemetary"};
 	
 	#endregion
 	

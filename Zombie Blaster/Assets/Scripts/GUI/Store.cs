@@ -570,7 +570,7 @@ public class Store : MonoBehaviour {
 		
 		ShopWeaponName.enabled = enableshowshopitems;
 		ShopWeaponBuyText.enabled = enableshowshopitems&&showWeapon[currentshopitem];
-		shopInfoButton.gameObject.SetActive(enableshowshopitems&&showWeapon[currentshopitem]);
+		shopInfoButton.gameObject.SetActive(enableshowshopitems);
 		shotItemBuy.gameObject.SetActive(enableshowshopitems&&showWeapon[currentshopitem]);
 		shotItemBuy.enabled = enableshowshopitems&&showWeapon[currentshopitem]&&wooi==-1;
 		shopItemTexture.enabled = enableshowshopitems;
@@ -1117,58 +1117,73 @@ public class Store : MonoBehaviour {
 	private void ShowWeaponDescription()
 	{
 		GUI.DrawTexture(new Rect(0.1f*Screen.width,0.1f*Screen.height,0.8f*Screen.width,0.8f*Screen.height),popupTexture);
-
-		GUI.Label(new Rect(0.4f*Screen.width,0.25f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),GameEnvironment.storeGun[wooi].name,myStyle);
 		
-		GUI.Label(new Rect(0.25f*Screen.width,0.32f*Screen.height,0.5f*Screen.width,0.25f*Screen.height),
-			GameEnvironment.storeGun[wooi].description,myStyle);
-		
-		if(wooi != (int)Weapon.Spade)
+		if(showWeapon[wooi])
 		{
-			string s = 
-				"Power:" +
-				"\nAccuracy:" + 
-			    "\nClip Size:" +
-				"\nMax Ammo:" +
-				"\nSpeed:" +
-				"\nReload Delay:";
+			GUI.Label(new Rect(0.4f*Screen.width,0.25f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),GameEnvironment.storeGun[wooi].name,myStyle);
 			
-			if( !WeaponUnlocked(wooi) )
-				s += "\nPrice:";
+			GUI.Label(new Rect(0.25f*Screen.width,0.32f*Screen.height,0.5f*Screen.width,0.25f*Screen.height),
+				GameEnvironment.storeGun[wooi].description,myStyle);
 			
-			GUI.Label(new Rect(0.3f*Screen.width,0.44f*Screen.height,0.3f*Screen.width,0.25f*Screen.height),s,myStyle);
-			
-			s = 	
-				"" + GameEnvironment.storeGun[wooi].damage +
-				"\n" + GameEnvironment.storeGun[wooi].accuracy + "%" +
-				"\n" + GameEnvironment.storeGun[wooi].pocketsize +
-				"\n" + (GameEnvironment.storeGun[wooi].maxammo) + 
-				"\n" + GameEnvironment.storeGun[wooi].speed + " m/s" +
-				"\n" + GameEnvironment.storeGun[wooi].reloadTime + " sec";
-			
-			if( !WeaponUnlocked(wooi) ) 
-				s += "\n" + GameEnvironment.storeGun[wooi].price;
-			
-			GUI.Label(new Rect(0.45f*Screen.width,0.44f*Screen.height,0.3f*Screen.width,0.25f*Screen.height),s,myStyle);
-		}
-		if( GUI.Button(new Rect(0.58f*Screen.width,0.585f*Screen.height,0.15f*Screen.width,0.1f*Screen.height), "OK", buttonStyle ) )
-		{
-			audio.Stop();
-			audio.PlayOneShot(clipBack);
-			wooi = -1; 
-			weapondescription = false;
-			spwchannel = true;
-		}
-		/*else
-		{
-			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.3f*Screen.height),"You have not enough heads to buy this item.",myStyle);
-			if( GUI.Button(new Rect(0.42f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Back") )
+			if(wooi != (int)Weapon.Spade)
 			{
-				wooi = -1;
+				string s = 
+					"Power:" +
+					"\nAccuracy:" + 
+				    "\nClip Size:" +
+					"\nMax Ammo:" +
+					"\nSpeed:" +
+					"\nReload Delay:";
+				
+				if( !WeaponUnlocked(wooi) )
+					s += "\nPrice:";
+				
+				GUI.Label(new Rect(0.3f*Screen.width,0.44f*Screen.height,0.3f*Screen.width,0.25f*Screen.height),s,myStyle);
+				
+				s = 	
+					"" + GameEnvironment.storeGun[wooi].damage +
+					"\n" + GameEnvironment.storeGun[wooi].accuracy + "%" +
+					"\n" + GameEnvironment.storeGun[wooi].pocketsize +
+					"\n" + (GameEnvironment.storeGun[wooi].maxammo) + 
+					"\n" + GameEnvironment.storeGun[wooi].speed + " m/s" +
+					"\n" + GameEnvironment.storeGun[wooi].reloadTime + " sec";
+				
+				if( !WeaponUnlocked(wooi) ) 
+					s += "\n" + GameEnvironment.storeGun[wooi].price;
+				
+				GUI.Label(new Rect(0.45f*Screen.width,0.44f*Screen.height,0.3f*Screen.width,0.25f*Screen.height),s,myStyle);
+			}
+		}
+		else
+		{
+			int levestounlock=0;
+			for(int i=0;i<countLevel;i++)
+				for(int j=0;j<weaponsForLevel[i].Length;j++)
+					if( (int)weaponsForLevel[i][j] == wooi )
+						levestounlock = i;
+			
+			string message;
+			if( wooi == (int)Weapon.AlienBlaster)
+				message = "UNLOCK ALL AREAS ON THE MAP TO GET THE \"Alien Blaster\"";
+			else
+				message = "UNLOCK \"" + GameEnvironment.levelName[levestounlock] + "\" ON THE MAP TO GET THE \"" 
+				+ GameEnvironment.storeGun[wooi].name + "\"";
+			
+			GUI.Label(new Rect(0.25f*Screen.width,0.32f*Screen.height,0.5f*Screen.width,0.25f*Screen.height),
+				message,myStyle);
+		}
+		
+			if( GUI.Button(new Rect(0.58f*Screen.width,0.585f*Screen.height,0.15f*Screen.width,0.1f*Screen.height), "OK", buttonStyle ) )
+			{
+				audio.Stop();
+				audio.PlayOneShot(clipBack);
+				wooi = -1; 
+				weapondescription = false;
 				spwchannel = true;
 			}
-		}*/
 	}
+	
+	
 	
 	private bool RectContainPoint(Rect rect,Vector2 pos)
 	{
