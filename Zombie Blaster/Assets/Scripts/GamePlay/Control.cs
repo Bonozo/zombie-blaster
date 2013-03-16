@@ -405,8 +405,7 @@ public class Control : MonoBehaviour {
 	
 	void Update () 
 	{
-		// Testing
-		
+		#if UNITY_EDITOR
 		if(Input.GetKeyUp(KeyCode.PageUp))
 			DamageMultiply();
 		if(Input.GetKeyUp(KeyCode.PageDown))
@@ -424,7 +423,7 @@ public class Control : MonoBehaviour {
 			armor += 0.1f;
 		if( Input.GetKeyUp(KeyCode.L) )
 			GetBite(0.1f);
-		
+		#endif
 		
 		// Update Zombie Heads Number On Screen
 		if( ScreenShowed )
