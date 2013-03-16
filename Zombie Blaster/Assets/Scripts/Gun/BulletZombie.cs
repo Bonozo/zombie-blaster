@@ -47,7 +47,7 @@ public class BulletZombie : MonoBehaviour {
 		v.y = 0;
 		if( v.magnitude <= 1f )
 		{
-			LevelInfo.Environments.control.GetHealth(-0.01f);
+			LevelInfo.Environments.control.GetHealth(-0.01f); // Player lost health by zombie shoot
 			Destroy(this.gameObject);
 		}
 	}
