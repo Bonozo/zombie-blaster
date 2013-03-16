@@ -188,8 +188,9 @@ public class Control : MonoBehaviour {
 	
 	public GameObject guiPlayGame;
 	public GameObject guiMap;
-	public GUIStyle myGUIStyle; 	
+	public GUIStyle myGUIStyle; 
 	public GUIStyle buttonGUIStyle;
+	public GUIStyle inputBoxGUIStyle;
 	public Texture texturePopup;
 	
 	public float Speed = 3f;
@@ -699,7 +700,7 @@ public class Control : MonoBehaviour {
 					GUI.Label(new Rect(0.35f*Screen.width,0.42f*Screen.height, 0.1f*Screen.width,0.05f*Screen.height), "SCORE: ",myGUIStyle);
 					
 					
-					#if UNITY_ANDROID
+					#if !UNITY_ANDROID
 					if( ZBFacebook.Instance.Ready)
 					{
 						nameLB = ZBFacebook.Instance.fbname;
@@ -713,7 +714,7 @@ public class Control : MonoBehaviour {
 						}
 					}
 					#else
-					nameLB = GUI.TextField(new Rect(0.48f*Screen.width,0.35f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), nameLB,12,myGUIStyle);
+					nameLB = GUI.TextField(new Rect(0.48f*Screen.width,0.35f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), nameLB,16,inputBoxGUIStyle);
 					#endif
 					
 					GUI.Label(new Rect(0.48f*Screen.width,0.42f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), (LevelInfo.Environments.hubScores.GetNumber()).ToString(),myGUIStyle);
@@ -729,7 +730,11 @@ public class Control : MonoBehaviour {
 						else if(nameLB.Trim().Equals(""))	
 						{
 							isName = false;
-							postScoreResponse = "Please log in to facebook.";//"Please Enter Name!";
+							#if UNITY_ANDROID
+							postScoreResponse = "Please log in to facebook!";
+							#else
+							postScoreResponse = "Please Enter Name!";
+							#endif
 							ZBFacebook.Instance.Init();
 						}
 						else
