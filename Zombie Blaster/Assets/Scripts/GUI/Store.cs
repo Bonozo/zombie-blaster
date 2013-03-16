@@ -374,15 +374,15 @@ public class Store : MonoBehaviour {
 	public GUITexture[] scrollingInfo;
 	private float scrollingTime = 0.0f;
 	
-	public GUITexture arrowUpShow;
-	public GUITexture arrowDownShow;
-	public GUITexture arrowUpStash;
-	public GUITexture arrowDownStash;
+	//public GUITexture arrowUpShow;
+	//public GUITexture arrowDownShow;
+	//public GUITexture arrowUpStash;
+	//public GUITexture arrowDownStash;
 	
-	public ButtonBase arrowUpShowButton;
-	public ButtonBase arrowDownShowButton;
-	public ButtonBase arrowUpStashButton;
-	public ButtonBase arrowDownStashButton;
+	//public ButtonBase arrowUpShowButton;
+	//public ButtonBase arrowDownShowButton;
+	//public ButtonBase arrowUpStashButton;
+	//public ButtonBase arrowDownStashButton;
 	
 	private bool spwchannel = false;
 	
@@ -586,7 +586,7 @@ public class Store : MonoBehaviour {
 				spwchannel = false;
 			}
 		
-		arrowUpShow.enabled = arrowDownShow.enabled = arrowUpStash.enabled = arrowDownStash.enabled = false;
+		//arrowUpShow.enabled = arrowDownShow.enabled = arrowUpStash.enabled = arrowDownStash.enabled = false;
 		
 		// shop
 		for(int i=1;i<countWeapons;i++)
@@ -598,8 +598,8 @@ public class Store : MonoBehaviour {
 		if( enableshowshopitems && wooi==-1)
 		{
 			int nx = NextWeapon(currentshopitem,false),pv = PrevWeapon(currentshopitem,false);
-			arrowUpShow.enabled   = nx!=-1&&nx!=currentshopitem;
-			arrowDownShow.enabled = pv!=-1&&pv!=currentshopitem;
+			//arrowUpShow.enabled   = nx!=-1&&nx!=currentshopitem;
+			//arrowDownShow.enabled = pv!=-1&&pv!=currentshopitem;
 			
 			for(int i=0;i<countWeapons;i++)
 				if( !WeaponUnlocked(i) )
@@ -634,7 +634,7 @@ public class Store : MonoBehaviour {
 			//Rect shopRect = new Rect(0.01f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
 			
 			if( (RectContainPoint(shopRect,GameEnvironment.AbsoluteSwipeBegin) && RectContainPoint(shopRect,GameEnvironment.AbsoluteSwipeEnd) && swp.y > 0 )
-				|| (arrowUpShow.enabled && arrowUpShowButton.PressedUp) )
+				/*|| (arrowUpShow.enabled && arrowUpShowButton.PressedUp)*/ )
 			{
 				int olditem = currentshopitem;
 				currentshopitem = NextWeapon(currentshopitem,false);
@@ -646,7 +646,7 @@ public class Store : MonoBehaviour {
 				}
 			}
 			if( (RectContainPoint(shopRect,GameEnvironment.AbsoluteSwipeBegin) && RectContainPoint(shopRect,GameEnvironment.AbsoluteSwipeEnd) && swp.y < 0 )
-				|| (arrowDownShow.enabled && arrowDownShowButton.PressedUp) )
+				/*|| (arrowDownShow.enabled && arrowDownShowButton.PressedUp)*/ )
 			{
 				int olditem = currentshopitem;
 				currentshopitem = PrevWeapon(currentshopitem,false);
@@ -674,8 +674,8 @@ public class Store : MonoBehaviour {
 		if( enableshowstashitems && wooi==-1)
 		{	
 			int nx = NextWeapon(currentStashitem,true),pv = PrevWeapon(currentStashitem,true);
-			arrowUpStash.enabled   = nx!=-1&&nx!=currentStashitem;
-			arrowDownStash.enabled = pv!=-1&&pv!=currentStashitem;
+			//arrowUpStash.enabled   = nx!=-1&&nx!=currentStashitem;
+			//arrowDownStash.enabled = pv!=-1&&pv!=currentStashitem;
 			
 			for(int i=0;i<countWeapons;i++)
 				if( WeaponUnlocked(i) )
@@ -704,7 +704,7 @@ public class Store : MonoBehaviour {
 			Rect StashRect = new Rect(0.51f*Screen.width,0.25f*Screen.height,0.487f*Screen.width,0.75f*Screen.height);
 		
 			if( (RectContainPoint(StashRect,GameEnvironment.AbsoluteSwipeBegin) && RectContainPoint(StashRect,GameEnvironment.AbsoluteSwipeEnd) && swp.y > 0 )
-				|| (arrowUpStash.enabled && arrowUpStashButton.PressedUp) )
+				/*|| (arrowUpStash.enabled && arrowUpStashButton.PressedUp)*/ )
 			{
 				int olditem = currentStashitem;
 				currentStashitem = NextWeapon(currentStashitem,true);
@@ -715,7 +715,7 @@ public class Store : MonoBehaviour {
 				}
 			}
 			if( (RectContainPoint(StashRect,GameEnvironment.AbsoluteSwipeBegin) && RectContainPoint(StashRect,GameEnvironment.AbsoluteSwipeEnd) && swp.y < 0 )
-				|| (arrowDownStash.enabled && arrowDownStashButton.PressedUp) )	
+				/*|| (arrowDownStash.enabled && arrowDownStashButton.PressedUp)*/ )	
 			{
 				int olditem = currentStashitem;
 				currentStashitem = PrevWeapon(currentStashitem,true);
