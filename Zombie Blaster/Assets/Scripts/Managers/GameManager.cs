@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour {
 	
 	public Transform environmentsTransform;
 	public Camera mainCamera;
+	public UICamera uiCamera;
 	public Control control;
 	public Store store;
 	public Generator generator;
