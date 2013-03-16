@@ -167,6 +167,8 @@ public class Option : MonoBehaviour {
 		Sensitivity = PlayerPrefs.GetFloat("options_sensitivity",0.01f);
 		TiltingMove = PlayerPrefs.GetInt("options_tiltmove",1)==1;
 		XInversion = PlayerPrefs.GetInt("options_xinversion",0)==1;
+		
+		AudioListener.volume = _hSlideVolume;
 	}
 	
 	private void RestoreDefault()

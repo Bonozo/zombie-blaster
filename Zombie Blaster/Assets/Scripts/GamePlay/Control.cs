@@ -1165,7 +1165,7 @@ public class Control : MonoBehaviour {
 		
 		LevelInfo.Environments.waveInfo.ShowWave(currentWave,LevelInfo.Environments.hubZombiesLeft.GetNumber());
 		LevelInfo.Audio.PlayLevel(currentWave);
-		LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.AudioWaveComplete);
+		LevelInfo.Audio.audioSourceBackground.PlayOneShot(LevelInfo.Audio.AudioWaveComplete);
 		
 		DestroyAllRemainedWithTag("Ufo");
 		GameObject g = (GameObject)Instantiate(LevelInfo.Environments.ufoSpaceship,new Vector3(transform.position.x+UnityEngine.Random.Range(4f,6f),4f,0f),Quaternion.identity);
