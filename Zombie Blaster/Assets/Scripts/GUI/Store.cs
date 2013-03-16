@@ -374,10 +374,10 @@ public class Store : MonoBehaviour {
 	public GUITexture[] scrollingInfo;
 	private float scrollingTime = 0.0f;
 	
-	//public GUITexture arrowUpShow;
-	//public GUITexture arrowDownShow;
-	//public GUITexture arrowUpStash;
-	//public GUITexture arrowDownStash;
+	public GUITexture arrowUpShow;
+	public GUITexture arrowDownShow;
+	public GUITexture arrowUpStash;
+	public GUITexture arrowDownStash;
 	
 	//public ButtonBase arrowUpShowButton;
 	//public ButtonBase arrowDownShowButton;
@@ -586,7 +586,7 @@ public class Store : MonoBehaviour {
 				spwchannel = false;
 			}
 		
-		//arrowUpShow.enabled = arrowDownShow.enabled = arrowUpStash.enabled = arrowDownStash.enabled = false;
+		arrowUpShow.enabled = arrowDownShow.enabled = arrowUpStash.enabled = arrowDownStash.enabled = false;
 		
 		// shop
 		for(int i=1;i<countWeapons;i++)
@@ -598,8 +598,8 @@ public class Store : MonoBehaviour {
 		if( enableshowshopitems && wooi==-1)
 		{
 			int nx = NextWeapon(currentshopitem,false),pv = PrevWeapon(currentshopitem,false);
-			//arrowUpShow.enabled   = nx!=-1&&nx!=currentshopitem;
-			//arrowDownShow.enabled = pv!=-1&&pv!=currentshopitem;
+			arrowUpShow.enabled   = nx!=-1&&nx!=currentshopitem;
+			arrowDownShow.enabled = pv!=-1&&pv!=currentshopitem;
 			
 			for(int i=0;i<countWeapons;i++)
 				if( !WeaponUnlocked(i) )
@@ -674,8 +674,8 @@ public class Store : MonoBehaviour {
 		if( enableshowstashitems && wooi==-1)
 		{	
 			int nx = NextWeapon(currentStashitem,true),pv = PrevWeapon(currentStashitem,true);
-			//arrowUpStash.enabled   = nx!=-1&&nx!=currentStashitem;
-			//arrowDownStash.enabled = pv!=-1&&pv!=currentStashitem;
+			arrowUpStash.enabled   = nx!=-1&&nx!=currentStashitem;
+			arrowDownStash.enabled = pv!=-1&&pv!=currentStashitem;
 			
 			for(int i=0;i<countWeapons;i++)
 				if( WeaponUnlocked(i) )
