@@ -1118,7 +1118,7 @@ public class Store : MonoBehaviour {
 	{
 		GUI.DrawTexture(new Rect(0.1f*Screen.width,0.1f*Screen.height,0.8f*Screen.width,0.8f*Screen.height),popupTexture);
 		
-		if(showWeapon[wooi])
+		if(showWeapon[wooi]||wooi==0)
 		{
 			GUI.Label(new Rect(0.4f*Screen.width,0.25f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),GameEnvironment.storeGun[wooi].name,myStyle);
 			
@@ -1173,14 +1173,14 @@ public class Store : MonoBehaviour {
 				message,myStyle);
 		}
 		
-			if( GUI.Button(new Rect(0.58f*Screen.width,0.585f*Screen.height,0.15f*Screen.width,0.1f*Screen.height), "OK", buttonStyle ) )
-			{
-				audio.Stop();
-				audio.PlayOneShot(clipBack);
-				wooi = -1; 
-				weapondescription = false;
-				spwchannel = true;
-			}
+		if( GUI.Button(new Rect(0.58f*Screen.width,0.585f*Screen.height,0.15f*Screen.width,0.1f*Screen.height), "OK", buttonStyle ) )
+		{
+			audio.Stop();
+			audio.PlayOneShot(clipBack);
+			wooi = -1; 
+			weapondescription = false;
+			spwchannel = true;
+		}
 	}
 	
 	
