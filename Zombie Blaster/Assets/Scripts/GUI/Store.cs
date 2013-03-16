@@ -662,7 +662,7 @@ public class Store : MonoBehaviour {
 		bool enableshowstashitems = currentStashitem != -1 && stashitemslidecount==0;
 		
 		StashWeaponName.enabled = enableshowstashitems;
-		StashWeaponBuyText.enabled = enableshowstashitems&&IsLevelGamePlay&&showWeapon[currentStashitem];
+		StashWeaponBuyText.enabled = enableshowstashitems&&IsLevelGamePlay&&showWeapon[currentStashitem]&&currentStashitem!=(int)Weapon.Spade;
 		StashInfoButton.gameObject.SetActive(enableshowstashitems);
 		StashItemBuy.gameObject.SetActive(enableshowstashitems&&IsLevelGamePlay&&showWeapon[currentStashitem]&&currentStashitem != (int)Weapon.Spade);
 		StashItemBuy.enabled = enableshowstashitems&&wooi==-1&&IsLevelGamePlay&&showWeapon[currentStashitem]&&currentStashitem != (int)Weapon.Spade;
