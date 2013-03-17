@@ -1028,7 +1028,7 @@ public class Store : MonoBehaviour {
 	
 		if( GameEnvironment.storeGun[wooi].current == GameEnvironment.storeGun[wooi].pocketsize && GameEnvironment.storeGun[wooi].store == GameEnvironment.storeGun[wooi].maxammo )
 		{
-			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"You already have maximum number of ammo!",myStyle);
+			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Your \"" + GameEnvironment.storeGun[wooi].name + " \" is already fully loaded!",myStyle);
 			if( GUI.Button(new Rect(0.42f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "BACK", buttonStyle) )
 			{
 				audio.PlayOneShot(clipBack);
@@ -1039,7 +1039,7 @@ public class Store : MonoBehaviour {
 		}
 		else if( Store.zombieHeads >= GameEnvironment.storeGun[wooi].price )
 		{
-			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Do you want to fill in with " + GameEnvironment.storeGun[wooi].price + " heads?",myStyle);
+			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Refill the \"" + GameEnvironment.storeGun[wooi].name + "\" ammo for " + GameEnvironment.storeGun[wooi].price + " Heads?",myStyle);
 			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "REFILL", buttonStyle ) )	
 			{
 				audio.Play();
@@ -1059,7 +1059,7 @@ public class Store : MonoBehaviour {
 		}
 		else
 		{
-			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.3f*Screen.height),"You do not have enough heads. Need " + GameEnvironment.storeGun[wooi].price + ".",myStyle);
+			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.3f*Screen.height),"You do not have enough heads.",myStyle);
 			
 			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "MORE HEADS", buttonStyle ) )	
 			{
