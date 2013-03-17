@@ -9,7 +9,7 @@ public class WaveInfo : MonoBehaviour {
 	
 	public GameObject rootWaveComplete;
 	//public UISprite spriteWaveCompleteReward;
-	public GameObject modelHeads,modelXtraLife;
+	public GameObject modelHeads,modelXtraLife,modelAmmoCrates;
 	public UISprite[] spriteStar;
 	public GameObject rewardSprite;
 	public UILabel waveBonus;
@@ -52,13 +52,22 @@ public class WaveInfo : MonoBehaviour {
 				waitforreward-=Time.deltaTime;
 				if(waitforreward<=0f)
 				{
-					int score = (LevelInfo.Environments.control.currentLevel+1)*
-					LevelInfo.Environments.control.currentWave*10;
-					LevelInfo.Environments.control.GetScore(score,false);
 					if(Store.FirstTimePlay)
+					{
 						waveBonus.text = "HEAD BONUS 500";	
+					}
 					else
-						waveBonus.text = "SCORE BONUS " + score;		
+					{
+						int score = (LevelInfo.Environments.control.currentLevel+1)*
+						LevelInfo.Environments.control.currentWave*stars*10;
+						LevelInfo.Environments.control.GetScore(score,false);
+					
+						int heads = (LevelInfo.Environments.control.currentLevel+1)*
+						LevelInfo.Environments.control.currentWave;
+						Store.zombieHeads += heads;
+						
+						waveBonus.text = "HEADS BONUS " + heads + "    SCORE BONUS " + score;		
+					}
 				}
 			}
 			
@@ -80,6 +89,7 @@ public class WaveInfo : MonoBehaviour {
 		{
 			modelHeads.SetActive(reward == HealthPackType.BonusHeads);
 			modelXtraLife.SetActive(reward == HealthPackType.XtraLife);
+			modelAmmoCrates.SetActive(reward == HealthPackType.SuperAmmo);
 			rewardSprite.SetActive(true);
 			waveBonus.gameObject.SetActive(true);
 		}
@@ -87,6 +97,7 @@ public class WaveInfo : MonoBehaviour {
 		{
 			modelHeads.SetActive(false);
 			modelXtraLife.SetActive(false);
+			modelAmmoCrates.SetActive(false);
 			rewardSprite.SetActive(false);
 			waveBonus.gameObject.SetActive(false);
 		}

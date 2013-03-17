@@ -8,7 +8,7 @@ public class ButtonMainMenu : MonoBehaviour {
 	void OnClick()
 	{
 		if(Fade.InProcess) return;
-		GameObject.Find("Store").GetComponent<Store>().GoMainMenuFromGamePlay();	
+		Store.Instance.GoMainMenuFromGamePlay();	
 	}
 
 	

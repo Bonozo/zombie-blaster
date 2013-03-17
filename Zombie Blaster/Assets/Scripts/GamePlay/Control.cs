@@ -602,6 +602,10 @@ public class Control : MonoBehaviour {
 	private bool postedscore = false;
 	private bool sharedonfacebook = false;
 	
+	[System.NonSerializedAttribute]
+	public bool wantToExitGame = false;
+	
+	[System.NonSerializedAttribute]
 	public bool allowShowGUI = true;
 	void OnGUI()
 	{
@@ -767,9 +771,7 @@ public class Control : MonoBehaviour {
 						}
 					}
 					#endif
-					
-					
-					
+										
 					if(!isName || (isPost == true))
 						GUI.Label(new Rect(0.38f*Screen.width,0.57f*Screen.height,0.30f*Screen.width,0.032f*Screen.height), postScoreResponse.ToString(),myGUIStyle);					
 				}
@@ -807,7 +809,15 @@ public class Control : MonoBehaviour {
 					if( headshotsinwave >= 0.9f ) stars = 3;
 					else if( headshotsinwave >= 0.75f ) stars = 2;
 					else stars = 1;
-					rewardforwavecomplete = (UnityEngine.Random.Range(0,2)==0?HealthPackType.BonusHeads:HealthPackType.XtraLife);
+					
+					int reward = UnityEngine.Random.Range(0,3);
+					switch(reward)
+					{
+					case 0: rewardforwavecomplete = HealthPackType.BonusHeads; break;
+					case 1: rewardforwavecomplete = HealthPackType.XtraLife; break;
+					case 2: rewardforwavecomplete = HealthPackType.SuperAmmo; break;
+					}
+					
 					LevelInfo.Environments.waveInfo.ShowWaveComplete(rewardforwavecomplete,stars,0.3f,0.2f,0.2f);
 					
 					bonusForWaveComplete = 1000;
@@ -967,9 +977,23 @@ public class Control : MonoBehaviour {
 				Moving = false;
 				
 				//Give reward to the player
-				if( rewardforwavecomplete == HealthPackType.XtraLife) LevelInfo.Environments.hubLives.SetNumberWithFlash(LevelInfo.Environments.hubLives.GetNumber()+1);
-				else if(rewardforwavecomplete == HealthPackType.BonusHeads) Store.zombieHeads = Store.zombieHeads + 100;
-				else Debug.LogError("Rewards must be heads or xtralife, but now is " + rewardforwavecomplete); 
+				switch(rewardforwavecomplete)
+				{
+				case HealthPackType.XtraLife:
+					LevelInfo.Environments.hubLives.SetNumberWithFlash(LevelInfo.Environments.hubLives.GetNumber()+1);
+					break;
+				case HealthPackType.BonusHeads:
+					Store.zombieHeads = Store.zombieHeads + 50;
+					break;
+				case HealthPackType.SuperAmmo:
+					for(int i=0;i<LevelInfo.Environments.guns.gun.Length;i++)
+					if( LevelInfo.Environments.guns.gun[i].EnabledGun )
+						LevelInfo.Environments.guns.GetAmmoWithMax((Weapon)i);
+					break;
+				default:
+					Debug.LogError("ZB Error: Rewards must be heads or xtralife, but now is " + rewardforwavecomplete);
+					break;
+				}
 				
 				CreateNewZombieWave();
 			}

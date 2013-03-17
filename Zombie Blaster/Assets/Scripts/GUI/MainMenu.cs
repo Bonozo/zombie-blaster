@@ -57,7 +57,7 @@ public class MainMenu : MonoBehaviour {
 				audioCredits.Play();
 			
 			if( _state == MenuState.Store )
-				GameObject.Find("Store").GetComponent<Store>().showStore = true;
+				Store.Instance.showStore = true;
 		}
 	}
 	
@@ -75,9 +75,8 @@ public class MainMenu : MonoBehaviour {
 	{
 		Option.Init();
 		Time.timeScale = 1f;
-		Store store = GameObject.Find("Store").GetComponent<Store>();
-		store.showStore = false;
-		store.showLoadingScreen = false;
+		Store.Instance.showStore = false;
+		Store.Instance.showLoadingScreen = false;
 	}
 	 
 	// Use this for initialization
