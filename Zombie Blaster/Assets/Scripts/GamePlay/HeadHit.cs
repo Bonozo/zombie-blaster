@@ -91,7 +91,9 @@ public class HeadHit : MonoBehaviour {
 		if( HeadContainer.NearPlayer() )
 			LevelInfo.Environments.goo.Show();
 		Store.zombieHeads++;
-		LevelInfo.Environments.control.GetScore(LevelInfo.State.scoreForHeadShot - LevelInfo.State.scoreForZombie,true);
+		
+		int score = HeadContainer.scooby?LevelInfo.State.scoreForScoobyZombieHeadshot:LevelInfo.State.scoreForStandardZombieHeadshot;
+		LevelInfo.Environments.control.GetScore(score - LevelInfo.State.scoreForZombie,true);
 		LevelInfo.Audio.PlayZombieHeadShot();
 	}
 	

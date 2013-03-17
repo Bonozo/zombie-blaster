@@ -80,7 +80,10 @@ public class Ufo : MonoBehaviour {
 		{
 			died = true;
 			gameObject.AddComponent("Rigidbody");
-			LevelInfo.Environments.control.GetScore(LevelInfo.State.scoreForUFO,true);			
+			
+			// Give scores and heads the player
+			LevelInfo.Environments.control.GetScore(LevelInfo.State.scoreForUFO,true);	
+			Store.zombieHeads += 20;
 		}
 	}
 	

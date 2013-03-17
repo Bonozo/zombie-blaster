@@ -41,7 +41,7 @@ public class Generator : MonoBehaviour {
 		
 		int lev = GameEnvironment.StartLevel;
 		
-		objLevel = (GameObject)Instantiate(Resources.Load("Environments/"+LevelInfo.State.level[GameEnvironment.StartLevel].name));
+		objLevel = (GameObject)Instantiate(Resources.Load("Environments/"+GameEnvironment.levelName[GameEnvironment.StartLevel]));
 		objLevel.SetActive(true);
 		objLevel.transform.parent = LevelInfo.Environments.environmentsTransform;
 		
