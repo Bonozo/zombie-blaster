@@ -53,7 +53,7 @@ public class WaveInfo : MonoBehaviour {
 				if(waitforreward<=0f)
 				{
 					int score = (LevelInfo.Environments.control.currentLevel+1)*
-					LevelInfo.Environments.control.currentWave;
+					LevelInfo.Environments.control.currentWave*10;
 					LevelInfo.Environments.control.GetScore(score,false);
 					if(Store.FirstTimePlay)
 						waveBonus.text = "HEAD BONUS 500";	
