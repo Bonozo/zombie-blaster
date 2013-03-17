@@ -795,7 +795,6 @@ public class Control : MonoBehaviour {
 			{
 				if( Time.time > waitfornewwave )
 				{
-					LevelInfo.Environments.waveInfo.HideWaveComplete();
 					bonusForWaveComplete = -1;
 				}
 				else if(bonusForWaveComplete<1000 && Time.time > waitfornewwave-showWaveCompleteTime+0.5f)
@@ -818,7 +817,7 @@ public class Control : MonoBehaviour {
 					case 2: rewardforwavecomplete = HealthPackType.SuperAmmo; break;
 					}
 					
-					LevelInfo.Environments.waveInfo.ShowWaveComplete(rewardforwavecomplete,stars,0.3f,0.2f,0.2f);
+					LevelInfo.Environments.waveInfo.ShowWaveComplete(rewardforwavecomplete,stars);
 					
 					bonusForWaveComplete = 1000;
 				}
@@ -971,30 +970,11 @@ public class Control : MonoBehaviour {
 		Vector3 dir = destination-GameEnvironment.ProjectionXZ(transform.position); dir.Normalize();
 		if( GameEnvironment.DistXZ(transform.position,destination) <= 0.5f )
 		{
-			if( Time.time > waitfornewwave )
+			if( Time.time > waitfornewwave && !LevelInfo.Environments.waveInfo.WaveCompleteInProgress)
 			{
 				LevelInfo.Environments.waveInfo.HideWaveComplete();
 				Moving = false;
-				
-				//Give reward to the player
-				switch(rewardforwavecomplete)
-				{
-				case HealthPackType.XtraLife:
-					LevelInfo.Environments.hubLives.SetNumberWithFlash(LevelInfo.Environments.hubLives.GetNumber()+1);
-					break;
-				case HealthPackType.BonusHeads:
-					Store.zombieHeads = Store.zombieHeads + 50;
-					break;
-				case HealthPackType.SuperAmmo:
-					for(int i=0;i<LevelInfo.Environments.guns.gun.Length;i++)
-					if( LevelInfo.Environments.guns.gun[i].EnabledGun )
-						LevelInfo.Environments.guns.GetAmmoWithMax((Weapon)i);
-					break;
-				default:
-					Debug.LogError("ZB Error: Rewards must be heads or xtralife, but now is " + rewardforwavecomplete);
-					break;
-				}
-				
+			
 				CreateNewZombieWave();
 			}
 		}		
@@ -1141,7 +1121,7 @@ public class Control : MonoBehaviour {
 	
 	private HealthPackType rewardforwavecomplete;
 	private int bonusForWaveComplete = -1;
-	public IEnumerator WaveComplete()
+	private IEnumerator WaveComplete()
 	{
 		isInWave = false;
 		
@@ -1230,11 +1210,9 @@ public class Control : MonoBehaviour {
 		
 		yield return new WaitForSeconds(2f);
 		LevelInfo.Environments.waveInfo.ShowPrologueComplete();
-		yield return new WaitForSeconds(5f);
-		Store.zombieHeads += 500;
-		yield return new WaitForSeconds(1f);
+		yield return new WaitForSeconds(6f);
 		LevelInfo.Environments.waveInfo.HideWaveComplete();
-		yield return new WaitForSeconds(2f);
+		yield return new WaitForSeconds(1f);
 		
 		Store.FirstTimePlay=false;
 		GameEnvironment.ToMap = true;

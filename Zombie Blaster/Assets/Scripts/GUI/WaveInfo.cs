@@ -3,109 +3,22 @@ using System.Collections;
 
 public class WaveInfo : MonoBehaviour {
 	
+	public GameObject mainroot;
+	
+	#region Show Wave Start
+
 	public GameObject root;
 	public UILabel numberWave;
 	public UILabel countZombies;
 	
-	public GameObject rootWaveComplete;
-	//public UISprite spriteWaveCompleteReward;
-	public GameObject modelHeads,modelXtraLife,modelAmmoCrates;
-	public UISprite[] spriteStar;
-	public GameObject rewardSprite;
-	public UILabel waveBonus;
-	public UILabel waveComplete;
-	
-	public float Wait = 5.0f;
-	private float waitfor = 0f;
-	private bool showWaveComplete = false;
-	private float[] startime = new float[3];
-	private int stars = 0;
-	private HealthPackType reward;
-	private float waitforreward=0f;
-	
-	// Use this for initialization
-	void Awake () {
-		root.SetActive(false);
-		rootWaveComplete.SetActive(false);
-	}
-	
-	void OnEnable()
-	{
-		Update();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-		if( Input.GetKeyUp(KeyCode.M) )
-		ShowWaveComplete(HealthPackType.BonusHeads,3,0.3f,0.2f,0.2f);
-		
-		if( waitfor > 0f ) waitfor -= Time.deltaTime;
-		root.SetActive(waitfor>0&&Time.deltaTime>0);
-		
-		rootWaveComplete.SetActive(showWaveComplete&&Time.deltaTime>0);
-		
-		if( showWaveComplete )
-		{
-			if(waitforreward>0)
-			{
-				waitforreward-=Time.deltaTime;
-				if(waitforreward<=0f)
-				{
-					if(Store.FirstTimePlay)
-					{
-						waveBonus.text = "HEAD BONUS: 500";	
-					}
-					else
-					{
-						int score = (LevelInfo.Environments.control.currentLevel+1)*
-						LevelInfo.Environments.control.currentWave*stars*10;
-						LevelInfo.Environments.control.GetScore(score,false);
-					
-						int heads = (LevelInfo.Environments.control.currentLevel+1)*
-						LevelInfo.Environments.control.currentWave;
-						Store.zombieHeads += heads;
-						
-						waveBonus.text = "SCORE BONUS: " + score + "    HEAD BONUS: " + heads;
-					}
-				}
-			}
-			
-			for(int i=0;i<3;i++)
-			{
-				if( startime[i] > 0f )
-				{
-					if(i==0)
-						LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.clipUIStar);
-					startime[i] -= Time.deltaTime;
-					if( startime[i] < 0 )
-						spriteStar[i].spriteName = stars>=i+1?"star full":"star empty";
-					break;
-				}
-			}
-		}
-		
-		if(showWaveComplete&&Time.deltaTime>0&&waitforreward<=0f)
-		{
-			modelHeads.SetActive(reward == HealthPackType.BonusHeads);
-			modelXtraLife.SetActive(reward == HealthPackType.XtraLife);
-			modelAmmoCrates.SetActive(reward == HealthPackType.SuperAmmo);
-			rewardSprite.SetActive(true);
-			waveBonus.gameObject.SetActive(true);
-		}
-		else
-		{
-			modelHeads.SetActive(false);
-			modelXtraLife.SetActive(false);
-			modelAmmoCrates.SetActive(false);
-			rewardSprite.SetActive(false);
-			waveBonus.gameObject.SetActive(false);
-		}
-	}
-	
 	public void ShowWave(int i,int zombieCount)
 	{
-		
+		StartCoroutine(ShowWaveThread(i,zombieCount));
+	}
+	
+	IEnumerator ShowWaveThread(int i,int zombieCount)
+	{
+		root.SetActive(true);
 		if( Store.FirstTimePlay )
 		{
 			numberWave.text = "PROLOGUE";
@@ -115,36 +28,151 @@ public class WaveInfo : MonoBehaviour {
 		{
 			numberWave.text = "Wave " + i;
 			countZombies.text = "" + zombieCount + " zombies";
-		}
-		waitfor = Wait;
+		}		
+		yield return new WaitForSeconds(5f);
+		root.SetActive(false);
 	}
 	
-	public void ShowWaveComplete(HealthPackType reward,int stars,float time1,float time2,float time3)
+	#endregion
+	
+	#region Show Wave Complete
+	
+	public GameObject rootWaveComplete;
+	public GameObject modelHeads,modelXtraLife,modelAmmoCrates;
+	public UISprite[] spriteStar;
+	public GameObject rewardSprite;
+	public UILabel waveBonus;
+	public UILabel headBonus;
+	public UILabel waveComplete;
+	
+	public void ShowWaveComplete(HealthPackType reward,int stars)
 	{
-		this.reward = reward;
-		showWaveComplete = true;
-		
-		for(int i=0;i<3;i++) spriteStar[i].spriteName = "star empty";
-		startime[0]=stars>=1?time1:0;
-		startime[1]=stars>=2?time2:0;
-		startime[2]=stars>=3?time3:0;
-		this.stars = stars;
-		
-		waitforreward = startime[0]+startime[1]+startime[2]+0.5f;
+		StartCoroutine(ShowWaveCompleteThread(reward,stars));
+	}
+	
+	IEnumerator ShowWaveCompleteThread(HealthPackType reward,int stars)
+	{
+		WaveCompleteInProgress = true;
+		HideWaveComplete();
+		rootWaveComplete.SetActive(true);	
 		
 		if(Store.FirstTimePlay)
 			waveComplete.text = "PROLOGUE COMPLETE";
 		else
 			waveComplete.text = "WAVE " + LevelInfo.Environments.control.currentWave + " COMPLETE";
+		
+		yield return new WaitForSeconds(0.4f);
+		
+		LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.clipUIStar);
+		spriteStar[0].spriteName = stars>0?"star full":"star empty";
+		yield return new WaitForSeconds(0.2f);
+		
+		spriteStar[1].spriteName = stars>1?"star full":"star empty";
+		yield return new WaitForSeconds(0.2f);
+		
+		spriteStar[2].spriteName = stars>2?"star full":"star empty";
+		
+		yield return new WaitForSeconds(0.5f);
+		
+		if(Store.FirstTimePlay)
+		{
+			headBonus.text = "HEAD BONUS: 500";	
+			headBonus.gameObject.SetActive(true);
+			Store.zombieHeads += 500;
+			yield return new WaitForSeconds(2f);
+		}
+		else
+		{
+			int score = (LevelInfo.Environments.control.currentLevel+1)*
+			LevelInfo.Environments.control.currentWave*stars*10;
+			
+			LevelInfo.Environments.control.GetScore(score,false);
+			
+			waveBonus.text = "SCORE BONUS: " + score;
+			waveBonus.gameObject.SetActive(true);
+			yield return new WaitForSeconds(1f);
+			
+			int heads = (LevelInfo.Environments.control.currentLevel+1)*
+			LevelInfo.Environments.control.currentWave;
+			
+			Store.zombieHeads += heads;
+				
+			headBonus.text = "HEAD BONUS: " + heads;
+			headBonus.gameObject.SetActive(true);
+			
+			yield return new WaitForSeconds(1f);
+			rewardSprite.gameObject.SetActive(true);
+			
+			//Give reward to the player
+			switch(reward)
+			{
+			case HealthPackType.XtraLife:
+				modelXtraLife.SetActive(true);
+				LevelInfo.Environments.hubLives.SetNumberWithFlash(LevelInfo.Environments.hubLives.GetNumber()+1);
+				break;
+			case HealthPackType.BonusHeads:
+				modelHeads.SetActive(true);
+				Store.zombieHeads = Store.zombieHeads + 50;
+				break;
+			case HealthPackType.SuperAmmo:
+				modelAmmoCrates.SetActive(true);
+				for(int i=0;i<LevelInfo.Environments.guns.gun.Length;i++)
+				if( LevelInfo.Environments.guns.gun[i].EnabledGun )
+					LevelInfo.Environments.guns.GetAmmoWithMax((Weapon)i);
+				break;
+			default:
+				Debug.LogError("ZB Error: Rewards must be heads or xtralife, but now is " + reward);
+				break;
+			}
+		}
+		
+		yield return new WaitForSeconds(3f);
+		WaveCompleteInProgress = false;
 	}
-	
+
 	public void HideWaveComplete()
 	{
-		showWaveComplete = false;
+		rootWaveComplete.SetActive(false);	
+		for(int i=0;i<3;i++) spriteStar[i].spriteName = "star empty";
+		
+		modelHeads.SetActive(false);
+		modelXtraLife.SetActive(false);
+		modelAmmoCrates.SetActive(false);
+		
+		rewardSprite.SetActive(false);
+		
+		headBonus.gameObject.SetActive(false);
+		waveBonus.gameObject.SetActive(false);
 	}
 	
 	public void ShowPrologueComplete()
 	{
-		ShowWaveComplete(HealthPackType.BonusHeads,3,0.3f,0.2f,0.2f);
+		ShowWaveComplete(HealthPackType.BonusHeads,3);
 	}
+	
+	public bool WaveCompleteInProgress{get;private set;}
+	
+	#endregion
+	
+	#region Mono Events
+	
+	void Awake () 
+	{
+		root.SetActive(false);
+		rootWaveComplete.SetActive(false);
+	}
+	
+	void OnEnable()
+	{
+		Update();
+	}
+	
+	void Update () 
+	{
+		mainroot.SetActive(Time.deltaTime>0);
+		if( Input.GetKeyUp(KeyCode.M) )
+			StartCoroutine(ShowWaveCompleteThread(HealthPackType.BonusHeads,3));
+	}
+	
+	#endregion
 }
