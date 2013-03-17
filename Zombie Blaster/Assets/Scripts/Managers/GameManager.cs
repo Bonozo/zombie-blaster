@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour {
 	public UISprite healthbarArmor;
 	public FlashIcon healthbarTombstone;
 	public FlashIcon healthbarBoxes;
+	public UILabel wavenumber;
 	
 	public Texture ProgressBarZombieEmpty;
 	public Texture ProgressBarZombieFull;

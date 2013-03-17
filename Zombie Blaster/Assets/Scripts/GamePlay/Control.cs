@@ -1182,7 +1182,11 @@ public class Control : MonoBehaviour {
 		
 		currentZombiesInWave = LevelInfo.State.zombiesCountFactor*currentWave;
 		currentHeadshotsInWave = 0;
-
+		
+		if(Store.FirstTimePlay)
+			LevelInfo.Environments.wavenumber.text = "PROLOGUE";
+		else
+			LevelInfo.Environments.wavenumber.text = "WAVE " + currentWave;
 		LevelInfo.Environments.hubZombiesLeft.SetNumber(currentZombiesInWave);
 		LevelInfo.Environments.generator.StartNewWave(LevelInfo.Environments.hubZombiesLeft.GetNumber());
 		
