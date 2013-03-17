@@ -4,6 +4,7 @@ using System.Collections;
 public class ZBFacebook : MonoBehaviour {
 	
 	public string appID;
+	public GameObject screenshotMessage;
 	
 	[System.NonSerialized]
 	public string lastmessage = "";
@@ -34,12 +35,12 @@ public class ZBFacebook : MonoBehaviour {
 	#region Random Screenshot 
 	
 	private string screenshotFilename = "ingamerandomscreenshot.png";
-	private float time=10f;
+	private float time=5f;
 	private int sc=1;
 	
 	IEnumerator Start()
 	{
-		yield return new WaitForSeconds(4.0f);
+		yield return new WaitForSeconds(3.0f);
 		Application.CaptureScreenshot( screenshotFilename );
 	}
 	
@@ -52,11 +53,21 @@ public class ZBFacebook : MonoBehaviour {
 			if( time <= 0f )
 			{
 				if(LevelInfo.Environments.control.state == GameState.Play)
+				{
 					Application.CaptureScreenshot( screenshotFilename );
+					StartCoroutine(ShowScreenShotMessage());
+				}
 				time = (++sc)*10f;
 			}
 		}
 		#endif
+	}
+	
+	IEnumerator ShowScreenShotMessage()
+	{
+		screenshotMessage.SetActive(true);
+		yield return new WaitForSeconds(1.0f);
+		screenshotMessage.SetActive(false);
 	}
 	
 	#endregion
