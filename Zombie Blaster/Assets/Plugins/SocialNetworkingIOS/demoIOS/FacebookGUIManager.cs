@@ -37,7 +37,7 @@ public class FacebookGUIManager : Prime31.MonoBehaviourGUI
 	void Start()
 	{
 		// Dump custom data to log after a request completes
-		FacebookManager.graphRequestCompletedEvent += result =>
+		FacebookManagerIOS.graphRequestCompletedEvent += result =>
 		{
 			Prime31.Utils.logObject( result );
 		};
