@@ -703,7 +703,7 @@ public class Control : MonoBehaviour {
 					GUI.Label(new Rect(0.35f*Screen.width,0.42f*Screen.height, 0.1f*Screen.width,0.05f*Screen.height), "SCORE: ",myGUIStyle);
 					
 					
-					#if UNITY_ANDROID
+					#if UNITY_ANDROID || UNITY_IPHONE
 					if( ZBFacebook.Instance.Ready)
 					{
 						nameLB = ZBFacebook.Instance.fbname;
@@ -733,7 +733,7 @@ public class Control : MonoBehaviour {
 						else if(nameLB.Trim().Equals(""))	
 						{
 							isName = false;
-							#if UNITY_ANDROID
+							#if UNITY_ANDROID || UNITY_IPHONE
 							postScoreResponse = "Please log in to facebook!";
 							#else
 							postScoreResponse = "Please Enter Name!";
@@ -750,7 +750,7 @@ public class Control : MonoBehaviour {
 						}						
 					}
 			
-					#if UNITY_ANDROID
+					#if UNITY_ANDROID || UNITY_IPHONE
 					
 					if(ZBFacebook.Instance.Posted)
 					{

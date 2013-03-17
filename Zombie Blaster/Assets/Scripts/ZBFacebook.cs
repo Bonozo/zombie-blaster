@@ -27,6 +27,11 @@ public class ZBFacebook : MonoBehaviour {
 		FacebookManager.loginSucceededEvent += facebookLogin;
 		FacebookManager.loginFailedEvent += facebookLoginFailed;
 		FacebookManager.loggedOutEvent += facebookDidLogoutEvent;
+		//Mak Kaloliya On 17-03-13
+		#elif UNITY_IOS
+		FacebookManagerIOS.sessionOpenedEvent += facebookLogin;
+		FacebookManagerIOS.loginFailedEvent += facebookLoginFailed;
+		//FacebookManagerIOS.loggedOutEvent += facebookDidLogoutEvent;	
 		#endif
 		Init();
 		// Init also is called from 1. when going to lose state and when posting with an error 0 length name
@@ -46,7 +51,7 @@ public class ZBFacebook : MonoBehaviour {
 	
 	void Update()
 	{
-		#if UNITY_ANDROID
+		#if UNITY_ANDROID || UNITY_IPHONE
 		if(Application.loadedLevel == 2)
 		{
 			time -= Time.deltaTime;
@@ -77,6 +82,9 @@ public class ZBFacebook : MonoBehaviour {
 		#if UNITY_ANDROID
 		FacebookAndroid.init(appID);
 		lastmessage = "Init called";
+		#elif UNITY_IPHONE
+		FacebookBinding.init();
+		lastmessage = "Init called";
 		#endif
 	}
 	
@@ -84,13 +92,21 @@ public class ZBFacebook : MonoBehaviour {
 	{
 		#if UNITY_ANDROID
 		FacebookAndroid.loginWithRequestedPermissions( new string[] { "publish_stream", "email", "user_birthday" } );
+		#elif UNITY_IPHONE
+		FacebookBinding.loginUsingDeprecatedAuthorizationFlowWithRequestedPermissions( new string[] { "publish_actions", "publish_stream" });
 		#endif
 	}
 
 	void facebookLogin()
 	{
 		Logging = true;
+		#if UNITY_ANDROID
 		Facebook.instance.graphRequest( "me", completionHandler );
+		#elif UNITY_IPHONE
+		FacebookIOS.instance.graphRequest( "me", completionHandler );
+		#endif
+		
+		
 	}
 
 	void completionHandler( string error, object result )
@@ -126,6 +142,13 @@ public class ZBFacebook : MonoBehaviour {
 		var bytes = System.IO.File.ReadAllBytes( pathToImage );
 		
 		Facebook.instance.postImage( bytes, posttext, completionHandler1 );
+		#elif UNITY_IPHONE
+		string posttext = fbfirstname + " played Zombie Blaster! (Score: " + scores + ")";
+		
+		var pathToImage = Application.persistentDataPath + "/" + screenshotFilename;
+		var bytes = System.IO.File.ReadAllBytes( pathToImage );
+		
+		FacebookIOS.instance.postImage( bytes, posttext, completionHandler1 );
 		#endif
 	}
 	
@@ -144,6 +167,8 @@ public class ZBFacebook : MonoBehaviour {
 	{
 		#if UNITY_ANDROID
 		return FacebookAndroid.isSessionValid();
+		#elif UNITY_IPHONE
+		return FacebookBinding.isSessionValid();
 		#else
 		return false;
 		#endif
