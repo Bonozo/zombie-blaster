@@ -54,7 +54,7 @@ public class WaveInfo : MonoBehaviour {
 				{
 					if(Store.FirstTimePlay)
 					{
-						waveBonus.text = "HEAD BONUS 500";	
+						waveBonus.text = "HEAD BONUS: 500";	
 					}
 					else
 					{
@@ -66,7 +66,7 @@ public class WaveInfo : MonoBehaviour {
 						LevelInfo.Environments.control.currentWave;
 						Store.zombieHeads += heads;
 						
-						waveBonus.text = "HEADS BONUS " + heads + "    SCORE BONUS " + score;		
+						waveBonus.text = "SCORE BONUS: " + score + "    HEAD BONUS: " + heads;
 					}
 				}
 			}

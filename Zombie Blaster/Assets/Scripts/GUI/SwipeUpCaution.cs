@@ -16,6 +16,8 @@ public class SwipeUpCaution : MonoBehaviour {
 	
 	public void Activate(Vector3 scp)
 	{	
+		swipeup.spriteName = Store.WeaponUnlocked((int)Weapon.Spade)?"Spade_buy":"Spade_normal";
+		
 		scp = LevelInfo.Environments.mainCamera.WorldToScreenPoint(scp);
 		// swipe up
 		if(scp.z > 0 && scp.x>=0 && scp.x <= Screen.width )
@@ -64,7 +66,6 @@ public class SwipeUpCaution : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
 		swipeup.gameObject.SetActive(isactive);
 		knockleft.gameObject.SetActive(leftactive);
 		knockright.gameObject.SetActive(rightactive);
