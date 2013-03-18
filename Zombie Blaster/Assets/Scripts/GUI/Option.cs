@@ -232,16 +232,25 @@ public class Option : MonoBehaviour {
 	private Rect textRect(float index)
 	{
 		index++;
-		return new Rect(Screen.width*0.05f,index*0.075f*Screen.height,Screen.width*0.3f,Screen.height*0.06f);
+		return new Rect(ScreenWidth*0.05f,index*0.075f*ScreenHeight,ScreenWidth*0.3f,ScreenHeight*0.06f);
 	}
 	private Rect buttonRect(float index)
 	{
 		index++;
-		return new Rect(Screen.width*0.35f,index*0.075f*Screen.height,Screen.width*0.4f,Screen.height*0.06f);
+		return new Rect(ScreenWidth*0.35f,index*0.075f*ScreenHeight,ScreenWidth*0.4f,ScreenHeight*0.06f);
 	}
+	
+	[System.NonSerializedAttribute]
+	public int ScreenWidth = 1200;
+	[System.NonSerializedAttribute]
+	public int ScreenHeight = 800;
 	
 	void OnGUI()
 	{
+		float horizRatio = (float)Screen.width / (float)ScreenWidth;
+		float vertRatio = (float)Screen.height / (float)ScreenHeight;
+		GUI.matrix = Matrix4x4.TRS (Vector3.zero, Quaternion.identity, new Vector3 (horizRatio, vertRatio, 1));
+		
 		if( debugScreen )
 		{
 			
@@ -278,14 +287,14 @@ public class Option : MonoBehaviour {
 			GUI.Label(textRect(9),"FT wait frames (" + FlameWaitingFrames + ")",myStyle1);
 			FlameWaitingFrames = Mathf.RoundToInt(GUI.HorizontalSlider(buttonRect(9),(float)FlameWaitingFrames,0f,60f));
 			
-			if( GUI.Button( new Rect(0.84f*Screen.width,0.01f*Screen.height,0.15f*Screen.width,0.09f*Screen.height),"Options",myStyle2))
+			if( GUI.Button( new Rect(0.84f*ScreenWidth,0.01f*ScreenHeight,0.15f*ScreenWidth,0.09f*ScreenHeight),"Options",myStyle2))
 			{
 				debugScreen = false;
 				title.text = "";
 				PlayTapAudio();
 			}
 			
-			if( GUI.Button( new Rect(0.84f*Screen.width,0.11f*Screen.height,0.15f*Screen.width,0.09f*Screen.height),"+1000 ZH",myStyle2))
+			if( GUI.Button( new Rect(0.84f*ScreenWidth,0.11f*ScreenHeight,0.15f*ScreenWidth,0.09f*ScreenHeight),"+1000 ZH",myStyle2))
 			{
 				Store.zombieHeads += 1000;
 				PlayTapAudio();
@@ -293,7 +302,7 @@ public class Option : MonoBehaviour {
 			
 			//By Mak Kaloliya on 07022013
 			#if UNITY_IPHONE
-			if( GUI.Button( new Rect(0.84f*Screen.width,0.21f*Screen.height,0.15f*Screen.width,0.09f*Screen.height),"Show TapJoy Offers",myStyle2))
+			if( GUI.Button( new Rect(0.84f*ScreenWidth,0.21f*ScreenHeight,0.15f*ScreenWidth,0.09f*ScreenHeight),"Show TapJoy Offers",myStyle2))
 			{
 				TapjoyBinding.showOffers();
 			}
@@ -370,7 +379,7 @@ public class Option : MonoBehaviour {
 				PlayTapAudio();
 			}
 			
-			if(showdebug && GUI.Button( new Rect(0.84f*Screen.width,0.01f*Screen.height,0.15f*Screen.width,0.09f*Screen.height),"Debug",myStyle2))
+			if(showdebug && GUI.Button( new Rect(0.84f*ScreenWidth,0.01f*ScreenHeight,0.15f*ScreenWidth,0.09f*ScreenHeight),"Debug",myStyle2))
 			{
 				debugScreen = true;
 				title.text = "Debug";
