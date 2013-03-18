@@ -79,6 +79,18 @@ public class Zombi : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
 	{
+		/* Changeing Collider to mesh collider
+		Destroy(gameObject.GetComponent<Collider>());
+		foreach(Transform c in transform)
+		{
+			if(c.gameObject.GetComponent<SkinnedMeshRenderer>() != null)
+			{
+				var col = gameObject.AddComponent<MeshCollider>();
+				col.sharedMesh = c.gameObject.GetComponent<SkinnedMeshRenderer>().sharedMesh;
+				col.convex = true;
+			}
+		}*/
+		
 		headHit.tag = "ZombieHead";
 		headHit.HeadContainer = this;
 		

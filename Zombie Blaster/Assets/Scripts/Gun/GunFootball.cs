@@ -5,7 +5,6 @@ public class GunFootball : GunBase {
 
 	public GameObject BulletPrefab;
 	
-	
 	void Start()
 	{
 	}

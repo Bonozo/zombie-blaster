@@ -6,12 +6,10 @@ public class BulletGrenade : MonoBehaviour {
 	public GameObject ParticleExplosion;
 	
 	public float DestroyTime = 4f;
-	public float Y = 2.5f;
 	public float ExplosionRadius = 3f;
 	
 	// Use this for initialization
 	void Start () {
-		transform.position = new Vector3(transform.position.x,Y,transform.position.z);
 		Vector3 throwto = transform.forward; throwto.y+=0.3f;
 		throwto.x *= 500f; throwto.y *= 500f; throwto.z *= 500f;
 		rigidbody.AddForce(throwto);

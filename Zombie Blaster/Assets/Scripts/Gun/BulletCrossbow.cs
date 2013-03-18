@@ -5,11 +5,9 @@ public class BulletCrossbow : MonoBehaviour {
 	
 	public float DestroyTime = 3f;
 	public float Speed = 5f;
-	public float Y = 2.5f;
 	
 	// Use this for initialization
 	void Start () {
-		transform.position = new Vector3(transform.position.x,Y,transform.position.z);
 	}
 	
 	// Update is called once per frame

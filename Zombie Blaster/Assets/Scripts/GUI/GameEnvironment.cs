@@ -6,7 +6,7 @@ public class GameEnvironment : MonoBehaviour {
 	#region Static Local
 	
 	public static int StartLevel = 0;
-	public static int StartWave = 0;
+	public static int StartWave = 5;
 	
 	
 	public static string loadingLevel = "error";

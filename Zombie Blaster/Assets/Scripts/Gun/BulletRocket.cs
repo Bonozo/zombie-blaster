@@ -8,12 +8,10 @@ public class BulletRocket : MonoBehaviour {
 	
 	public float DestroyTime = 4f;
 	public float Speed = 5f;
-	public float Y = 2.5f;
 	public float ExplosionRadius = 3f;
 	
 	// Use this for initialization
 	void Start () {
-		transform.position = new Vector3(transform.position.x,Y,transform.position.z);
 		Exhaust = (GameObject)Instantiate(Exhaust,transform.position,Quaternion.identity);
 		Destroy(Exhaust,DestroyTime);
 	}

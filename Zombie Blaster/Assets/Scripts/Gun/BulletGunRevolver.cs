@@ -6,12 +6,10 @@ public class BulletGunRevolver : MonoBehaviour {
 	public GameObject sparks;
 	public float DestroyTime = 4f;
 	public float Speed = 5f;
-	public float Y = 2.5f;
 	public float power = 4;
 	
 	// Use this for initialization
 	void Start () {
-		transform.position = new Vector3(transform.position.x,Y,transform.position.z);
 		Instantiate(sparks,transform.position,transform.rotation);
 	}
 	

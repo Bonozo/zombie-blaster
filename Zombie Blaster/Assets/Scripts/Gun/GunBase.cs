@@ -144,7 +144,13 @@ public class GunBase : MonoBehaviour {
 	
 	protected Vector3 RaycastsTargetPosition(Camera mainCamera,Ray ray,RaycastHit hit)
 	{
-		float distfromcamera = hit.collider == null ? 100f : Vector3.Distance(mainCamera.transform.position,hit.collider.gameObject.transform.position);
-		return mainCamera.transform.position + distfromcamera*ray.direction;
+		if(hit.collider == null )
+		{
+			return mainCamera.transform.position + 100f*ray.direction;
+		}
+		else
+			return hit.point;
+		//float distfromcamera = hit.collider == null ? 100f : Vector3.Distance(mainCamera.transform.position,hit.collider.gameObject.transform.position);
+		//return mainCamera.transform.position + distfromcamera*ray.direction;
 	}
 }
