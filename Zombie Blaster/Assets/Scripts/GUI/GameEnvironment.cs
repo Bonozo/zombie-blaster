@@ -368,10 +368,10 @@ public class GameEnvironment : MonoBehaviour {
 		/*3*/ new StoreGun("Flamethrower"		,false,		250,	500,	300,	40,		8,		30,		90,		"The Flamethrower is useful for killing groups of zombies in one go. Effective in all ranges."),
 		/*4*/ new StoreGun("Football"			,false,		5,		25,		400,	50,		5,		100,	100,	"The Football is most effective on quick kills, but not the best choice for getting headshots."),
 		/*5*/ new StoreGun("Machine Gun"		,false,		250,	500,	750,	9,		8,		60,		60,		"The Machine Gun works best for killing large hordes of zombies within close range."),
-		/*6*/ new StoreGun("Grenades"			,false,		5,		25,		400,	50,		5,		100,	10,		"Grenades are the only weapons that can\'t get headshots but are great at getting multiple kill bonuses."),
+		/*6*/ new StoreGun("Grenades"			,false,		5,		25,		400,	50,		5,		200,	10,		"Grenades are the only weapons that can\'t get headshots but are great at getting multiple kill bonuses."),
 		/*7*/ new StoreGun("Crossbow"			,false,		10,		60,		1000,	20,		5,		40,		90,		"The Crossbow is one of the best weapons for taking headshots as it\'s accuracy is sublime."),
-		/*8*/ new StoreGun("Rocket Launcher"	,false,		3,		24,		500,	10,		5,		100,	100,	"The Rocket Launcher is a great weapon for long range kills of groups of zombies."),
-		/*9*/ new StoreGun("Alien Blaster"		,false,		10,		50,		2000,	25,		10,		100,	100,	"The juggernaut of all weapons. The Alien Blaster is difficult to get, but it\'s all worth your while."),
+		/*8*/ new StoreGun("Rocket Launcher"	,false,		3,		24,		500,	10,		5,		200,	100,	"The Rocket Launcher is a great weapon for long range kills of groups of zombies."),
+		/*9*/ new StoreGun("Alien Blaster"		,false,		10,		50,		2000,	25,		10,		200,	100,	"The juggernaut of all weapons. The Alien Blaster is difficult to get, but it\'s all worth your while."),
 		/*10*/new StoreGun("Spade"				,false,		-1,		-1,		1250,	-1,		-1,		-1,		-1, 	"Perfect for if your weapons just aren\'t enough. The Spade shoves zombies back further if they get too close.")
 	};
 	
