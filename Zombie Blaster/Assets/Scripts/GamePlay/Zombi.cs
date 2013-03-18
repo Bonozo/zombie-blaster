@@ -53,6 +53,7 @@ public class Zombi : MonoBehaviour {
 	
 	private float flaming = 1f;
 	private float smoking = 1f;
+	private float alldamage = 10;
 	private float damage = 10;
 	private bool audioswaonelayed = false;
 	private bool spawning = true;
@@ -80,6 +81,9 @@ public class Zombi : MonoBehaviour {
 	{
 		headHit.tag = "ZombieHead";
 		headHit.HeadContainer = this;
+		
+		alldamage = scooby?20:10;
+		damage = alldamage;	
 		
 		haveHelmet = false;
 		if( HelmetPrefab != null )
@@ -330,7 +334,7 @@ public class Zombi : MonoBehaviour {
 				 
 				healthBar.back.transform.localPosition = new Vector3(pos.x-20,-pos.y,0f);
 				healthBar.front.transform.localPosition = new Vector3(pos.x-20,-pos.y,0f);
-				healthBar.front.transform.localScale = new Vector3(damage*4,healthBar.front.transform.localScale.y,healthBar.front.transform.localScale.z);
+				healthBar.front.transform.localScale = new Vector3(damage*40/alldamage,healthBar.front.transform.localScale.y,healthBar.front.transform.localScale.z);
 				  
 				if( scooby )
 				{
@@ -387,7 +391,7 @@ public class Zombi : MonoBehaviour {
 				
 				HelmetPrefab.SetActive(false);
 				
-				damage = 10;
+				damage = alldamage;
 			}
 			else
 			{
