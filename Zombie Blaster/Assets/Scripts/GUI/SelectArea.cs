@@ -80,6 +80,8 @@ public class SelectArea : MonoBehaviour {
 			return;
 		}
 		
+		UpdateSelectAreaScreen();
+		
 		play_index = unlock_index = -1;
 		GameEnvironment.StartWave = 0;
 		
@@ -108,8 +110,6 @@ public class SelectArea : MonoBehaviour {
 		}
 		if( countUnlocked == 5 && helpMessage != null)
 			Destroy(helpMessage);
-		UpdateSelectAreaScreen();
-
 		
 		for(int i=0;i<levelButton.Length;i++)
 			levelButton[i].canPressed = unlocked[i];	
