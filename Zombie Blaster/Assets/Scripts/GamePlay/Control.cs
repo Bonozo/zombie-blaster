@@ -1144,7 +1144,6 @@ public class Control : MonoBehaviour {
 		//DestroyAllRemainedWithTag("ZombieRagdoll");
 		
 		LevelInfo.Audio.audioSourceZombies.Stop();
-		state = GameState.Play;
 		MoveTo(VantagePoints[currentWave%VantagePoints.Length]);
 	}
 	
