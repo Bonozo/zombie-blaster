@@ -182,6 +182,7 @@ public class Option : MonoBehaviour {
 		Sensitivity = 0.01f;
 		TiltingMove = true;
 		XInversion = false;
+		QualitySettings.SetQualityLevel(1);
 	}
 	
 	#endregion
@@ -191,11 +192,15 @@ public class Option : MonoBehaviour {
 	
 	bool showdebug = true;
 	bool debugScreen = false;
+	bool wanttoresetdefault;
 	public ButtonBase creditsButton;
 	public GUIText title;
 	public GUIText version;
 	public GUIStyle myStyle1;
 	public GUIStyle myStyle2;
+	public GUIStyle myStyle3;
+	public GUIStyle buttonGUIStyle;
+	public Texture texturePopup;
 	public ButtonBase backToGameForGamePlay;
 	
 	#endregion
@@ -225,6 +230,7 @@ public class Option : MonoBehaviour {
 	{
 		debugScreen = false;
 		showdebug = false;
+		wanttoresetdefault = false;
 		title.text = "";
 		Update();
 	}
@@ -250,6 +256,24 @@ public class Option : MonoBehaviour {
 		float horizRatio = (float)Screen.width / (float)ScreenWidth;
 		float vertRatio = (float)Screen.height / (float)ScreenHeight;
 		GUI.matrix = Matrix4x4.TRS (Vector3.zero, Quaternion.identity, new Vector3 (horizRatio, vertRatio, 1));
+		
+		if(wanttoresetdefault)
+		{
+			GUI.DrawTexture(new Rect(0.2f*ScreenWidth,0.15f*ScreenHeight,0.6f*ScreenWidth,0.6f*ScreenHeight),texturePopup);
+			GUI.Label(new Rect(0.35f*ScreenWidth,0.305f*ScreenHeight,0.3f*ScreenWidth,0.2f*ScreenHeight),"Restore Default Option Settings?",myStyle3);
+			if(GUI.Button(new Rect(0.33f*ScreenWidth,0.5f*ScreenHeight,0.16f*ScreenWidth,0.1f*ScreenHeight), "YES", buttonGUIStyle ) )	
+			{
+				wanttoresetdefault = false;
+				RestoreDefault();
+				PlayTapAudio();
+			}
+			if( GUI.Button(new Rect(0.52f*ScreenWidth,0.5f*ScreenHeight,0.16f*ScreenWidth,0.1f*ScreenHeight), "NO", buttonGUIStyle ) )
+			{
+				wanttoresetdefault = false;
+				PlayTapAudio();
+			}	
+			return;
+		}
 		
 		if( debugScreen )
 		{
@@ -375,7 +399,7 @@ public class Option : MonoBehaviour {
 			
 			if( GUI.Button(buttonRect(11),"Restore Defaults",myStyle2 ) )
 			{
-				RestoreDefault();
+				wanttoresetdefault = true;
 				PlayTapAudio();
 			}
 			
