@@ -10,6 +10,8 @@ public class ButtonMap : MonoBehaviour {
 			GameEnvironment.IgnoreButtons();
 	}
 	
+	public static GameState lastState = GameState.Play;
+	
 	void OnClick()
 	{
 		if(Fade.InProcess) return;
@@ -18,6 +20,7 @@ public class ButtonMap : MonoBehaviour {
 			
 		if( LevelInfo.Environments.control.state == GameState.Play  || LevelInfo.Environments.control.state == GameState.Paused)
 		{
+			lastState = LevelInfo.Environments.control.state;
 			LevelInfo.Environments.control.state = GameState.Map;
 		}
 	}

@@ -53,13 +53,13 @@ public class HealthPack : MonoBehaviour {
 			gunindexifweapon = Weapon.None;
 			int count = 0;
 			for(int i=1;i<countweaponslocal;i++)
-				if(LevelInfo.Environments.store.WeaponAvailable(i))
+				if(Store.Instance.WeaponAvailable(i))
 					count++;
 			int index = Random.Range(0,count)+1;
 			count = 0;
 			for(int i=1;i<countweaponslocal;i++)
 			{
-				if(LevelInfo.Environments.store.WeaponAvailable(i))	
+				if(Store.Instance.WeaponAvailable(i))	
 				{
 					count++;
 					if(count == index)

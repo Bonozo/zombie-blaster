@@ -229,7 +229,7 @@ public class Control : MonoBehaviour {
 		}
 		set
 		{
-			if( _state == GameState.Paused && value != GameState.Paused)
+			if( _state == GameState.Paused && value == GameState.Play)
 			{
 				LevelInfo.Audio.PlayAudioPause(false);
 			}
@@ -268,8 +268,8 @@ public class Control : MonoBehaviour {
 				Time.timeScale = 1f;
 				LevelInfo.Environments.guns.Update();
 				
-				if(laststate == GameState.Paused)
-					LevelInfo.Audio.UnPauseAll();
+				//if(laststate == GameState.Paused)
+				LevelInfo.Audio.UnPauseAll();
 				
 				break;
 			case GameState.Paused:
@@ -282,16 +282,17 @@ public class Control : MonoBehaviour {
 				System.GC.Collect();
 				break;
 			case GameState.Store:
-				LevelInfo.Audio.StopEffects();
+				LevelInfo.Audio.PauseAll();
 				Time.timeScale = 0f;
 				guiPlayGame.SetActive(false);
-				LevelInfo.Environments.store.GetComponent<Store>().showStore = true;	
+				Store.Instance.showStore = true;	
 				break;
 			case GameState.Map:
-				LevelInfo.Audio.StopEffects();
+				LevelInfo.Audio.PauseAll();
 				Time.timeScale = 0f;
 				guiPlayGame.SetActive(false);
 				guiMap.SetActive(true);
+				System.GC.Collect();
 				break;
 			case GameState.Options:
 				guiPlayGame.SetActive(false);
@@ -332,7 +333,7 @@ public class Control : MonoBehaviour {
 	
 	void Awake()
 	{		
-		LevelInfo.Environments.store.showLoadingScreen = false;
+		Store.Instance.showLoadingScreen = false;
 		InitOptions();
 		
 		if( Store.FirstTimePlay )
@@ -572,9 +573,9 @@ public class Control : MonoBehaviour {
 	{
 		bool old = storeNotificationTime;
 		storeNotificationTime=false;
-		LevelInfo.Environments.store.UpdateWeaponAvailable();
+		Store.Instance.UpdateWeaponAvailable();
 		for(int i=0;i<Store.countWeapons;i++)
-			if(LevelInfo.Environments.store.WeaponAvailable(i) && Store.CanBuyWeapon(i) )
+			if(Store.Instance.WeaponAvailable(i) && Store.CanBuyWeapon(i) )
 				storeNotificationTime=true;
 		if(!old&&storeNotificationTime)
 			LevelInfo.Audio.audioSourcePlayer.PlayOneShot(LevelInfo.Audio.clipUIStar);
@@ -781,7 +782,7 @@ public class Control : MonoBehaviour {
 				{
 					isLeaderBoard = false;		
 					GameEnvironment.ToMap = true;
-					LevelInfo.Environments.store.GoMainMenuFromGamePlay();
+					Store.Instance.GoMainMenuFromGamePlay();
 				}
 				 
 			}
@@ -1216,7 +1217,7 @@ public class Control : MonoBehaviour {
 		
 		Store.FirstTimePlay=false;
 		GameEnvironment.ToMap = true;
-		LevelInfo.Environments.store.GoMainMenuFromGamePlay();
+		Store.Instance.GoMainMenuFromGamePlay();
 	}
 	
 	#endregion

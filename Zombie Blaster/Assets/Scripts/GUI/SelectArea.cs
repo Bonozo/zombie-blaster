@@ -156,7 +156,7 @@ public class SelectArea : MonoBehaviour {
 		
 		if( backToGameForGamePlay!=null && backToGameForGamePlay.PressedUp )
 		{
-			LevelInfo.Environments.control.state = GameState.Paused;
+			LevelInfo.Environments.control.state = ButtonMap.lastState;
 			return;
 		}
 		

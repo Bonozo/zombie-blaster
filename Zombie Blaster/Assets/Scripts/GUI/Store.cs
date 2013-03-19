@@ -528,7 +528,7 @@ public class Store : MonoBehaviour {
 		
 		if( buttonGAME.PressedUp ) 
 		{
-			if( IsLevelGamePlay ) LevelInfo.Environments.control.state = GameState.Paused;
+			if( IsLevelGamePlay ) LevelInfo.Environments.control.state = ButtonStore.lastState;
 			if( IsLevelOption ) 
 			{
 				MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));

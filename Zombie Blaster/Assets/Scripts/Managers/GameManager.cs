@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour {
 	public Camera mainCamera;
 	public UICamera uiCamera;
 	public Control control;
-	public Store store;
 	public Generator generator;
 	public Fade fade;
 	public HealthPack healthPack;
@@ -95,15 +94,6 @@ public class GameManager : MonoBehaviour {
 	public UIButton buttonPauseStore;
 	public UIButton buttonPauseMainMenu;
 	public UIButton buttonPauseResume;
-	
-	#endregion
-	
-	#region Initialzie
-	
-	void Awake()
-	{
-		store = (Store)GameObject.FindObjectOfType(typeof(Store));
-	}
 	
 	#endregion
 }

@@ -9,6 +9,8 @@ public class ButtonStore : MonoBehaviour {
 			GameEnvironment.IgnoreButtons();
 	}
 	
+	public static GameState lastState = GameState.Play;
+	
 	void OnClick()
 	{
 		if(Fade.InProcess) return;
@@ -17,6 +19,7 @@ public class ButtonStore : MonoBehaviour {
 		
 		if( LevelInfo.Environments.control.state == GameState.Play || LevelInfo.Environments.control.state == GameState.Paused)
 		{
+			lastState = LevelInfo.Environments.control.state;
 			LevelInfo.Environments.control.state = GameState.Store;
 		}
 	}
