@@ -83,7 +83,7 @@ public class Ufo : MonoBehaviour {
 			
 			// Give scores and heads the player
 			LevelInfo.Environments.control.GetScore(LevelInfo.State.scoreForUFO,true);	
-			Store.zombieHeads += 20;
+			Store.zombieHeads += 30;
 		}
 	}
 	
