@@ -193,6 +193,7 @@ public class Option : MonoBehaviour {
 	bool showdebug = true;
 	bool debugScreen = false;
 	bool wanttoresetdefault;
+	bool showqualityleveldescription = false;
 	public ButtonBase creditsButton;
 	public GUIText title;
 	public GUIText version;
@@ -231,6 +232,7 @@ public class Option : MonoBehaviour {
 		debugScreen = false;
 		showdebug = false;
 		wanttoresetdefault = false;
+		showqualityleveldescription = false;
 		title.text = "";
 		Update();
 	}
@@ -246,6 +248,12 @@ public class Option : MonoBehaviour {
 		return new Rect(ScreenWidth*0.35f,index*0.075f*ScreenHeight,ScreenWidth*0.4f,ScreenHeight*0.06f);
 	}
 	
+	private Rect buttonRectRight(float index)
+	{
+		index++;
+		return new Rect(ScreenWidth*0.76f,index*0.075f*ScreenHeight,ScreenWidth*0.06f,ScreenHeight*0.06f);
+	}
+	
 	[System.NonSerializedAttribute]
 	public int ScreenWidth = 1200;
 	[System.NonSerializedAttribute]
@@ -257,11 +265,10 @@ public class Option : MonoBehaviour {
 		float vertRatio = (float)Screen.height / (float)ScreenHeight;
 		GUI.matrix = Matrix4x4.TRS (Vector3.zero, Quaternion.identity, new Vector3 (horizRatio, vertRatio, 1));
 		
-		GUI.enabled = !wanttoresetdefault;
+		GUI.enabled = !wanttoresetdefault&&!showqualityleveldescription;
 		
 		if( debugScreen )
 		{
-			
 			GUI.Label(textRect(1),"Unlimited Health",myStyle1);
 			if( GUI.Button(buttonRect(1),UnlimitedHealth?"ON":"OFF" ,myStyle2) )
 				UnlimitedHealth = !UnlimitedHealth;
@@ -381,6 +388,12 @@ public class Option : MonoBehaviour {
 				PlayTapAudio();
 			}
 			
+			if( GUI.Button(buttonRectRight(10),"[?]", myStyle2 ) )
+			{
+				showqualityleveldescription = true;
+				PlayTapAudio();
+			}
+			
 			if( GUI.Button(buttonRect(11),"Restore Defaults",myStyle2 ) )
 			{
 				wanttoresetdefault = true;
@@ -412,10 +425,45 @@ public class Option : MonoBehaviour {
 					PlayTapAudio();
 				}	
 			}
-		}
-		
-
 			
+			if(showqualityleveldescription)
+				ShowCurrentQualitySettings();
+		}	
+	}
+	
+	void ShowCurrentQualitySettings()
+	{
+		GUI.enabled = true;
+		GUI.DrawTexture(new Rect(0.1f*ScreenWidth,0.1f*ScreenHeight,0.8f*ScreenWidth,0.8f*ScreenHeight),texturePopup);
+		int oldfontsize = myStyle3.fontSize;
+		myStyle3.fontSize = 28;
+		int index = QualitySettings.GetQualityLevel();
+		string str = 
+			// ooops Unity Standard Settings
+			"Name: " + QualitySettings.names[index] + "\n" +
+			"Pixel Light Count: " + QualitySettings.pixelLightCount.ToString () + "\n" + 
+			// Texture Quality = Always Full Res
+			"Anisotropic Filtering: " + QualitySettings.anisotropicFiltering.ToString() + "\n" + 
+			"Anti Aliasing: " + QualitySettings.antiAliasing.ToString() + "\n" + 
+			// Soft Particles = Poor(false), Average(false), Best(true)
+			// Shadow = Poor(Disable Shadows), Average(Hard shadows only), Best(Hard and Soft Shadows)
+			// Shadow Resolution = Poor(low), Average(medium), Best(hard)
+			"Shadow Projection: " + QualitySettings.shadowProjection.ToString() + "\n" + 
+			"Shadow Cascades: " + QualitySettings.shadowCascades.ToString() + "\n" + 
+			"Shadow Distance: " + QualitySettings.shadowDistance.ToString() + "\n" + 
+			"Blend Weights: " + QualitySettings.blendWeights.ToString() + "\n" + 
+			"VSync Count: " + QualitySettings.vSyncCount.ToString() + "\n" + 
+			"Particle Raycast Budget: " + QualitySettings.particleRaycastBudget.ToString() + "\n";
+		
+		GUI.Label(new Rect(0.3f*ScreenWidth,0.25f*ScreenHeight,0.5f*ScreenWidth,0.5f*ScreenHeight),str ,myStyle3);
+		
+		myStyle3.fontSize = oldfontsize;
+		
+		if( GUI.Button(new Rect(0.42f*ScreenWidth,0.62f*ScreenHeight,0.16f*ScreenWidth,0.1f*ScreenHeight), "OK", buttonGUIStyle ) )
+		{
+			showqualityleveldescription = false;
+			PlayTapAudio();
+		}	
 	}
 	
 	void PlayTapAudio()
