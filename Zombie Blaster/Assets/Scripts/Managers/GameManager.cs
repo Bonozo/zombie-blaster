@@ -94,6 +94,7 @@ public class GameManager : MonoBehaviour {
 	public UIButton buttonPauseStore;
 	public UIButton buttonPauseMainMenu;
 	public UIButton buttonPauseResume;
+	public UIButton buttonPauseOptions;
 	
 	#endregion
 }

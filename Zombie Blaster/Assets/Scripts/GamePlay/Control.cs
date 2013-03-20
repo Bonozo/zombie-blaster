@@ -600,16 +600,43 @@ public class Control : MonoBehaviour {
 
 	#region GUI
 	
+	private bool wanttoexit = false;
+	public bool WantToExit{
+		get{
+			return wanttoexit;
+		}
+		set{
+			wanttoexit = value;
+			SetPauseMenuButtonsEnabled(!value);
+			Fade.InProcess = value;
+		}
+	}
+	
+	
 	private bool postedscore = false;
 	private bool sharedonfacebook = false;
-	
-	[System.NonSerializedAttribute]
-	public bool wantToExitGame = false;
 	
 	[System.NonSerializedAttribute]
 	public bool allowShowGUI = true;
 	void OnGUI()
 	{
+		if(WantToExit)
+		{
+			GUI.DrawTexture(new Rect(0.2f*Screen.width,0.15f*Screen.height,0.6f*Screen.width,0.6f*Screen.height),texturePopup);
+			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Leave Game?",myGUIStyle);
+			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "YES", buttonGUIStyle ) )	
+			{
+				WantToExit = false;
+				SetPauseMenuButtonsEnabled(false);
+				Store.Instance.GoMainMenuFromGamePlay();
+			}
+			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "NO", buttonGUIStyle ) )
+			{
+				WantToExit = false;
+			}
+			return;
+		}
+		
 		if( Fade.InProcess) return;
 		if( !allowShowGUI) return;
 		switch(state)
@@ -1203,7 +1230,7 @@ public class Control : MonoBehaviour {
 		StartCoroutine(PrologueCompleteThread());		
 	}
 	
-	IEnumerator PrologueCompleteThread()
+	private IEnumerator PrologueCompleteThread()
 	{
 		prologuecomplete=true;
 		//LevelInfo.Environments.buttonPause.isEnabled=false;
@@ -1217,6 +1244,15 @@ public class Control : MonoBehaviour {
 		Store.FirstTimePlay=false;
 		GameEnvironment.ToMap = true;
 		Store.Instance.GoMainMenuFromGamePlay();
+	}
+	
+	private void SetPauseMenuButtonsEnabled(bool enable)
+	{
+		LevelInfo.Environments.buttonPauseResume.isEnabled = enable;
+		LevelInfo.Environments.buttonPauseMap.isEnabled = enable;
+		LevelInfo.Environments.buttonPauseStore.isEnabled = enable;
+		LevelInfo.Environments.buttonPauseMainMenu.isEnabled = enable;
+		LevelInfo.Environments.buttonPauseOptions.isEnabled = enable;
 	}
 	
 	#endregion

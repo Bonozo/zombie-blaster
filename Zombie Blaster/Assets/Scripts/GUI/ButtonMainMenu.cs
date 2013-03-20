@@ -8,7 +8,8 @@ public class ButtonMainMenu : MonoBehaviour {
 	void OnClick()
 	{
 		if(Fade.InProcess) return;
-		Store.Instance.GoMainMenuFromGamePlay();	
+		LevelInfo.Environments.control.WantToExit = true;
+		//Store.Instance.GoMainMenuFromGamePlay();	
 	}
 
 	
