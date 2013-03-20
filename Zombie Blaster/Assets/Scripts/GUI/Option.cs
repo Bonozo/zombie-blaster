@@ -257,23 +257,7 @@ public class Option : MonoBehaviour {
 		float vertRatio = (float)Screen.height / (float)ScreenHeight;
 		GUI.matrix = Matrix4x4.TRS (Vector3.zero, Quaternion.identity, new Vector3 (horizRatio, vertRatio, 1));
 		
-		if(wanttoresetdefault)
-		{
-			GUI.DrawTexture(new Rect(0.2f*ScreenWidth,0.15f*ScreenHeight,0.6f*ScreenWidth,0.6f*ScreenHeight),texturePopup);
-			GUI.Label(new Rect(0.35f*ScreenWidth,0.305f*ScreenHeight,0.3f*ScreenWidth,0.2f*ScreenHeight),"Restore Default Option Settings?",myStyle3);
-			if(GUI.Button(new Rect(0.33f*ScreenWidth,0.5f*ScreenHeight,0.16f*ScreenWidth,0.1f*ScreenHeight), "YES", buttonGUIStyle ) )	
-			{
-				wanttoresetdefault = false;
-				RestoreDefault();
-				PlayTapAudio();
-			}
-			if( GUI.Button(new Rect(0.52f*ScreenWidth,0.5f*ScreenHeight,0.16f*ScreenWidth,0.1f*ScreenHeight), "NO", buttonGUIStyle ) )
-			{
-				wanttoresetdefault = false;
-				PlayTapAudio();
-			}	
-			return;
-		}
+		GUI.enabled = !wanttoresetdefault;
 		
 		if( debugScreen )
 		{
@@ -401,6 +385,7 @@ public class Option : MonoBehaviour {
 			{
 				wanttoresetdefault = true;
 				PlayTapAudio();
+				return;
 			}
 			
 			if(showdebug && GUI.Button( new Rect(0.84f*ScreenWidth,0.01f*ScreenHeight,0.15f*ScreenWidth,0.09f*ScreenHeight),"Debug",myStyle2))
@@ -408,6 +393,24 @@ public class Option : MonoBehaviour {
 				debugScreen = true;
 				title.text = "Debug";
 				PlayTapAudio();
+			}
+			
+			if(wanttoresetdefault)
+			{
+				GUI.enabled = true;
+				GUI.DrawTexture(new Rect(0.2f*ScreenWidth,0.15f*ScreenHeight,0.6f*ScreenWidth,0.6f*ScreenHeight),texturePopup);
+				GUI.Label(new Rect(0.35f*ScreenWidth,0.305f*ScreenHeight,0.3f*ScreenWidth,0.2f*ScreenHeight),"Restore Default Option Settings?",myStyle3);
+				if(GUI.Button(new Rect(0.33f*ScreenWidth,0.5f*ScreenHeight,0.16f*ScreenWidth,0.1f*ScreenHeight), "YES", buttonGUIStyle ) )	
+				{
+					wanttoresetdefault = false;
+					RestoreDefault();
+					PlayTapAudio();
+				}
+				if( GUI.Button(new Rect(0.52f*ScreenWidth,0.5f*ScreenHeight,0.16f*ScreenWidth,0.1f*ScreenHeight), "NO", buttonGUIStyle ) )
+				{
+					wanttoresetdefault = false;
+					PlayTapAudio();
+				}	
 			}
 		}
 		
