@@ -59,7 +59,7 @@ public class Credits : MonoBehaviour {
 			}
 			index += 0.1f;
 		}
-		if(index<0f)
+		if(index<-0.5f)
 		{
 			currentHeight = -1;
 			MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
