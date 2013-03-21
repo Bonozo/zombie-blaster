@@ -16,6 +16,7 @@ public class Credits : MonoBehaviour {
 	
 	public GUIStyle guiStyleTitle;
 	public GUIStyle guiStyleName;
+	public GUIStyle buttonGUIStyle;
 	private float currentHeight = -1f;
 	
 	// Use this for initialization
@@ -63,5 +64,11 @@ public class Credits : MonoBehaviour {
 			MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
 			mainmenu.GoState(MainMenu.MenuState.Option);
 		}
+		
+		if(GUI.Button(new Rect(5f,5f,0.2f*Screen.width,0.075f*Screen.height),"Game Trailer",buttonGUIStyle))
+			Application.OpenURL(@"http://youtu.be/gtRwZtht-1Q");
+		if(GUI.Button(new Rect(0.8f*Screen.width-5f,5f,0.2f*Screen.width,0.075f*Screen.height),"Behind the Scenes",buttonGUIStyle))
+			Application.OpenURL(@"http://youtu.be/NB9TwvKv4RM");
+			
 	}
 }
