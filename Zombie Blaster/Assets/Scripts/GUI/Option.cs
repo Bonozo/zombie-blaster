@@ -240,31 +240,28 @@ public class Option : MonoBehaviour {
 	private Rect textRect(float index)
 	{
 		index++;
-		return new Rect(ScreenWidth*0.05f,index*0.075f*ScreenHeight,ScreenWidth*0.3f,ScreenHeight*0.06f);
+		return new Rect(GameEnvironment.ScreenWidth*0.05f,index*0.075f*GameEnvironment.ScreenHeight,GameEnvironment.ScreenWidth*0.3f,GameEnvironment.ScreenHeight*0.06f);
 	}
 	private Rect buttonRect(float index)
 	{
 		index++;
-		return new Rect(ScreenWidth*0.35f,index*0.075f*ScreenHeight,ScreenWidth*0.4f,ScreenHeight*0.06f);
+		return new Rect(GameEnvironment.ScreenWidth*0.35f,index*0.075f*GameEnvironment.ScreenHeight,GameEnvironment.ScreenWidth*0.4f,GameEnvironment.ScreenHeight*0.06f);
 	}
 	
 	private Rect buttonRectRight(float index)
 	{
 		index++;
-		return new Rect(ScreenWidth*0.76f,index*0.075f*ScreenHeight,ScreenWidth*0.06f,ScreenHeight*0.06f);
+		return new Rect(GameEnvironment.ScreenWidth*0.76f,index*0.075f*GameEnvironment.ScreenHeight,GameEnvironment.ScreenWidth*0.06f,GameEnvironment.ScreenHeight*0.06f);
 	}
 	
+	/*[System.NonSerializedAttribute]
+	public int GameEnvironment.ScreenWidth = 1200;
 	[System.NonSerializedAttribute]
-	public int ScreenWidth = 1200;
-	[System.NonSerializedAttribute]
-	public int ScreenHeight = 800;
+	public int GameEnvironment.ScreenHeight = 800;*/
 	
 	void OnGUI()
 	{
-		float horizRatio = (float)Screen.width / (float)ScreenWidth;
-		float vertRatio = (float)Screen.height / (float)ScreenHeight;
-		GUI.matrix = Matrix4x4.TRS (Vector3.zero, Quaternion.identity, new Vector3 (horizRatio, vertRatio, 1));
-		
+		GUI.matrix = GameEnvironment.GetGameGUIMatrix();
 		GUI.enabled = !wanttoresetdefault&&!showqualityleveldescription;
 		
 		if( debugScreen )
@@ -302,14 +299,14 @@ public class Option : MonoBehaviour {
 			GUI.Label(textRect(9),"FT wait frames (" + FlameWaitingFrames + ")",myStyle1);
 			FlameWaitingFrames = Mathf.RoundToInt(GUI.HorizontalSlider(buttonRect(9),(float)FlameWaitingFrames,0f,60f));
 			
-			if( GUI.Button( new Rect(0.84f*ScreenWidth,0.01f*ScreenHeight,0.15f*ScreenWidth,0.09f*ScreenHeight),"Options",myStyle2))
+			if( GUI.Button( new Rect(0.84f*GameEnvironment.ScreenWidth,0.01f*GameEnvironment.ScreenHeight,0.15f*GameEnvironment.ScreenWidth,0.09f*GameEnvironment.ScreenHeight),"Options",myStyle2))
 			{
 				debugScreen = false;
 				title.text = "";
 				PlayTapAudio();
 			}
 			
-			if( GUI.Button( new Rect(0.84f*ScreenWidth,0.11f*ScreenHeight,0.15f*ScreenWidth,0.09f*ScreenHeight),"+1000 ZH",myStyle2))
+			if( GUI.Button( new Rect(0.84f*GameEnvironment.ScreenWidth,0.11f*GameEnvironment.ScreenHeight,0.15f*GameEnvironment.ScreenWidth,0.09f*GameEnvironment.ScreenHeight),"+1000 ZH",myStyle2))
 			{
 				Store.zombieHeads += 1000;
 				PlayTapAudio();
@@ -317,7 +314,7 @@ public class Option : MonoBehaviour {
 			
 			//By Mak Kaloliya on 07022013
 			#if UNITY_IPHONE
-			if( GUI.Button( new Rect(0.84f*ScreenWidth,0.21f*ScreenHeight,0.15f*ScreenWidth,0.09f*ScreenHeight),"Show TapJoy Offers",myStyle2))
+			if( GUI.Button( new Rect(0.84f*GameEnvironment.ScreenWidth,0.21f*GameEnvironment.ScreenHeight,0.15f*GameEnvironment.ScreenWidth,0.09f*GameEnvironment.ScreenHeight),"Show TapJoy Offers",myStyle2))
 			{
 				TapjoyBinding.showOffers();
 			}
@@ -401,7 +398,7 @@ public class Option : MonoBehaviour {
 				return;
 			}
 			
-			if(showdebug && GUI.Button( new Rect(0.84f*ScreenWidth,0.01f*ScreenHeight,0.15f*ScreenWidth,0.09f*ScreenHeight),"Debug",myStyle2))
+			if(showdebug && GUI.Button( new Rect(0.84f*GameEnvironment.ScreenWidth,0.01f*GameEnvironment.ScreenHeight,0.15f*GameEnvironment.ScreenWidth,0.09f*GameEnvironment.ScreenHeight),"Debug",myStyle2))
 			{
 				debugScreen = true;
 				title.text = "Debug";
@@ -411,15 +408,15 @@ public class Option : MonoBehaviour {
 			if(wanttoresetdefault)
 			{
 				GUI.enabled = true;
-				GUI.DrawTexture(new Rect(0.2f*ScreenWidth,0.15f*ScreenHeight,0.6f*ScreenWidth,0.6f*ScreenHeight),texturePopup);
-				GUI.Label(new Rect(0.35f*ScreenWidth,0.305f*ScreenHeight,0.3f*ScreenWidth,0.2f*ScreenHeight),"Restore Default Option Settings?",myStyle3);
-				if(GUI.Button(new Rect(0.33f*ScreenWidth,0.5f*ScreenHeight,0.16f*ScreenWidth,0.1f*ScreenHeight), "YES", buttonGUIStyle ) )	
+				GUI.DrawTexture(new Rect(0.2f*GameEnvironment.ScreenWidth,0.15f*GameEnvironment.ScreenHeight,0.6f*GameEnvironment.ScreenWidth,0.6f*GameEnvironment.ScreenHeight),texturePopup);
+				GUI.Label(new Rect(0.35f*GameEnvironment.ScreenWidth,0.305f*GameEnvironment.ScreenHeight,0.3f*GameEnvironment.ScreenWidth,0.2f*GameEnvironment.ScreenHeight),"Restore Default Option Settings?",myStyle3);
+				if(GUI.Button(new Rect(0.33f*GameEnvironment.ScreenWidth,0.5f*GameEnvironment.ScreenHeight,0.16f*GameEnvironment.ScreenWidth,0.1f*GameEnvironment.ScreenHeight), "YES", buttonGUIStyle ) )	
 				{
 					wanttoresetdefault = false;
 					RestoreDefault();
 					PlayTapAudio();
 				}
-				if( GUI.Button(new Rect(0.52f*ScreenWidth,0.5f*ScreenHeight,0.16f*ScreenWidth,0.1f*ScreenHeight), "NO", buttonGUIStyle ) )
+				if( GUI.Button(new Rect(0.52f*GameEnvironment.ScreenWidth,0.5f*GameEnvironment.ScreenHeight,0.16f*GameEnvironment.ScreenWidth,0.1f*GameEnvironment.ScreenHeight), "NO", buttonGUIStyle ) )
 				{
 					wanttoresetdefault = false;
 					PlayTapAudio();
@@ -434,7 +431,7 @@ public class Option : MonoBehaviour {
 	void ShowCurrentQualitySettings()
 	{
 		GUI.enabled = true;
-		GUI.DrawTexture(new Rect(0.1f*ScreenWidth,0.1f*ScreenHeight,0.8f*ScreenWidth,0.8f*ScreenHeight),texturePopup);
+		GUI.DrawTexture(new Rect(0.1f*GameEnvironment.ScreenWidth,0.1f*GameEnvironment.ScreenHeight,0.8f*GameEnvironment.ScreenWidth,0.8f*GameEnvironment.ScreenHeight),texturePopup);
 		int oldfontsize = myStyle3.fontSize;
 		myStyle3.fontSize = 28;
 		int index = QualitySettings.GetQualityLevel();
@@ -455,11 +452,11 @@ public class Option : MonoBehaviour {
 			"VSync Count: " + QualitySettings.vSyncCount.ToString() + "\n" + 
 			"Particle Raycast Budget: " + QualitySettings.particleRaycastBudget.ToString() + "\n";
 		
-		GUI.Label(new Rect(0.3f*ScreenWidth,0.25f*ScreenHeight,0.5f*ScreenWidth,0.5f*ScreenHeight),str ,myStyle3);
+		GUI.Label(new Rect(0.3f*GameEnvironment.ScreenWidth,0.25f*GameEnvironment.ScreenHeight,0.5f*GameEnvironment.ScreenWidth,0.5f*GameEnvironment.ScreenHeight),str ,myStyle3);
 		
 		myStyle3.fontSize = oldfontsize;
 		
-		if( GUI.Button(new Rect(0.42f*ScreenWidth,0.62f*ScreenHeight,0.16f*ScreenWidth,0.1f*ScreenHeight), "OK", buttonGUIStyle ) )
+		if( GUI.Button(new Rect(0.42f*GameEnvironment.ScreenWidth,0.62f*GameEnvironment.ScreenHeight,0.16f*GameEnvironment.ScreenWidth,0.1f*GameEnvironment.ScreenHeight), "OK", buttonGUIStyle ) )
 		{
 			showqualityleveldescription = false;
 			PlayTapAudio();

@@ -381,6 +381,21 @@ public class GameEnvironment : MonoBehaviour {
 	
 	#endregion
 	
+	#region GUI Settings
+	
+	public static int ScreenWidth = 1200;
+	public static int ScreenHeight = 800;
+	
+	public static Matrix4x4 GetGameGUIMatrix() 
+	{
+		float horizRatio = (float)Screen.width / (float)ScreenWidth;
+		float vertRatio = (float)Screen.height / (float)ScreenHeight;
+		return Matrix4x4.TRS (Vector3.zero, Quaternion.identity, new Vector3 (horizRatio, vertRatio, 1));
+	
+	}
+	
+	#endregion
+	
 	#region Helpful
 	
 	public static float DistXZ(Vector3 a,Vector3 b)

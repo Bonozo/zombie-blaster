@@ -36,13 +36,14 @@ public class Credits : MonoBehaviour {
 	
 	private Rect RectScreen(float a,float b,float w,float h)
 	{
-		return new Rect(a*Screen.width,b*Screen.height,w*Screen.width,h*Screen.height);
+		return new Rect(a*GameEnvironment.ScreenWidth,b*GameEnvironment.ScreenHeight,w*GameEnvironment.ScreenWidth,h*GameEnvironment.ScreenHeight);
 	}
 	
 	void OnGUI()
 	{
+		GUI.matrix = GameEnvironment.GetGameGUIMatrix();
 		foreach(Touch touch in Input.touches)
-				currentHeight += 0.25f*touch.deltaPosition.y/Screen.height;
+				currentHeight += 0.25f*touch.deltaPosition.y/GameEnvironment.ScreenHeight;
 		if( currentHeight < -1 ) currentHeight = -1;
 		
 		float index = -currentHeight;
@@ -50,7 +51,7 @@ public class Credits : MonoBehaviour {
 		foreach(var mb in members )
 		{
 			GUI.Label(RectScreen(0.25f,index,0.5f,0.1f),mb.title,guiStyleTitle);
-			index += 0.1f;
+			index += 0.075f;
 			foreach(var nm in mb.name)
 			{
 				GUI.Label(RectScreen(0.2f,index,0.6f,0.1f),nm,guiStyleName);
@@ -65,9 +66,9 @@ public class Credits : MonoBehaviour {
 			mainmenu.GoState(MainMenu.MenuState.Option);
 		}
 		
-		if(GUI.Button(new Rect(5f,5f,0.2f*Screen.width,0.075f*Screen.height),"Game Trailer",buttonGUIStyle))
+		if(GUI.Button(new Rect(5f,5f,0.2f*GameEnvironment.ScreenWidth,0.075f*GameEnvironment.ScreenHeight),"Game Trailer",buttonGUIStyle))
 			Application.OpenURL(@"http://youtu.be/gtRwZtht-1Q");
-		if(GUI.Button(new Rect(0.8f*Screen.width-5f,5f,0.2f*Screen.width,0.075f*Screen.height),"Behind the Scenes",buttonGUIStyle))
+		if(GUI.Button(new Rect(0.8f*GameEnvironment.ScreenWidth-5f,5f,0.2f*GameEnvironment.ScreenWidth,0.075f*GameEnvironment.ScreenHeight),"Behind the Scenes",buttonGUIStyle))
 			Application.OpenURL(@"http://youtu.be/NB9TwvKv4RM");
 			
 	}
