@@ -170,8 +170,6 @@ public class WaveInfo : MonoBehaviour {
 	void Update () 
 	{
 		mainroot.SetActive(Time.deltaTime>0);
-		if( Input.GetKeyUp(KeyCode.M) )
-			StartCoroutine(ShowWaveCompleteThread(HealthPackType.BonusHeads,3));
 	}
 	
 	#endregion
