@@ -383,13 +383,13 @@ public class GameEnvironment : MonoBehaviour {
 	
 	#region GUI Settings
 	
-	public static int ScreenWidth = 1200;
-	public static int ScreenHeight = 800;
+	public static int GUIWidth = 1200;
+	public static int GUIHeight = 800;
 	
 	public static Matrix4x4 GetGameGUIMatrix() 
 	{
-		float horizRatio = (float)Screen.width / (float)ScreenWidth;
-		float vertRatio = (float)Screen.height / (float)ScreenHeight;
+		float horizRatio = (float)Screen.width / (float)GUIWidth;
+		float vertRatio = (float)Screen.height / (float)GUIHeight;
 		return Matrix4x4.TRS (Vector3.zero, Quaternion.identity, new Vector3 (horizRatio, vertRatio, 1));
 	
 	}

@@ -221,6 +221,8 @@ public class SelectArea : MonoBehaviour {
 	public GUIStyle buttonStyle;
 	void OnGUI ()
 	{ 
+		GUI.matrix = GameEnvironment.GetGameGUIMatrix();
+		
 		if(Fade.InProcess) return;
 		
 		popupTexture.enabled = unlock_index != -1 || play_index != -1;
@@ -228,41 +230,41 @@ public class SelectArea : MonoBehaviour {
 		{
 			bool can_bay = Store.zombieHeads >= GameEnvironment.levelPrice[unlock_index];
 
-			//GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"");
-			GUI.Label(new Rect(0.425f*Screen.width,0.32f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),"COST: " + GameEnvironment.levelPrice[unlock_index],myStyle);
-			GUI.DrawTexture(new Rect(0.52f*Screen.width,0.29f*Screen.height,0.08f*Screen.width,0.08f*Screen.height),headSack);
+			//GUI.Box(new Rect(0.25f*GameEnvironment.GUIWidth,0.25f*GameEnvironment.GUIHeight,0.5f*GameEnvironment.GUIWidth,0.5f*GameEnvironment.GUIHeight),"");
+			GUI.Label(new Rect(0.425f*GameEnvironment.GUIWidth,0.32f*GameEnvironment.GUIHeight,0.1f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight),"COST: " + GameEnvironment.levelPrice[unlock_index],myStyle);
+			GUI.DrawTexture(new Rect(0.52f*GameEnvironment.GUIWidth,0.29f*GameEnvironment.GUIHeight,0.08f*GameEnvironment.GUIWidth,0.08f*GameEnvironment.GUIHeight),headSack);
 			
 			/*int cc = 0;
 			for(int i=0; i<newWeapos[unlock_index] .Length; i++)
 					cc++;
 			for(int i=0,j=0; i<newWeapos[unlock_index].Length; i++)
 			{
-				float sz = 0.08f*Screen.height;
+				float sz = 0.08f*GameEnvironment.GUIHeight;
 				if( j < 5 )
-					GUI.DrawTexture(new Rect( (0.5f-0.045f*Mathf.Min(cc,5)+0.09f*j)*Screen.width,0.41f*Screen.height,sz,sz),store.weaponIcon[(int)newWeapos[unlock_index][i]]);
+					GUI.DrawTexture(new Rect( (0.5f-0.045f*Mathf.Min(cc,5)+0.09f*j)*GameEnvironment.GUIWidth,0.41f*GameEnvironment.GUIHeight,sz,sz),store.weaponIcon[(int)newWeapos[unlock_index][i]]);
 				else
-					GUI.DrawTexture(new Rect( (0.5f-0.045f*(cc-5)+0.09f*(j-5))*Screen.width,0.51f*Screen.height,sz,sz),store.weaponIcon[(int)newWeapos[unlock_index][i]]);
+					GUI.DrawTexture(new Rect( (0.5f-0.045f*(cc-5)+0.09f*(j-5))*GameEnvironment.GUIWidth,0.51f*GameEnvironment.GUIHeight,sz,sz),store.weaponIcon[(int)newWeapos[unlock_index][i]]);
 				j++;
 			}*/
-			float sz = 0.08f*Screen.height;
+			float sz = 0.08f*GameEnvironment.GUIHeight;
 			
 			if(newWeapos[unlock_index].Length==1)
 			{
-				GUI.Label(new Rect(0.42f*Screen.width,0.41f*Screen.height+sz*0.5f-8,0.1f*Screen.width,0.1f*Screen.height),"UNLOCKS: ",myStyle);
-				GUI.DrawTexture(new Rect( 0.52f*Screen.width,0.41f*Screen.height,sz,sz),store.weaponIcon[(int)newWeapos[unlock_index][0]]);
+				GUI.Label(new Rect(0.42f*GameEnvironment.GUIWidth,0.41f*GameEnvironment.GUIHeight+sz*0.5f-8,0.1f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight),"UNLOCKS: ",myStyle);
+				GUI.DrawTexture(new Rect( 0.52f*GameEnvironment.GUIWidth,0.41f*GameEnvironment.GUIHeight,sz,sz),store.weaponIcon[(int)newWeapos[unlock_index][0]]);
 			}
 			else if(newWeapos[unlock_index].Length==2)
 			{
-				GUI.Label(new Rect(0.4f*Screen.width,0.41f*Screen.height+sz*0.5f-8,0.1f*Screen.width,0.1f*Screen.height),"UNLOCKS: ",myStyle);
-				GUI.DrawTexture(new Rect( 0.5f*Screen.width,0.41f*Screen.height,sz,sz),store.weaponIcon[(int)newWeapos[unlock_index][0]]);
-				GUI.DrawTexture(new Rect( 0.51f*Screen.width+sz,0.41f*Screen.height,sz,sz),store.weaponIcon[(int)newWeapos[unlock_index][1]]);
+				GUI.Label(new Rect(0.4f*GameEnvironment.GUIWidth,0.41f*GameEnvironment.GUIHeight+sz*0.5f-8,0.1f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight),"UNLOCKS: ",myStyle);
+				GUI.DrawTexture(new Rect( 0.5f*GameEnvironment.GUIWidth,0.41f*GameEnvironment.GUIHeight,sz,sz),store.weaponIcon[(int)newWeapos[unlock_index][0]]);
+				GUI.DrawTexture(new Rect( 0.51f*GameEnvironment.GUIWidth+sz,0.41f*GameEnvironment.GUIHeight,sz,sz),store.weaponIcon[(int)newWeapos[unlock_index][1]]);
 			}
 			else
 				Debug.LogError("ZB: Weapons unlocked for level is not implemented for grather that 2");
 			
 			if( can_bay)
 			{
-				if(GUI.Button(new Rect(0.33f*Screen.width,0.55f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "UNLOCK", buttonStyle ) )	
+				if(GUI.Button(new Rect(0.33f*GameEnvironment.GUIWidth,0.55f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "UNLOCK", buttonStyle ) )	
 				{
 					Store.UnlockLevel(unlock_index);
 					unlocked[unlock_index] = true;
@@ -277,11 +279,11 @@ public class SelectArea : MonoBehaviour {
 			}
 			else
 			{
-				if( GUI.Button(new Rect(0.33f*Screen.width,0.55f*Screen.height,0.16f*Screen.width,0.1f*Screen.height),"MORE HEADS", buttonStyle))
+				if( GUI.Button(new Rect(0.33f*GameEnvironment.GUIWidth,0.55f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight),"MORE HEADS", buttonStyle))
 					store.Get1000HeadsEvent();
 			}
 	
-			if( GUI.Button(new Rect(0.52f*Screen.width,0.55f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "CANCEL", buttonStyle ) )
+			if( GUI.Button(new Rect(0.52f*GameEnvironment.GUIWidth,0.55f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "CANCEL", buttonStyle ) )
 			{
 				audioLocked.Stop();
 				audioBack.Play();
@@ -293,8 +295,8 @@ public class SelectArea : MonoBehaviour {
 		
 		if( play_index != -1 )
 		{
-			GUI.Label(new Rect(0.35f*Screen.width,0.33f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),"HIGHEST WAVE COMPLETED: " + Store.HighestWaveCompleted(play_index),myStyle);
-			if(GUI.Button(new Rect(0.33f*Screen.width,0.55f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "PLAY", buttonStyle))
+			GUI.Label(new Rect(0.35f*GameEnvironment.GUIWidth,0.33f*GameEnvironment.GUIHeight,0.1f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight),"HIGHEST WAVE COMPLETED: " + Store.HighestWaveCompleted(play_index),myStyle);
+			if(GUI.Button(new Rect(0.33f*GameEnvironment.GUIWidth,0.55f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "PLAY", buttonStyle))
 			{
 				/*audioUnlocked.Play();
 				GameEnvironment.StartLevel = play_index;
@@ -312,21 +314,21 @@ public class SelectArea : MonoBehaviour {
 			
 			if( Store.HighestWaveCompleted(play_index)>0 )
 			{		
-				GUI.Label(new Rect(0.35f*Screen.width,0.43f*Screen.height,0.1f*Screen.width,0.1f*Screen.height),"Start Wave ",myStyle);
-				if( GUI.Button(new Rect(0.485f*Screen.width,0.405f*Screen.height, 0.08f*Screen.width,0.08f*Screen.height), "-", buttonStyle) && GameEnvironment.StartWave > 0 )
+				GUI.Label(new Rect(0.35f*GameEnvironment.GUIWidth,0.43f*GameEnvironment.GUIHeight,0.1f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight),"Start Wave ",myStyle);
+				if( GUI.Button(new Rect(0.485f*GameEnvironment.GUIWidth,0.405f*GameEnvironment.GUIHeight, 0.08f*GameEnvironment.GUIWidth,0.08f*GameEnvironment.GUIHeight), "-", buttonStyle) && GameEnvironment.StartWave > 0 )
 					GameEnvironment.StartWave--;
 				
 				myStyle.alignment = TextAnchor.MiddleCenter;	
-				GUI.Label(new Rect(0.57f*Screen.width,0.42f*Screen.height, 0.03f*Screen.width,0.05f*Screen.height), (GameEnvironment.StartWave+1).ToString(),myStyle);
+				GUI.Label(new Rect(0.57f*GameEnvironment.GUIWidth,0.42f*GameEnvironment.GUIHeight, 0.03f*GameEnvironment.GUIWidth,0.05f*GameEnvironment.GUIHeight), (GameEnvironment.StartWave+1).ToString(),myStyle);
 				myStyle.alignment = TextAnchor.UpperLeft;
 				
-				if( GUI.Button(new Rect(0.605f*Screen.width,0.405f*Screen.height, 0.08f*Screen.width,0.08f*Screen.height), "+", buttonStyle) && GameEnvironment.StartWave < Store.HighestWaveCompleted(play_index) )
+				if( GUI.Button(new Rect(0.605f*GameEnvironment.GUIWidth,0.405f*GameEnvironment.GUIHeight, 0.08f*GameEnvironment.GUIWidth,0.08f*GameEnvironment.GUIHeight), "+", buttonStyle) && GameEnvironment.StartWave < Store.HighestWaveCompleted(play_index) )
 					GameEnvironment.StartWave++;	
 			}
 			
 			
 			
-			if( GUI.Button(new Rect(0.52f*Screen.width,0.55f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "BACK", buttonStyle ))
+			if( GUI.Button(new Rect(0.52f*GameEnvironment.GUIWidth,0.55f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "BACK", buttonStyle ))
 			{
 				audioUnlocked.Stop();
 				audioBack.Play();

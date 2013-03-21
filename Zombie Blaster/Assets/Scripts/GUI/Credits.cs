@@ -36,14 +36,14 @@ public class Credits : MonoBehaviour {
 	
 	private Rect RectScreen(float a,float b,float w,float h)
 	{
-		return new Rect(a*GameEnvironment.ScreenWidth,b*GameEnvironment.ScreenHeight,w*GameEnvironment.ScreenWidth,h*GameEnvironment.ScreenHeight);
+		return new Rect(a*GameEnvironment.GUIWidth,b*GameEnvironment.GUIHeight,w*GameEnvironment.GUIWidth,h*GameEnvironment.GUIHeight);
 	}
 	
 	void OnGUI()
 	{
 		GUI.matrix = GameEnvironment.GetGameGUIMatrix();
 		foreach(Touch touch in Input.touches)
-				currentHeight += 0.25f*touch.deltaPosition.y/GameEnvironment.ScreenHeight;
+				currentHeight += 0.25f*touch.deltaPosition.y/GameEnvironment.GUIHeight;
 		if( currentHeight < -1 ) currentHeight = -1;
 		
 		float index = -currentHeight;
@@ -66,9 +66,9 @@ public class Credits : MonoBehaviour {
 			mainmenu.GoState(MainMenu.MenuState.Option);
 		}
 		
-		if(GUI.Button(new Rect(5f,5f,0.2f*GameEnvironment.ScreenWidth,0.075f*GameEnvironment.ScreenHeight),"Game Trailer",buttonGUIStyle))
+		if(GUI.Button(new Rect(5f,5f,0.2f*GameEnvironment.GUIWidth,0.075f*GameEnvironment.GUIHeight),"Game Trailer",buttonGUIStyle))
 			Application.OpenURL(@"http://youtu.be/gtRwZtht-1Q");
-		if(GUI.Button(new Rect(0.8f*GameEnvironment.ScreenWidth-5f,5f,0.2f*GameEnvironment.ScreenWidth,0.075f*GameEnvironment.ScreenHeight),"Behind the Scenes",buttonGUIStyle))
+		if(GUI.Button(new Rect(0.8f*GameEnvironment.GUIWidth-5f,5f,0.2f*GameEnvironment.GUIWidth,0.075f*GameEnvironment.GUIHeight),"Behind the Scenes",buttonGUIStyle))
 			Application.OpenURL(@"http://youtu.be/NB9TwvKv4RM");
 			
 	}
