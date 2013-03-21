@@ -17,6 +17,7 @@ public class SwipeUpCaution : MonoBehaviour {
 	public void Activate(Vector3 scp)
 	{	
 		swipeup.spriteName = Store.WeaponUnlocked((int)Weapon.Spade)?"Spade_buy":"Spade_normal";
+		swipeup.MakePixelPerfect();
 		
 		scp = LevelInfo.Environments.mainCamera.WorldToScreenPoint(scp);
 		// swipe up
