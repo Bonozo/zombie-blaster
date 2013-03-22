@@ -6,6 +6,7 @@ public class AudioManager : MonoBehaviour {
 	#region Parameters
 	
 	public AudioSource audioSourceBackground;
+	public AudioSource audioSourceWaveBeginComplete;
 	public AudioSource audioSourcePlayer;
 	public AudioSource audioSourceZombies;
 	public AudioSource audioSourceWindLoop;
@@ -21,6 +22,7 @@ public class AudioManager : MonoBehaviour {
 	public void StopAll()
 	{
 		audioSourceBackground.Stop();
+		audioSourceWaveBeginComplete.Stop();
 		StopEffects();
 	}
 	
@@ -28,6 +30,7 @@ public class AudioManager : MonoBehaviour {
 	{
 		audioSourceBackground.Pause();
 		audioSourceWindLoop.Pause();
+		audioSourceWaveBeginComplete.Pause();
 		StopEffects();
 	}
 	
@@ -37,7 +40,7 @@ public class AudioManager : MonoBehaviour {
 		audioSourceWindLoop.Play();
 		audioSourcePlayer.Play();
 		audioSourceZombies.Play();
-		
+		audioSourceWaveBeginComplete.Play();
 	}
 	
 	public void Awake()
@@ -49,6 +52,7 @@ public class AudioManager : MonoBehaviour {
 	{
 		//// init volumes
 		audioSourceBackground.volume = Option.hSlideVolume;
+		audioSourceWaveBeginComplete.volume = Option.hSlideVolume;
 
 		audioSourcePlayer.volume = Option.sfxVolume;
 		audioSourceZombies.volume = Option.sfxVolume;
@@ -85,6 +89,18 @@ public class AudioManager : MonoBehaviour {
 	
 	public AudioClip AudioWaveBegin;
 	public AudioClip AudioWaveComplete;
+	
+	public void PlayWaveBegin()
+	{
+		audioSourceWaveBeginComplete.clip = AudioWaveBegin;
+		audioSourceWaveBeginComplete.Play();
+	}
+	
+	public void PlayWaveComplete()
+	{
+		audioSourceWaveBeginComplete.clip = AudioWaveComplete;
+		audioSourceWaveBeginComplete.Play();		
+	}
 	
 	public AudioClip AudioPause;
 	public AudioClip AudioUnPause;
