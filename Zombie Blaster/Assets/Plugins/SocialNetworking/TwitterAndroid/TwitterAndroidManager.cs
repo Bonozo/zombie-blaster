@@ -2,9 +2,10 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Prime31;
 
 
-public class TwitterAndroidManager : MonoBehaviour
+public class TwitterAndroidManager : AbstractManager
 {
 #if UNITY_ANDROID
 	// Fired when a login is successful.  Provides the users screen name
@@ -23,46 +24,39 @@ public class TwitterAndroidManager : MonoBehaviour
 	public static event Action twitterInitializedEvent;
 
 
-	void Awake()
+	static TwitterAndroidManager()
 	{
-		// Set the GameObject name to the class name for easy access from Obj-C
-		gameObject.name = this.GetType().ToString();
-		DontDestroyOnLoad( this );
+		AbstractManager.initialize( typeof( TwitterAndroidManager ) );
 	}
 
 
 	public void loginDidSucceed( string username )
 	{
-		if( loginDidSucceedEvent != null )
-			loginDidSucceedEvent( username );
+		loginDidSucceedEvent.fire( username );
 	}
 
 
 	public void loginDidFail( string error )
 	{
-		if( loginDidFailEvent != null )
-			loginDidFailEvent( error );
+		loginDidFailEvent.fire( error );
 	}
 
 
 	public void requestSucceeded( string response )
 	{
-		if( requestSucceededEvent != null )
-			requestSucceededEvent( Prime31.Json.jsonDecode( response )/*Prime31.MiniJSON.jsonDecode( response )*/ );
+		requestSucceededEvent.fire( Prime31.Json.jsonDecode( response ) );
 	}
 
 
 	public void requestFailed( string error )
 	{
-		if( requestFailedEvent != null )
-			requestFailedEvent( error );
+		requestFailedEvent.fire( error );
 	}
 
 
 	public void twitterInitialized( string empty )
 	{
-		if( twitterInitializedEvent != null )
-			twitterInitializedEvent();
+		twitterInitializedEvent.fire();
 	}
 #endif
 }
