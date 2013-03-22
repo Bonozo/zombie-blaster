@@ -620,17 +620,19 @@ public class Control : MonoBehaviour {
 	public bool allowShowGUI = true;
 	void OnGUI()
 	{
+		GUI.matrix = GameEnvironment.GetGameGUIMatrix();
+		
 		if(WantToExit)
 		{
-			GUI.DrawTexture(new Rect(0.2f*Screen.width,0.15f*Screen.height,0.6f*Screen.width,0.6f*Screen.height),texturePopup);
-			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Leave Game?",myGUIStyle);
-			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "YES", buttonGUIStyle ) )	
+			GUI.DrawTexture(new Rect(0.2f*GameEnvironment.GUIWidth,0.15f*GameEnvironment.GUIHeight,0.6f*GameEnvironment.GUIWidth,0.6f*GameEnvironment.GUIHeight),texturePopup);
+			GUI.Label(new Rect(0.35f*GameEnvironment.GUIWidth,0.305f*GameEnvironment.GUIHeight,0.3f*GameEnvironment.GUIWidth,0.2f*GameEnvironment.GUIHeight),"Leave Game?",myGUIStyle);
+			if(GUI.Button(new Rect(0.33f*GameEnvironment.GUIWidth,0.5f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "YES", buttonGUIStyle ) )	
 			{
 				WantToExit = false;
 				SetPauseMenuButtonsEnabled(false);
 				Store.Instance.GoMainMenuFromGamePlay();
 			}
-			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "NO", buttonGUIStyle ) )
+			if( GUI.Button(new Rect(0.52f*GameEnvironment.GUIWidth,0.5f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "NO", buttonGUIStyle ) )
 			{
 				WantToExit = false;
 			}
@@ -642,12 +644,12 @@ public class Control : MonoBehaviour {
 		switch(state)
 		{
 		case GameState.Lose:
-			GUI.DrawTexture(new Rect(0.1f*Screen.width,0.1f*Screen.height,0.8f*Screen.width,0.8f*Screen.height),texturePopup);
+			GUI.DrawTexture(new Rect(0.1f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight,0.8f*GameEnvironment.GUIWidth,0.8f*GameEnvironment.GUIHeight),texturePopup);
 			if( (LevelInfo.Environments.hubLives.GetNumber() > 0) && (isLeaderBoard == false))
 			{
-				//GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"CONTINUE?");
-				GUI.Label(new Rect(0.3f*Screen.width,0.28f*Screen.height,0.5f*Screen.width,0.2f*Screen.height),"CONTINUE?",myGUIStyle);
-				if( GUI.Button(new Rect(0.27f*Screen.width,0.62f*Screen.height,0.15f*Screen.width,0.1f*Screen.height), "YES", buttonGUIStyle ) )	
+				//GUI.Box(new Rect(0.25f*GameEnvironment.GUIWidth,0.25f*GameEnvironment.GUIHeight,0.5f*GameEnvironment.GUIWidth,0.5f*GameEnvironment.GUIHeight),"CONTINUE?");
+				GUI.Label(new Rect(0.3f*GameEnvironment.GUIWidth,0.28f*GameEnvironment.GUIHeight,0.5f*GameEnvironment.GUIWidth,0.2f*GameEnvironment.GUIHeight),"CONTINUE?",myGUIStyle);
+				if( GUI.Button(new Rect(0.27f*GameEnvironment.GUIWidth,0.62f*GameEnvironment.GUIHeight,0.15f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "YES", buttonGUIStyle ) )	
 				{
 					isLeaderBoard = false;
 					GameEnvironment.StartWave = currentWave-1;
@@ -659,7 +661,7 @@ public class Control : MonoBehaviour {
 					Time.timeScale = 1.0f;
 					Application.LoadLevel(Application.loadedLevel);
 				}
-				if( GUI.Button(new Rect(0.58f*Screen.width,0.62f*Screen.height,0.15f*Screen.width,0.1f*Screen.height), "NO", buttonGUIStyle) )
+				if( GUI.Button(new Rect(0.58f*GameEnvironment.GUIWidth,0.62f*GameEnvironment.GUIHeight,0.15f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "NO", buttonGUIStyle) )
 				{
 					isLeaderBoard = true;
 					//Time.timeScale = 1.0f;
@@ -669,10 +671,10 @@ public class Control : MonoBehaviour {
 			
 			else
 			{
-				GUI.Label(new Rect(0.3f*Screen.width,0.28f*Screen.height,0.5f*Screen.width,0.2f*Screen.height),"YOU ARE DEAD.",myGUIStyle);
+				GUI.Label(new Rect(0.3f*GameEnvironment.GUIWidth,0.28f*GameEnvironment.GUIHeight,0.5f*GameEnvironment.GUIWidth,0.2f*GameEnvironment.GUIHeight),"YOU ARE DEAD.",myGUIStyle);
 				//Debug.Log("R");
 				#region Post, Get Best Score
-				/*if( (GUI.Button(new Rect(0.27f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "Get Top Score")) && (isScoreDisplayed == false) )
+				/*if( (GUI.Button(new Rect(0.27f*GameEnvironment.GUIWidth,0.67f*GameEnvironment.GUIHeight,0.15f*GameEnvironment.GUIWidth,0.05f*GameEnvironment.GUIHeight), "Get Top Score")) && (isScoreDisplayed == false) )
 				{	
 		        	string url = "http://crustdesigns.com/demo/game/gettopscore.php?top=10&format=xml";
 		        	WWW www = new WWW(url);
@@ -683,7 +685,7 @@ public class Control : MonoBehaviour {
 					
 					isScoreDisplayed = true;	
 				}*/
-				if( GUI.Button(new Rect(0.3f*Screen.width,0.62f*Screen.height,0.15f*Screen.width,0.1f*Screen.height), "Post Score", buttonGUIStyle ) )
+				if( GUI.Button(new Rect(0.3f*GameEnvironment.GUIWidth,0.62f*GameEnvironment.GUIHeight,0.15f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "Post Score", buttonGUIStyle ) )
 				{			
 					isGet = false;
 					isPost = true;
@@ -700,25 +702,25 @@ public class Control : MonoBehaviour {
 					
 					if(nameArray[0] != null && isConnectionError1 == false )
 					{	
-						GUI.Label(new Rect(0.38f*Screen.width,0.32f*Screen.height,0.15f*Screen.width,0.03f*Screen.height), "" + "NAME",myGUIStyle);				
+						GUI.Label(new Rect(0.38f*GameEnvironment.GUIWidth,0.32f*GameEnvironment.GUIHeight,0.15f*GameEnvironment.GUIWidth,0.03f*GameEnvironment.GUIHeight), "" + "NAME",myGUIStyle);				
 						
-						GUI.Label(new Rect(0.50f*Screen.width,0.32f*Screen.height,0.15f*Screen.width,0.03f*Screen.height), "" + "SCORE",myGUIStyle);					
+						GUI.Label(new Rect(0.50f*GameEnvironment.GUIWidth,0.32f*GameEnvironment.GUIHeight,0.15f*GameEnvironment.GUIWidth,0.03f*GameEnvironment.GUIHeight), "" + "SCORE",myGUIStyle);					
 						
 						for(int i = 0; i < 10; i++)
 						{	
-							GUI.Label(new Rect(0.38f*Screen.width, (0.35f + yPosition*i)*Screen.height, 0.15f*Screen.width,0.03f*Screen.height), "" + nameArray[i].ToString(),myGUIStyle);
+							GUI.Label(new Rect(0.38f*GameEnvironment.GUIWidth, (0.35f + yPosition*i)*GameEnvironment.GUIHeight, 0.15f*GameEnvironment.GUIWidth,0.03f*GameEnvironment.GUIHeight), "" + nameArray[i].ToString(),myGUIStyle);
 						}	
 							//GUI.Label(new Rect(400,40, 200, 70), "" + scoreArray[i].ToString());
 							
 							//GUI.Label(new Rect(200,40 + yPosition*(i+1), 200, 70), "" + nameArray[i].ToString());
 						for(int i = 0; i < 10; i++)
 						{			
-							GUI.Label(new Rect(0.50f*Screen.width, (0.35f + yPosition*i)*Screen.height, 0.15f*Screen.width,0.03f*Screen.height), "" + scoreArray[i].ToString(),myGUIStyle);
+							GUI.Label(new Rect(0.50f*GameEnvironment.GUIWidth, (0.35f + yPosition*i)*GameEnvironment.GUIHeight, 0.15f*GameEnvironment.GUIWidth,0.03f*GameEnvironment.GUIHeight), "" + scoreArray[i].ToString(),myGUIStyle);
 						}
 					}
 					else
 					{
-						GUI.Label(new Rect(0.35f*Screen.width,0.35f*Screen.height,0.30f*Screen.width,0.032f*Screen.height), getScoreResponse.ToString(),myGUIStyle);
+						GUI.Label(new Rect(0.35f*GameEnvironment.GUIWidth,0.35f*GameEnvironment.GUIHeight,0.30f*GameEnvironment.GUIWidth,0.032f*GameEnvironment.GUIHeight), getScoreResponse.ToString(),myGUIStyle);
 					}
 					
 					//isGet = false;				
@@ -727,32 +729,32 @@ public class Control : MonoBehaviour {
 				if(isPost)
 				{
 					//GUI.Label(new Rect(100, 60, 200, 70), getScoreResponse.ToString());
-					GUI.Label(new Rect(0.35f*Screen.width,0.355f*Screen.height, 0.1f*Screen.width,0.05f*Screen.height), "NAME: ",myGUIStyle);
-					GUI.Label(new Rect(0.35f*Screen.width,0.42f*Screen.height, 0.1f*Screen.width,0.05f*Screen.height), "SCORE: ",myGUIStyle);
+					GUI.Label(new Rect(0.35f*GameEnvironment.GUIWidth,0.355f*GameEnvironment.GUIHeight, 0.1f*GameEnvironment.GUIWidth,0.05f*GameEnvironment.GUIHeight), "NAME: ",myGUIStyle);
+					GUI.Label(new Rect(0.35f*GameEnvironment.GUIWidth,0.42f*GameEnvironment.GUIHeight, 0.1f*GameEnvironment.GUIWidth,0.05f*GameEnvironment.GUIHeight), "SCORE: ",myGUIStyle);
 					
 					
 					#if UNITY_ANDROID || UNITY_IPHONE
 					if( ZBFacebook.Instance.Ready)
 					{
 						nameLB = ZBFacebook.Instance.fbname;
-						GUI.Label(new Rect(0.48f*Screen.width,0.35f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), nameLB,myGUIStyle);
+						GUI.Label(new Rect(0.48f*GameEnvironment.GUIWidth,0.35f*GameEnvironment.GUIHeight, 0.2f*GameEnvironment.GUIWidth,0.05f*GameEnvironment.GUIHeight), nameLB,myGUIStyle);
 					}
 					else
 					{
-						if( GUI.Button(new Rect(0.48f*Screen.width,0.35f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), "Log in ", buttonGUIStyle) && !ZBFacebook.Instance.Logging)
+						if( GUI.Button(new Rect(0.48f*GameEnvironment.GUIWidth,0.35f*GameEnvironment.GUIHeight, 0.2f*GameEnvironment.GUIWidth,0.05f*GameEnvironment.GUIHeight), "Log in ", buttonGUIStyle) && !ZBFacebook.Instance.Logging)
 						{
 							ZBFacebook.Instance.Login();
 						}
 					}
 					#else
-					nameLB = GUI.TextField(new Rect(0.48f*Screen.width,0.35f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), nameLB,16,inputBoxGUIStyle);
+					nameLB = GUI.TextField(new Rect(0.48f*GameEnvironment.GUIWidth,0.35f*GameEnvironment.GUIHeight, 0.2f*GameEnvironment.GUIWidth,0.05f*GameEnvironment.GUIHeight), nameLB,16,inputBoxGUIStyle);
 					#endif
 					
-					GUI.Label(new Rect(0.48f*Screen.width,0.42f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), (LevelInfo.Environments.hubScores.GetNumber()).ToString(),myGUIStyle);
+					GUI.Label(new Rect(0.48f*GameEnvironment.GUIWidth,0.42f*GameEnvironment.GUIHeight, 0.2f*GameEnvironment.GUIWidth,0.05f*GameEnvironment.GUIHeight), (LevelInfo.Environments.hubScores.GetNumber()).ToString(),myGUIStyle);
 					
-					//scoreLB = GUI.TextField(new Rect(0.45f*Screen.width,0.40f*Screen.height, 0.15f*Screen.width,0.035f*Screen.height), scoreLB);
+					//scoreLB = GUI.TextField(new Rect(0.45f*GameEnvironment.GUIWidth,0.40f*GameEnvironment.GUIHeight, 0.15f*GameEnvironment.GUIWidth,0.035f*GameEnvironment.GUIHeight), scoreLB);
 
-					if(GUI.Button(new Rect(0.45f*Screen.width,0.475f*Screen.height, 0.10f*Screen.width,0.075f*Screen.height), "Post", buttonGUIStyle) )
+					if(GUI.Button(new Rect(0.45f*GameEnvironment.GUIWidth,0.475f*GameEnvironment.GUIHeight, 0.10f*GameEnvironment.GUIWidth,0.075f*GameEnvironment.GUIHeight), "Post", buttonGUIStyle) )
 					{
 						if(postedscore)
 						{
@@ -787,7 +789,7 @@ public class Control : MonoBehaviour {
 						postScoreResponse = "Shared on facebook!";
 					}
 					
-					if(GUI.Button(new Rect(0.585f*Screen.width,0.475f*Screen.height, 0.10f*Screen.width,0.075f*Screen.height), "Share", buttonGUIStyle))
+					if(GUI.Button(new Rect(0.585f*GameEnvironment.GUIWidth,0.475f*GameEnvironment.GUIHeight, 0.10f*GameEnvironment.GUIWidth,0.075f*GameEnvironment.GUIHeight), "Share", buttonGUIStyle))
 					{
 						if( !sharedonfacebook )
 						{
@@ -801,11 +803,11 @@ public class Control : MonoBehaviour {
 					#endif
 										
 					if(!isName || (isPost == true))
-						GUI.Label(new Rect(0.38f*Screen.width,0.57f*Screen.height,0.30f*Screen.width,0.032f*Screen.height), postScoreResponse.ToString(),myGUIStyle);					
+						GUI.Label(new Rect(0.38f*GameEnvironment.GUIWidth,0.57f*GameEnvironment.GUIHeight,0.30f*GameEnvironment.GUIWidth,0.032f*GameEnvironment.GUIHeight), postScoreResponse.ToString(),myGUIStyle);					
 				}
 				#endregion
 	
-				if( GUI.Button(new Rect(0.58f*Screen.width,0.62f*Screen.height,0.15f*Screen.width,0.1f*Screen.height), "EXIT", buttonGUIStyle) )
+				if( GUI.Button(new Rect(0.58f*GameEnvironment.GUIWidth,0.62f*GameEnvironment.GUIHeight,0.15f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "EXIT", buttonGUIStyle) )
 				{
 					isLeaderBoard = false;		
 					GameEnvironment.ToMap = true;
@@ -876,9 +878,9 @@ public class Control : MonoBehaviour {
 	{
 		if( !Option.AutoTargeting || AutoTargeting) return;
 		Vector3 scp = LevelInfo.Environments.mainCamera.WorldToScreenPoint(zombie.transform.position);
-		if(scp.z > 0 && scp.x>=0 && scp.x <= Screen.width) return;
+		if(scp.z > 0 && scp.x>=0 && scp.x <= GameEnvironment.GUIWidth) return;
 		if(scp.z<0) scp.x = -scp.x;
-		if(scp.x < -Screen.width*0.5f && scp.z<0 || scp.x<0f && scp.z>=0)
+		if(scp.x < -GameEnvironment.GUIWidth*0.5f && scp.z<0 || scp.x<0f && scp.z>=0)
 		{
 			LeftAttackingZombie=zombie;
 			leftAutoTargetTime=3f;
