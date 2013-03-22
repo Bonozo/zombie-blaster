@@ -2,203 +2,156 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Collections;
+using Prime31;
 
 
 public class FacebookManager : MonoBehaviour
 {
 #if UNITY_ANDROID || UNITY_IPHONE
 	// Fired after a successful login attempt was made
-	public static event Action loginSucceededEvent;
+	public static event Action sessionOpenedEvent;
 	
 	// Fired just before the login succeeded event. For interal use only.
 	public static event Action preLoginSucceededEvent;
-	
+
 	// Fired when an error occurs while logging in
 	public static event Action<string> loginFailedEvent;
-	
-	// Fired when the user logs out
-	public static event Action loggedOutEvent;
-	
-	// Fired when the access token is extended. Returns the date that the new token will expire
-	public static event Action<DateTime> accessTokenExtendedEvent;
-	
-	// Fired when the access token fails to be extended
-	public static event Action failedToExtendTokenEvent;
-	
-	// Fired when the session is invalidated
-	public static event Action sessionInvalidatedEvent;
-	
-	// Fired when the post message or custom dialog completes
-	public static event Action dialogCompletedEvent;
-	
-	// Fired when the post message or custom dialog fails
-	public static event Action<string> dialogFailedEvent;
-	
-	// Fired when the post message or a custom dialog does not complete
-	public static event Action dialogDidNotCompleteEvent;
 	
 	// Fired when a custom dialog completes with the url passed back from the dialog
 	public static event Action<string> dialogCompletedWithUrlEvent;
 	
-	// Fired when a rest request finishes
-	public static event Action<object> customRequestReceivedEvent;
+	// iOS only. Fired when the post message or custom dialog completes
+	public static event Action dialogCompletedEvent;
+
+	// iOS only. Fired when the post message or a custom dialog does not complete
+	public static event Action dialogDidNotCompleteEvent;
 	
-	// Fired when a rest request fails
-	public static event Action<string> customRequestFailedEvent;
+	// Fired when the post message or custom dialog fails
+	public static event Action<string> dialogFailedEvent;
+
+	// Fired when a graph request finishes
+	public static event Action<object> graphRequestCompletedEvent;
+
+	// Fired when a graph request fails
+	public static event Action<string> graphRequestFailedEvent;
 	
-	// Fired when the Facebook composer completes. True indicates success and false cancel/failure.
+	// iOS only. Fired when a rest request finishes
+	public static event Action<object> restRequestCompletedEvent;
+
+	// iOS only. Fired when a rest request fails
+	public static event Action<string> restRequestFailedEvent;
+	
+	// iOS only. Fired when the Facebook composer completes. True indicates success and false cancel/failure.
 	public static event Action<bool> facebookComposerCompletedEvent;
+
+	// Fired when reauthorization succeeds
+	public static event Action reauthorizationSucceededEvent;
+
+	// Fired when reauthorization fails
+	public static event Action<string> reauthorizationFailedEvent;
 	
-	// Fired when reath with read permissions fails
-	public static event Action<string> facebookReauthorizationWithReadPermissionsFailedEvent;
-
-	// Fired when reath with read permissions succeeds
-	public static event Action facebookReauthorizationWithReadPermissionsSucceededEvent;
-
-	// Fired when reath with publish permissions fails
-	public static event Action<string> facebookReauthorizationWithPublishPermissionsFailedEvent;
-
-	// Fired when reath with publish permissions succeeds
-	public static event Action facebookReauthorizationWithPublishPermissionsSucceededEvent;
-
 	
 
-    void Awake()
-    {
-		// Set the GameObject name to the class name for easy access from Obj-C
-		gameObject.name = this.GetType().ToString();
-		DontDestroyOnLoad( this );
-    }
-
-
-
-	public void facebookLoginSucceeded( string empty )
+	static FacebookManager()
 	{
-		if( preLoginSucceededEvent != null )
-			preLoginSucceededEvent();
+		AbstractManager.initialize( typeof( FacebookManager ) );
+	}
+
+	
+	
+	public void sessionOpened( string accessToken )
+	{
+		preLoginSucceededEvent.fire();
+		Facebook.instance.accessToken = accessToken;
 		
-		if( loginSucceededEvent != null )
-			loginSucceededEvent();
+		sessionOpenedEvent.fire();
 	}
 	
 	
-	public void facebookLoginDidFail( string error )
+	public void loginFailed( string error )
 	{
-		if( loginFailedEvent != null )
-			loginFailedEvent( error );
-	}
-	
-	
-	public void facebookDidLogout( string empty )
-	{
-		if( loggedOutEvent != null )
-			loggedOutEvent();
-	}
-	
-	
-	public void facebookDidExtendToken( string secondsSinceEpoch )
-	{
-		if( accessTokenExtendedEvent != null )
-		{
-			var seconds = double.Parse( secondsSinceEpoch );
-			var intermediate = new DateTime( 1970, 1, 1, 0, 0, 0, DateTimeKind.Utc );
-			var date = intermediate.AddSeconds( seconds );
-			accessTokenExtendedEvent( date );
-		}
-	}
-	
-	
-	public void facebookFailedToExtendToken( string empty )
-	{
-		if( failedToExtendTokenEvent != null )
-			failedToExtendTokenEvent();
+		loginFailedEvent.fire( error );
 	}
 
 	
-	public void facebookSessionInvalidated( string empty )
-	{
-		if( sessionInvalidatedEvent != null )
-			sessionInvalidatedEvent();
-	}
-	
-	
-	public void facebookDialogDidComplete( string empty )
+	// iOS only
+	public void dialogCompleted( string empty )
 	{
 		if( dialogCompletedEvent != null )
 			dialogCompletedEvent();
 	}
 	
 	
-	public void facebookDialogDidCompleteWithUrl( string url )
-	{
-		if( dialogCompletedWithUrlEvent != null )
-			dialogCompletedWithUrlEvent( url );
-	}
-
-
-	public void facebookDialogDidNotComplete( string empty )
+	// iOS only
+	public void dialogDidNotComplete( string empty )
 	{
 		if( dialogDidNotCompleteEvent != null )
 			dialogDidNotCompleteEvent();
 	}
-	
-	
-	public void facebookDialogDidFailWithError( string error )
+
+
+	public void dialogCompletedWithUrl( string url )
 	{
-		if( dialogFailedEvent != null )
-			dialogFailedEvent( error );
+		dialogCompletedWithUrlEvent.fire( url );
 	}
 
-
-	public void facebookDidReceiveCustomRequest( string result )
+	
+	public void dialogFailedWithError( string error )
 	{
-		if( customRequestReceivedEvent != null )
+		dialogFailedEvent.fire( error );
+	}
+
+	
+	public void graphRequestCompleted( string json )
+	{
+		if( graphRequestCompletedEvent != null )
 		{
-			object obj = Prime31.Json.jsonDecode( result )/*Prime31.MiniJSON.jsonDecode( result )*/;
-			customRequestReceivedEvent( obj );
+			object obj = Prime31.Json.jsonDecode( json );
+			graphRequestCompletedEvent.fire( obj );
 		}
 	}
 	
 	
-	public void facebookCustomRequestDidFail( string error )
+	public void graphRequestFailed( string error )
 	{
-		if( customRequestFailedEvent != null )
-			customRequestFailedEvent( error );
+		graphRequestFailedEvent.fire( error );
 	}
 	
+
+	// iOS only
+	public void restRequestCompleted( string json )
+	{
+		if( restRequestCompletedEvent != null )
+		{
+			object obj = Prime31.Json.jsonDecode( json );
+			restRequestCompletedEvent.fire( obj );
+		}
+	}
 	
+
+	// iOS only
+	public void restRequestFailed( string error )
+	{
+		graphRequestFailedEvent.fire( error );
+	}
+
+
+	// iOS only
 	public void facebookComposerCompleted( string result )
 	{
-		if( facebookComposerCompletedEvent != null )
-			facebookComposerCompletedEvent( result == "1" );
+		facebookComposerCompletedEvent.fire( result == "1" );
 	}
+
+
+	public void reauthorizationSucceeded( string empty )
+	{
+		reauthorizationSucceededEvent.fire();
+	}
+
 	
-	
-	public void facebookReauthorizationWithReadPermissionsFailed( string error )
+	public void reauthorizationFailed( string error )
 	{
-		if( facebookReauthorizationWithReadPermissionsFailedEvent != null )
-			facebookReauthorizationWithReadPermissionsFailedEvent( error );
-	}
-
-
-	public void facebookReauthorizationWithReadPermissionsSucceeded( string empty )
-	{
-		if( facebookReauthorizationWithReadPermissionsSucceededEvent != null )
-			facebookReauthorizationWithReadPermissionsSucceededEvent();
-	}
-
-
-	public void facebookReauthorizationWithPublishPermissionsFailed( string error )
-	{
-		if( facebookReauthorizationWithPublishPermissionsFailedEvent != null )
-			facebookReauthorizationWithPublishPermissionsFailedEvent( error );
-	}
-
-
-	public void facebookReauthorizationWithPublishPermissionsSucceeded( string empty )
-	{
-		if( facebookReauthorizationWithPublishPermissionsSucceededEvent != null )
-			facebookReauthorizationWithPublishPermissionsSucceededEvent();
+		reauthorizationFailedEvent.fire( error );
 	}
 
 #endif

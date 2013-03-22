@@ -70,6 +70,20 @@ public class Facebook : P31RestKit
 		surrogateMonobehaviour.StartCoroutine( send( path, verb, parameters, completionHandler ) );
 	}
 	
+	
+	public void graphRequestBatch( IEnumerable<FacebookBatchRequest> requests, Action<string, object> completionHandler )
+	{
+		var parameters = new Dictionary<string,object>();
+		var requestList = new List<Dictionary<string,object>>();
+		
+		foreach( var r in requests )
+			requestList.Add( r.requestDictionary() );
+		
+		parameters.Add( "batch", Json.jsonEncode( requestList ) );
+		
+		surrogateMonobehaviour.StartCoroutine( send( string.Empty, HTTPVerb.POST, parameters, completionHandler ) );
+	}
+	
 	#endregion
 	
 	
@@ -143,13 +157,60 @@ public class Facebook : P31RestKit
     {
 		get( "me/friends", completionHandler );
     }
+	
+	
+	// Extends a short lived access token. Completion handler returns either the expiry date or null if unsuccessful. Note that it is highly recommended to
+	// only call this from a server. Your app secret should not be included with your application
+	public void extendAccessToken( string appId, string appSecret, Action<DateTime?> completionHandler )
+	{
+		if( Facebook.instance.accessToken == null )
+		{
+			Debug.LogError( "There is no access token to extend. The user must be autenticated before attempting to extend their access token" );
+			return;
+		}
+		
+		var parameters = new Dictionary<string,object>()
+		{
+			{ "client_id", appId },
+			{ "client_secret", appSecret },
+			{ "grant_type", "fb_exchange_token" },
+			{ "fb_exchange_token", Facebook.instance.accessToken }
+		};
+		
+		get( "oauth/access_token", parameters, ( error, obj ) =>
+		{
+			if( obj is string )
+			{
+				var text = obj as string;
+				if( text.StartsWith( "access_token=" ) )
+				{
+					var paramDict = text.parseQueryString();
+					Facebook.instance.accessToken = paramDict["access_token"];
+					
+					var expires = double.Parse( paramDict["expires"] );
+					completionHandler( DateTime.Now.AddSeconds( expires ) );
+				}
+				else
+				{
+					Debug.LogError( "error extending access token: " + text );
+					completionHandler( null );
+				}
+			}
+			else
+			{
+				Debug.LogError( "error extending access token: " + error );
+				completionHandler( null );
+			}
+		});
+	}
 
 	#endregion
 	
 	
 	#region App Access Token
 	
-	// Fetches the app access token
+	// Fetches the app access token. Note that it is highly recommended to only call this from a server. Your app secret should not be included
+	// with your application
 	public void getAppAccessToken( string appId, string appSecret, Action<string> completionHandler )
 	{
 		var parameters = new Dictionary<string,object>()
