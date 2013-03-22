@@ -24,13 +24,13 @@ public class ZBFacebook : MonoBehaviour {
 		DontDestroyOnLoad(this.gameObject);
 				
 		#if UNITY_ANDROID
-		FacebookManager.loginSucceededEvent += facebookLogin;
+		FacebookManager.sessionOpenedEvent += facebookLogin;
 		FacebookManager.loginFailedEvent += facebookLoginFailed;
-		FacebookManager.loggedOutEvent += facebookDidLogoutEvent;
+		//FacebookManager.loggedOutEvent += facebookDidLogoutEvent;
 		//Mak Kaloliya On 17-03-13
 		#elif UNITY_IOS
-		FacebookManagerIOS.sessionOpenedEvent += facebookLogin;
-		FacebookManagerIOS.loginFailedEvent += facebookLoginFailed;
+		FacebookManager.sessionOpenedEvent += facebookLogin;
+		FacebookManager.loginFailedEvent += facebookLoginFailed;
 		//FacebookManagerIOS.loggedOutEvent += facebookDidLogoutEvent;	
 		#endif
 		Init();
@@ -80,7 +80,7 @@ public class ZBFacebook : MonoBehaviour {
 	public void Init()
 	{
 		#if UNITY_ANDROID
-		FacebookAndroid.init(appID);
+		FacebookAndroid.init();
 		lastmessage = "Init called";
 		#elif UNITY_IPHONE
 		FacebookBinding.init();
@@ -91,9 +91,10 @@ public class ZBFacebook : MonoBehaviour {
 	public void Login()
 	{
 		#if UNITY_ANDROID
-		FacebookAndroid.loginWithRequestedPermissions( new string[] { "publish_stream", "email", "user_birthday" } );
+		FacebookAndroid.loginWithReadPermissions( new string[] { "email", "user_birthday" } );
+		//FacebookAndroid.loginWithRequestedPermissions( new string[] { "publish_stream", "email", "user_birthday" } );
 		#elif UNITY_IPHONE
-		FacebookBinding.loginUsingDeprecatedAuthorizationFlowWithRequestedPermissions( new string[] { "publish_actions", "publish_stream" });
+		FacebookBinding.loginWithReadPermissions(new string[] { "email", "user_birthday" });
 		#endif
 	}
 
@@ -103,7 +104,7 @@ public class ZBFacebook : MonoBehaviour {
 		#if UNITY_ANDROID
 		Facebook.instance.graphRequest( "me", completionHandler );
 		#elif UNITY_IPHONE
-		FacebookIOS.instance.graphRequest( "me", completionHandler );
+		Facebook.instance.graphRequest( "me", completionHandler );
 		#endif
 		
 		
@@ -135,7 +136,7 @@ public class ZBFacebook : MonoBehaviour {
 	
 	public void PostOnWall(int scores)
 	{
-		#if UNITY_ANDROID
+			#if UNITY_ANDROID
 		string posttext = fbfirstname + " played Zombie Blaster! (Score: " + scores + ")";
 		
 		var pathToImage = Application.persistentDataPath + "/" + screenshotFilename;
@@ -148,7 +149,7 @@ public class ZBFacebook : MonoBehaviour {
 		var pathToImage = Application.persistentDataPath + "/" + screenshotFilename;
 		var bytes = System.IO.File.ReadAllBytes( pathToImage );
 		
-		FacebookIOS.instance.postImage( bytes, posttext, completionHandler1 );
+		Facebook.instance.postImage( bytes, posttext, completionHandler1 );
 		#endif
 	}
 	
