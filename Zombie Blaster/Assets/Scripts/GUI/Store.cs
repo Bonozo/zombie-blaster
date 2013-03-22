@@ -631,8 +631,7 @@ public class Store : MonoBehaviour {
 			}	
 			
 			Rect shopRect = new Rect(0.01f*Screen.width,0.1f*Screen.height,0.487f*Screen.width,0.9f*Screen.height);
-			//Rect shopRect = new Rect(0.01f*Screen.width,0.273f*Screen.height,0.487f*Screen.width,0.421f*Screen.height);
-			
+
 			if( (RectContainPoint(shopRect,GameEnvironment.AbsoluteSwipeBegin) && RectContainPoint(shopRect,GameEnvironment.AbsoluteSwipeEnd) && swp.y > 0 )
 				/*|| (arrowUpShow.enabled && arrowUpShowButton.PressedUp)*/ )
 			{
@@ -940,20 +939,22 @@ public class Store : MonoBehaviour {
 	
 	void OnGUI()
 	{
+		GUI.matrix = GameEnvironment.GetGameGUIMatrix();
+		
 		if(Fade.InProcess) return;
 		
 		if(!_showStore) return;
 		
 		if( wantToExit ) // Only game play event
 		{
-			GUI.DrawTexture(new Rect(0.2f*Screen.width,0.15f*Screen.height,0.6f*Screen.width,0.6f*Screen.height),popupTexture);
-			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Leave Game?",myStyle);
+			GUI.DrawTexture(new Rect(0.2f*GameEnvironment.GUIWidth,0.15f*GameEnvironment.GUIHeight,0.6f*GameEnvironment.GUIWidth,0.6f*GameEnvironment.GUIHeight),popupTexture);
+			GUI.Label(new Rect(0.35f*GameEnvironment.GUIWidth,0.305f*GameEnvironment.GUIHeight,0.3f*GameEnvironment.GUIWidth,0.2f*GameEnvironment.GUIHeight),"Leave Game?",myStyle);
 
-			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Quit", buttonStyle ) )	
+			if(GUI.Button(new Rect(0.33f*GameEnvironment.GUIWidth,0.5f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "Quit", buttonStyle ) )	
 			{
 				GoMainMenuFromGamePlay();
 			}
-			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "Back", buttonStyle ) )
+			if( GUI.Button(new Rect(0.52f*GameEnvironment.GUIWidth,0.5f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "Back", buttonStyle ) )
 			{
 				audio.PlayOneShot(clipBack);
 				wantToExit = false;
@@ -974,13 +975,13 @@ public class Store : MonoBehaviour {
 	
 	private void ShowWeaponBuyDialog()
 	{
-		GUI.DrawTexture(new Rect(0.2f*Screen.width,0.15f*Screen.height,0.6f*Screen.width,0.6f*Screen.height),popupTexture);
+		GUI.DrawTexture(new Rect(0.2f*GameEnvironment.GUIWidth,0.15f*GameEnvironment.GUIHeight,0.6f*GameEnvironment.GUIWidth,0.6f*GameEnvironment.GUIHeight),popupTexture);
 		if( Store.zombieHeads >= GameEnvironment.storeGun[wooi].price )
 		{
 		
-			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Do you want to buy this item?",myStyle);
+			GUI.Label(new Rect(0.35f*GameEnvironment.GUIWidth,0.305f*GameEnvironment.GUIHeight,0.3f*GameEnvironment.GUIWidth,0.2f*GameEnvironment.GUIHeight),"Do you want to buy this item?",myStyle);
 			
-			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "BUY", buttonStyle ) )	
+			if(GUI.Button(new Rect(0.33f*GameEnvironment.GUIWidth,0.5f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "BUY", buttonStyle ) )	
 			{
 				Store.UnlockWeapon(wooi);
 				showWeapon[wooi] = true;
@@ -995,7 +996,7 @@ public class Store : MonoBehaviour {
 				spwchannel = true;
 				currentshopitem = NextWeapon(currentshopitem,false);
 			}
-			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "BACK", buttonStyle ) )
+			if( GUI.Button(new Rect(0.52f*GameEnvironment.GUIWidth,0.5f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "BACK", buttonStyle ) )
 			{
 				audio.PlayOneShot(clipBack);
 				wooi = -1; 
@@ -1004,14 +1005,14 @@ public class Store : MonoBehaviour {
 		}
 		else
 		{
-			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.3f*Screen.height),"You have not enough heads to buy this item.",myStyle);
+			GUI.Label(new Rect(0.35f*GameEnvironment.GUIWidth,0.305f*GameEnvironment.GUIHeight,0.3f*GameEnvironment.GUIWidth,0.3f*GameEnvironment.GUIHeight),"You have not enough heads to buy this item.",myStyle);
 			
-			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "MORE HEADS", buttonStyle ) )	
+			if(GUI.Button(new Rect(0.33f*GameEnvironment.GUIWidth,0.5f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "MORE HEADS", buttonStyle ) )	
 			{
 				Get1000HeadsEvent();
 			}
 			
-			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "BACK", buttonStyle) )
+			if( GUI.Button(new Rect(0.52f*GameEnvironment.GUIWidth,0.5f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "BACK", buttonStyle) )
 			{
 				audio.PlayOneShot(clipBack);
 				wooi = -1;
@@ -1024,12 +1025,12 @@ public class Store : MonoBehaviour {
 	
 	private void ShowFillInDialog()
 	{
-		GUI.DrawTexture(new Rect(0.2f*Screen.width,0.15f*Screen.height,0.6f*Screen.width,0.6f*Screen.height),popupTexture);
+		GUI.DrawTexture(new Rect(0.2f*GameEnvironment.GUIWidth,0.15f*GameEnvironment.GUIHeight,0.6f*GameEnvironment.GUIWidth,0.6f*GameEnvironment.GUIHeight),popupTexture);
 	
 		if( GameEnvironment.storeGun[wooi].current == GameEnvironment.storeGun[wooi].pocketsize && GameEnvironment.storeGun[wooi].store == GameEnvironment.storeGun[wooi].maxammo )
 		{
-			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Your \"" + GameEnvironment.storeGun[wooi].name + " \" is already fully loaded!",myStyle);
-			if( GUI.Button(new Rect(0.42f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "BACK", buttonStyle) )
+			GUI.Label(new Rect(0.35f*GameEnvironment.GUIWidth,0.305f*GameEnvironment.GUIHeight,0.3f*GameEnvironment.GUIWidth,0.2f*GameEnvironment.GUIHeight),"Your \"" + GameEnvironment.storeGun[wooi].name + " \" is already fully loaded!",myStyle);
+			if( GUI.Button(new Rect(0.42f*GameEnvironment.GUIWidth,0.5f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "BACK", buttonStyle) )
 			{
 				audio.PlayOneShot(clipBack);
 				wooi = -1;
@@ -1039,8 +1040,8 @@ public class Store : MonoBehaviour {
 		}
 		else if( Store.zombieHeads >= GameEnvironment.storeGun[wooi].price )
 		{
-			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Refill the \"" + GameEnvironment.storeGun[wooi].name + "\" ammo for " + GameEnvironment.storeGun[wooi].price + " Heads?",myStyle);
-			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "REFILL", buttonStyle ) )	
+			GUI.Label(new Rect(0.35f*GameEnvironment.GUIWidth,0.305f*GameEnvironment.GUIHeight,0.3f*GameEnvironment.GUIWidth,0.2f*GameEnvironment.GUIHeight),"Refill the \"" + GameEnvironment.storeGun[wooi].name + "\" ammo for " + GameEnvironment.storeGun[wooi].price + " Heads?",myStyle);
+			if(GUI.Button(new Rect(0.33f*GameEnvironment.GUIWidth,0.5f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "REFILL", buttonStyle ) )	
 			{
 				audio.Play();
 				Store.zombieHeads -= GameEnvironment.storeGun[wooi].price;
@@ -1049,7 +1050,7 @@ public class Store : MonoBehaviour {
 				fillin = false;
 				spwchannel = true;			
 			}
-			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "BACK", buttonStyle ) )
+			if( GUI.Button(new Rect(0.52f*GameEnvironment.GUIWidth,0.5f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "BACK", buttonStyle ) )
 			{
 				audio.PlayOneShot(clipBack);
 				wooi = -1;
@@ -1059,14 +1060,14 @@ public class Store : MonoBehaviour {
 		}
 		else
 		{
-			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.3f*Screen.height),"You do not have enough heads.",myStyle);
+			GUI.Label(new Rect(0.35f*GameEnvironment.GUIWidth,0.305f*GameEnvironment.GUIHeight,0.3f*GameEnvironment.GUIWidth,0.3f*GameEnvironment.GUIHeight),"You do not have enough heads.",myStyle);
 			
-			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "MORE HEADS", buttonStyle ) )	
+			if(GUI.Button(new Rect(0.33f*GameEnvironment.GUIWidth,0.5f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "MORE HEADS", buttonStyle ) )	
 			{
 				Get1000HeadsEvent();
 			}
 			
-			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "BACK", buttonStyle) )
+			if( GUI.Button(new Rect(0.52f*GameEnvironment.GUIWidth,0.5f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "BACK", buttonStyle) )
 			{
 				audio.PlayOneShot(clipBack);
 				wooi = -1;
@@ -1074,55 +1075,17 @@ public class Store : MonoBehaviour {
 				spwchannel = true;
 			}		
 		}
-		
-		/*/ old
-		if( Store.zombieHeads >= 100 )
-		{
-			GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"Do you want to Fill in ammo?");
-			
-			if(GUI.Button(new Rect(0.35f*Screen.width,0.4f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "Fill in" ) )	
-			{
-				audio.Play();
-				Store.zombieHeads -= 100;
-				//GameEnvironment.storeGun[wooi].store += 5*GameEnvironment.storeGun[wooi].pocketsize;
-				LevelInfo.Environments.guns.GetWeaponWithMAX((Weapon)wooi);
-				
-				wooi = -1;
-				fillin = false;
-				spwchannel = true;
-			}
-			if( GUI.Button(new Rect(0.35f*Screen.width,0.6f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "Back" ) )
-			{
-				audio.PlayOneShot(clipBack);
-				wooi = -1;
-				fillin = false;
-				spwchannel = true;
-			}
-		}
-		else
-		{
-			GUI.Box(new Rect(0.25f*Screen.width,0.25f*Screen.height,0.5f*Screen.width,0.5f*Screen.height),"You have not enough heads.");
-			if( GUI.Button(new Rect(0.35f*Screen.width,0.5f*Screen.height,0.3f*Screen.width,0.1f*Screen.height), "Back") )
-			{
-				audio.PlayOneShot(clipBack);
-				wooi = -1;
-				fillin = false;
-				spwchannel = true;
-			}
-		}
-		*/
-
 	}
 	
 	private void ShowWeaponDescription()
 	{
-		GUI.DrawTexture(new Rect(0.1f*Screen.width,0.1f*Screen.height,0.8f*Screen.width,0.8f*Screen.height),popupTexture);
+		GUI.DrawTexture(new Rect(0.1f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight,0.8f*GameEnvironment.GUIWidth,0.8f*GameEnvironment.GUIHeight),popupTexture);
 		
 		if(showWeapon[wooi]||wooi==0)
 		{
-			GUI.Label(new Rect(0.4f*Screen.width,0.25f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),GameEnvironment.storeGun[wooi].name,myStyle);
+			GUI.Label(new Rect(0.4f*GameEnvironment.GUIWidth,0.25f*GameEnvironment.GUIHeight,0.3f*GameEnvironment.GUIWidth,0.2f*GameEnvironment.GUIHeight),GameEnvironment.storeGun[wooi].name,myStyle);
 			
-			GUI.Label(new Rect(0.25f*Screen.width,0.32f*Screen.height,0.5f*Screen.width,0.25f*Screen.height),
+			GUI.Label(new Rect(0.25f*GameEnvironment.GUIWidth,0.32f*GameEnvironment.GUIHeight,0.5f*GameEnvironment.GUIWidth,0.25f*GameEnvironment.GUIHeight),
 				GameEnvironment.storeGun[wooi].description,myStyle);
 			
 			if(wooi != (int)Weapon.Spade)
@@ -1138,7 +1101,7 @@ public class Store : MonoBehaviour {
 				if( !WeaponUnlocked(wooi) )
 					s += "\nPrice:";
 				
-				GUI.Label(new Rect(0.3f*Screen.width,0.44f*Screen.height,0.3f*Screen.width,0.25f*Screen.height),s,myStyle);
+				GUI.Label(new Rect(0.3f*GameEnvironment.GUIWidth,0.44f*GameEnvironment.GUIHeight,0.3f*GameEnvironment.GUIWidth,0.25f*GameEnvironment.GUIHeight),s,myStyle);
 				
 				s = 	
 					"" + GameEnvironment.storeGun[wooi].damage +
@@ -1151,7 +1114,7 @@ public class Store : MonoBehaviour {
 				if( !WeaponUnlocked(wooi) ) 
 					s += "\n" + GameEnvironment.storeGun[wooi].price;
 				
-				GUI.Label(new Rect(0.45f*Screen.width,0.44f*Screen.height,0.3f*Screen.width,0.25f*Screen.height),s,myStyle);
+				GUI.Label(new Rect(0.45f*GameEnvironment.GUIWidth,0.44f*GameEnvironment.GUIHeight,0.3f*GameEnvironment.GUIWidth,0.25f*GameEnvironment.GUIHeight),s,myStyle);
 			}
 		}
 		else
@@ -1169,11 +1132,11 @@ public class Store : MonoBehaviour {
 				message = "UNLOCK \"" + GameEnvironment.levelName[levestounlock] + "\" ON THE MAP TO GET THE \"" 
 				+ GameEnvironment.storeGun[wooi].name + "\"";
 			
-			GUI.Label(new Rect(0.25f*Screen.width,0.32f*Screen.height,0.5f*Screen.width,0.25f*Screen.height),
+			GUI.Label(new Rect(0.25f*GameEnvironment.GUIWidth,0.32f*GameEnvironment.GUIHeight,0.5f*GameEnvironment.GUIWidth,0.25f*GameEnvironment.GUIHeight),
 				message,myStyle);
 		}
 		
-		if( GUI.Button(new Rect(0.58f*Screen.width,0.585f*Screen.height,0.15f*Screen.width,0.1f*Screen.height), "OK", buttonStyle ) )
+		if( GUI.Button(new Rect(0.58f*GameEnvironment.GUIWidth,0.585f*GameEnvironment.GUIHeight,0.15f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "OK", buttonStyle ) )
 		{
 			audio.Stop();
 			audio.PlayOneShot(clipBack);
