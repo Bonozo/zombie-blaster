@@ -262,7 +262,7 @@ public class Control : MonoBehaviour {
 				LevelInfo.Audio.StopAll();
 				LevelInfo.Audio.PlayGameOver();
 				LevelInfo.Environments.hubLives.SetNumberWithFlash(LevelInfo.Environments.hubLives.GetNumber()-1);
-				ZBFacebook.Instance.Init();
+				ZombieBlasterFacebook .Instance.Init();
 				break;
 			case GameState.Play:
 				Time.timeScale = 1f;
@@ -734,16 +734,16 @@ public class Control : MonoBehaviour {
 					
 					
 					#if UNITY_ANDROID || UNITY_IPHONE
-					if( ZBFacebook.Instance.Ready)
+					if( ZombieBlasterFacebook .Instance.Ready)
 					{
-						nameLB = ZBFacebook.Instance.fbname;
+						nameLB = ZombieBlasterFacebook .Instance.fbname;
 						GUI.Label(new Rect(0.48f*GameEnvironment.GUIWidth,0.35f*GameEnvironment.GUIHeight, 0.2f*GameEnvironment.GUIWidth,0.05f*GameEnvironment.GUIHeight), nameLB,myGUIStyle);
 					}
 					else
 					{
-						if( GUI.Button(new Rect(0.48f*GameEnvironment.GUIWidth,0.35f*GameEnvironment.GUIHeight, 0.2f*GameEnvironment.GUIWidth,0.05f*GameEnvironment.GUIHeight), "Log in ", buttonGUIStyle) && !ZBFacebook.Instance.Logging)
+						if( GUI.Button(new Rect(0.48f*GameEnvironment.GUIWidth,0.35f*GameEnvironment.GUIHeight, 0.2f*GameEnvironment.GUIWidth,0.05f*GameEnvironment.GUIHeight), "Log in ", buttonGUIStyle) && !ZombieBlasterFacebook .Instance.Logging)
 						{
-							ZBFacebook.Instance.Login();
+							ZombieBlasterFacebook .Instance.Login();
 						}
 					}
 					#else
@@ -768,7 +768,7 @@ public class Control : MonoBehaviour {
 							#else
 							postScoreResponse = "Please Enter Name!";
 							#endif
-							ZBFacebook.Instance.Init();
+							ZombieBlasterFacebook .Instance.Init();
 						}
 						else
 						{	
@@ -782,10 +782,10 @@ public class Control : MonoBehaviour {
 			
 					#if UNITY_ANDROID || UNITY_IPHONE
 					
-					if(ZBFacebook.Instance.Posted)
+					if(ZombieBlasterFacebook .Instance.Posted)
 					{
 						sharedonfacebook = true;
-						ZBFacebook.Instance.Posted = false;
+						ZombieBlasterFacebook .Instance.Posted = false;
 						postScoreResponse = "Shared on facebook!";
 					}
 					
@@ -797,7 +797,7 @@ public class Control : MonoBehaviour {
 						}
 						else
 						{
-							ZBFacebook.Instance.PostOnWall(LevelInfo.Environments.hubScores.GetNumber());		
+							ZombieBlasterFacebook .Instance.PostOnWall(LevelInfo.Environments.hubScores.GetNumber());		
 						}
 					}
 					#endif
