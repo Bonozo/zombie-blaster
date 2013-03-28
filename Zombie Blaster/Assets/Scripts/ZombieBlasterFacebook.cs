@@ -5,12 +5,9 @@ using Prime31;
 
 public class ZombieBlasterFacebook : MonoBehaviourGUI {
 
-	#if UNITY_ANDROID
 	public GameObject screenshotMessage;
 	public static ZombieBlasterFacebook Instance;
 	
-	[System.NonSerialized]
-	public string lastmessage = "";
 	[System.NonSerialized]
 	public string fbname = "";
 	[System.NonSerialized]
@@ -82,10 +79,8 @@ public class ZombieBlasterFacebook : MonoBehaviourGUI {
 		Debug.Log("ZombieBlasterFacebook  init called");
 		#if UNITY_ANDROID
 		FacebookAndroid.init();
-		lastmessage = "Init called";
 		#elif UNITY_IPHONE
 		FacebookBinding.init();
-		lastmessage = "Init called";
 		#endif
 	}
 	
@@ -105,20 +100,18 @@ public class ZombieBlasterFacebook : MonoBehaviourGUI {
 		var ht = result as Hashtable;
 		fbname = ht["name"].ToString();
 		fbfirstname = ht["first_name"].ToString();
-		lastmessage = fbname + " successfully logged in to Facebook";
 		Ready = true;
 		Logging = false;
 	}
 	
 	void facebookLoginFailed( string error )
 	{
-		lastmessage = "Facebook login failed: " + error;
+		Debug.Log("Facebook login failed: " + error);
 		Logging = false;
 	}
 	
 	void facebookDidLogoutEvent()
 	{
-		lastmessage = fbname + " logged out" ;
 		fbname = "";
 		fbfirstname = "";
 		Ready = false;
@@ -147,10 +140,11 @@ public class ZombieBlasterFacebook : MonoBehaviourGUI {
 	private void completionHandler1( string error, object result )
 	{
 		if(error!=null)
-			lastmessage = "Error when posting on facebook: " + error;
+		{
+			
+		}
 		else
 		{
-			lastmessage = "Successfully posted on facebook wall";
 			Posted = true;
 		}
 	}
@@ -165,118 +159,6 @@ public class ZombieBlasterFacebook : MonoBehaviourGUI {
 		return false;
 		#endif
 	}
-	
-	/*void OnGUI()
-	{
-		beginColumn();
-
-
-		if( GUILayout.Button( "Initialize Facebook" ) )
-		{
-			FacebookAndroid.init();
-		}
-	
-	
-		if( GUILayout.Button( "Login" ) )
-		{
-			FacebookAndroid.loginWithReadPermissions( new string[] { "email", "user_birthday" } );
-		}
-		
-		
-		if( GUILayout.Button( "Reauthorize with Publish Permissions" ) )
-		{
-			FacebookAndroid.reauthorizeWithPublishPermissions( new string[] { "publish_actions", "manage_friendlists" }, FacebookSessionDefaultAudience.EVERYONE );
-		}
-
-		
-		if( GUILayout.Button( "Logout" ) )
-		{
-			FacebookAndroid.logout();
-		}
-	
-	
-		if( GUILayout.Button( "Is Session Valid?" ) )
-		{
-			var isSessionValid = FacebookAndroid.isSessionValid();
-			Debug.Log( "Is session valid?: " + isSessionValid );
-		}
-		
-	
-		if( GUILayout.Button( "Get Session Token" ) )
-		{
-			var token = FacebookAndroid.getAccessToken();
-			Debug.Log( "session token: " + token );
-		}
-
-		
-		if( GUILayout.Button( "Get Granted Permissions" ) )
-		{
-			var permissions = FacebookAndroid.getSessionPermissions();
-			Debug.Log( "granted permissions: " + permissions.Count );
-			Prime31.Utils.logObject( permissions );
-		}
-
-	
-		endColumn( true );
-		
-
-		if( GUILayout.Button( "Post Image" ) )
-		{
-			var pathToImage = Application.persistentDataPath;// + "/" + screenshotFilename;
-			var bytes = System.IO.File.ReadAllBytes( pathToImage );
-			
-			Facebook.instance.postImage( bytes, "im an image posted from Android", completionHandler );
-		}
-
-
-		if( GUILayout.Button( "Graph Request (me)" ) )
-		{
-			Facebook.instance.graphRequest( "me", completionHandler );
-		}
-
-
-		if( GUILayout.Button( "Post Message" ) )
-		{
-			Facebook.instance.postMessage( "im posting this from Unity: " + Time.deltaTime, completionHandler );
-		}
-		
-		
-		if( GUILayout.Button( "Post Message & Extras" ) )
-		{
-			Facebook.instance.postMessageWithLinkAndLinkToImage( "link post from Unity: " + Time.deltaTime, "http://prime31.com", "Prime31 Studios", "http://prime31.com/assets/images/prime31logo.png", "Prime31 Logo", completionHandler );
-		}
-
-
-		if( GUILayout.Button( "Show Post Dialog" ) )
-		{
-			// parameters are optional. See Facebook's documentation for all the dialogs and paramters that they support
-			var parameters = new Dictionary<string,string>
-			{
-				{ "link", "http://prime31.com" },
-				{ "name", "link name goes here" },
-				{ "picture", "http://prime31.com/assets/images/prime31logo.png" },
-				{ "caption", "the caption for the image is here" }
-			};
-			FacebookAndroid.showDialog( "stream.publish", parameters );
-		}
-
-
-		if( GUILayout.Button( "Get Friends" ) )
-		{
-			Facebook.instance.getFriends( completionHandler );
-		}
-
-		
-		endColumn();
-		
-		
-		if( bottomLeftButton( "Twitter Scene" ) )
-		{
-			Application.LoadLevel( "TwitterTestScene" );
-		}
-	}*/
-
-#endif
 	
 	#if UNITY_IPHONE || UNITY_ANDROID
 	// Listens to all the events.  All event listeners MUST be removed before this object is disposed!
@@ -341,7 +223,6 @@ public class ZombieBlasterFacebook : MonoBehaviourGUI {
 	void loginFailedEvent( string error )
 	{
 		Debug.Log( "Facebook login failed: " + error );
-		lastmessage = "Facebook login failed: " + error;
 		Logging = false;
 	}
 
