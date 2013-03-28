@@ -215,8 +215,10 @@ public class Leaderboard : MonoBehaviour {
 	
 	void OnGUI()
 	{
+		GUI.matrix = GameEnvironment.GetGameGUIMatrix();
+		
 		#region Post, Get Best Score
-		/*if( (GUI.Button(new Rect(0.27f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "Get Top Score")) && (isScoreDisplayed == false) )
+		/*if( (GUI.Button(new Rect(0.27f*GameEnvironment.GUIWidth,0.67f*GameEnvironment.GUIHeight,0.15f*GameEnvironment.GUIWidth,0.05f*GameEnvironment.GUIHeight), "Get Top Score")) && (isScoreDisplayed == false) )
 		{	
         	string url = "http://therealmattharmon.com/Zombie/gettopscore.php?top=10&format=xml";
         	WWW www = new WWW(url);
@@ -227,7 +229,7 @@ public class Leaderboard : MonoBehaviour {
 			
 			isScoreDisplayed = true;	
 		}
-		if( GUI.Button(new Rect(0.425f*Screen.width,0.67f*Screen.height,0.15f*Screen.width,0.05f*Screen.height), "Post Score") )
+		if( GUI.Button(new Rect(0.425f*GameEnvironment.GUIWidth,0.67f*GameEnvironment.GUIHeight,0.15f*GameEnvironment.GUIWidth,0.05f*GameEnvironment.GUIHeight), "Post Score") )
 		{			
 			isGet = false;
 			isPost = true;
@@ -244,30 +246,30 @@ public class Leaderboard : MonoBehaviour {
 			
 			if(nameArray[0] != null && isConnectionError1 == false )
 			{	
-				//GUI.Label(new Rect(0.38f*Screen.width,0.32f*Screen.height,0.15f*Screen.width,0.03f*Screen.height), "" + "NAME",postGUIStyle);				
+				//GUI.Label(new Rect(0.38f*GameEnvironment.GUIWidth,0.32f*GameEnvironment.GUIHeight,0.15f*GameEnvironment.GUIWidth,0.03f*GameEnvironment.GUIHeight), "" + "NAME",postGUIStyle);				
 				
-				//GUI.Label(new Rect(0.50f*Screen.width,0.32f*Screen.height,0.15f*Screen.width,0.03f*Screen.height), "" + "SCORE",postGUIStyle);					
+				//GUI.Label(new Rect(0.50f*GameEnvironment.GUIWidth,0.32f*GameEnvironment.GUIHeight,0.15f*GameEnvironment.GUIWidth,0.03f*GameEnvironment.GUIHeight), "" + "SCORE",postGUIStyle);					
 				
-				//GUI.BeginGroup(new Rect(0.04f*Screen.width,0.14f*Screen.height,0.92f*Screen.width,0.56f*Screen.height));
+				//GUI.BeginGroup(new Rect(0.04f*GameEnvironment.GUIWidth,0.14f*GameEnvironment.GUIHeight,0.92f*GameEnvironment.GUIWidth,0.56f*GameEnvironment.GUIHeight));
 				
 				for(int i = 0; i < 10 && nameArray[i] != null/*by Aharon*/; i++)
 				{	
 					string nmb = (i+1).ToString() + (i<9?".  ":". ");
-					GUI.Label(new Rect(0.05f*Screen.width, (0.15f + yPosition*i)*Screen.height, 0.3f*Screen.width,0.03f*Screen.height), nmb + nameArray[i].ToString().Replace('_',' '),postGUIStyle);
+					GUI.Label(new Rect(0.05f*GameEnvironment.GUIWidth, (0.15f + yPosition*i)*GameEnvironment.GUIHeight, 0.3f*GameEnvironment.GUIWidth,0.03f*GameEnvironment.GUIHeight), nmb + nameArray[i].ToString().Replace('_',' '),postGUIStyle);
 				}	
 					//GUI.Label(new Rect(400,40, 200, 70), "" + scoreArray[i].ToString());
 					
 					//GUI.Label(new Rect(200,40 + yPosition*(i+1), 200, 70), "" + nameArray[i].ToString());
 				for(int i = 0; i < 10 && nameArray[i] != null/*by Aharon*/; i++)
 				{			
-					GUI.Label(new Rect(0.45f*Screen.width, (0.15f + yPosition*i)*Screen.height, 0.15f*Screen.width,0.03f*Screen.height), "" + scoreArray[i].ToString(),postGUIStyle);
+					GUI.Label(new Rect(0.45f*GameEnvironment.GUIWidth, (0.15f + yPosition*i)*GameEnvironment.GUIHeight, 0.15f*GameEnvironment.GUIWidth,0.03f*GameEnvironment.GUIHeight), "" + scoreArray[i].ToString(),postGUIStyle);
 				}
 				
 				// GUI.EndGroup();
 			}
 			else
 			{
-				GUI.Label(new Rect(0.05f*Screen.width,0.15f*Screen.height,0.30f*Screen.width,0.032f*Screen.height), getScoreResponse.ToString(),postGUIStyle);
+				GUI.Label(new Rect(0.05f*GameEnvironment.GUIWidth,0.15f*GameEnvironment.GUIHeight,0.30f*GameEnvironment.GUIWidth,0.032f*GameEnvironment.GUIHeight), getScoreResponse.ToString(),postGUIStyle);
 			}
 			
 			//isGet = false;				
@@ -276,15 +278,15 @@ public class Leaderboard : MonoBehaviour {
 		if(isPost)
 		{
 			//GUI.Label(new Rect(100, 60, 200, 70), getScoreResponse.ToString());
-			GUI.Label(new Rect(0.35f*Screen.width,0.355f*Screen.height, 0.1f*Screen.width,0.05f*Screen.height), "NAME: ",postGUIStyle);
-			GUI.Label(new Rect(0.35f*Screen.width,0.42f*Screen.height, 0.1f*Screen.width,0.05f*Screen.height), "SCORE: ",postGUIStyle);
+			GUI.Label(new Rect(0.35f*GameEnvironment.GUIWidth,0.355f*GameEnvironment.GUIHeight, 0.1f*GameEnvironment.GUIWidth,0.05f*GameEnvironment.GUIHeight), "NAME: ",postGUIStyle);
+			GUI.Label(new Rect(0.35f*GameEnvironment.GUIWidth,0.42f*GameEnvironment.GUIHeight, 0.1f*GameEnvironment.GUIWidth,0.05f*GameEnvironment.GUIHeight), "SCORE: ",postGUIStyle);
 			
-			nameLB = GUI.TextField(new Rect(0.48f*Screen.width,0.35f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), nameLB,12,postGUIStyle);
-			GUI.Label(new Rect(0.48f*Screen.width,0.42f*Screen.height, 0.2f*Screen.width,0.05f*Screen.height), (LevelInfo.Environments.hubScores.GetNumber()).ToString(),postGUIStyle);
+			nameLB = GUI.TextField(new Rect(0.48f*GameEnvironment.GUIWidth,0.35f*GameEnvironment.GUIHeight, 0.2f*GameEnvironment.GUIWidth,0.05f*GameEnvironment.GUIHeight), nameLB,12,postGUIStyle);
+			GUI.Label(new Rect(0.48f*GameEnvironment.GUIWidth,0.42f*GameEnvironment.GUIHeight, 0.2f*GameEnvironment.GUIWidth,0.05f*GameEnvironment.GUIHeight), (LevelInfo.Environments.hubScores.GetNumber()).ToString(),postGUIStyle);
 			
-			//scoreLB = GUI.TextField(new Rect(0.45f*Screen.width,0.40f*Screen.height, 0.15f*Screen.width,0.035f*Screen.height), scoreLB);
+			//scoreLB = GUI.TextField(new Rect(0.45f*GameEnvironment.GUIWidth,0.40f*GameEnvironment.GUIHeight, 0.15f*GameEnvironment.GUIWidth,0.035f*GameEnvironment.GUIHeight), scoreLB);
 
-			if( GUI.Button(new Rect(0.45f*Screen.width,0.5f*Screen.height, 0.10f*Screen.width,0.035f*Screen.height), "Post") )
+			if( GUI.Button(new Rect(0.45f*GameEnvironment.GUIWidth,0.5f*GameEnvironment.GUIHeight, 0.10f*GameEnvironment.GUIWidth,0.035f*GameEnvironment.GUIHeight), "Post") )
 			{
 				if(nameLB.Trim().Equals(""))	
 				{
@@ -301,27 +303,27 @@ public class Leaderboard : MonoBehaviour {
 			}
 			
 			if(!isName || (isPost == true))
-				GUI.Label(new Rect(0.38f*Screen.width,0.57f*Screen.height,0.30f*Screen.width,0.032f*Screen.height), postScoreResponse.ToString(),postGUIStyle);					
+				GUI.Label(new Rect(0.38f*GameEnvironment.GUIWidth,0.57f*GameEnvironment.GUIHeight,0.30f*GameEnvironment.GUIWidth,0.032f*GameEnvironment.GUIHeight), postScoreResponse.ToString(),postGUIStyle);					
 		}
 
 		#endregion
 		
-		if( GUI.Button(new Rect(0.76f*Screen.width,0.59f*Screen.height, 0.2f*Screen.width,0.1f*Screen.height), "RESET GAME",buttonGUIStyle) && !wanttoresetgame)
+		if( GUI.Button(new Rect(0.76f*GameEnvironment.GUIWidth,0.59f*GameEnvironment.GUIHeight, 0.2f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "RESET GAME",buttonGUIStyle) && !wanttoresetgame)
 		{
 			audioOpen.Play();
 			wanttoresetgame = true;
 		}
 		if(wanttoresetgame)
 		{
-			GUI.DrawTexture(new Rect(0.2f*Screen.width,0.15f*Screen.height,0.6f*Screen.width,0.6f*Screen.height),texturePopup);
-			GUI.Label(new Rect(0.35f*Screen.width,0.305f*Screen.height,0.3f*Screen.width,0.2f*Screen.height),"Are you sure you want to reset game progress?",postGUIStyle);
-			if(GUI.Button(new Rect(0.33f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "YES", buttonGUIStyle ) )	
+			GUI.DrawTexture(new Rect(0.2f*GameEnvironment.GUIWidth,0.15f*GameEnvironment.GUIHeight,0.6f*GameEnvironment.GUIWidth,0.6f*GameEnvironment.GUIHeight),texturePopup);
+			GUI.Label(new Rect(0.35f*GameEnvironment.GUIWidth,0.305f*GameEnvironment.GUIHeight,0.3f*GameEnvironment.GUIWidth,0.2f*GameEnvironment.GUIHeight),"Are you sure you want to reset game progress?",postGUIStyle);
+			if(GUI.Button(new Rect(0.33f*GameEnvironment.GUIWidth,0.5f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "YES", buttonGUIStyle ) )	
 			{
 				Store.ClearGameStats();
 				Application.LoadLevel(Application.loadedLevel);
 				return;
 			}
-			if( GUI.Button(new Rect(0.52f*Screen.width,0.5f*Screen.height,0.16f*Screen.width,0.1f*Screen.height), "NO", buttonGUIStyle ) )
+			if( GUI.Button(new Rect(0.52f*GameEnvironment.GUIWidth,0.5f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "NO", buttonGUIStyle ) )
 			{
 				wanttoresetgame = false;
 				audioNo.Play();
