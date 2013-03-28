@@ -784,20 +784,20 @@ public class Control : MonoBehaviour {
 					
 					if(ZombieBlasterFacebook .Instance.Posted)
 					{
-						sharedonfacebook = true;
 						ZombieBlasterFacebook .Instance.Posted = false;
 						postScoreResponse = "Shared on facebook!";
 					}
 					
 					if(GUI.Button(new Rect(0.585f*GameEnvironment.GUIWidth,0.475f*GameEnvironment.GUIHeight, 0.10f*GameEnvironment.GUIWidth,0.075f*GameEnvironment.GUIHeight), "Share", buttonGUIStyle))
 					{
-						if( !sharedonfacebook )
+						if( sharedonfacebook )
 						{
 							postScoreResponse = "Already shared on facebook!";
 						}
 						else
 						{
 							ZombieBlasterFacebook .Instance.PostOnWall(LevelInfo.Environments.hubScores.GetNumber());		
+							sharedonfacebook = true;
 						}
 					}
 					#endif
