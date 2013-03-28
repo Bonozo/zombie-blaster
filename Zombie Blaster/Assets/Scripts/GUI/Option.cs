@@ -223,8 +223,8 @@ public class Option : MonoBehaviour {
 			mainmenu.GoState(MainMenu.MenuState.Credits);
 		}
 		
-		if( GameEnvironment.AbsoluteSwipe.x < -0.5f )
-			showdebug = true;
+		//if( GameEnvironment.AbsoluteSwipe.x < -0.5f )
+		//	showdebug = true;
 	}
 	
 	void OnEnable()

@@ -13,7 +13,6 @@ public enum Levels
 
 public enum Weapon
 {
-	// // Crossbow, Shotgun, Flame Thrower, Football, Machine Gun, Grenades, Revolver, Rocket Launcher
 	BB,
 	Revolver,
 	PulseShotGun,
@@ -175,13 +174,17 @@ public class Store : MonoBehaviour {
 
 	//--------------- store purchase code ------------------//
 	
-	public string storePublicKey;
+	public string androidKey;
 	public static bool tapjoyConnected = false;
 	
 	void OnEnable()
 	{
 		#if UNITY_ANDROID
+		IABAndroidManager.billingSupportedEvent += HandleIABAndroidManagerbillingSupportedEvent;
 		IABAndroidManager.purchaseSucceededEvent += HandleIABAndroidManagerpurchaseSucceededEvent;
+		IABAndroidManager.purchaseCancelledEvent += HandleIABAndroidManagerpurchaseCancelledEvent;
+		IABAndroidManager.purchaseFailedEvent += HandleIABAndroidManagerpurchaseFailedEvent;
+		
 		TapjoyAndroidManager.fullScreenAdDidLoadEvent += fullScreenAdDidLoadEvent;
 		#endif
 		
@@ -197,11 +200,15 @@ public class Store : MonoBehaviour {
 		//End
 		
 	}
-	
+
 	void OnDisable()
 	{
 		#if UNITY_ANDROID
+		IABAndroidManager.billingSupportedEvent -= HandleIABAndroidManagerbillingSupportedEvent;
 		IABAndroidManager.purchaseSucceededEvent -= HandleIABAndroidManagerpurchaseSucceededEvent;
+		IABAndroidManager.purchaseCancelledEvent -= HandleIABAndroidManagerpurchaseCancelledEvent;
+		IABAndroidManager.purchaseFailedEvent -= HandleIABAndroidManagerpurchaseFailedEvent;
+		
 		TapjoyAndroidManager.fullScreenAdDidLoadEvent -= fullScreenAdDidLoadEvent;
 		#endif
 		
@@ -217,10 +224,34 @@ public class Store : MonoBehaviour {
 		//End
 	}
 	
+	#if UNITY_ANDROID
+	
+	[System.NonSerializedAttribute]
+	public bool canPay = false;
+	
+	void HandleIABAndroidManagerbillingSupportedEvent (bool obj)
+	{
+		Debug.Log("Android Billing Supported: " + obj);
+		canPay = obj;
+	}
+	
 	void HandleIABAndroidManagerpurchaseSucceededEvent (string obj)
 	{
+		Debug.Log( "purchased product: " + obj );
 		Store.zombieHeads = Store.zombieHeads + 1000;
 	}
+	
+	void HandleIABAndroidManagerpurchaseFailedEvent (string obj)
+	{
+		Debug.Log( "purchase failed with error: " + obj );
+	}
+
+	void HandleIABAndroidManagerpurchaseCancelledEvent (string obj)
+	{
+		Debug.Log( "purchase cancelled with error: " + obj );
+	}
+	
+	#endif
 	
 	#if UNITY_IPHONE
 	void zombieStoreKitPurchaseSuccessful( StoreKitTransaction transaction )
@@ -228,7 +259,6 @@ public class Store : MonoBehaviour {
 		Debug.Log( "purchased product: " + transaction );
 		Store.zombieHeads = Store.zombieHeads + 1000;
 	}
-	#endif
 	
 	void zombieStoreKitPurchaseFailed( string error )
 	{
@@ -239,6 +269,8 @@ public class Store : MonoBehaviour {
 	{
 		Debug.Log( "purchase cancelled with error: " + error );
 	}
+	
+	#endif
 
 	void fullScreenAdDidLoadEvent( bool didLoad )
 	{
@@ -268,10 +300,13 @@ public class Store : MonoBehaviour {
 	void Start()
 	{
 		#if UNITY_ANDROID
-		IABAndroid.init( storePublicKey );
-		TapjoyAndroid.init( "6f8b509b-f292-4dd3-b440-eab33f211089", "7TYeZbZ6GTqRncoALV3W", false );//old
-		//TapjoyAndroid.init( "b1f6ad92-1ff9-47ca-a962-a4b7ecddebd2", "wNZUPjewwCeVRkgpCCZQ", false );//new
+		IABAndroid.init( androidKey );
+		
+		//TapjoyAndroid.init( "6f8b509b-f292-4dd3-b440-eab33f211089", "7TYeZbZ6GTqRncoALV3W", false );//old
+		TapjoyAndroid.init( "b1f6ad92-1ff9-47ca-a962-a4b7ecddebd2", "wNZUPjewwCeVRkgpCCZQ", false );//new
 		#endif 
+		
+		
 		
 		//By Mak Kaloliya on 07022013
 		#if UNITY_IPHONE
@@ -284,7 +319,6 @@ public class Store : MonoBehaviour {
 		var productIdentifiers = new string[] {"ZH1000"};
 		StoreKitBinding.requestProductData( productIdentifiers );
 		#endif
-		//End
 		
 		// Clear Prefabs
 		//PlayerPrefs.SetInt("zombieHeads",100000);
@@ -303,31 +337,6 @@ public class Store : MonoBehaviour {
 	}
 	
 	//--------------- store purchase code end ------------------//
-	
-	#endregion
-	
-	#region Extra shot items
-	
-	[System.SerializableAttribute]
-	public class ExtraShopItem
-	{
-		public string name;
-		public GameObject obj;
-		private int _purchased;
-		public bool Purchased{
-			get{
-				return _purchased==1;
-			}
-			set{
-				_purchased = value?1:0;
-				PlayerPrefs.SetInt("store_"+name,_purchased);
-			}
-		}
-		public void Init()
-		{
-			_purchased = PlayerPrefs.GetInt("store_"+name);
-		}
-	}
 	
 	#endregion
 	
@@ -474,7 +483,16 @@ public class Store : MonoBehaviour {
 	public void Get1000HeadsEvent()
 	{
 		#if UNITY_ANDROID
-		IABAndroid.purchaseProduct("android.test.purchased");
+		if( !canPay )
+		{
+			Debug.Log("Can't pay. Initializing!");
+			IABAndroid.init(androidKey );
+			IABAndroid.startCheckBillingAvailableRequest();
+		}
+		else
+		{
+			IABAndroid.purchaseProduct("1000heads");
+		}
 		#endif
 		
 		#if UNITY_IPHONE
@@ -1025,6 +1043,11 @@ public class Store : MonoBehaviour {
 	
 	private void ShowFillInDialog()
 	{
+		int allammo = GameEnvironment.storeGun[wooi].maxammo+GameEnvironment.storeGun[wooi].pocketsize;
+		int currentammo = GameEnvironment.storeGun[wooi].current+GameEnvironment.storeGun[wooi].store;
+		float pc = 1f-(float)currentammo/(float)allammo;
+		int price = Mathf.CeilToInt(100f*pc);
+		
 		GUI.DrawTexture(new Rect(0.2f*GameEnvironment.GUIWidth,0.15f*GameEnvironment.GUIHeight,0.6f*GameEnvironment.GUIWidth,0.6f*GameEnvironment.GUIHeight),popupTexture);
 	
 		if( GameEnvironment.storeGun[wooi].current == GameEnvironment.storeGun[wooi].pocketsize && GameEnvironment.storeGun[wooi].store == GameEnvironment.storeGun[wooi].maxammo )
@@ -1038,13 +1061,13 @@ public class Store : MonoBehaviour {
 				spwchannel = true;
 			}		
 		}
-		else if( Store.zombieHeads >= GameEnvironment.storeGun[wooi].price )
+		else if( Store.zombieHeads >= price )
 		{
-			GUI.Label(new Rect(0.35f*GameEnvironment.GUIWidth,0.305f*GameEnvironment.GUIHeight,0.3f*GameEnvironment.GUIWidth,0.2f*GameEnvironment.GUIHeight),"Refill the \"" + GameEnvironment.storeGun[wooi].name + "\" ammo for " + GameEnvironment.storeGun[wooi].price + " Heads?",myStyle);
+			GUI.Label(new Rect(0.35f*GameEnvironment.GUIWidth,0.305f*GameEnvironment.GUIHeight,0.3f*GameEnvironment.GUIWidth,0.2f*GameEnvironment.GUIHeight),"Refill the \"" + GameEnvironment.storeGun[wooi].name + "\" ammo for " + price + " Heads?",myStyle);
 			if(GUI.Button(new Rect(0.33f*GameEnvironment.GUIWidth,0.5f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "REFILL", buttonStyle ) )	
 			{
 				audio.Play();
-				Store.zombieHeads -= GameEnvironment.storeGun[wooi].price;
+				Store.zombieHeads -= price;
 				LevelInfo.Environments.guns.GetWeaponWithMAX((Weapon)wooi);
 				wooi = -1;
 				fillin = false;
