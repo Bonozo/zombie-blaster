@@ -615,6 +615,7 @@ public class Control : MonoBehaviour {
 	
 	private bool postedscore = false;
 	private bool sharedonfacebook = false;
+	private bool sharing = false;
 	
 	[System.NonSerializedAttribute]
 	public bool allowShowGUI = true;
@@ -784,6 +785,7 @@ public class Control : MonoBehaviour {
 					
 					if(ZombieBlasterFacebook .Instance.Posted)
 					{
+						sharedonfacebook = true;
 						ZombieBlasterFacebook .Instance.Posted = false;
 						postScoreResponse = "Shared on facebook!";
 					}
@@ -794,10 +796,16 @@ public class Control : MonoBehaviour {
 						{
 							postScoreResponse = "Already shared on facebook!";
 						}
+						else if( sharing)
+						{
+							postScoreResponse = "Is in progress...";
+						}
+						else if(nameLB.Trim().Equals(""))
+								postScoreResponse = "Please log in to facebook!";
 						else
 						{
 							ZombieBlasterFacebook .Instance.PostOnWall(LevelInfo.Environments.hubScores.GetNumber());		
-							sharedonfacebook = true;
+							sharing = true;
 						}
 					}
 					#endif
