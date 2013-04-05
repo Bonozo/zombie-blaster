@@ -17,6 +17,8 @@ using System.Collections.Generic;
 /// JSON uses Arrays and Objects. These correspond here to the datatypes ArrayList and Hashtable.
 /// All numbers are parsed to doubles.
 /// </summary>
+
+
 public class MiniJSON
 {
 	private const int TOKEN_NONE = 0;
@@ -323,14 +325,10 @@ public class MiniJSON
 						char[] unicodeCharArray = new char[4];
 						Array.Copy( json, index, unicodeCharArray, 0, 4 );
 
-						// Drop in the HTML markup for the unicode character
-						s += "&#x" + new string( unicodeCharArray ) + ";";
-
-						/*
-uint codePoint = UInt32.Parse(new string(unicodeCharArray), NumberStyles.HexNumber);
-// convert the integer codepoint to a unicode char and add to string
-s += Char.ConvertFromUtf32((int)codePoint);
-*/
+						uint codePoint = UInt32.Parse( new string( unicodeCharArray ), System.Globalization.NumberStyles.HexNumber );
+						
+						// convert the integer codepoint to a unicode char and add to string
+						s += Char.ConvertFromUtf32( (int)codePoint );
 
 						// skip 4 chars
 						index += 4;
@@ -339,7 +337,6 @@ s += Char.ConvertFromUtf32((int)codePoint);
 					{
 						break;
 					}
-
 				}
 			}
 			else
@@ -518,7 +515,7 @@ s += Char.ConvertFromUtf32((int)codePoint);
 		{
 			string key = e.Key.ToString();
 			object value = e.Value;
-
+			
 			if( !first )
 			{
 				builder.Append( ", " );
@@ -590,8 +587,8 @@ s += Char.ConvertFromUtf32((int)codePoint);
 	
 	protected static bool serializeValue( object value, StringBuilder builder )
 	{
-		// Type t = value.GetType();
-		// Debug.Log("type: " + t.ToString() + " isArray: " + t.IsArray);
+		//Type t = value.GetType();
+		//UnityEngine.Debug.Log("type: " + t.ToString() + " isArray: " + t.IsArray);
 
 		if( value == null )
 		{
@@ -608,6 +605,10 @@ s += Char.ConvertFromUtf32((int)codePoint);
 		else if( value is Char )
 		{
 			serializeString( Convert.ToString( (char)value ), builder );
+		}
+		else if( value is decimal )
+		{
+			serializeString( Convert.ToString( (decimal)value ), builder );
 		}
 		else if( value is Hashtable )
 		{
@@ -736,3 +737,5 @@ public static class MiniJsonExtensions
 }
 
 #endregion
+
+

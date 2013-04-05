@@ -170,7 +170,7 @@ public class Store : MonoBehaviour {
 	
 	#endregion
 	
-	#region Google, Tapjoy
+	#region Google, Tapjoy, Amazon
 
 	//--------------- store purchase code ------------------//
 	
@@ -184,6 +184,12 @@ public class Store : MonoBehaviour {
 		IABAndroidManager.purchaseSucceededEvent += HandleIABAndroidManagerpurchaseSucceededEvent;
 		IABAndroidManager.purchaseCancelledEvent += HandleIABAndroidManagerpurchaseCancelledEvent;
 		IABAndroidManager.purchaseFailedEvent += HandleIABAndroidManagerpurchaseFailedEvent;
+		
+		AmazonIAPManager.onSdkAvailableEvent += HandleAmazonIAPManageronSdkAvailableEvent;
+		AmazonIAPManager.itemDataRequestFinishedEvent += HandleAmazonIAPManageritemDataRequestFinishedEvent;
+		AmazonIAPManager.itemDataRequestFailedEvent += HandleAmazonIAPManageritemDataRequestFailedEvent;
+		AmazonIAPManager.purchaseSuccessfulEvent += HandleAmazonIAPManagerpurchaseSuccessfulEvent;
+		AmazonIAPManager.purchaseFailedEvent += HandleAmazonIAPManagerpurchaseFailedEvent;
 		
 		TapjoyAndroidManager.fullScreenAdDidLoadEvent += fullScreenAdDidLoadEvent;
 		#endif
@@ -209,6 +215,12 @@ public class Store : MonoBehaviour {
 		IABAndroidManager.purchaseCancelledEvent -= HandleIABAndroidManagerpurchaseCancelledEvent;
 		IABAndroidManager.purchaseFailedEvent -= HandleIABAndroidManagerpurchaseFailedEvent;
 		
+		AmazonIAPManager.onSdkAvailableEvent -= HandleAmazonIAPManageronSdkAvailableEvent;
+		AmazonIAPManager.itemDataRequestFinishedEvent -= HandleAmazonIAPManageritemDataRequestFinishedEvent;
+		AmazonIAPManager.itemDataRequestFailedEvent -= HandleAmazonIAPManageritemDataRequestFailedEvent;
+		AmazonIAPManager.purchaseSuccessfulEvent -= HandleAmazonIAPManagerpurchaseSuccessfulEvent;
+		AmazonIAPManager.purchaseFailedEvent -= HandleAmazonIAPManagerpurchaseFailedEvent;
+		
 		TapjoyAndroidManager.fullScreenAdDidLoadEvent -= fullScreenAdDidLoadEvent;
 		#endif
 		
@@ -229,6 +241,7 @@ public class Store : MonoBehaviour {
 	[System.NonSerializedAttribute]
 	public bool canPay = false;
 	
+	//=================Google Play Store============================
 	void HandleIABAndroidManagerbillingSupportedEvent (bool obj)
 	{
 		Debug.Log("Android Billing Supported: " + obj);
@@ -250,6 +263,35 @@ public class Store : MonoBehaviour {
 	{
 		Debug.Log( "purchase cancelled with error: " + obj );
 	}
+	//===============================================================
+	
+	//===================Amazon App Store============================
+	void HandleAmazonIAPManageronSdkAvailableEvent (bool obj)
+	{
+		Debug.Log( "Amazon onSdkAvailableEvent. isTestMode: " + obj );
+	}
+
+	void HandleAmazonIAPManagerpurchaseFailedEvent (string obj)
+	{
+		Debug.Log( "Amazon purchaseFailedEvent: " + obj );
+	}
+
+	void HandleAmazonIAPManagerpurchaseSuccessfulEvent (AmazonReceipt obj)
+	{
+		Debug.Log( "purchaseSuccessfulEvent: " + obj );
+		Store.zombieHeads = Store.zombieHeads + 1000;
+	}
+	
+	void HandleAmazonIAPManageritemDataRequestFailedEvent()
+	{
+		Debug.Log( "Amazon dataRequestFailed" );
+	}
+	
+	void HandleAmazonIAPManageritemDataRequestFinishedEvent (List<string> arg1, List<AmazonItem> arg2)
+	{
+		Debug.Log( "itemDataRequestFinishedEvent. unavailable skus: " + arg1.Count + ", avaiable items: " + arg2.Count );
+	}
+	//===============================================================
 	
 	#endif
 	
@@ -337,6 +379,41 @@ public class Store : MonoBehaviour {
 	}
 	
 	//--------------- store purchase code end ------------------//
+	
+	public void Get1000HeadsEvent()
+	{
+		#if UNITY_ANDROID
+		
+		if(GlobalPersistentParameters.AmazonBuild)
+		{
+			AmazonIAP.initiateItemDataRequest( new string[] { "1000heads" } );
+			AmazonIAP.initiatePurchaseRequest( "1000heads" );
+		}
+		else
+		{
+			if( !canPay )
+			{
+				Debug.Log("Can't pay. Initializing!");
+				IABAndroid.init(androidKey );
+				IABAndroid.startCheckBillingAvailableRequest();
+			}
+			else
+			{
+				IABAndroid.purchaseProduct("1000heads");
+			}
+		}
+		#endif
+		
+		#if UNITY_IPHONE
+		if(_products.Count > 0)
+			StoreKitBinding.purchaseProduct( "ZH1000", 1 );
+		#endif
+			
+		#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX
+		Store.zombieHeads = Store.zombieHeads + 1000;
+		#endif
+	}
+	
 	
 	#endregion
 	
@@ -478,31 +555,6 @@ public class Store : MonoBehaviour {
 		if( showZombieHeads < zombieHeads ) showZombieHeads+=delta;
 		if( showZombieHeads > zombieHeads ) showZombieHeads-=delta;
 		zombieHeadText.text = "" + showZombieHeads;
-	}
-	
-	public void Get1000HeadsEvent()
-	{
-		#if UNITY_ANDROID
-		if( !canPay )
-		{
-			Debug.Log("Can't pay. Initializing!");
-			IABAndroid.init(androidKey );
-			IABAndroid.startCheckBillingAvailableRequest();
-		}
-		else
-		{
-			IABAndroid.purchaseProduct("1000heads");
-		}
-		#endif
-		
-		#if UNITY_IPHONE
-		if(_products.Count > 0)
-			StoreKitBinding.purchaseProduct( "ZH1000", 1 );
-		#endif
-			
-		#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX
-		Store.zombieHeads = Store.zombieHeads + 1000;
-		#endif
 	}
 	
 	private bool exitVerified = false;

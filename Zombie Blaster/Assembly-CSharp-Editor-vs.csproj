@@ -129,6 +129,7 @@
      <None Include="Assets\Plugins\Android\res\layout\com_facebook_picker_image.xml" />
      <None Include="Assets\Plugins\Android\Unity35Manifest.xml" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed).shader" />
+     <None Include="Assets\Plugins\AmazonIAPAndroid\Manifest.xml" />
      <None Include="Assets\Art\Shaders\Electricity.shader" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (HardClip).shader" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Additive Colored.shader" />
@@ -162,8 +163,6 @@
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass-vs.csproj">
       <Project>{273D50B4-AAF9-96CA-1923-6CBABDF70880}</Project>      <Name>Assembly-CSharp-firstpass-vs</Name>    </ProjectReference>
-    <ProjectReference Include="Assembly-CSharp-vs.csproj">
-      <Project>{4D8ADAAF-ED22-D1D1-76D1-136A27FCA8E8}</Project>      <Name>Assembly-CSharp-vs</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
