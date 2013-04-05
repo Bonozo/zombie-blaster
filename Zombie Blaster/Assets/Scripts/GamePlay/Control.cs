@@ -847,12 +847,11 @@ public class Control : MonoBehaviour {
 					else if( headshotsinwave >= 0.75f ) stars = 2;
 					else stars = 1;
 					
-					int reward = UnityEngine.Random.Range(0,3);
+					int reward = UnityEngine.Random.Range(0,2);
 					switch(reward)
 					{
 					case 0: rewardforwavecomplete = HealthPackType.BonusHeads; break;
-					case 1: rewardforwavecomplete = HealthPackType.XtraLife; break;
-					case 2: rewardforwavecomplete = HealthPackType.SuperAmmo; break;
+					case 1: rewardforwavecomplete = HealthPackType.SuperAmmo; break;
 					}
 					
 					LevelInfo.Environments.waveInfo.ShowWaveComplete(rewardforwavecomplete,stars);
