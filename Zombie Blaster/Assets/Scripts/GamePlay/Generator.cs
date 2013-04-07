@@ -295,6 +295,7 @@ public class Generator : MonoBehaviour {
 			case 5: packType = HealthPackType.SuperAmmo; break;
 			}	
 			
+			// Replace Ammo instead of AllAmmo with probablity 40%
 			if(packType == HealthPackType.SuperAmmo && Random.Range(0,5)<2 )
 				packType = HealthPackType.Ammo;
 			
