@@ -281,6 +281,10 @@ public class Generator : MonoBehaviour {
 		{
 			int r = Random.Range(0,6);
 			
+			// some complication code
+			if( (r==0||r==5) && !ExistAvailableWeaponForAmmo())
+				r = Random.Range(1,5);
+			
 			switch(r)
 			{
 			case 0: packType = HealthPackType.Ammo; break;
@@ -290,6 +294,9 @@ public class Generator : MonoBehaviour {
 			case 4: packType = HealthPackType.Rampage; break;
 			case 5: packType = HealthPackType.SuperAmmo; break;
 			}	
+			
+			if(packType == HealthPackType.SuperAmmo && Random.Range(0,5)<2 )
+				packType = HealthPackType.Ammo;
 			
 			// If there are many of alive zombies more probablity to spawn Shield
 			if(LevelInfo.Environments.control.AliveZombieCount > 5)
@@ -315,6 +322,14 @@ public class Generator : MonoBehaviour {
 			
 		}		
 		return packType;
+	}
+	
+	private bool ExistAvailableWeaponForAmmo()
+	{
+		for(int i=1;i<Store.countWeapons-1;i++)
+			if(Store.WeaponUnlocked(i))
+				return true;
+		return false;
 	}
 	
 	public void InstantiatePowerup(Vector3 position,Quaternion rotation,bool scooby)

@@ -51,15 +51,16 @@ public class HealthPack : MonoBehaviour {
 		case HealthPackType.Ammo:
 			// calculating active weapons
 			gunindexifweapon = Weapon.None;
+			
 			int count = 0;
 			for(int i=1;i<countweaponslocal;i++)
-				if(Store.Instance.WeaponAvailable(i))
+				if(Store.WeaponUnlocked(i))
 					count++;
 			int index = Random.Range(0,count)+1;
 			count = 0;
 			for(int i=1;i<countweaponslocal;i++)
 			{
-				if(Store.Instance.WeaponAvailable(i))	
+				if(Store.WeaponUnlocked(i))	
 				{
 					count++;
 					if(count == index)
