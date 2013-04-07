@@ -362,7 +362,7 @@ public class GameEnvironment : MonoBehaviour {
 	public static StoreGun[] storeGun = new StoreGun[11]
 	{	
 		//			    	name			    enabled    clip  maxammo   price   speed   reload  power  accuracy
-		/*0*/ new StoreGun("Airsoft"			,true,		20,		100,	0,		12,		2,		20,		80,		"The Airsoft is your first weapon. It shoots lightweight projectiles at attacking zombies."),
+		/*0*/ new StoreGun("Airsoft"			,true,		20,		100,	0,		12,		4,		20,		80,		"The Airsoft is your first weapon. It shoots lightweight projectiles at attacking zombies."),
 		/*1*/ new StoreGun("Revolver"			,false,		6,		30,		200,	25,		5,		40,		80,		"The Revolver is a small, yet lethal, hand-held weapon. Best for headshots in the beginning."),	
 		/*2*/ new StoreGun("Shotgun"			,false,		5,		25,		400,	15,		3,		100,	70,		"The Shotgun is a heavyweight weapon that shoots many small bullets at zombies. Great for short to middle distance kills."),
 		/*3*/ new StoreGun("Flamethrower"		,false,		250,	500,	300,	40,		8,		30,		90,		"The Flamethrower is useful for killing groups of zombies in one go. Effective in all ranges."),
