@@ -174,7 +174,7 @@ public class Store : MonoBehaviour {
 
 	//--------------- store purchase code ------------------//
 	
-	public string androidKey;
+	private string androidKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnTAvl2vK4KXRCx7UnvmLgVxZCsRUUivSb6iIvHP2aVpNPK3BBJvOK1uxYumXNiSr5OPJBxGQ+Tx4nmNpx9sIjZQy06BUUtvYDOgSuakMCdF1LfWZXQ5II7L5IzZnYenTc+aWTZaSTJy4z1e/oifsz0BltZ3b31DhZBb1wYjZeynd3mJA4DZs2bGpCvGRrf1QeF9oLtBvyq1NAQ2+R2zSgQPPzEarn/9Lqq/oHqx7wCrTxiX8/I7ButnJpWHoCkDIszC4SncTqMmZlCtl2hlfRzvEWgMozAlZJYMU9IC9hVJKbkYpf3vvJ8QPyE4RTPoDzGRoKeI5lHB8bU0PLaUcjwIDAQAB";
 	public static bool tapjoyConnected = false;
 	
 	void OnEnable()
