@@ -47,7 +47,7 @@ public class BulletZombie : MonoBehaviour {
 		v.y = 0;
 		if( v.magnitude <= 1f )
 		{
-			float damage = Mathf.Min(0.01f*LevelInfo.Environments.control.currentWave,0.1f);
+			float damage = 0.1f;
 			LevelInfo.Environments.control.GetHealth(damage); // Player lost health by zombie shoot
 			Destroy(this.gameObject);
 		}
