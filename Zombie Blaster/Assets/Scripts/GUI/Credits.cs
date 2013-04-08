@@ -66,6 +66,7 @@ public class Credits : MonoBehaviour {
 			mainmenu.GoState(MainMenu.MenuState.Option);
 		}
 		
+		// link buttons
 		if(GUI.Button(new Rect(5f,5f,0.2f*GameEnvironment.GUIWidth,0.075f*GameEnvironment.GUIHeight),"Game Trailer",buttonGUIStyle))
 			Application.OpenURL(@"http://youtu.be/gtRwZtht-1Q");
 		if(GUI.Button(new Rect(0.8f*GameEnvironment.GUIWidth-5f,5f,0.2f*GameEnvironment.GUIWidth,0.075f*GameEnvironment.GUIHeight),"Behind the Scenes",buttonGUIStyle))
