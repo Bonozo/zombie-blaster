@@ -70,6 +70,7 @@ public class Credits : MonoBehaviour {
 			Application.OpenURL(@"http://youtu.be/gtRwZtht-1Q");
 		if(GUI.Button(new Rect(0.8f*GameEnvironment.GUIWidth-5f,5f,0.2f*GameEnvironment.GUIWidth,0.075f*GameEnvironment.GUIHeight),"Behind the Scenes",buttonGUIStyle))
 			Application.OpenURL(@"http://youtu.be/NB9TwvKv4RM");
-			
+		if(GUI.Button(new Rect(0.8f*GameEnvironment.GUIWidth-5f,0.925f*GameEnvironment.GUIHeight-5f,0.2f*GameEnvironment.GUIWidth,0.075f*GameEnvironment.GUIHeight),"Harlem Shake",buttonGUIStyle))
+			Application.OpenURL(@"http://youtu.be/9ag_0SjwbyY ");		
 	}
 }

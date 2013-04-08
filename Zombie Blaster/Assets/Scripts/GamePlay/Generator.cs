@@ -276,6 +276,14 @@ public class Generator : MonoBehaviour {
 			case 1: packType = HealthPackType.XtraLife; break;
 			case 2: packType = HealthPackType.Shield; break;
 			}
+			
+			// If there are many of alive zombies more probablity to spawn Shield
+			if(LevelInfo.Environments.control.AliveZombieCount > 5)
+			{
+				int prob = Mathf.Max(10-LevelInfo.Environments.control.AliveZombieCount,0)+2;
+				// 2<=prob<=6
+				if(Random.Range(0,prob)==1) packType = HealthPackType.Shield;
+			}
 		}
 		else
 		{
@@ -299,14 +307,6 @@ public class Generator : MonoBehaviour {
 			if(packType == HealthPackType.SuperAmmo && Random.Range(0,5)<2 )
 				packType = HealthPackType.Ammo;
 			
-			// If there are many of alive zombies more probablity to spawn Shield
-			if(LevelInfo.Environments.control.AliveZombieCount > 5)
-			{
-				int prob = Mathf.Max(10-LevelInfo.Environments.control.AliveZombieCount,0)+2;
-				// 2<=prob<=6
-				if(Random.Range(0,prob)==1) packType = HealthPackType.Shield;
-			}
-			
 			// If player has few health more probablity to spawn FirstAid;
 			if(LevelInfo.Environments.control.Health < 0.5f )
 			{
@@ -314,11 +314,6 @@ public class Generator : MonoBehaviour {
 				// 2<=prob<=6
 				if(Random.Range(0,prob)==1) packType = HealthPackType.Health;
 			}
-			
-			/*if(Store.FirstTimePlay && Random.Range(0,10)<=7) // 80% probablity
-			{
-				packType = HealthPackType.Rampage;
-			}*/
 				
 			
 		}		
