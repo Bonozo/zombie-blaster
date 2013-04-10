@@ -169,8 +169,8 @@ public class ZombieBlasterFacebook : MonoBehaviourGUI {
 		
 		FacebookManager.dialogCompletedWithUrlEvent += dialogCompletedEvent;
 		FacebookManager.dialogFailedEvent += dialogFailedEvent;
-		FacebookManager.dialogCompletedEvent += facebokDialogCompleted;
-		FacebookManager.dialogDidNotCompleteEvent += dialogDidNotCompleteEvent;
+		//FacebookManager.dialogCompletedEvent += facebokDialogCompleted;
+		//FacebookManager.dialogDidNotCompleteEvent += dialogDidNotCompleteEvent;
 		
 		FacebookManager.graphRequestCompletedEvent += graphRequestCompletedEvent;
 		FacebookManager.graphRequestFailedEvent += facebookCustomRequestFailed;
@@ -189,9 +189,9 @@ public class ZombieBlasterFacebook : MonoBehaviourGUI {
 		FacebookManager.sessionOpenedEvent -= sessionOpenedEvent;
 		FacebookManager.loginFailedEvent -= loginFailedEvent;
 
-		FacebookManager.dialogCompletedEvent -= facebokDialogCompleted;
+		//FacebookManager.dialogCompletedEvent -= facebokDialogCompleted;
 		FacebookManager.dialogCompletedWithUrlEvent -= dialogCompletedEvent;
-		FacebookManager.dialogDidNotCompleteEvent -= dialogDidNotCompleteEvent;
+		//FacebookManager.dialogDidNotCompleteEvent -= dialogDidNotCompleteEvent;
 		FacebookManager.dialogFailedEvent -= dialogFailedEvent;
 		
 		FacebookManager.graphRequestCompletedEvent -= graphRequestCompletedEvent;
