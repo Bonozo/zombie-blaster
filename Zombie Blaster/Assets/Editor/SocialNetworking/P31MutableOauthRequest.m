@@ -125,12 +125,17 @@
 	[chunks addObject:[NSString stringWithFormat:@"oauth_signature=\"%@\"", [_signature encodedURLParameterString]]];
 	[chunks addObject:[NSString stringWithFormat:@"oauth_timestamp=\"%@\"", _timestamp]];
 	[chunks addObject:[NSString stringWithFormat:@"oauth_nonce=\"%@\"", _nonce]];
+	
+	if( _token )
+		[chunks addObject:[NSString stringWithFormat:@"oauth_verifier=\"%@\"", _token.pin]];
+	
 	[chunks	addObject:@"oauth_version=\"1.0\""];
 	
 	NSString *oauthHeader = [NSString stringWithFormat:@"OAuth %@", [chunks componentsJoinedByString:@", "]];
 	[chunks release];
 	
     [self setValue:oauthHeader forHTTPHeaderField:@"Authorization"];
+	NSLog( @"auth header: %@", oauthHeader );
 }
 
 

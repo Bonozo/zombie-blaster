@@ -24,7 +24,7 @@
 - (void)requestRequestToken
 {
     _isFetchingRequestToken = YES;
-	[self requestURL:@"https://twitter.com/oauth/request_token"
+	[self requestURL:@"https://api.twitter.com/oauth/request_token"
 			   token:nil
 		   onSuccess:@selector(setRequestToken:withData:)
 			  onFail:@selector(outhTicketFailed:data:)];
@@ -35,7 +35,7 @@
 - (void)requestAccessToken
 {
     _isFetchingRequestToken = NO;
-	[self requestURL:@"https://twitter.com/oauth/access_token"
+	[self requestURL:@"https://api.twitter.com/oauth/access_token"
 			   token:_requestToken
 		   onSuccess:@selector(setAccessToken:withData:)
 			  onFail:@selector(outhTicketFailed:data:)];

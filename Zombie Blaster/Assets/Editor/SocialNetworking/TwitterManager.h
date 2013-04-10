@@ -9,9 +9,6 @@
 #import <Foundation/Foundation.h>
 
 
-#define USE_UNITY_3_5 1
-
-
 typedef enum {
 	TwitterRequestLogin,
 	TwitterRequestUpdateStatus,
@@ -30,9 +27,6 @@ typedef enum {
 @private
 	NSMutableData *_payload;
 	TwitterRequest _requestType;
-#ifndef USE_UNITY_3_5
-	UIViewController *_viewControllerWrapper;
-#endif
 }
 @property (nonatomic, copy) NSString *consumerKey;
 @property (nonatomic, copy) NSString *consumerSecret;
@@ -47,10 +41,6 @@ typedef enum {
 + (BOOL)userCanTweet;
 
 
-
-#ifndef USE_UNITY_3_5
-- (void)dismissWrappedViewController;
-#endif
 
 // these next methods are used by Xauth and Oauth methods
 - (NSString*)extractUsernameFromHTTPBody:(NSString*)body;
