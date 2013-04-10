@@ -13,8 +13,6 @@ public class FacebookEventListener : MonoBehaviour
 		
 		FacebookManager.dialogCompletedWithUrlEvent += dialogCompletedEvent;
 		FacebookManager.dialogFailedEvent += dialogFailedEvent;
-		FacebookManager.dialogCompletedEvent += facebokDialogCompleted;
-		FacebookManager.dialogDidNotCompleteEvent += dialogDidNotCompleteEvent;
 		
 		FacebookManager.graphRequestCompletedEvent += graphRequestCompletedEvent;
 		FacebookManager.graphRequestFailedEvent += facebookCustomRequestFailed;
@@ -33,9 +31,7 @@ public class FacebookEventListener : MonoBehaviour
 		FacebookManager.sessionOpenedEvent -= sessionOpenedEvent;
 		FacebookManager.loginFailedEvent -= loginFailedEvent;
 
-		FacebookManager.dialogCompletedEvent -= facebokDialogCompleted;
 		FacebookManager.dialogCompletedWithUrlEvent -= dialogCompletedEvent;
-		FacebookManager.dialogDidNotCompleteEvent -= dialogDidNotCompleteEvent;
 		FacebookManager.dialogFailedEvent -= dialogFailedEvent;
 		
 		FacebookManager.graphRequestCompletedEvent -= graphRequestCompletedEvent;
@@ -77,12 +73,6 @@ public class FacebookEventListener : MonoBehaviour
 	void facebokDialogCompleted()
 	{
 		Debug.Log( "facebokDialogCompleted" );
-	}
-
-	
-	void dialogDidNotCompleteEvent()
-	{
-		Debug.Log( "facebookDialogDidntComplete" );
 	}
 
 	
