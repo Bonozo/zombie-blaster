@@ -126,7 +126,7 @@
 	[chunks addObject:[NSString stringWithFormat:@"oauth_timestamp=\"%@\"", _timestamp]];
 	[chunks addObject:[NSString stringWithFormat:@"oauth_nonce=\"%@\"", _nonce]];
 	
-	if( _token )
+	if( _token != nil && _token.pin != nil )
 		[chunks addObject:[NSString stringWithFormat:@"oauth_verifier=\"%@\"", _token.pin]];
 	
 	[chunks	addObject:@"oauth_version=\"1.0\""];
@@ -135,7 +135,7 @@
 	[chunks release];
 	
     [self setValue:oauthHeader forHTTPHeaderField:@"Authorization"];
-	NSLog( @"auth header: %@", oauthHeader );
+	//NSLog( @"auth header: %@", oauthHeader );
 }
 
 

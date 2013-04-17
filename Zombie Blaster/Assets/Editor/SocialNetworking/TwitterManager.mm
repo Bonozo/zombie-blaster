@@ -112,14 +112,12 @@ NSString *const kLoggedInUser = @"kLoggedInUser";
 	// pause the game
 	UnityPause( true );
 	
-	UIViewController *vc = UnityGetGLViewController();
-	
 	// show the mail composer on iPad in a form sheet
 	if( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
-		vc.modalPresentationStyle = UIModalPresentationFormSheet;
+		viewController.modalPresentationStyle = UIModalPresentationFormSheet;
 	
 	// show the controller
-	[vc presentModalViewController:viewController animated:YES];
+	[UnityGetGLViewController() presentModalViewController:viewController animated:YES];
 }
 
 
@@ -330,6 +328,9 @@ NSString *const kLoggedInUser = @"kLoggedInUser";
 	}
 	
 	OAToken *token = [[OAToken alloc] initWithHTTPResponseBody:tokenString];
+	
+	if( ![path hasPrefix:@"/"] )
+		path = [@"/" stringByAppendingString:path];
 	
 	NSString *url = [NSString stringWithFormat:@"https://api.twitter.com%@", path];
 	_requestType = TwitterRequestCustom;

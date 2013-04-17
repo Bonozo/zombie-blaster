@@ -79,6 +79,7 @@
     NSString *aKey = nil;
 	NSString *aSecret = nil;
 	NSString *aSession = nil;
+	NSString *aVerifier = nil;
 	NSNumber *aDuration = nil;
 	NSDate *creationDate = nil;
 	NSDictionary *attrs = nil;
@@ -97,6 +98,11 @@
 		{
             aSecret = [elements objectAtIndex:1];
         }
+		else if( [[elements objectAtIndex:0] isEqualToString:@"oauth_verifier"] )
+		{
+			// we dont need the verifier
+			//aVerifier = [elements objectAtIndex:1];
+		}
 		else if ([[elements objectAtIndex:0] isEqualToString:@"oauth_session_handle"])
 		{
 			aSession = [elements objectAtIndex:1];
@@ -106,7 +112,8 @@
 			aDuration = [[self class] durationWithString:[elements objectAtIndex:1]];
 			creationDate = [NSDate date];
 		}
-		else if ([[elements objectAtIndex:0] isEqualToString:@"oauth_token_attributes"]) {
+		else if ([[elements objectAtIndex:0] isEqualToString:@"oauth_token_attributes"])
+		{
 			attrs = [[self class] attributesWithString:[[elements objectAtIndex:1] decodedURLString]];
 		}
 		else if ([[elements objectAtIndex:0] isEqualToString:@"oauth_token_renewable"])
@@ -117,8 +124,11 @@
 		}
     }
     
-    return [self initWithKey:aKey secret:aSecret session:aSession duration:aDuration
-				  attributes:attrs created:creationDate renewable:renew];
+    OAToken *token = [self initWithKey:aKey secret:aSecret session:aSession duration:aDuration
+							attributes:attrs created:creationDate renewable:renew];
+	token.pin = aVerifier;
+	
+	return token;
 }
 
 - (id)initWithUserDefaultsUsingServiceProviderName:(const NSString *)provider prefix:(const NSString *)prefix
