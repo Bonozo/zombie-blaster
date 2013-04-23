@@ -151,7 +151,7 @@
  <HintPath>Assets\Editor\Prime31\Prime31MenuItem.dll</HintPath>
  </Reference>
  <Reference Include="P31RestKit">
- <HintPath>Assets\Plugins\Prime31\P31RestKit.dll</HintPath>
+ <HintPath>Assets\Plugins\P31RestKit.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:\Program Files\Unity\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
