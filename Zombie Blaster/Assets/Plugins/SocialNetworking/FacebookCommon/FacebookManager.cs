@@ -5,7 +5,7 @@ using System.Collections;
 using Prime31;
 
 
-public class FacebookManager : MonoBehaviour
+public class FacebookManager : AbstractManager
 {
 #if UNITY_ANDROID || UNITY_IPHONE
 	// Fired after a successful login attempt was made
@@ -19,12 +19,6 @@ public class FacebookManager : MonoBehaviour
 	
 	// Fired when a custom dialog completes with the url passed back from the dialog
 	public static event Action<string> dialogCompletedWithUrlEvent;
-	
-	// iOS only. Fired when the post message or custom dialog completes
-	public static event Action dialogCompletedEvent;
-
-	// iOS only. Fired when the post message or a custom dialog does not complete
-	public static event Action dialogDidNotCompleteEvent;
 	
 	// Fired when the post message or custom dialog fails
 	public static event Action<string> dialogFailedEvent;
@@ -71,22 +65,6 @@ public class FacebookManager : MonoBehaviour
 	public void loginFailed( string error )
 	{
 		loginFailedEvent.fire( error );
-	}
-
-	
-	// iOS only
-	public void dialogCompleted( string empty )
-	{
-		if( dialogCompletedEvent != null )
-			dialogCompletedEvent();
-	}
-	
-	
-	// iOS only
-	public void dialogDidNotComplete( string empty )
-	{
-		if( dialogDidNotCompleteEvent != null )
-			dialogDidNotCompleteEvent();
 	}
 
 

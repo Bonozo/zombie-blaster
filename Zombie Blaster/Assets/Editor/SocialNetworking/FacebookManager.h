@@ -7,18 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Facebook.h"
-//#import <FacebookSDK/FacebookSDK.h>
+#import "FacebookSDK.h"
 
 
 
 extern NSString *const kFacebookAppIdKey;
 
 
-@interface FacebookManager : NSObject <FBDialogDelegate>
+@interface FacebookManager : NSObject
 @property (nonatomic, copy) NSString *urlSchemeSuffix;
 @property (nonatomic, copy) NSString *appLaunchUrl;
-@property (nonatomic, retain) Facebook *facebook;
 @property (nonatomic) FBSessionLoginBehavior loginBehavior;
 
 

@@ -16,10 +16,7 @@
 
 void UnitySendMessage( const char * className, const char * methodName, const char * param );
 void UnityPause( bool shouldPause );
-
-#if USE_UNITY_3_5
 UIViewController *UnityGetGLViewController();
-#endif
 
 NSString *const kLoggedInUser = @"kLoggedInUser";
 
@@ -110,82 +107,17 @@ NSString *const kLoggedInUser = @"kLoggedInUser";
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Private
 
-- (UIViewController*)getViewControllerForModalPresentation:(BOOL)destroyIfExists
-{
-#if USE_UNITY_3_5
-	return UnityGetGLViewController();
-#else
-	
-	if( destroyIfExists && _viewControllerWrapper )
-	{
-		[_viewControllerWrapper dismissModalViewControllerAnimated:NO];
-		[_viewControllerWrapper.view removeFromSuperview];
-		[_viewControllerWrapper release];
-		_viewControllerWrapper = nil;
-	}
-	else if( !_viewControllerWrapper )
-	{
-		// Create a wrapper controller to house the picker.  If this is iPad, use a rotating view controller
-		if( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
-			_viewControllerWrapper = [[UIViewController alloc] initWithNibName:nil bundle:nil];
-		else
-			_viewControllerWrapper = [[UIViewController alloc] initWithNibName:nil bundle:nil];
-		
-		// add the wrapper to the window
-		[[UIApplication sharedApplication].keyWindow addSubview:_viewControllerWrapper.view];
-	}
-	
-	// zero the frame so it is hidden
-	_viewControllerWrapper.view.frame = CGRectZero;
-	
-	return _viewControllerWrapper;
-#endif
-}
-
-
-#ifndef USE_UNITY_3_5
-- (void)dismissWrappedViewController
-{
-	// No view controller? Get out of here.
-	if( !_viewControllerWrapper )
-		return;
-
-	// cancel the prvious delayed call to dismiss the view controller if it exists
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-
-	// dismiss the vc
-	[_viewControllerWrapper dismissModalViewControllerAnimated:YES];
-
-	// make sure it doesn't eat touches
-	_viewControllerWrapper.view.frame = CGRectZero;
-	
-	// remove the wrapper view controller
-	[self performSelector:@selector(removeAndReleaseViewControllerWrapper) withObject:nil afterDelay:1.0];
-}
-
-
-- (void)removeAndReleaseViewControllerWrapper
-{
-	[_viewControllerWrapper.view removeFromSuperview];
-	[_viewControllerWrapper release];
-	_viewControllerWrapper = nil;
-}
-#endif
-
-
 - (void)showViewControllerModallyInWrapper:(UIViewController*)viewController
 {
 	// pause the game
 	UnityPause( true );
-	
-	UIViewController *vc = [self getViewControllerForModalPresentation:YES];
 	
 	// show the mail composer on iPad in a form sheet
 	if( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
 		viewController.modalPresentationStyle = UIModalPresentationFormSheet;
 	
 	// show the controller
-	[vc presentModalViewController:viewController animated:YES];
+	[UnityGetGLViewController() presentModalViewController:viewController animated:YES];
 }
 
 
@@ -397,6 +329,9 @@ NSString *const kLoggedInUser = @"kLoggedInUser";
 	
 	OAToken *token = [[OAToken alloc] initWithHTTPResponseBody:tokenString];
 	
+	if( ![path hasPrefix:@"/"] )
+		path = [@"/" stringByAppendingString:path];
+	
 	NSString *url = [NSString stringWithFormat:@"https://api.twitter.com%@", path];
 	_requestType = TwitterRequestCustom;
 	P31MutableOauthRequest *request = [[P31MutableOauthRequest alloc] initWithUrl:url
@@ -468,8 +403,7 @@ NSString *const kLoggedInUser = @"kLoggedInUser";
 	
 	// Show the tweet sheet
 	UnityPause( true );
-	UIViewController *vc = [self getViewControllerForModalPresentation:YES];
-	[vc presentModalViewController:tweetSheet animated:YES];
+	[UnityGetGLViewController() presentModalViewController:tweetSheet animated:YES];
 	
 	[tweetSheet release];
 }

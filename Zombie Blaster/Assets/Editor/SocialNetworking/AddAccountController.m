@@ -83,7 +83,7 @@ void UnitySendMessage( const char * className, const char * methodName, const ch
 
 - (void)gotPin:(NSString*)pin
 {
-    NSLog( @"got verifier after successful login" );
+    NSLog( @"got verifier after successful login: %@", pin );
     _request.pin = pin;
     [_request requestAccessToken];
 }

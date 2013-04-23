@@ -9,8 +9,8 @@ public class Facebook : P31RestKit
 {
 	public string accessToken;
 	public string appAccessToken;
-	
-	
+
+
 	private static Facebook _instance = null;
 	public static Facebook instance
 	{
@@ -22,73 +22,101 @@ public class Facebook : P31RestKit
 			return _instance;
 		}
 	}
-	
-	
+
+
 	public Facebook()
 	{
 		_baseUrl = "https://graph.facebook.com/";
 		forceJsonResponse = true;
 	}
 
-	
-	
+
+
 	#region Private
-	
+
 	protected override IEnumerator send( string path, HTTPVerb httpVerb, Dictionary<string,object> parameters, Action<string, object> onComplete )
 	{
 		if( parameters == null )
 			parameters = new Dictionary<string, object>();
-		
+
 		// add the access token if we dont have one in the dictionary
 		if( !parameters.ContainsKey( "access_token" ) )
 			parameters.Add( "access_token", accessToken );
-		
+
 		return base.send( path, httpVerb, parameters, onComplete );
 	}
-	
+
 	#endregion
-	
-	
+
+
+	public void prepareForMetroUse( GameObject go, MonoBehaviour mb )
+	{
+		GameObject.DontDestroyOnLoad( go );
+		surrogateGameObject = go;
+		surrogateMonobehaviour = mb;
+	}
+
+
 	#region Public
-	
+
 	// Sends off a graph request. The completion handler will return a Hashtable or Arraylist if successful depending on the path called.
 	// See Facebook's documentation for the returned data and parameters
 	public void graphRequest( string path, Action<string, object> completionHandler )
 	{
 		get( path, null, completionHandler );
 	}
-	
-	
+
+
 	public void graphRequest( string path, HTTPVerb verb, Action<string, object> completionHandler )
 	{
 		graphRequest( path, verb, null, completionHandler );
 	}
-	
-	
+
+
 	public void graphRequest( string path, HTTPVerb verb, Dictionary<string, object> parameters, Action<string, object> completionHandler )
 	{
 		surrogateMonobehaviour.StartCoroutine( send( path, verb, parameters, completionHandler ) );
 	}
-	
-	
+
+
 	public void graphRequestBatch( IEnumerable<FacebookBatchRequest> requests, Action<string, object> completionHandler )
 	{
 		var parameters = new Dictionary<string,object>();
 		var requestList = new List<Dictionary<string,object>>();
-		
+
 		foreach( var r in requests )
 			requestList.Add( r.requestDictionary() );
-		
+
 		parameters.Add( "batch", Json.jsonEncode( requestList ) );
-		
+
 		surrogateMonobehaviour.StartCoroutine( send( string.Empty, HTTPVerb.POST, parameters, completionHandler ) );
 	}
-	
+
+
+	public void restRequest( string method, HTTPVerb verb, Dictionary<string, object> parameters, Action<string, object> completionHandler )
+	{
+		// ensure we return json
+		if( parameters == null )
+			parameters = new Dictionary<string,object>();
+		
+		if( !parameters.ContainsKey( "format" ) )
+			parameters.Add( "format", "json" );
+		
+		// we have to rejigger the baseUrl temporarily here
+		var path = "method/" + method;
+		var oldBaseUrl = _baseUrl;
+		_baseUrl = "https://api.facebook.com/";
+		
+		surrogateMonobehaviour.StartCoroutine( send( path, verb, parameters, completionHandler ) );
+		
+		_baseUrl = oldBaseUrl;
+	}
+
 	#endregion
-	
-	
+
+
 	#region Graph API Examples
-	
+
 	// Posts the message to the user's wall
     public void postMessage( string message, Action<string, object> completionHandler )
     {
@@ -98,8 +126,8 @@ public class Facebook : P31RestKit
 		};
 		post( "me/feed", parameters, completionHandler );
     }
-	
-	
+
+
 	// Posts the message to the user's wall with a link and a name for the link
     public void postMessageWithLink( string message, string link, string linkName, Action<string, object> completionHandler )
     {
@@ -111,7 +139,7 @@ public class Facebook : P31RestKit
 		};
 		post( "me/feed", parameters, completionHandler );
     }
-	
+
 
 	// Posts the message to the user's wall with a link, a name for the link, a link to an image and a caption for the image
     public void postMessageWithLinkAndLinkToImage( string message, string link, string linkName, string linkToImage, string caption, Action<string, object> completionHandler )
@@ -126,7 +154,7 @@ public class Facebook : P31RestKit
 		};
 		post( "me/feed", parameters, completionHandler );
     }
-	
+
 
 	// Posts an image on the user's wall along with a caption.
     public void postImage( byte[] image, string message, Action<string, object> completionHandler )
@@ -138,7 +166,7 @@ public class Facebook : P31RestKit
 		};
 		post( "me/photos", parameters, completionHandler );
     }
-	
+
 
 	// Posts an image to a specific album along with a caption.
     public void postImageToAlbum( byte[] image, string caption, string albumId, Action<string, object> completionHandler )
@@ -151,14 +179,14 @@ public class Facebook : P31RestKit
 		post( albumId, parameters, completionHandler );
     }
 
-	
+
 	// Sends a request to fetch the currently logged in users friends
     public void getFriends( Action<string, object> completionHandler )
     {
 		get( "me/friends", completionHandler );
     }
-	
-	
+
+
 	// Extends a short lived access token. Completion handler returns either the expiry date or null if unsuccessful. Note that it is highly recommended to
 	// only call this from a server. Your app secret should not be included with your application
 	public void extendAccessToken( string appId, string appSecret, Action<DateTime?> completionHandler )
@@ -168,7 +196,7 @@ public class Facebook : P31RestKit
 			Debug.LogError( "There is no access token to extend. The user must be autenticated before attempting to extend their access token" );
 			return;
 		}
-		
+
 		var parameters = new Dictionary<string,object>()
 		{
 			{ "client_id", appId },
@@ -176,7 +204,7 @@ public class Facebook : P31RestKit
 			{ "grant_type", "fb_exchange_token" },
 			{ "fb_exchange_token", Facebook.instance.accessToken }
 		};
-		
+
 		get( "oauth/access_token", parameters, ( error, obj ) =>
 		{
 			if( obj is string )
@@ -186,7 +214,7 @@ public class Facebook : P31RestKit
 				{
 					var paramDict = text.parseQueryString();
 					Facebook.instance.accessToken = paramDict["access_token"];
-					
+
 					var expires = double.Parse( paramDict["expires"] );
 					completionHandler( DateTime.Now.AddSeconds( expires ) );
 				}
@@ -205,10 +233,10 @@ public class Facebook : P31RestKit
 	}
 
 	#endregion
-	
-	
+
+
 	#region App Access Token
-	
+
 	// Fetches the app access token. Note that it is highly recommended to only call this from a server. Your app secret should not be included
 	// with your application
 	public void getAppAccessToken( string appId, string appSecret, Action<string> completionHandler )
@@ -219,7 +247,7 @@ public class Facebook : P31RestKit
 			{ "client_secret", appSecret },
 			{ "grant_type", "client_credentials" }
 		};
-		
+
 		get( "oauth/access_token", parameters, ( error, obj ) =>
 		{
 			if( obj is string )
@@ -241,8 +269,8 @@ public class Facebook : P31RestKit
 			}
 		});
 	}
-	
-	
+
+
 	// Posts a score for your app
 	public void postScore( string userId, int score, Action<bool> completionHandler )
 	{
@@ -252,14 +280,14 @@ public class Facebook : P31RestKit
 			completionHandler( false );
 			return;
 		}
-		
+
 		if( userId == null )
 		{
 			Debug.Log( "a valid userId is required to post a score" );
 			completionHandler( false );
 			return;
 		}
-		
+
 		// post the score to the proper path
 		var path = userId + "/scores";
 		var parameters = new Dictionary<string,object>()
@@ -268,7 +296,7 @@ public class Facebook : P31RestKit
 			{ "app_access_token", appAccessToken },
 			{ "access_token", appAccessToken }
 		};
-		
+
 		post( path, parameters, ( error, obj ) =>
 		{
 			if( error == null && obj is bool )
@@ -282,15 +310,15 @@ public class Facebook : P31RestKit
 			}
 		});
 	}
-	
-	
+
+
 	// Retrieves the scores for your app
 	public void getScores( string userId, Action<string, object> onComplete )
 	{
 		var path = userId + "/scores";
 		get( path, onComplete );
 	}
-	
+
 	#endregion
-	
+
 }
