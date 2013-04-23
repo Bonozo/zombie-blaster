@@ -262,7 +262,7 @@ public class Control : MonoBehaviour {
 				LevelInfo.Audio.StopAll();
 				LevelInfo.Audio.PlayGameOver();
 				LevelInfo.Environments.hubLives.SetNumberWithFlash(LevelInfo.Environments.hubLives.GetNumber()-1);
-				ZombieBlasterFacebook .Instance.Init();
+				//ZombieBlasterFacebook .Instance.Init();
 				break;
 			case GameState.Play:
 				Time.timeScale = 1f;
@@ -734,7 +734,7 @@ public class Control : MonoBehaviour {
 					GUI.Label(new Rect(0.35f*GameEnvironment.GUIWidth,0.42f*GameEnvironment.GUIHeight, 0.1f*GameEnvironment.GUIWidth,0.05f*GameEnvironment.GUIHeight), "SCORE: ",myGUIStyle);
 					
 					
-					#if UNITY_ANDROID || UNITY_IPHONE
+					/*#if UNITY_ANDROID || UNITY_IPHONE
 					if( ZombieBlasterFacebook .Instance.Ready)
 					{
 						nameLB = ZombieBlasterFacebook .Instance.fbname;
@@ -747,9 +747,9 @@ public class Control : MonoBehaviour {
 							ZombieBlasterFacebook .Instance.Login();
 						}
 					}
-					#else
+					#else*/
 					nameLB = GUI.TextField(new Rect(0.48f*GameEnvironment.GUIWidth,0.35f*GameEnvironment.GUIHeight, 0.2f*GameEnvironment.GUIWidth,0.05f*GameEnvironment.GUIHeight), nameLB,16,inputBoxGUIStyle);
-					#endif
+					//#endif
 					
 					GUI.Label(new Rect(0.48f*GameEnvironment.GUIWidth,0.42f*GameEnvironment.GUIHeight, 0.2f*GameEnvironment.GUIWidth,0.05f*GameEnvironment.GUIHeight), (LevelInfo.Environments.hubScores.GetNumber()).ToString(),myGUIStyle);
 					
@@ -764,12 +764,12 @@ public class Control : MonoBehaviour {
 						else if(nameLB.Trim().Equals(""))	
 						{
 							isName = false;
-							#if UNITY_ANDROID || UNITY_IPHONE
+							/*#if UNITY_ANDROID || UNITY_IPHONE
 							postScoreResponse = "Please log in to facebook!";
-							#else
+							#else*/
 							postScoreResponse = "Please Enter Name!";
-							#endif
-							ZombieBlasterFacebook .Instance.Init();
+							//#endif
+							//ZombieBlasterFacebook .Instance.Init();
 						}
 						else
 						{	
@@ -781,7 +781,7 @@ public class Control : MonoBehaviour {
 						}						
 					}
 			
-					#if UNITY_ANDROID || UNITY_IPHONE
+					/*#if UNITY_ANDROID || UNITY_IPHONE
 					
 					if(ZombieBlasterFacebook .Instance.Posted)
 					{
@@ -808,7 +808,7 @@ public class Control : MonoBehaviour {
 							sharing = true;
 						}
 					}
-					#endif
+					#endif*/
 										
 					if(!isName || (isPost == true))
 						GUI.Label(new Rect(0.38f*GameEnvironment.GUIWidth,0.57f*GameEnvironment.GUIHeight,0.30f*GameEnvironment.GUIWidth,0.032f*GameEnvironment.GUIHeight), postScoreResponse.ToString(),myGUIStyle);					
