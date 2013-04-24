@@ -29,7 +29,7 @@ public class GameEnvironment : MonoBehaviour {
 		ignore = true;
 	}
 	
-	#if UNITY_ANDROID || UNITY_IPHONE
+	#if (UNITY_ANDROID || UNITY_IPHONE) && !UNITY_EDITOR
 	private static Vector2 beginPos;
 	private static Vector2 startPos;
 	private static bool couldBeSwipe;
