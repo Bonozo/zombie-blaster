@@ -614,8 +614,8 @@ public class Control : MonoBehaviour {
 	
 	
 	private bool postedscore = false;
-	private bool sharedonfacebook = false;
-	private bool sharing = false;
+	//private bool sharedonfacebook = false;
+	//private bool sharing = false;
 	
 	[System.NonSerializedAttribute]
 	public bool allowShowGUI = true;
