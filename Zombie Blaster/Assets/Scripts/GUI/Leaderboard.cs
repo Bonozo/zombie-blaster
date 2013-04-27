@@ -200,12 +200,13 @@ public class Leaderboard : MonoBehaviour {
 	}
 	
 	// Use this for initialization
-	void Start () {
-	
+	void Start ()
+	{
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+	{
 		if( buttonMainMenu.PressedUp )
 		{
 			MainMenu mainmenu = (MainMenu)GameObject.FindObjectOfType(typeof(MainMenu));
@@ -308,12 +309,50 @@ public class Leaderboard : MonoBehaviour {
 
 		#endregion
 		
-		if( GUI.Button(new Rect(0.76f*GameEnvironment.GUIWidth,0.59f*GameEnvironment.GUIHeight, 0.2f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "RESET GAME",buttonGUIStyle) && !wanttoresetgame)
+		if( GUI.Button(new Rect(0.76f*GameEnvironment.GUIWidth,0.59f*GameEnvironment.GUIHeight, 0.2f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "RESET GAME",buttonGUIStyle) && !wanttoresetgame && codeKeyboard==null && codemessage=="")
 		{
 			audioOpen.Play();
 			wanttoresetgame = true;
 		}
-		if(wanttoresetgame)
+		
+		if( GUI.Button(new Rect(0.76f*GameEnvironment.GUIWidth,0.47f*GameEnvironment.GUIHeight, 0.2f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "ENTER CODE",buttonGUIStyle) && !wanttoresetgame && codeKeyboard==null && codemessage=="")
+		{
+			codeKeyboard = TouchScreenKeyboard.Open("");
+		}
+		
+		if(codeKeyboard != null)
+		{
+			if(codeKeyboard.wasCanceled)
+				codeKeyboard = null;
+			else if(codeKeyboard.done)
+			{
+				if(codeKeyboard.text == "123456")
+				{
+					if( PlayerPrefs.GetInt("code_123456",0) == 1 )
+					{
+						codemessage = "You have already activated this code.";
+					}
+					else
+					{
+						codemessage = "Congrats!!!\nYou got 1000 Zombie Heads!";
+						Store.zombieHeads += 1000;
+						PlayerPrefs.SetInt("code_123456",1);
+					}
+				}
+				else
+					codemessage = "Wrong code.";
+				codeKeyboard = null;
+			}
+		}
+		else if(codemessage != "")
+		{
+			GUI.DrawTexture(new Rect(0.2f*GameEnvironment.GUIWidth,0.15f*GameEnvironment.GUIHeight,0.6f*GameEnvironment.GUIWidth,0.6f*GameEnvironment.GUIHeight),texturePopup);
+			GUI.Label(new Rect(0.35f*GameEnvironment.GUIWidth,0.305f*GameEnvironment.GUIHeight,0.3f*GameEnvironment.GUIWidth,0.2f*GameEnvironment.GUIHeight),codemessage,postGUIStyle);
+			
+			if( GUI.Button(new Rect(0.42f*GameEnvironment.GUIWidth,0.5f*GameEnvironment.GUIHeight,0.16f*GameEnvironment.GUIWidth,0.1f*GameEnvironment.GUIHeight), "OK", buttonGUIStyle ) )
+				codemessage = "";
+		}
+		else if(wanttoresetgame)
 		{
 			GUI.DrawTexture(new Rect(0.2f*GameEnvironment.GUIWidth,0.15f*GameEnvironment.GUIHeight,0.6f*GameEnvironment.GUIWidth,0.6f*GameEnvironment.GUIHeight),texturePopup);
 			GUI.Label(new Rect(0.35f*GameEnvironment.GUIWidth,0.305f*GameEnvironment.GUIHeight,0.3f*GameEnvironment.GUIWidth,0.2f*GameEnvironment.GUIHeight),"Are you sure you want to reset game progress?",postGUIStyle);
@@ -333,4 +372,7 @@ public class Leaderboard : MonoBehaviour {
 	
 	public Texture2D texturePopup;
 	bool wanttoresetgame = false;
+	
+	public TouchScreenKeyboard codeKeyboard;
+	string codemessage = "";
 }
