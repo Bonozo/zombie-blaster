@@ -1222,7 +1222,7 @@ public class Control : MonoBehaviour {
 				StartCoroutine(ShowTip("TIP: TAP TO SHOOT",4f));
 				break;
 			case 2:
-				StartCoroutine(ShowTip("TIP: SWIPE LEFT OR RIGHT TO TURN",4f));
+				StartCoroutine(ShowTip("TIP: SWIPE OR TILT LEFT OR RIGHT TO TURN",4f));
 				break;
 			case 3:
 				StartCoroutine(ShowTip("TIP: SHOOT RARE ZOMBIES FOR WEAPONS",4f));
